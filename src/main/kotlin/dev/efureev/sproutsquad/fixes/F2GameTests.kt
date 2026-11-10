@@ -5,8 +5,10 @@ import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.entity.gnome.GnomeVariant
+import joshxviii.plantz.entity.plant.Squash
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
+import net.minecraft.core.SectionPos
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -65,7 +68,7 @@ object F2GameTests {
     fun registerTests(event: RegisterGameTestsEvent) {
         val environment = event.registerEnvironment(ENVIRONMENT)
         event.registerTest(DATA, FunctionGameTestInstance(function(DATA), TestData(environment, Identifier.withDefaultNamespace("empty"), 100, 0, true)))
-        event.registerTest(SQUASH, FunctionGameTestInstance(function(SQUASH), TestData(environment, Identifier.withDefaultNamespace("empty"), 200, 0, true)))
+        event.registerTest(SQUASH, FunctionGameTestInstance(function(SQUASH), TestData(environment, Identifier.withDefaultNamespace("empty"), 600, 0, true)))
     }
 
     private fun data(helper: GameTestHelper) {
@@ -167,14 +170,25 @@ object F2GameTests {
     /** A squash next to a zombie leaps on it, kills it in one hit and is used up. */
     private fun squash(helper: GameTestHelper) {
         // The 1x1x1 "empty" test structure is encased in barriers, which block line of sight: use open ground beside it.
-        for (x in 0..2) helper.setBlock(BlockPos(x, -1, 5), Blocks.STONE)
-        val squash = helper.spawn(PazEntities.SQUASH, BlockPos(0, 0, 5))
-        val zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(2, 0, 5))
-        zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
-        helper.succeedWhen {
-            helper.assertTrue(squash.isRemoved, "squash has not attacked yet")
-            helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved, "zombie survived the squash")
-        }
+        // Only the structure's chunk is force-loaded, so force the arena too and wait until it ticks entities
+        // (a fresh chunk may need generating first). The runner unforces all chunks after the batch.
+        val arena = (-1..3).flatMap { x -> (4..6).map { z -> helper.absolutePos(BlockPos(x, 0, z)) } }
+        for (pos in arena) helper.level.setChunkForced(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z), true)
+        lateinit var squash: Squash
+        lateinit var zombie: Zombie
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
+            .thenExecute {
+                for (x in 0..2) helper.setBlock(BlockPos(x, -1, 5), Blocks.STONE)
+                squash = helper.spawn(PazEntities.SQUASH, BlockPos(0, 0, 5))
+                zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(2, 0, 5))
+                zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
+            }
+            .thenWaitUntil {
+                helper.assertTrue(squash.isRemoved, "squash has not attacked yet")
+                helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved, "zombie survived the squash")
+            }
+            .thenSucceed()
     }
 
     private fun lootTable(server: MinecraftServer, path: String): LootTable =
