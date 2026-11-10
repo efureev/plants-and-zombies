@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "plantz:block/smooth_brainz_alloy_block"
-  }
-}

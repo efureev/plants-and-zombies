@@ -1,0 +1,44 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "thirdperson_righthand",
+          "thirdperson_lefthand"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "sproutsquad:item/gardening_glove/thirdperson"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "minecraft:entity_data",
+      "ignore_default": true,
+      "on_true": {
+        "type": "minecraft:composite",
+        "models": [
+          {
+            "type": "minecraft:model",
+            "model": "sproutsquad:item/gardening_glove/grab"
+          },
+          {
+            "type": "sproutsquad:plant_icon"
+          },
+          {
+            "type": "minecraft:model",
+            "model": "sproutsquad:item/gardening_glove/grab_overlay"
+          }
+        ]
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "sproutsquad:item/gardening_glove/open"
+      }
+    }
+  }
+}

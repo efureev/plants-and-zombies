@@ -1,0 +1,22 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "minecraft:writable_book_content",
+    "ignore_default": true,
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "sproutsquad:item/letter_opened"
+    },
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "sproutsquad:item/letter",
+      "tints": [
+        {
+          "type": "minecraft:dye",
+          "default": -3523278
+        }
+      ]
+    }
+  }
+}

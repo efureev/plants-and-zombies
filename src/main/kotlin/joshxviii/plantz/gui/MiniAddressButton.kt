@@ -26,8 +26,8 @@ class MiniAddressButton(
     enabledRequirement: ((button: PazButton) -> Boolean) = { true },
     clickRequirement: ((button: PazButton) -> Boolean) = enabledRequirement,
 ) : PazButton(buttonX, buttonY, 8, 8, clickAction, ADDRESS, ADDRESS_HIGHLIGHTED, ADDRESS_SELECTED, enabledRequirement, clickRequirement, Component.empty(), menuData?.let { ARGB.addRgb(it.color, 0x333333) }?: -1) {
-    val posText = Component.translatable("container.plantz.mailbox_coords", mailboxData.blockPos.x, mailboxData.blockPos.y, mailboxData.blockPos.z).withColor(0xFFFFFFF)
-    val toolTipText: MutableComponent = Component.translatable("container.plantz.mailbox_coords_mini",
+    val posText = Component.translatable("container.sproutsquad.mailbox_coords", mailboxData.blockPos.x, mailboxData.blockPos.y, mailboxData.blockPos.z).withColor(0xFFFFFFF)
+    val toolTipText: MutableComponent = Component.translatable("container.sproutsquad.mailbox_coords_mini",
         mailboxData.name.copy().withColor(ARGB.multiply(mailboxData.color, 0xFFFFFF)),
         posText
     )

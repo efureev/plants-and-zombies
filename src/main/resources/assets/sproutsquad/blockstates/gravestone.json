@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "sproutsquad:block/gravestone" },
+    "facing=south": { "model": "sproutsquad:block/gravestone", "y": 180 },
+    "facing=east":  { "model": "sproutsquad:block/gravestone", "y": 90 },
+    "facing=west":  { "model": "sproutsquad:block/gravestone", "y": 270 }
+  }
+}

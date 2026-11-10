@@ -1,0 +1,13 @@
+{
+  "values": [
+    "sproutsquad:gargantuar",
+    "sproutsquad:electric_slide",
+    "sproutsquad:baron_von_bats",
+    "#sproutsquad:plant",
+    "#sproutsquad:zombie_robots",
+    {
+      "id": "#c:bosses",
+      "required": false
+    }
+  ]
+}

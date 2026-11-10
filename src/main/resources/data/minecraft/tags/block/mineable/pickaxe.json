@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "plantz:gravestone",
-    "#plantz:brainz_alloy_blocks",
-    "#plantz:mailbox",
-    "#plantz:garden_gnome_blocks"
+    "sproutsquad:gravestone",
+    "#sproutsquad:brainz_alloy_blocks",
+    "#sproutsquad:mailbox",
+    "#sproutsquad:garden_gnome_blocks"
   ]
 }

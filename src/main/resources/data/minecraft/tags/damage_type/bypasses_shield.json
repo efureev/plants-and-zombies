@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "plantz:plant_fume",
-    "#plantz:is_electric",
-    "#plantz:is_energy"
+    "sproutsquad:plant_fume",
+    "#sproutsquad:is_electric",
+    "#sproutsquad:is_energy"
   ]
 }

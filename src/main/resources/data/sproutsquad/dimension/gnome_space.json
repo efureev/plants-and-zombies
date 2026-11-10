@@ -1,0 +1,11 @@
+{
+  "type": "sproutsquad:gnome_space",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "sproutsquad:gnome_space",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "sproutsquad:gnome_space"
+    }
+  }
+}

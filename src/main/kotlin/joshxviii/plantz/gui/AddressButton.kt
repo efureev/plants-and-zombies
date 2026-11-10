@@ -26,7 +26,7 @@ class AddressButton(
     clickRequirement: ((button: PazButton) -> Boolean) = enabledRequirement,
 ) : PazButton(buttonX, buttonY, 97, 14, clickAction, ADDRESS, ADDRESS_HIGHLIGHTED, ADDRESS_SELECTED, enabledRequirement, clickRequirement, mailboxData.name, menuData?.let { ARGB.addRgb(it.color, 0x333333) }?: -1) {
     val posText: MutableComponent =
-        Component.translatable("container.plantz.mailbox_coords", mailboxData.blockPos.x, mailboxData.blockPos.y, mailboxData.blockPos.z).withColor(0xFFFFFFF)
+        Component.translatable("container.sproutsquad.mailbox_coords", mailboxData.blockPos.x, mailboxData.blockPos.y, mailboxData.blockPos.z).withColor(0xFFFFFFF)
 
     init {
         setTooltip(Tooltip.create(posText))

@@ -1,0 +1,13 @@
+{
+  "parent": "sproutsquad:item/gardening_glove/grab",
+  "textures": {
+    "layer0": "sproutsquad:item/gardening_glove/grab_overlay"
+  },
+  "display": {
+    "firstperson_lefthand": {
+      "rotation": [0, 90, -25],
+      "translation": [1.1299, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    }
+  }
+}

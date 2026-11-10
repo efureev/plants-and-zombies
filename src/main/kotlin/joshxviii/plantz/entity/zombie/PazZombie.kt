@@ -514,14 +514,14 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
 
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
-        output.putInt("plantz:State", state.ordinal)
-        output.putBoolean("plantz:IsFlying", entityData.get(FLYING))
+        output.putInt("sproutsquad:State", state.ordinal)
+        output.putBoolean("sproutsquad:IsFlying", entityData.get(FLYING))
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
-        isFlying = input.getBooleanOr("plantz:IsFlying", false)
-        state = ZombieState.entries[input.getInt("plantz:State").getOrElse { 0 }]
+        isFlying = input.getBooleanOr("sproutsquad:IsFlying", false)
+        state = ZombieState.entries[input.getInt("sproutsquad:State").getOrElse { 0 }]
     }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {

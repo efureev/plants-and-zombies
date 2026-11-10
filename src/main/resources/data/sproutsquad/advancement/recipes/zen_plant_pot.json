@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:zen_plant_pot"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_plant_pot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:plant_pot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_plant_pot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:zen_plant_pot"
+    ]
+  }
+}

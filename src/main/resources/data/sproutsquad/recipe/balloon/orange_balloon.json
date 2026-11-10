@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "balloon_dye",
+  "category": "misc",
+  "ingredients": [
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons",
+    "minecraft:orange_dye",
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons",
+    "#sproutsquad:balloons"
+  ],
+  "result": {
+    "count": 8,
+    "id": "sproutsquad:orange_balloon"
+  }
+}

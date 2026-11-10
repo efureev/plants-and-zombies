@@ -36,9 +36,9 @@ data class StoredSun(
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        consumer.accept(Component.translatable("component.plantz.stored_sun.description").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
+        consumer.accept(Component.translatable("component.sproutsquad.stored_sun.description").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         consumer.accept(Component.empty())
-        consumer.accept(Component.translatable("component.plantz.stored_sun", storedSun, max).withStyle(ChatFormatting.YELLOW))
+        consumer.accept(Component.translatable("component.sproutsquad.stored_sun", storedSun, max).withStyle(ChatFormatting.YELLOW))
     }
 
     fun getLevel(): Int = if (hasSun()) max(1,(Mth.floor(storagePercentage() * 15f))) else 0// used for light level and redstone signal

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:balloon/balloon"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wind_charge": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:wind_charge"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wind_charge"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:balloon/balloon"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "minecraft:entity_data",
+    "cases": [
+      {
+        "when": { "id": "sproutsquad:zombie_turret" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "sproutsquad:item/blueprint/zombie_turret"
+        }
+      },
+      {
+        "when": { "id": "sproutsquad:zombie_drone" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "sproutsquad:item/blueprint/zombie_drone"
+        }
+      },
+      {
+        "when": { "id": "sproutsquad:electro_turret" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "sproutsquad:item/blueprint/electro_turret"
+        }
+      },
+      {
+        "when": { "id": "sproutsquad:lawn_mower" },
+        "model": {
+          "type": "minecraft:model",
+          "model": "sproutsquad:item/blueprint/lawn_mower"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "sproutsquad:item/blueprint/blueprint"
+    }
+  }
+}

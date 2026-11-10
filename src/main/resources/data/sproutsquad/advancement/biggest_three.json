@@ -1,0 +1,54 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:gargantuar_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.biggest_three"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.biggest_three.description"
+    }
+  },
+  "parent": "sproutsquad:bigger_three",
+  "criteria": {
+    "sproutsquad:baron_von_bats": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:baron_von_bats"
+          }
+        }
+      }
+    },
+    "sproutsquad:electric_slide": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:electric_slide",
+            "minecraft:nbt": "{\"variant\":\"boogaloo\"}"
+          }
+        }
+      }
+    },
+    "sproutsquad:gargantuar": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:gargantuar"
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

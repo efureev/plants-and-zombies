@@ -93,7 +93,7 @@ abstract class ExplosivePlant(type: EntityType<out ExplosivePlant>, level: Level
             if (itemStack.`is`(Items.FLINT_AND_STEEL)) {
                 if (cooldown<0) {
                     if (isAsleep) {
-                        player.sendOverlayMessage(Component.translatable("message.plantz.sleeping", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
+                        player.sendOverlayMessage(Component.translatable("message.sproutsquad.sleeping", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         return InteractionResult.FAIL
                     }
                     swellDir=2

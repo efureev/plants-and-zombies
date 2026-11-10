@@ -1,0 +1,89 @@
+{
+  "type": "minecraft:generic",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:white_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:light_gray_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:gray_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:black_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:brown_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:red_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:orange_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:magenta_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:yellow_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:lime_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:green_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:cyan_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:light_blue_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blue_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:purple_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:magenta_balloon"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:pink_balloon"
+        }
+      ]
+    }
+  ],
+  "modifier": [
+    {
+      "type": "minecraft:set_count",
+      "count": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 4
+      }
+    }
+  ],
+  "random_sequence": "chests/balloons"
+}

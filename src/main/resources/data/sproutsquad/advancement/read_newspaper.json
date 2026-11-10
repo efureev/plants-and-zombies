@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:newspaper"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.read_newspaper"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.read_newspaper.description"
+    }
+  },
+  "parent": "sproutsquad:root",
+  "criteria": {
+    "read_newspaper": {
+      "trigger": "minecraft:using_item",
+      "conditions": {
+        "item": {
+          "items": "sproutsquad:newspaper"
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

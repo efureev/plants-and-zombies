@@ -1,0 +1,18 @@
+{
+  "mutations": [
+    {
+      "weather": "thunder",
+      "chance": 0.5,
+      "result": "sproutsquad:electric_peashooter"
+    },
+    {
+      "biome": "#sproutsquad:plant/has_fire_peashooter",
+      "chance": 0.5,
+      "result": "sproutsquad:fire_peashooter"
+    },
+    {
+      "chance": 0.1,
+      "result": "sproutsquad:repeater"
+    }
+  ]
+}

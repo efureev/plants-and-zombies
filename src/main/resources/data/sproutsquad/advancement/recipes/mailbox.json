@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:mailbox/mailbox"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_newspaper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:newspaper"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_newspaper"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:mailbox/mailbox"
+    ]
+  }
+}

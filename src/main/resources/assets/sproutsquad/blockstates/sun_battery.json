@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "face=floor,facing=east":  { "model": "sproutsquad:block/sun_battery", "y": 90 },
+    "face=floor,facing=west":  { "model": "sproutsquad:block/sun_battery", "y": 270 },
+    "face=floor,facing=south": { "model": "sproutsquad:block/sun_battery", "y": 180 },
+    "face=floor,facing=north": { "model": "sproutsquad:block/sun_battery" },
+
+    "face=wall,facing=east":  { "model": "sproutsquad:block/sun_battery", "x": 90, "y": 90 },
+    "face=wall,facing=west":  { "model": "sproutsquad:block/sun_battery", "x": 90, "y": 270 },
+    "face=wall,facing=south": { "model": "sproutsquad:block/sun_battery", "x": 90, "y": 180 },
+    "face=wall,facing=north": { "model": "sproutsquad:block/sun_battery", "x": 90 },
+
+    "face=ceiling,facing=east":  { "model": "sproutsquad:block/sun_battery", "x": 180, "y": 270 },
+    "face=ceiling,facing=west":  { "model": "sproutsquad:block/sun_battery", "x": 180, "y": 90 },
+    "face=ceiling,facing=south": { "model": "sproutsquad:block/sun_battery", "x": 180 },
+    "face=ceiling,facing=north": { "model": "sproutsquad:block/sun_battery", "x": 180, "y": 180 }
+  }
+}

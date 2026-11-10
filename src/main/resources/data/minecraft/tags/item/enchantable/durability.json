@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "plantz:gardening_glove",
-    "plantz:dye_blaster",
-    "plantz:door_shield",
-    "plantz:baron_staff"
+    "sproutsquad:gardening_glove",
+    "sproutsquad:dye_blaster",
+    "sproutsquad:door_shield",
+    "sproutsquad:baron_staff"
   ]
 }

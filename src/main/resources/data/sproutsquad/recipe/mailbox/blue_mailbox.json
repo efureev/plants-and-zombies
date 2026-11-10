@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "group": "mailbox_dye",
+  "category": "misc",
+  "input": "#sproutsquad:mailboxes",
+  "material": "minecraft:blue_dye",
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:blue_mailbox"
+  }
+}

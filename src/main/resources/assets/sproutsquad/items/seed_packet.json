@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "sproutsquad:item/seed_packet"
+      },
+      {
+        "type": "sproutsquad:plant_icon"
+      }
+    ]
+  }
+}

@@ -7,7 +7,7 @@
         "when": "head",
         "model": {
           "type": "minecraft:model",
-          "model": "plantz:block/bucket_helmet"
+          "model": "sproutsquad:block/bucket_helmet"
         }
       }
     ],

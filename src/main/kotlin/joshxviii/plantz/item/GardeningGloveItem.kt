@@ -43,7 +43,7 @@ class GardeningGloveItem(properties: Properties) : Item(properties) {
             val data = components.get(DataComponents.ENTITY_DATA)
 
             if (data == null) {
-                consumer.add(1, Component.translatable("item.plantz.gardening_glove.description")
+                consumer.add(1, Component.translatable("item.sproutsquad.gardening_glove.description")
                     .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
                 return
             }
@@ -52,7 +52,7 @@ class GardeningGloveItem(properties: Properties) : Item(properties) {
             val entityName = Component.translatable("entity.${id.namespace}.${id.path}")
                 .withStyle(ChatFormatting.DARK_GREEN)
 
-            consumer.add(1, Component.translatable("item.plantz.gardening_glove.entity", entityName)
+            consumer.add(1, Component.translatable("item.sproutsquad.gardening_glove.entity", entityName)
                 .withStyle(ChatFormatting.GRAY))
         }
 
@@ -87,7 +87,7 @@ class GardeningGloveItem(properties: Properties) : Item(properties) {
         val seedItem = blockState.getCloneItemStack(level, context.clickedPos, false).item
         if (cropAge >= 7 && player != null) {
             if (isHolding) {
-                player.sendOverlayMessage(Component.translatable("message.plantz.glove_full").withStyle(ChatFormatting.RED))
+                player.sendOverlayMessage(Component.translatable("message.sproutsquad.glove_full").withStyle(ChatFormatting.RED))
                 return InteractionResult.PASS
             }
             val blockPos = context.clickedPos

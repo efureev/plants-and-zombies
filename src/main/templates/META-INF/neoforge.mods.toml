@@ -12,18 +12,18 @@ iconFile="sprout_squad_icon.png"
 authors="joshxviii, efureev"
 credits="Based on Plants & Zombies by joshxviii (https://github.com/joshxviii/plants-and-zombies), MPL-2.0"
 description='''
-Find and grow helpful Plants that can defend your base.
-NeoForge port of Plants & Zombies.
+Find and grow helpful Plants that can defend your base from Zombies.
+Sprout Squad grows its own squad of new characters on top of Plants & Zombies.
 '''
 
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"
 
 [[mixins]]
-config="plantz.mixins.json"
+config="sproutsquad.mixins.json"
 
 [[mixins]]
-config="plantz.client.mixins.json"
+config="sproutsquad.client.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="neoforge"

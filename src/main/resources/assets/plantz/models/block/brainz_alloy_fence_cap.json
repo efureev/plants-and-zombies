@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/template_bars_cap",
-  "textures": {
-    "bars": "plantz:block/brainz_alloy_fence",
-    "edge": "plantz:block/brainz_alloy_fence"
-  }
-}

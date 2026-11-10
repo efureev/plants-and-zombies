@@ -46,7 +46,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
         val entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entityData.type())
 
         val entityName = Component.translatable("entity.${entityId.namespace}.${entityId.path}")
-        return Component.translatable("item.plantz.seed_packet.entity", entityName)
+        return Component.translatable("item.sproutsquad.seed_packet.entity", entityName)
     }
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {
@@ -121,7 +121,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val sunCost = itemStack.get(PazComponents.SUN_COST)?.getSunCost(entityType) ?: 0
             if (!ignoreSunRequirement && sunCost > availableSun && !player.hasInfiniteMaterials()) {
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.not_enough_item", PazItems.SUN.name(), availableSun, sunCost).withStyle(ChatFormatting.RED)
+                    Component.translatable("message.sproutsquad.not_enough_item", PazItems.SUN.name(), availableSun, sunCost).withStyle(ChatFormatting.RED)
                 )
                 return InteractionResult.FAIL
             }
@@ -142,7 +142,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 if (entityLimit > -1 && !player.hasInfiniteMaterials()) {
                     if (entity.isOverEntityLimit()) {
                         player.sendOverlayMessage(
-                            Component.translatable("message.plantz.entity_limit", entityType.description.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
+                            Component.translatable("message.sproutsquad.entity_limit", entityType.description.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                         )
                         return InteractionResult.FAIL
                     }
@@ -156,7 +156,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
                 ) {
                     player.sendOverlayMessage(
-                        Component.translatable("message.plantz.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
+                        Component.translatable("message.sproutsquad.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                     )
                     return InteractionResult.FAIL
                 }
@@ -176,7 +176,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 val existingPlants = level.getEntitiesOfClass(Plant::class.java, AABB(it.blockPosition()))
                 if (existingPlants.isNotEmpty()) {
                     player.sendOverlayMessage(
-                        Component.translatable("message.plantz.already_planted").withStyle(ChatFormatting.RED)
+                        Component.translatable("message.sproutsquad.already_planted").withStyle(ChatFormatting.RED)
                     )
                     return InteractionResult.FAIL
                 }

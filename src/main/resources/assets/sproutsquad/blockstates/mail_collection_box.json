@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "state=open,facing=north": { "model": "sproutsquad:block/mail_collection_box/open" },
+    "state=open,facing=south": { "model": "sproutsquad:block/mail_collection_box/open", "y": 180 },
+    "state=open,facing=east":  { "model": "sproutsquad:block/mail_collection_box/open", "y": 90 },
+    "state=open,facing=west":  { "model": "sproutsquad:block/mail_collection_box/open", "y": 270 },
+
+    "state=closed,facing=north": { "model": "sproutsquad:block/mail_collection_box/closed" },
+    "state=closed,facing=south": { "model": "sproutsquad:block/mail_collection_box/closed", "y": 180 },
+    "state=closed,facing=east":  { "model": "sproutsquad:block/mail_collection_box/closed", "y": 90 },
+    "state=closed,facing=west":  { "model": "sproutsquad:block/mail_collection_box/closed", "y": 270 }
+  }
+}

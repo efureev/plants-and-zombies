@@ -116,12 +116,12 @@ class ZombieRaid(
                 Codec.FLOAT.optionalFieldOf("boss_chance", 0f).forGetter { it.bossChance },
             ).apply(r, ::ZombieRaid )
         }
-        val ZOMBIE_RAID_BAR_START: Component = Component.translatable("event.plantz.zombie_raid.start").withStyle(ChatFormatting.GOLD)
-        val ZOMBIE_RAID_BAR_START_CREDITS: Component = Component.translatable("event.plantz.zombie_raid.start.after_credits").withStyle(ChatFormatting.GOLD)
-        val ZOMBIE_RAID_VICTORY: Component = Component.translatable("event.plantz.zombie_raid.victory").withStyle(ChatFormatting.GOLD)
-        val ZOMBIE_RAID_VICTORY_TITLE: Component = Component.translatable("event.plantz.zombie_raid.victory_title").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD)
-        val ZOMBIE_RAID_DEFEAT: Component = Component.translatable("event.plantz.zombie_raid.defeat").withStyle(ChatFormatting.RED)
-        val ZOMBIE_RAID_DEFEAT_TITLE: Component = Component.translatable("event.plantz.zombie_raid.defeat_title").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD)
+        val ZOMBIE_RAID_BAR_START: Component = Component.translatable("event.sproutsquad.zombie_raid.start").withStyle(ChatFormatting.GOLD)
+        val ZOMBIE_RAID_BAR_START_CREDITS: Component = Component.translatable("event.sproutsquad.zombie_raid.start.after_credits").withStyle(ChatFormatting.GOLD)
+        val ZOMBIE_RAID_VICTORY: Component = Component.translatable("event.sproutsquad.zombie_raid.victory").withStyle(ChatFormatting.GOLD)
+        val ZOMBIE_RAID_VICTORY_TITLE: Component = Component.translatable("event.sproutsquad.zombie_raid.victory_title").withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.BOLD)
+        val ZOMBIE_RAID_DEFEAT: Component = Component.translatable("event.sproutsquad.zombie_raid.defeat").withStyle(ChatFormatting.RED)
+        val ZOMBIE_RAID_DEFEAT_TITLE: Component = Component.translatable("event.sproutsquad.zombie_raid.defeat_title").withStyle(ChatFormatting.DARK_RED).withStyle(ChatFormatting.BOLD)
         const val WAVE_DURATION: Int = 3000 // 2.5 minutes
         const val BOSS_WAVE_DURATION: Int = 4500 // 3.75 minutes
         const val FINAL_WAVE_DURATION: Int = WAVE_DURATION * 2 // 5 minutes
@@ -353,7 +353,7 @@ class ZombieRaid(
             getBosses().isEmpty() && pendingRaiders.values.none { it.isBoss }
         ) {
             zombieRaidEvent.players.forEach { player ->
-                player.sendSystemMessage(Component.translatable("event.plantz.zombie_raid.boss.defeat").withStyle(ChatFormatting.GOLD))
+                player.sendSystemMessage(Component.translatable("event.sproutsquad.zombie_raid.boss.defeat").withStyle(ChatFormatting.GOLD))
                 PazCriteria.BOSS_DEFEAT_TRIGGER.trigger(player)
             }
         }
@@ -385,7 +385,7 @@ class ZombieRaid(
 
         //next boss chance
         bossChance = calculateBossChance()
-        if (isFinalWave()) showTitleMessage(Component.translatable("event.plantz.zombie_raid.final_wave").apply { withStyle(ChatFormatting.RED) }, Component.empty())
+        if (isFinalWave()) showTitleMessage(Component.translatable("event.sproutsquad.zombie_raid.final_wave").apply { withStyle(ChatFormatting.RED) }, Component.empty())
         zombieRaidEvent.players.forEach { player ->
             PazCriteria.RAID_WAVE_TRIGGER.trigger(player, currentWaveNumber())
         }
@@ -632,14 +632,14 @@ class ZombieRaid(
         val subtitle: Component = wave.popupMessage().copy().apply { withStyle(subColor, ChatFormatting.BOLD) }
         showTitleMessage(Component.empty(), subtitle)
         zombieRaidEvent.players.forEach {
-            it.sendSystemMessage(Component.translatable("event.plantz.zombie_raid.special_wave", subtitle).withColor(0x872727))
+            it.sendSystemMessage(Component.translatable("event.sproutsquad.zombie_raid.special_wave", subtitle).withColor(0x872727))
         }
     }
 
     private fun announceBoss(bossName: Component) {
         zombieRaidEvent.players.forEach {
             it.connection.send(ClientboundSoundPacket(PazSounds.BOSS_SPAWN, SoundSource.UI, it.x, it.y, it.z, 1.0f, 1.0f, random.nextLong()))
-            it.sendSystemMessage(Component.translatable("event.plantz.zombie_raid.boss.spawn", bossName.copy().apply { withStyle(ChatFormatting.RED, ChatFormatting.BOLD) }).withColor(0x872727))
+            it.sendSystemMessage(Component.translatable("event.sproutsquad.zombie_raid.boss.spawn", bossName.copy().apply { withStyle(ChatFormatting.RED, ChatFormatting.BOLD) }).withColor(0x872727))
         }
     }
 

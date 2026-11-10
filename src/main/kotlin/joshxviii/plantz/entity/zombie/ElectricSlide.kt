@@ -185,7 +185,7 @@ class ElectricSlide(type: EntityType<out ElectricSlide>, level: Level) : PazZomb
     }
 
     override fun getTypeName(): Component {
-        return if (variant != ElectricSlideVariant.SLIDE) Component.translatable("entity.plantz.electric_slide.variant.${variant.name.lowercase()}")
+        return if (variant != ElectricSlideVariant.SLIDE) Component.translatable("entity.sproutsquad.electric_slide.variant.${variant.name.lowercase()}")
         else super.getTypeName()
     }
 

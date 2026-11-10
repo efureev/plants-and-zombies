@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "plantz:ice_peashooter",
-    "plantz:iceshroom",
-    "plantz:winter_melon",
-    "plantz:zombie_yeti"
+    "sproutsquad:ice_peashooter",
+    "sproutsquad:iceshroom",
+    "sproutsquad:winter_melon",
+    "sproutsquad:zombie_yeti"
   ]
 }

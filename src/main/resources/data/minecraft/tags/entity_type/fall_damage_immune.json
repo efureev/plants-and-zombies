@@ -1,11 +1,11 @@
 {
   "replace": false,
   "values": [
-    "#plantz:plant",
-    "plantz:gnome",
-    "plantz:super_brainz",
-    "plantz:imp",
-    "plantz:baron_von_bats",
-    "#plantz:zombie_robots"
+    "#sproutsquad:plant",
+    "sproutsquad:gnome",
+    "sproutsquad:super_brainz",
+    "sproutsquad:imp",
+    "sproutsquad:baron_von_bats",
+    "#sproutsquad:zombie_robots"
   ]
 }

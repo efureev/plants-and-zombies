@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:copper_golem",
+    "sproutsquad:electric_peashooter",
+    "sproutsquad:lightning_reed",
+    "sproutsquad:electric_slide"
+  ]
+}

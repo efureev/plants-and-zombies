@@ -1,0 +1,13 @@
+{
+  "mutations": [
+    {
+      "weather": "thunder",
+      "chance": 1.0,
+      "result": "sproutsquad:electric_peashooter"
+    },
+    {
+      "chance": 0.15,
+      "result": "sproutsquad:peashooter"
+    }
+  ]
+}

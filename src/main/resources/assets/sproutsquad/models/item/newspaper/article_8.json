@@ -1,0 +1,7 @@
+{
+	"parent": "sproutsquad:item/newspaper/article_1",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "sproutsquad:item/newspaper/article_8"
+	}
+}

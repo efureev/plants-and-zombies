@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "sproutsquad:item/gardening_glove/open"
+  },
+  "display": {
+    "firstperson_righthand": {
+        "rotation": [-20, 0, 0],
+        "translation": [9.25, -0.5, -10.5]
+    },
+    "firstperson_lefthand": {
+        "rotation": [-20, -180, 0],
+        "translation": [9.25, -0.5, -10.5]
+    }
+  }
+}

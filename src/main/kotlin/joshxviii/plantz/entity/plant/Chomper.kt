@@ -42,12 +42,12 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
 
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
-        output.putBoolean("plantz:IsChewing", isChewing)
+        output.putBoolean("sproutsquad:IsChewing", isChewing)
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
-        isChewing = input.getBooleanOr("plantz:IsChewing", false)
+        isChewing = input.getBooleanOr("sproutsquad:IsChewing", false)
     }
 
     override fun registerGoals() {

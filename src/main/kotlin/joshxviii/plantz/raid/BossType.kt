@@ -30,7 +30,7 @@ enum class BossType(
     private val weightFn: (ZombieRaid, WaveType) -> Float,
     private val bossSpawns: (ZombieRaid, WaveType) -> List<BossEntry>,
 ): StringRepresentable {
-    //TODO: I would like to make this a data-driven system. Boss types should be defined as "plantz/boss_type/[boss_name].json" files.
+    //TODO: I would like to make this a data-driven system. Boss types should be defined as "sproutsquad/boss_type/[boss_name].json" files.
     // SpawnRequirements, Weights, BossEntries, and Boss Configurations should all be editable in the .json.
     // Parsing should be done in a new [PazAPI] class.
     GIGA_ALL_STAR(

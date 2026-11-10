@@ -177,7 +177,7 @@ object PazCreativeTabs {
     val PAZ_TAB: CreativeModeTab = Registry.register(
         BuiltInRegistries.CREATIVE_MODE_TAB, PAZ_TAB_KEY,
         CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0)
-            .title(Component.translatable("itemGroup.plantz.item_tab"))
+            .title(Component.translatable("itemGroup.sproutsquad.item_tab"))
             .icon { ItemStack(PazItems.SUN) }
             .displayItems { parameters, output ->
                 if (!PazConfig.SPLIT_ITEM_TABS) {
@@ -190,7 +190,7 @@ object PazCreativeTabs {
     val PLANT_TAB: CreativeModeTab = Registry.register(
         BuiltInRegistries.CREATIVE_MODE_TAB, PLANT_TAB_KEY,
         CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 1)
-            .title(Component.translatable("itemGroup.plantz.seed_packet_tab"))
+            .title(Component.translatable("itemGroup.sproutsquad.seed_packet_tab"))
             .icon { SeedPacketItem.stackFor(PazEntities.SUNFLOWER) }
             .displayItems { parameters, output ->
                 if (PazConfig.SPLIT_ITEM_TABS) plantEntities(output)
@@ -199,7 +199,7 @@ object PazCreativeTabs {
     val ZOMBIE_TAB: CreativeModeTab = Registry.register(
         BuiltInRegistries.CREATIVE_MODE_TAB, ZOMBIE_TAB_KEY,
         CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 2)
-            .title(Component.translatable("itemGroup.plantz.zombie_tab"))
+            .title(Component.translatable("itemGroup.sproutsquad.zombie_tab"))
             .icon { ItemStack(PazItems.BROWN_COAT_SPAWN_EGG) }
             .displayItems { parameters, output ->
                 if (PazConfig.SPLIT_ITEM_TABS) zombieEntities(output)

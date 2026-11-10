@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "plantz:football_helmet",
-    "plantz:plant_pot_helmet",
-    "plantz:cone",
+    "sproutsquad:football_helmet",
+    "sproutsquad:plant_pot_helmet",
+    "sproutsquad:cone",
     "minecraft:bucket"
   ]
 }

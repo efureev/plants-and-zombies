@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "sproutsquad:plant_electric",
+    "sproutsquad:zombie_electric",
+    "sproutsquad:electric_zap",
+    "#minecraft:is_lightning"
+  ]
+}

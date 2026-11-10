@@ -113,7 +113,7 @@ interface PlantHeadAttachment {
             if (!spaceFree) return InteractionResult.FAIL
             if (level.getEntitiesOfClass(Plant::class.java, AABB(placePos)).any { it !== plant }) {
                 if (!level.isClientSide) {
-                    player.sendOverlayMessage(Component.translatable("message.plantz.already_planted").withStyle(ChatFormatting.RED))
+                    player.sendOverlayMessage(Component.translatable("message.sproutsquad.already_planted").withStyle(ChatFormatting.RED))
                 }
                 return InteractionResult.FAIL
             }

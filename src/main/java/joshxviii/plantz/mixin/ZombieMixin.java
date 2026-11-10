@@ -86,20 +86,20 @@ public class ZombieMixin implements ZombieRaider {
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveCustomFlags(ValueOutput output, CallbackInfo ci) {
-        output.putBoolean("plantz:IsFromRaid", this.plantz$getIsFromRaid());
-        output.putBoolean("plantz:AddsHealthToRaid", this.plantz$getAddsHealthToRaid());
-        output.putBoolean("plantz:IsLeader", this.plantz$getIsLeader());
-        output.putBoolean("plantz:IsBoss", this.plantz$getIsBoss());
-        output.putBoolean("plantz:IgnoreFlag", this.plantz$getIgnoreFlag());
+        output.putBoolean("sproutsquad:IsFromRaid", this.plantz$getIsFromRaid());
+        output.putBoolean("sproutsquad:AddsHealthToRaid", this.plantz$getAddsHealthToRaid());
+        output.putBoolean("sproutsquad:IsLeader", this.plantz$getIsLeader());
+        output.putBoolean("sproutsquad:IsBoss", this.plantz$getIsBoss());
+        output.putBoolean("sproutsquad:IgnoreFlag", this.plantz$getIgnoreFlag());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void loadCustomFlags(ValueInput input, CallbackInfo ci) {
-        this.plantz$setIsFromRaid(input.getBooleanOr("plantz:IsFromRaid", false));
-        this.plantz$setAddsHealthToRaid(input.getBooleanOr("plantz:AddsHealthToRaid", true));
-        this.plantz$setIsLeader(input.getBooleanOr("plantz:IsLeader", false));
-        this.plantz$setIsBoss(input.getBooleanOr("plantz:IsBoss", false));
-        this.plantz$setIgnoreFlag(input.getBooleanOr("plantz:IgnoreFlag", false));
+        this.plantz$setIsFromRaid(input.getBooleanOr("sproutsquad:IsFromRaid", false));
+        this.plantz$setAddsHealthToRaid(input.getBooleanOr("sproutsquad:AddsHealthToRaid", true));
+        this.plantz$setIsLeader(input.getBooleanOr("sproutsquad:IsLeader", false));
+        this.plantz$setIsBoss(input.getBooleanOr("sproutsquad:IsBoss", false));
+        this.plantz$setIgnoreFlag(input.getBooleanOr("sproutsquad:IgnoreFlag", false));
     }
 
     @ModifyArgs(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/monster/Monster;hurtServer(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)Z"))

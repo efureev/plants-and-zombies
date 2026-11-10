@@ -1,0 +1,47 @@
+{
+  "parent": "sproutsquad:recipes/balloon",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:balloon/balloon"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_balloon": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#sproutsquad:balloons"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_balloon"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:balloon/white_balloon",
+      "sproutsquad:balloon/light_gray_balloon",
+      "sproutsquad:balloon/gray_balloon",
+      "sproutsquad:balloon/black_balloon",
+      "sproutsquad:balloon/brown_balloon",
+      "sproutsquad:balloon/red_balloon",
+      "sproutsquad:balloon/orange_balloon",
+      "sproutsquad:balloon/yellow_balloon",
+      "sproutsquad:balloon/lime_balloon",
+      "sproutsquad:balloon/green_balloon",
+      "sproutsquad:balloon/cyan_balloon",
+      "sproutsquad:balloon/light_blue_balloon",
+      "sproutsquad:balloon/blue_balloon",
+      "sproutsquad:balloon/purple_balloon",
+      "sproutsquad:balloon/magenta_balloon",
+      "sproutsquad:balloon/pink_balloon"
+    ]
+  }
+}

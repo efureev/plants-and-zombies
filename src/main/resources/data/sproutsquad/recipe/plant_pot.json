@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": [
+      "minecraft:brick"
+    ],
+    "@": [
+      "minecraft:dirt"
+    ],
+    "*": [
+      "sproutsquad:sun"
+    ]
+  },
+  "pattern": [
+    " * ",
+    "#@#",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:plant_pot"
+  }
+}

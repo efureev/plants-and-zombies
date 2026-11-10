@@ -1,0 +1,53 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:football_helmet"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.big_three"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.big_three.description"
+    }
+  },
+  "parent": "sproutsquad:cone_head",
+  "criteria": {
+    "sproutsquad:all_star": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:all_star"
+          }
+        }
+      }
+    },
+    "sproutsquad:disco_zombie": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:disco_zombie"
+          }
+        }
+      }
+    },
+    "sproutsquad:zombie_yeti": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:zombie_yeti"
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

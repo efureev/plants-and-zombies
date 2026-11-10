@@ -1,6 +1,0 @@
-{
-  "parent": "plantz:item/watering_can",
-  "textures": {
-    "layer0": "plantz:item/watering_can_filled"
-  }
-}

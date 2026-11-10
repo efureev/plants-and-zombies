@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "@": [
+      "minecraft:amethyst_shard"
+    ],
+    "#": [
+      "sproutsquad:brainz_alloy"
+    ],
+    "+": [
+      "sproutsquad:brainzium"
+    ],
+    "*": [
+      "minecraft:redstone"
+    ],
+    "=": [
+      "sproutsquad:reinforced_brainz_alloy_block"
+    ]
+  },
+  "pattern": [
+    "#@#",
+    "*+*",
+    "==="
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:time_machine"
+  }
+}

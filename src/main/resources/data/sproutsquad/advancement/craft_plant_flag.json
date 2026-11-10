@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:plantz_flag"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.craft_plant_flag"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.craft_plant_flag.description"
+    }
+  },
+  "parent": "sproutsquad:root",
+  "criteria": {
+    "craft_flag": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipes": [
+          "sproutsquad:plantz_flag"
+        ]
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

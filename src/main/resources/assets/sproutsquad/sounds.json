@@ -1,0 +1,485 @@
+{
+  "item.watering_can": {
+    "sounds": [
+      { "name": "item/bottle/empty1", "volume": 1.0, "pitch": 0.75},
+      { "name": "item/bottle/empty2", "volume": 1.0, "pitch": 0.75}
+    ], "subtitle": "sproutsquad.subtitles.item.watering_can"
+  },
+
+  "item.dye_blaster": {
+    "sounds": [
+      { "name": "sproutsquad:item/dye_blaster/shoot1", "volume": 1.0, "pitch": 1.0},
+      { "name": "sproutsquad:item/dye_blaster/shoot2", "volume": 1.0, "pitch": 1.0},
+      { "name": "sproutsquad:item/dye_blaster/shoot3", "volume": 1.0, "pitch": 1.0},
+      { "name": "sproutsquad:item/dye_blaster/shoot4", "volume": 1.0, "pitch": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.item.dye_blaster"
+  },
+
+  "item.balloon.inflate": {
+    "sounds": [
+      { "name": "sproutsquad:item/balloon/inflate1", "volume": 0.4, "pitch": 1.1},
+      { "name": "sproutsquad:item/balloon/inflate2", "volume": 0.4, "pitch": 1.1},
+      { "name": "sproutsquad:item/balloon/inflate3", "volume": 0.4, "pitch": 1.1}
+    ], "subtitle": "sproutsquad.subtitles.item.balloon.inflate"
+  },
+  "item.balloon.pop": {
+    "sounds": [
+      { "name": "sproutsquad:item/balloon/pop1", "volume": 1.2, "pitch": 1.0},
+      { "name": "sproutsquad:item/balloon/pop2", "volume": 1.2, "pitch": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.item.balloon.pop"
+  },
+
+  "entity.projectile.hit_paper": {
+    "sounds": [
+      { "name": "sproutsquad:projectile/hit_paper1", "volume": 1.0},
+      { "name": "sproutsquad:projectile/hit_paper2", "volume": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.projectile.deflected"
+  },
+  "entity.projectile.hit_cone": {
+    "sounds": [
+      { "name": "sproutsquad:projectile/hit_cone1", "volume": 1.0},
+      { "name": "sproutsquad:projectile/hit_cone2", "volume": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.projectile.deflected"
+  },
+  "entity.projectile.hit_bucket": {
+    "sounds": [
+      { "name": "sproutsquad:projectile/hit_bucket1", "volume": 1.0},
+      { "name": "sproutsquad:projectile/hit_bucket2", "volume": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.projectile.deflected"
+  },
+  "entity.projectile.shoot": {
+    "sounds": [{ "name": "random/pop", "volume": 1.0, "pitch": 0.8 }], "subtitle": "sproutsquad.subtitles.projectile.shoot"
+  },
+
+  "entity.projectile.electric_zap": {
+    "sounds": [
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap1", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap2", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap3", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap4", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap5", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap6", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/electric_zap/electric_zap7", "volume": 1.0, "pitch": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.projectile.electric_zap"
+  },
+
+  "entity.projectile.missile.explode": {
+    "sounds": [
+      { "name": "sproutsquad:projectile/missile/explode1", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/missile/explode2", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:projectile/missile/explode3", "volume": 1.0, "pitch": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.projectile.missile.explode"
+  },
+
+  "entity.chomper.attack": {
+    "sounds": [{ "name": "mob/evocation_illager/fangs", "volume": 1.0, "pitch": 0.8 }], "subtitle": "sproutsquad.subtitles.entity.chomper.attack"
+  },
+
+  "entity.scaredyshroom.peek": {
+    "sounds": [{ "name": "sproutsquad:entity/plant/scaredyshroom/peek", "volume": 0.7, "pitch": 1.2 }], "subtitle": "sproutsquad.subtitles.entity.scaredyshroom.peek"
+  },
+  "entity.scaredyshroom.hide": {
+    "sounds": [{ "name": "sproutsquad:entity/plant/scaredyshroom/hide", "volume": 1.0, "pitch": 1.2 }], "subtitle": "sproutsquad.subtitles.entity.scaredyshroom.hide"
+  },
+
+  "entity.potatomine.explode": {
+    "sounds": [
+      { "name": "sproutsquad:entity/plant/potatomine/explode1", "volume": 1.0, "pitch": 1.2 },
+      { "name": "sproutsquad:entity/plant/potatomine/explode2", "volume": 1.0, "pitch": 1.2 }
+    ], "subtitle": "sproutsquad.subtitles.entity.potatomine.explode"
+  },
+
+  "entity.plant_explode": {
+    "sounds": [
+      { "name": "minecraft:random/explode1", "volume": 1.0, "pitch": 1.9 },
+      { "name": "minecraft:random/explode2", "volume": 1.0, "pitch": 1.9 },
+      { "name": "minecraft:random/explode3", "volume": 1.0, "pitch": 1.9 }
+    ], "subtitle": "sproutsquad.subtitles.entity.plant_explode"
+  },
+
+  "entity.gnome.voice_1.ambient": {"sounds": [
+    { "name": "sproutsquad:entity/gnome/voice1/ambient1", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice1/ambient2", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice1/ambient3", "volume": 1.0 }
+  ], "subtitle": "sproutsquad.subtitles.entity.gnome.ambient"},
+  "entity.gnome.voice_1.hurt": {"sounds": [
+    { "name": "sproutsquad:entity/gnome/voice1/hurt1", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice1/hurt2", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice1/hurt3", "volume": 1.0 }
+  ], "subtitle": "sproutsquad.subtitles.entity.gnome.hurt"},
+  "entity.gnome.voice_1.death": {"sounds": [{ "name": "sproutsquad:entity/gnome/voice1/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.gnome.death"},
+
+  "entity.gnome.voice_2.ambient": {"sounds": [
+    { "name": "sproutsquad:entity/gnome/voice2/ambient1", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice2/ambient2", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice2/ambient3", "volume": 1.0 }
+  ], "subtitle": "sproutsquad.subtitles.entity.gnome.ambient"},
+  "entity.gnome.voice_2.hurt": {"sounds": [
+    { "name": "sproutsquad:entity/gnome/voice2/hurt1", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice2/hurt2", "volume": 1.0 },
+    { "name": "sproutsquad:entity/gnome/voice2/hurt3", "volume": 1.0 }
+  ], "subtitle": "sproutsquad.subtitles.entity.gnome.hurt"},
+  "entity.gnome.voice_2.death": {"sounds": [{ "name": "sproutsquad:entity/gnome/voice2/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.gnome.death"},
+
+  "entity.gnome.jump": {"sounds": [{ "name": "sproutsquad:entity/gnome/jump", "volume": 0.2, "pitch": 1.2}], "subtitle": "sproutsquad.subtitles.entity.gnome.jump"},
+
+  "entity.browncoat.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/browncoat/ambient1", "volume": 0.7 },
+      { "name": "sproutsquad:entity/zombie/browncoat/ambient2", "volume": 0.7 },
+      { "name": "sproutsquad:entity/zombie/browncoat/ambient3", "volume": 0.7 }
+    ], "subtitle": "subtitles.entity.zombie.ambient"
+  },
+
+  "entity.gnome.voice_1.jump": {
+    "sounds": [
+      { "name": "sproutsquad:entity/gnome/jump", "volume": 0.2, "pitch": 1.2}
+    ], "subtitle": "sproutsquad.subtitles.entity.gnome.jump"
+  },
+
+  "entity.gnome.voice_2.jump": {
+    "sounds": [
+      { "name": "sproutsquad:entity/gnome/jump", "volume": 0.2, "pitch": 1.2}
+    ], "subtitle": "sproutsquad.subtitles.entity.gnome.jump"
+  },
+
+  "entity.snowchunk": {
+    "sounds": [
+      { "name": "dig/snow1", "volume": 1.0, "pitch": 1.0},
+      { "name": "dig/snow2", "volume": 1.0, "pitch": 1.0},
+      { "name": "dig/snow3", "volume": 1.0, "pitch": 1.0},
+      { "name": "dig/snow4", "volume": 1.0, "pitch": 1.0}
+    ], "subtitle": "sproutsquad.subtitles.entity.snowchunk"
+  },
+  "entity.browncoat.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/browncoat/hurt1", "volume": 0.7 },
+      { "name": "sproutsquad:entity/zombie/browncoat/hurt2", "volume": 0.7 },
+      { "name": "sproutsquad:entity/zombie/browncoat/hurt3", "volume": 0.7 }
+    ], "subtitle": "subtitles.entity.zombie.hurt"
+  },
+  "entity.browncoat.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/browncoat/death", "volume": 0.7 }], "subtitle": "subtitles.entity.zombie.death"
+  },
+
+  "entity.digger_zombie.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/digger_zombie/ambient1", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/digger_zombie/ambient2", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/digger_zombie/ambient3", "volume": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.digger_zombie.ambient"
+  },
+  "entity.digger_zombie.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/digger_zombie/hurt1", "volume": 0.9 },
+      { "name": "sproutsquad:entity/zombie/digger_zombie/hurt2", "volume": 0.9 },
+      { "name": "sproutsquad:entity/zombie/digger_zombie/hurt3", "volume": 0.9 }
+    ], "subtitle": "sproutsquad.subtitles.entity.digger_zombie.hurt"
+  },
+  "entity.digger_zombie.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/digger_zombie/death", "volume": 0.9 }], "subtitle": "sproutsquad.subtitles.entity.digger_zombie.death"
+  },
+
+  "entity.backup_dancer.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/backup_dancer/ambient1", "volume": 1.0, "pitch": 0.9 },
+      { "name": "sproutsquad:entity/zombie/backup_dancer/ambient2", "volume": 1.0, "pitch": 0.9 },
+      { "name": "sproutsquad:entity/zombie/backup_dancer/ambient3", "volume": 1.0, "pitch": 0.9 }
+    ], "subtitle": "sproutsquad.subtitles.entity.backup_dancer.ambient"
+  },
+  "entity.backup_dancer.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/backup_dancer/hurt1", "volume": 1.0, "pitch": 0.9 },
+      { "name": "sproutsquad:entity/zombie/backup_dancer/hurt2", "volume": 1.0, "pitch": 0.9 },
+      { "name": "sproutsquad:entity/zombie/backup_dancer/hurt3", "volume": 1.0, "pitch": 0.9 }
+    ], "subtitle": "sproutsquad.subtitles.entity.backup_dancer.hurt"
+  },
+  "entity.backup_dancer.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/backup_dancer/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.backup_dancer.death"
+  },
+
+  "entity.disco_zombie.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/disco_zombie/ambient1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/disco_zombie/ambient2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/disco_zombie/ambient3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.disco_zombie.ambient"
+  },
+  "entity.disco_zombie.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/disco_zombie/hurt1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/disco_zombie/hurt2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/disco_zombie/hurt3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.disco_zombie.hurt"
+  },
+  "entity.disco_zombie.boogie": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/disco_zombie/boogie", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.disco_zombie.boogie"
+  },
+  "entity.disco_zombie.summon": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/disco_zombie/summon", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.disco_zombie.summon"
+  },
+  "entity.disco_zombie.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/disco_zombie/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.disco_zombie.death"
+  },
+
+  "entity.all_star.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/all_star/ambient1", "volume": 1.0, "pitch": 0.9  },
+      { "name": "sproutsquad:entity/zombie/all_star/ambient2", "volume": 1.0, "pitch": 0.9  },
+      { "name": "sproutsquad:entity/zombie/all_star/ambient3", "volume": 1.0, "pitch": 0.9  }
+    ], "subtitle": "sproutsquad.subtitles.entity.all_star.ambient"
+  },
+  "entity.all_star.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/all_star/hurt1", "volume": 1.0, "pitch": 0.9 },
+      { "name": "sproutsquad:entity/zombie/all_star/hurt2", "volume": 1.0, "pitch": 0.9  },
+      { "name": "sproutsquad:entity/zombie/all_star/hurt3", "volume": 1.0, "pitch": 0.9  }
+    ], "subtitle": "sproutsquad.subtitles.entity.all_star.hurt"
+  },
+  "entity.all_star.whistle": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/all_star/whistle", "volume": 1.0, "pitch": 1.1 }], "subtitle": "sproutsquad.subtitles.entity.all_star.whistle"
+  },
+  "entity.all_star.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/all_star/death", "volume": 1.0, "pitch": 0.9 }], "subtitle": "sproutsquad.subtitles.entity.all_star.death"
+  },
+
+  "entity.zombie_yeti.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/ambient1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/ambient2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/ambient3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.zombie_yeti.ambient"
+  },
+  "entity.zombie_yeti.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/hurt1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/hurt2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_yeti/hurt3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.zombie_yeti.hurt"
+  },
+  "entity.zombie_yeti.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/zombie_yeti/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.zombie_yeti.death"
+  },
+
+  "entity.imp.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/imp/ambient1", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/imp/ambient2", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/imp/ambient3", "volume": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.imp.ambient"
+  },
+  "entity.imp.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/imp/hurt1", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/imp/hurt2", "volume": 0.8 },
+      { "name": "sproutsquad:entity/zombie/imp/hurt3", "volume": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.imp.hurt"
+  },
+  "entity.imp.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/imp/death", "volume": 0.8 }], "subtitle": "sproutsquad.subtitles.entity.imp.death"
+  },
+
+  "entity.pirate_captain.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/pirate_captain/ambient1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/ambient2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/ambient3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.pirate_captain.ambient"
+  },
+  "entity.pirate_captain.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/pirate_captain/hurt1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/hurt2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/hurt3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.pirate_captain.hurt"
+  },
+  "entity.pirate_captain.death": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/pirate_captain/death1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/death2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain/death3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.pirate_captain.death"
+  },
+  "entity.pirate_captain_ghost.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/ambient1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/ambient2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/ambient3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.pirate_captain_ghost.ambient"
+  },
+  "entity.pirate_captain_ghost.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/hurt1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/hurt2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/pirate_captain_ghost/hurt3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.pirate_captain_ghost.hurt"
+  },
+
+  "entity.zombie_turret.shoot": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/zombie_turret/shoot1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_turret/shoot2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/zombie_turret/shoot3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.zombie_turret.shoot"
+  },
+
+  "entity.robo_zombie.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/robo_zombie/ambient1", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:entity/zombie/robo_zombie/ambient2", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:entity/zombie/robo_zombie/ambient3", "volume": 1.0, "pitch": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.robo_zombie.ambient"
+  },
+  "entity.robo_zombie.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/robo_zombie/hurt1", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:entity/zombie/robo_zombie/hurt2", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:entity/zombie/robo_zombie/hurt3", "volume": 1.0, "pitch": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.robo_zombie.hurt"
+  },
+  "entity.robo_zombie.shoot": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/robo_zombie/shoot", "volume": 1.5 }], "subtitle": "sproutsquad.subtitles.entity.robo_zombie.shoot"
+  },
+  "entity.robo_zombie.death": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/robo_zombie/death1", "volume": 1.0, "pitch": 0.8 },
+      { "name": "sproutsquad:entity/zombie/robo_zombie/death2", "volume": 1.0, "pitch": 0.8 }
+    ], "subtitle": "sproutsquad.subtitles.entity.robo_zombie.death"
+  },
+
+  "entity.super_brainz.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/super_brainz/ambient1", "volume": 1.2 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/ambient2", "volume": 1.2 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/ambient3", "volume": 1.2 }
+    ], "subtitle": "sproutsquad.subtitles.entity.super_brainz.ambient"
+  },
+  "entity.super_brainz.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/super_brainz/hurt1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/hurt2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/hurt3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.super_brainz.hurt"
+  },
+  "entity.super_brainz.punch": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/super_brainz/punch1", "volume": 1.2 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/punch2", "volume": 1.2 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/punch3", "volume": 1.2 }
+    ], "subtitle": "sproutsquad.subtitles.entity.super_brainz.punch"
+  },
+  "entity.super_brainz.lazer": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/super_brainz/lazer1", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/lazer2", "volume": 1.0 },
+      { "name": "sproutsquad:entity/zombie/super_brainz/lazer3", "volume": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.super_brainz.lazer"
+  },
+  "entity.super_brainz.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/super_brainz/death", "volume": 1.0 }], "subtitle": "sproutsquad.subtitles.entity.super_brainz.death"
+  },
+
+  "entity.gargantuar.ambient": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/gargantuar/ambient1", "volume": 2.0 },
+      { "name": "sproutsquad:entity/zombie/gargantuar/ambient2", "volume": 2.0 },
+      { "name": "sproutsquad:entity/zombie/gargantuar/ambient3", "volume": 2.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.gargantuar.ambient"
+  },
+  "entity.gargantuar.hurt": {
+    "sounds": [
+      { "name": "sproutsquad:entity/zombie/gargantuar/hurt1", "volume": 2.0 },
+      { "name": "sproutsquad:entity/zombie/gargantuar/hurt2", "volume": 2.0 },
+      { "name": "sproutsquad:entity/zombie/gargantuar/hurt3", "volume": 2.0 }
+    ], "subtitle": "sproutsquad.subtitles.entity.gargantuar.hurt"
+  },
+  "entity.gargantuar.death": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/gargantuar/death", "volume": 2.0 }], "subtitle": "sproutsquad.subtitles.entity.gargantuar.death"
+  },
+  "entity.gargantuar.dig": {
+    "sounds": [{ "name": "sproutsquad:entity/zombie/gargantuar/dig", "volume": 1.3 }], "subtitle": "sproutsquad.subtitles.entity.gargantuar.dig"
+  },
+
+  "entity.zombie.eat": {
+    "sounds": [{ "name": "random/burp", "volume": 1.0, "pitch": 0.9 }], "subtitle": "sproutsquad.subtitles.entity.zombie.eat"
+  },
+
+  "event.mob_effect.hypnotized": {
+    "sounds": [{ "name": "enchant/thorns/hit1", "volume": 1.0, "pitch": 1.3 }], "subtitle": "sproutsquad.subtitles.event.mob_effect.hypnotized"
+  },
+  "event.mob_effect.zombie_omen": {
+    "sounds": [{ "name": "event/mob_effects/raid_omen", "volume": 1.0, "pitch": 1.2 }], "subtitle": "sproutsquad.subtitles.event.mob_effect.zombie_omen"
+  },
+
+  "music_disc.grassy_groove": {
+    "sounds": [{ "name": "sproutsquad:music/grassy_groove", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music_disc.grassy_groove"
+  },
+
+  "event.raid.victory": {
+    "sounds": [
+      { "name": "sproutsquad:music/raid/loon_griefers_win", "volume": 0.8, "pitch": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.event.raid.victory"
+  },
+
+  "event.raid.defeat": {
+    "sounds": [
+      { "name": "sproutsquad:music/raid/loon_griefers_lose", "volume": 0.8, "pitch": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.event.raid.defeat"
+  },
+
+  "event.raid.special_wave": {
+    "sounds": [
+      { "name": "block/trial_spawner/ambient_ominous1", "volume": 6.0, "pitch": 1.0 },
+      { "name": "block/trial_spawner/ambient_ominous2", "volume": 6.0, "pitch": 1.0 },
+      { "name": "block/trial_spawner/ambient_ominous3", "volume": 6.0, "pitch": 1.0 }
+    ], "subtitle": "sproutsquad.subtitles.event.raid.special_wave"
+  },
+
+  "event.raid.boss_spawn": {
+    "sounds": [
+      { "name": "mob/evocation_illager/prepare_summon", "volume": 6.0, "pitch": 0.825 }
+    ], "subtitle": "sproutsquad.subtitles.event.raid.boss_spawn"
+  },
+
+  "event.raid.taco_reward": {
+    "sounds": [{ "name": "sproutsquad:event/taco_reward", "volume": 1.0, "pitch": 1.0  }], "subtitle": "sproutsquad.subtitles.event.raid.taco_reward"
+  },
+
+  "music.gnome_space": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_low", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.gnome_space"
+  },
+
+  "music.raid.low": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_low", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.low"
+  },
+  "music.raid.medium": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_medium", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.medium"
+  },
+  "music.raid.high": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.high"
+  },
+  "music.raid.bucket": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_medium", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.bucket"
+  },
+  "music.raid.halftime": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_medium", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.halftime"
+  },
+  "music.raid.winter": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.winter"
+  },
+  "music.raid.zomboween": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.zomboween"
+  },
+  "music.raid.pirate": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.pirate"
+  },
+  "music.raid.army": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.army"
+  },
+  "music.raid.league": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.league"
+  },
+  "music.raid.zomboss": {
+    "sounds": [{ "name": "sproutsquad:music/raid/loon_griefers_high", "volume": 1.0, "pitch": 1.0 }], "subtitle": "sproutsquad.subtitles.music.raid.zomboss"
+  }
+}

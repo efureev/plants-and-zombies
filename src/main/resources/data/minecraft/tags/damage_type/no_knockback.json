@@ -1,9 +1,9 @@
 {
   "replace": false,
   "values": [
-    "#plantz:plant_damage",
-    "#plantz:is_electric",
-    "plantz:zombie_energy",
-    "plantz:toxic"
+    "#sproutsquad:plant_damage",
+    "#sproutsquad:is_electric",
+    "sproutsquad:zombie_energy",
+    "sproutsquad:toxic"
   ]
 }

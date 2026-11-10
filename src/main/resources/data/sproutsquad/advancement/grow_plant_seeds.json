@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:watering_can"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.grow_plant_seeds"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.grow_plant_seeds.description"
+    }
+  },
+  "parent": "sproutsquad:relocation",
+  "criteria": {
+    "grow_seeds": {
+      "trigger": "sproutsquad:grow_seeds"
+    }
+  },
+  "sends_telemetry_event": false
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:brainz_alloy"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_brainzium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:brainzium"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brainzium"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:time_machine",
+      "sproutsquad:brainz_alloy"
+    ]
+  }
+}

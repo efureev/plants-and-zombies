@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack
 class RollerSkatesItem(properties: Properties) : Item(properties) {
     companion object {
         fun addToTooltip(consumer: MutableList<Component>) {
-            consumer.add(1, Component.translatable("item.plantz.roller_skates.description")
+            consumer.add(1, Component.translatable("item.sproutsquad.roller_skates.description")
                 .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         }
         val ROLLER_SKATES_ID = pazResource("roller_skates")

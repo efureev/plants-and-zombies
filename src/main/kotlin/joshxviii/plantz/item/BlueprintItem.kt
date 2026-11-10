@@ -36,7 +36,7 @@ class BlueprintItem(properties: Properties) : Item(properties) {
         val entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entityData.type())
 
         val entityName = Component.translatable("entity.${entityId.namespace}.${entityId.path}")
-        return Component.translatable("item.plantz.blueprint.entity", entityName)
+        return Component.translatable("item.sproutsquad.blueprint.entity", entityName)
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {
@@ -68,7 +68,7 @@ class BlueprintItem(properties: Properties) : Item(properties) {
         val alloyCost = itemStack.get(PazComponents.BRAINZ_ALLOY_COST)?.getAlloyCost(entityType) ?: 0
         if (alloyCost > availableAlloy && !player.hasInfiniteMaterials()) {
             player.sendOverlayMessage(
-                Component.translatable("message.plantz.not_enough_item", PazItems.BRAINZ_ALLOY.name(), availableAlloy, alloyCost).withStyle(ChatFormatting.RED)
+                Component.translatable("message.sproutsquad.not_enough_item", PazItems.BRAINZ_ALLOY.name(), availableAlloy, alloyCost).withStyle(ChatFormatting.RED)
             )
             return InteractionResult.FAIL
         }
@@ -87,7 +87,7 @@ class BlueprintItem(properties: Properties) : Item(properties) {
             val entityBox = entity.boundingBox.move(spawnPos.multiply(-1))
             if (!(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))) {
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
+                    Component.translatable("message.sproutsquad.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                 )
                 return InteractionResult.FAIL
             }
@@ -101,7 +101,7 @@ class BlueprintItem(properties: Properties) : Item(properties) {
             val existingPlants = level.getEntitiesOfClass(LivingEntity::class.java, AABB(it.blockPosition()))
             if (existingPlants.isNotEmpty()) {
                 player.sendOverlayMessage(
-                    Component.translatable("message.plantz.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
+                    Component.translatable("message.sproutsquad.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
                 )
                 return InteractionResult.FAIL
             }

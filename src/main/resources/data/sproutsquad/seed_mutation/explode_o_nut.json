@@ -1,0 +1,8 @@
+{
+  "mutations": [
+    {
+      "chance": 0.2,
+      "result": "sproutsquad:wallnut"
+    }
+  ]
+}

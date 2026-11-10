@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:mail_collection_box"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_mailbox": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:mailbox"
+          }
+        ]
+      }
+    },
+    "has_brainz_alloy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:brainz_alloy"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mailbox",
+      "has_brainz_alloy"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:mail_collection_box"
+    ]
+  }
+}

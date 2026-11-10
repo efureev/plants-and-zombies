@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:time_machine"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.time_machine"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.time_machine.description"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "sproutsquad:solar_power",
+  "criteria": {
+    "has_time_machine": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:time_machine"
+          }
+        ]
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

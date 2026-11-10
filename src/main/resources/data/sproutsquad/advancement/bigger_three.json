@@ -1,0 +1,53 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:pirate_captain_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.bigger_three"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.bigger_three.description"
+    }
+  },
+  "parent": "sproutsquad:big_three",
+  "criteria": {
+    "sproutsquad:robo_zombie": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:robo_zombie"
+          }
+        }
+      }
+    },
+    "sproutsquad:pirate_captain": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:pirate_captain"
+          }
+        }
+      }
+    },
+    "sproutsquad:super_brainz": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:super_brainz"
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

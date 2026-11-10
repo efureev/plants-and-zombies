@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:plantz_flag"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "sproutsquad:blocks/plantz_flag"
+}

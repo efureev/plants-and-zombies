@@ -1,0 +1,60 @@
+{
+  "type": "sproutsquad:time_space",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "sproutsquad:time_space",
+    "biome_source": {
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "sproutsquad:ancient_egypt",
+          "parameters": {
+            "temperature": [0, 1],
+            "humidity": [-1, 0],
+            "continentalness": [-1, 1],
+            "erosion": [-1, 1],
+            "depth": [-1, 1],
+            "weirdness": [-1, 1],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "sproutsquad:jurassic_period",
+          "parameters": {
+            "temperature": [0, 1],
+            "humidity": [0, 1],
+            "continentalness": [-1, 1],
+            "erosion": [-1, 1],
+            "depth": [-1, 1],
+            "weirdness": [-1, 1],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "sproutsquad:dark_ages",
+          "parameters": {
+            "temperature": [-1, 0],
+            "humidity": [0, 1],
+            "continentalness": [-1, 1],
+            "erosion": [-1, 1],
+            "depth": [-1, 1],
+            "weirdness": [-1, 1],
+            "offset": 0
+          }
+        },
+        {
+          "biome": "sproutsquad:far_future",
+          "parameters": {
+            "temperature": [-1, 0],
+            "humidity": [-1, 0],
+            "continentalness": [-1, 1],
+            "erosion": [-1, 1],
+            "depth": [-1, 1],
+            "weirdness": [-1, 1],
+            "offset": 0
+          }
+        }
+      ]
+    }
+  }
+}

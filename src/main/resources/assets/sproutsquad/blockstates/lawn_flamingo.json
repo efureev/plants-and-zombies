@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "sproutsquad:block/lawn_flamingo" },
+    "facing=south": { "model": "sproutsquad:block/lawn_flamingo", "y": 180 },
+    "facing=east":  { "model": "sproutsquad:block/lawn_flamingo", "y": 90 },
+    "facing=west":  { "model": "sproutsquad:block/lawn_flamingo", "y": 270 }
+  }
+}

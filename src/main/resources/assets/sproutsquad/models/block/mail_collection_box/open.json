@@ -1,0 +1,6 @@
+{
+	"parent": "sproutsquad:block/mail_collection_box/closed",
+	"textures": {
+		"0": "sproutsquad:block/mail_collection_box/open"
+	}
+}

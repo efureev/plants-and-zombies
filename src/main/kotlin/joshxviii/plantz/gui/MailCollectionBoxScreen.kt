@@ -48,7 +48,7 @@ class MailCollectionBoxScreen(
     }
 
     fun initSearchBar(x: Int, y: Int): EditBox {
-        val txt = EditBox(font, x, y, 94, 12, Component.translatable("container.plantz.address_search"));
+        val txt = EditBox(font, x, y, 94, 12, Component.translatable("container.sproutsquad.address_search"));
         txt.setCanLoseFocus(true)
         txt.setTextColor(-1)
         txt.setTextColorUneditable(-1)
@@ -128,7 +128,7 @@ class MailCollectionBoxScreen(
         menu.availableMailboxes.find { it.blockPos == menu.selectedMailboxPos }?.let { mailbox ->
             val color = ARGB.addRgb(mailbox.color, 0x333333)
             val darker = ARGB.multiply(color, 0x777777)
-            val posText = mailbox.blockPos.let { Component.translatable("container.plantz.mailbox_coords", it.x, it.y, it.z) }.withColor(darker)
+            val posText = mailbox.blockPos.let { Component.translatable("container.sproutsquad.mailbox_coords", it.x, it.y, it.z) }.withColor(darker)
             val text = Component.translatable("chat.square_brackets", posText).withColor(darker)
             val line = font.split(text, 101).firstOrNull()
             graphics.blit(RenderPipelines.GUI_TEXTURED, MAILBOX_SELECTED, xo+24, yo+70, 0f, 0f, 101, 14, 101, 14, color)
@@ -136,7 +136,7 @@ class MailCollectionBoxScreen(
         }
 
         if (miniButtons.isEmpty() && menu.selectedMailboxPos == null) {
-            val text = Component.translatable("container.plantz.no_address").withColor(0x777777)
+            val text = Component.translatable("container.sproutsquad.no_address").withColor(0x777777)
             val line = font.split(text, 101).firstOrNull()
             if (line!=null) graphics.text(font, line, xo+75 - font.width(line)/2, yo+73, -1, false)
         }

@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3
 class DuckTubeItem(properties: Properties) : Item(properties) {
     companion object {
         fun addToTooltip(consumer: MutableList<Component>) {
-            consumer.add(1, Component.translatable("item.plantz.ducky_tube.description")
+            consumer.add(1, Component.translatable("item.sproutsquad.ducky_tube.description")
                 .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         }
 

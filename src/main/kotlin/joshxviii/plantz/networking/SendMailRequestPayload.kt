@@ -55,13 +55,13 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
                 targetBE?.updateMailboxState(MailboxState.HAS_MAIL)
                 level.playSound(null, menu.data.blockPos, SoundEvents.UI_LOOM_SELECT_PATTERN, SoundSource.BLOCKS, 0.3f, 1.2f)
                 PacketDistributor.sendToPlayer(player, SendMailResponsePayload(
-                    Component.translatable("container.plantz.mailbox_success").withColor(0x00FF00)
+                    Component.translatable("container.sproutsquad.mailbox_success").withColor(0x00FF00)
                 ))
             }
             else {
                 level.playSound(null, menu.data.blockPos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.3f, 1.2f)
                 PacketDistributor.sendToPlayer(player, SendMailResponsePayload(
-                    Component.translatable("container.plantz.mailbox_full", targetBE?.name ?: Component.translatable("item.plantz.mailbox")).withColor(0xFF0000)
+                    Component.translatable("container.sproutsquad.mailbox_full", targetBE?.name ?: Component.translatable("item.sproutsquad.mailbox")).withColor(0xFF0000)
                 ))
             }
             PazCriteria.SEND_MAIL.trigger(player, result == MailboxSendResult.SUCCESS)

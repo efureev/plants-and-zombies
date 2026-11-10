@@ -38,7 +38,7 @@ object ZombieSpawnEggs {
 
         fun variant(variant: StringRepresentable) {
             tag.putString("variant", variant.serializedName)
-            name = Component.translatable("entity.plantz.$typeKey.variant.${variant.serializedName}")
+            name = Component.translatable("entity.sproutsquad.$typeKey.variant.${variant.serializedName}")
             customModelDataStrings = listOf(variant.serializedName)
         }
 
@@ -48,7 +48,7 @@ object ZombieSpawnEggs {
             loadout.items.forEach { (slot, stack) ->
                 equipment.put(slot.serializedName, ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, stack()).getOrThrow())
             }
-            name = Component.translatable("entity.plantz.$typeKey.loadout.${loadout.id}")
+            name = Component.translatable("entity.sproutsquad.$typeKey.loadout.${loadout.id}")
         }
 
         fun build(): ItemStack {

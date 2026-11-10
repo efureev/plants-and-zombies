@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "sproutsquad:zombie_eat",
+    "sproutsquad:zombie_smash",
+    "sproutsquad:zombie_explode",
+    "sproutsquad:zombie_electric",
+    "sproutsquad:zombie_energy",
+    "sproutsquad:zombie_trample"
+  ]
+}

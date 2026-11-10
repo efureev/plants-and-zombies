@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "plantz:paint",
-    "#plantz:plant_damage",
-    "#plantz:is_electric"
+    "sproutsquad:paint",
+    "#sproutsquad:plant_damage",
+    "#sproutsquad:is_electric"
   ]
 }

@@ -27,7 +27,7 @@ class DoorShieldItem(properties: Properties) : Item(properties) {
 
     override fun getName(itemStack: ItemStack): Component {
         val doorData = itemStack.get(PazComponents.DOOR_SHIELD) ?: return super.getName(itemStack)
-        return Component.translatable("item.plantz.door_shield.type", doorData.doorType.name)
+        return Component.translatable("item.sproutsquad.door_shield.type", doorData.doorType.name)
     }
 
     override fun use(level: Level, player: Player, hand: InteractionHand): InteractionResult {

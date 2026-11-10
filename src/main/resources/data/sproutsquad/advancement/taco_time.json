@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:taco"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.taco_time"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.taco_time.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "sproutsquad:craft_plant_flag",
+  "criteria": {
+    "boss_1": {"conditions": {"boss_defeats": 1}, "trigger": "sproutsquad:boss_defeat"},
+    "boss_2": {"conditions": {"boss_defeats": 2}, "trigger": "sproutsquad:boss_defeat"}
+  },
+  "requirements": [
+    ["boss_1"],
+    ["boss_2"]
+  ],
+  "sends_telemetry_event": true
+}
