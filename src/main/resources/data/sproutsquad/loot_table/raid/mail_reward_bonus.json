@@ -35,6 +35,19 @@
           "weight": 3
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:brainzium"
+        }
+      ],
+      "condition": {
+        "type": "minecraft:random_chance",
+        "chance": 0.25
+      }
     }
   ],
   "random_sequence": "sproutsquad:raid/default_mail_rewards"

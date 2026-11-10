@@ -1,0 +1,87 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:phantom_membrane",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0,
+                "max": 1
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:entity_properties",
+            "entity": "attacker",
+            "predicate": {
+              "minecraft:entity_type": "#sproutsquad:drop_loot_when_killed_by"
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "modifier": [
+            {
+              "type": "minecraft:set_components",
+              "components": {
+                "minecraft:entity_data": {
+                  "id": "sproutsquad:seashroom"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:entity_properties",
+            "entity": "attacker",
+            "predicate": {
+              "minecraft:entity_type": "#sproutsquad:drop_loot_when_killed_by"
+            }
+          },
+          {
+            "type": "minecraft:random_chance",
+            "chance": 0.03
+          }
+        ]
+      }
+    }
+  ],
+  "random_sequence": "sproutsquad:entities/pirate_captain_ghost"
+}

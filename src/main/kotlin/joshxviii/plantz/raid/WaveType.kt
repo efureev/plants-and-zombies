@@ -231,7 +231,7 @@ enum class WaveType(
                 ),
             )
         },
-        lootTableFn = { PazLootTables.MAIL_REWARD_DEFAULT_HARD }
+        lootTableFn = { PazLootTables.MAIL_REWARD_DISCO }
     ),
     ZOMBOWEEN(
         minWave = 4,

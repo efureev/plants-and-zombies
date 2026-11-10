@@ -11,6 +11,16 @@
           "weight": 1
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "sproutsquad:raid/zomboss/treasure"
+        }
+      ]
     }
   ],
   "random_sequence": "minecraft:chests/raid/league_mail_rewards"

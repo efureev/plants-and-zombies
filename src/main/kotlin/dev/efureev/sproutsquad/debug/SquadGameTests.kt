@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.debug
 
+import dev.efureev.sproutsquad.fixes.F2GameTests
 import joshxviii.plantz.PazMain
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.FunctionGameTestInstance
@@ -19,20 +20,24 @@ import java.util.function.Consumer
  * An environment id can be registered only once.
  */
 object SquadGameTests {
-    private val tests: List<Pair<String, (GameTestHelper) -> Unit>> = listOf(
-        "gallery" to GalleryGameTest::run,
-        "squad_plants" to SquadPlantsGameTest::run,
+    private class Test(val name: String, val run: (GameTestHelper) -> Unit, val maxTicks: Int = 100)
+
+    private val tests = listOf(
+        Test("gallery", GalleryGameTest::run),
+        Test("squad_plants", SquadPlantsGameTest::run),
+        Test("f2_data", F2GameTests::data),
+        Test("f2_squash", F2GameTests::squash, maxTicks = 600),
     )
 
     fun register(modBus: IEventBus) {
         modBus.addListener(RegisterEvent::class.java) { event ->
-            tests.forEach { (name, test) -> event.register(Registries.TEST_FUNCTION, id(name)) { Consumer<GameTestHelper>(test) } }
+            tests.forEach { test -> event.register(Registries.TEST_FUNCTION, id(test.name)) { Consumer<GameTestHelper>(test.run) } }
         }
         modBus.addListener(RegisterGameTestsEvent::class.java) { event ->
-            tests.forEach { (name, _) ->
-                val environment = event.registerEnvironment(id(name))
-                val function = ResourceKey.create(Registries.TEST_FUNCTION, id(name))
-                event.registerTest(id(name), FunctionGameTestInstance(function, TestData(environment, Identifier.withDefaultNamespace("empty"), 100, 0, true)))
+            tests.forEach { test ->
+                val environment = event.registerEnvironment(id(test.name))
+                val function = ResourceKey.create(Registries.TEST_FUNCTION, id(test.name))
+                event.registerTest(id(test.name), FunctionGameTestInstance(function, TestData(environment, Identifier.withDefaultNamespace("empty"), test.maxTicks, 0, true)))
             }
         }
     }

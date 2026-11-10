@@ -77,6 +77,11 @@
           "weight": 3
         },
         {
+          "type": "minecraft:item",
+          "name": "sproutsquad:brainzium",
+          "weight": 3
+        },
+        {
           "type": "minecraft:loot_table",
           "value": "sproutsquad:balloons",
           "weight": 7

@@ -20,7 +20,7 @@
         },
         {
           "type": "minecraft:loot_table",
-          "value": "sproutsquad:raid/default_hard/treasure",
+          "value": "sproutsquad:raid/zomboween/treasure",
           "weight": 12
         }
       ]

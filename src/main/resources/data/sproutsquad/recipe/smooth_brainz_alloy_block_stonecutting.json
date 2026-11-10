@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "sproutsquad:brainz_alloy_block",
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:smooth_brainz_alloy_block"
+  }
+}
