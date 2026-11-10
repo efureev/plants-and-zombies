@@ -424,3 +424,11 @@ fun LivingEntity.knockback(power: Double, xd: Double, zd: Double) {
 fun Path?.getEndPos(): BlockPos? = this?.endNode?.let { BlockPos(it.x, it.y, it.z) }
 
 fun PathNavigation.moveToBlockPos(blockPos: BlockPos, speedModifier: Double) = this.moveTo(blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), speedModifier)
+/** Synced status-effect flags of a [net.minecraft.world.entity.LivingEntity], implemented by LivingEntityMixin. */
+interface PazEffectFlags {
+    fun `plantz$getHypnoId`(): Boolean
+    fun `plantz$getChillId`(): Boolean
+    fun `plantz$getFrozenId`(): Boolean
+    fun `plantz$getButterId`(): Boolean
+    fun `plantz$getPaintedColors`(): Map<Int, Int>
+}

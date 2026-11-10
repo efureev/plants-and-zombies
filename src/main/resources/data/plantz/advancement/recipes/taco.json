@@ -1,4 +1,9 @@
 {
+  "neoforge:conditions": [
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:foods/leafy_green" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/tomato" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/onion" } }
+  ],
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_the_recipe": {

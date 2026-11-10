@@ -6,7 +6,6 @@
   "mixins": [
     "BlocksAttacksBreakChanceMixin",
     "EntityProjectileDeflectionMixin",
-    "LivingEntityAccessor",
     "LivingEntityMixin",
     "LivingEntityProtectsHeadMixin",
     "MobAccessor",
