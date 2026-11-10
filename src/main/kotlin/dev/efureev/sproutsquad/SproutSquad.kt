@@ -1,12 +1,11 @@
 package dev.efureev.sproutsquad
 
 import dev.efureev.sproutsquad.debug.GalleryCommand
-import dev.efureev.sproutsquad.debug.GalleryGameTest
+import dev.efureev.sproutsquad.debug.SquadGameTests
+import dev.efureev.sproutsquad.registry.SquadEntities
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.event.RegisterGameTestsEvent
-import net.neoforged.neoforge.registries.RegisterEvent
 
 /**
  * Entry point for Sprout Squad's own content (everything outside the original mod's code).
@@ -14,9 +13,10 @@ import net.neoforged.neoforge.registries.RegisterEvent
  */
 object SproutSquad {
     fun init(modBus: IEventBus) {
+        SquadEntities.register(modBus)
+
         NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent::class.java) { GalleryCommand.register(it.dispatcher) }
 
-        modBus.addListener(RegisterEvent::class.java) { GalleryGameTest.registerFunction(it) }
-        modBus.addListener(RegisterGameTestsEvent::class.java) { GalleryGameTest.registerTest(it) }
+        SquadGameTests.register(modBus)
     }
 }

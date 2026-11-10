@@ -235,6 +235,11 @@ object PazConfig {
         return chance
     }
 
+    /** Default sun cost for plants registered outside the original mod (Sprout Squad's own characters). */
+    fun registerDefaultSunCost(entityId: String, sunCost: Int) {
+        defaultServerConfig.sunCosts.putIfAbsent(entityId, sunCost)
+    }
+
     fun putDefaultSunCost(entityId: Identifier, sunCost: Int) {
         server.sunCosts.putIfAbsent(entityId.toString(), sunCost.coerceAtLeast(0))
         saveServer()

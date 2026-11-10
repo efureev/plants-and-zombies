@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:flower_pot",
+    "minecraft:wheat_seeds",
+    "sproutsquad:sun"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "sproutsquad:potling"
+      }
+    }
+  }
+}
