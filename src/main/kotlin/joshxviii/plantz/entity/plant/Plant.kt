@@ -679,6 +679,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         bounceAnimation.stop()
         bounceAnimation.startIfStopped(tickCount)
     }
+    // Client side: bounce when hurt.
+    override fun handleDamageEvent(source: DamageSource) {
+        super.handleDamageEvent(source)
+        funnyBounce()
+    }
     fun applyCoffeeBuff(amount: Int = PazConfig.COFFEE_BUFF_DURATION) {
         coffeeBuff = amount
         playSound(SoundEvents.WITCH_DRINK, 1f, 1.5f)
