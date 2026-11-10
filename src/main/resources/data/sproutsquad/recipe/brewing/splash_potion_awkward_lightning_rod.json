@@ -15,6 +15,6 @@
     "id": "minecraft:splash_potion"
   },
   "reagent": {
-    "item": "minecraft:lightning_rod"
+    "item": "#minecraft:lightning_rods"
   }
 }
