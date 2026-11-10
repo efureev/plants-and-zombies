@@ -5,7 +5,9 @@ import joshxviii.plantz.PazItems
 import joshxviii.plantz.inventory.LetterMenu
 import joshxviii.plantz.pazResource
 import joshxviii.plantz.item.component.LetterDataComponent
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.server.level.ServerPlayer
+import net.neoforged.neoforge.network.PacketDistributor
+import net.neoforged.neoforge.network.handling.IPayloadContext
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -28,8 +30,8 @@ data class UpdateLetterPayload(
             ::UpdateLetterPayload
         )
 
-        fun handleUpdateLetterPacket(payload: UpdateLetterPayload, context: ServerPlayNetworking.Context) {
-            val player = context.player()
+        fun handleUpdateLetterPacket(payload: UpdateLetterPayload, context: IPayloadContext) {
+            val player = context.player() as ServerPlayer
             val hand = when (payload.hand) {
                 0 -> InteractionHand.MAIN_HAND
                 1 -> InteractionHand.OFF_HAND

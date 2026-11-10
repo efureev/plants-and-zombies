@@ -19,8 +19,10 @@ import joshxviii.plantz.entity.projectile.*
 import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.mixin.MobAccessor
 import joshxviii.plantz.raid.ignoresFlag
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
+import joshxviii.plantz.neoforge.PazPlatform
+import net.minecraft.server.level.ServerLevel
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -37,7 +39,9 @@ import net.minecraft.world.entity.projectile.Projectile
 object PazEntities {
 
     fun initialize() {
-        ServerEntityEvents.ENTITY_LOAD.register { entity, level ->
+        NeoForge.EVENT_BUS.addListener(EntityJoinLevelEvent::class.java) { event ->
+            if (event.level !is ServerLevel) return@addListener
+            val entity = event.entity
             if (entity is Zombie) (entity as MobAccessor).targetSelector.addGoal(4, NearestAttackableTargetGoal(entity, Gnome::class.java, 5, true, false, null))
 
             val ignore = (entity as? Zombie)?.ignoresFlag() ?: false
@@ -798,7 +802,7 @@ object PazEntities {
     ): EntityType<T> {
         builder.sized(width, height).eyeHeight(eyeHeight)
         val type = register(name, builder)
-        FabricDefaultAttributeRegistry.register(type, attributes.apply(createMobAttributes()))
+        PazPlatform.registerDefaultAttributes(type, attributes.apply(createMobAttributes()))
         return type
     }
 
@@ -810,7 +814,7 @@ object PazEntities {
         val type = register(name, builder
             .ridingOffset(-0.7f)
             .notInPeaceful())
-        FabricDefaultAttributeRegistry.register(type, attributes.apply(createMobAttributes()))
+        PazPlatform.registerDefaultAttributes(type, attributes.apply(createMobAttributes()))
         return type
     }
 
@@ -820,7 +824,7 @@ object PazEntities {
         attributes: AttributeSupplier.Builder = createMobAttributes()
     ): EntityType<Gnome> {
         val type = register(name, builder)
-        FabricDefaultAttributeRegistry.register(type, attributes)
+        PazPlatform.registerDefaultAttributes(type, attributes)
         return type
     }
 
@@ -840,7 +844,7 @@ object PazEntities {
         attributes: AttributeSupplier.Builder = createMobAttributes()
     ): EntityType<T> {
         val type = register(name, builder)
-        FabricDefaultAttributeRegistry.register(type, attributes)
+        PazPlatform.registerDefaultAttributes(type, attributes)
         return type
     }
 

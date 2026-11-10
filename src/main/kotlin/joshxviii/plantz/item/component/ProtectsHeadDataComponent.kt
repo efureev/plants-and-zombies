@@ -37,7 +37,7 @@ import kotlin.compareTo
 
 private const val BELOW_EYE_LEVEL_TOLERANCE = 0.25
 
-class ProtectsHeadDataComponent(
+data class ProtectsHeadDataComponent(
     val slot: EquipmentSlotGroup = EquipmentSlotGroup.HEAD,
     val damageReductions: List<DamageReduction> = listOf(DamageReduction()),
     val itemDamage: ItemDamageFunction = ItemDamageFunction.DEFAULT,

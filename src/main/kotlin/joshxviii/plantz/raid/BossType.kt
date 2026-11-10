@@ -6,7 +6,6 @@ import joshxviii.plantz.entity.zombie.*
 import joshxviii.plantz.pazResource
 import io.netty.buffer.ByteBuf
 import joshxviii.plantz.PazItems
-import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBakedItemModel
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

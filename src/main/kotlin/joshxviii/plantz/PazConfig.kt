@@ -1,8 +1,9 @@
 package joshxviii.plantz
 
 import com.google.gson.GsonBuilder
-import net.fabricmc.api.EnvType
-import net.fabricmc.loader.api.FabricLoader
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.fml.loading.FMLEnvironment
+import net.neoforged.fml.loading.FMLPaths
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
@@ -97,8 +98,8 @@ object PazConfig {
         .disableHtmlEscaping()
         .create()
 
-    private val serverConfigPath: Path = FabricLoader.getInstance().configDir.resolve(SERVER_CONFIG_PATH)
-    private val clientConfigPath: Path = FabricLoader.getInstance().configDir.resolve(CLIENT_CONFIG_PATH)
+    private val serverConfigPath: Path = FMLPaths.CONFIGDIR.get().resolve(SERVER_CONFIG_PATH)
+    private val clientConfigPath: Path = FMLPaths.CONFIGDIR.get().resolve(CLIENT_CONFIG_PATH)
 
     private val defaultServerConfig = ServerConfig()
     var server = defaultServerConfig
@@ -107,7 +108,7 @@ object PazConfig {
     var client = defaultClientConfig
 
     fun load() {
-        if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             client = loadConfig(clientConfigPath, ClientConfig())
         }
         server = loadConfig(serverConfigPath, ServerConfig())

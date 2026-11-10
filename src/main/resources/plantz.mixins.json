@@ -14,9 +14,10 @@
     "PlayerListMixin",
     "ServerLevelMixin",
     "ServerPlayerMixin",
-    "SpawnPlacementsInvoker",
     "VillagerHostilesSensorMixin",
-    "ZombieMixin"
+    "ZombieMixin",
+    "neoforge.LivingEntityEffectsRemovedMixin",
+    "neoforge.MobEffectInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

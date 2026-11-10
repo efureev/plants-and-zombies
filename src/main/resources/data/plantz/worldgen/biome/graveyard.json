@@ -23,8 +23,11 @@
     },
     "minecraft:visual/sky_light_factor": 0.7,
     "minecraft:gameplay/natural_mob_spawns": {
-      "spawns_by_category": {},
-      "spawn_costs": {}
+      "modifier": "overlay",
+      "argument": {
+        "spawns_by_category": {},
+        "spawn_costs": {}
+      }
     }
   },
   "carvers": [

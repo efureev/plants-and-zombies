@@ -1,75 +1,126 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'java-library'
 	id 'maven-publish'
-	id "org.jetbrains.kotlin.jvm" version "2.4.21"
+	id 'idea'
+	id 'net.neoforged.moddev' version "${moddev_version}"
+	id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
 }
 
 version = project.mod_version
-group = project.maven_group
+group = project.mod_group_id
 
 base {
 	archivesName = project.archives_base_name
 }
 
-repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-	maven { url = 'https://maven.minecraftforge.net/' }
-	maven { url = "https://api.modrinth.com/maven" }
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(25)
+	withSourcesJar()
 }
 
-loom {
-	splitEnvironmentSourceSets()
+kotlin {
+	jvmToolchain(25)
+}
 
-	mods {
-		"plants-and-zombies" {
-			sourceSet sourceSets.main
-			sourceSet sourceSets.client
+repositories {
+	maven {
+		name = 'Kotlin for Forge'
+		url = 'https://thedarkcolour.github.io/KotlinForForge/'
+		content { includeGroup 'thedarkcolour' }
+	}
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = 'Modrinth'
+				url = 'https://api.modrinth.com/maven'
+			}
+		}
+		filter { includeGroup 'maven.modrinth' }
+	}
+}
+
+sourceSets.main.resources {
+	exclude('**/*.bbmodel')
+}
+
+neoForge {
+	version = project.neo_version
+
+	runs {
+		client {
+			client()
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+		}
+		server {
+			server()
+			programArgument '--nogui'
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+		}
+		gameTestServer {
+			type = 'gameTestServer'
+			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+		}
+		configureEach {
+			systemProperty 'forge.logging.markers', 'REGISTRIES'
+			logLevel = org.slf4j.event.Level.INFO
 		}
 	}
 
+	mods {
+		"${mod_id}" {
+			sourceSet(sourceSets.main)
+		}
+	}
+}
+
+configurations {
+	runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-	implementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+	implementation "thedarkcolour:kotlinforforge-neoforge:${project.kff_version}"
 
 	compileOnly "maven.modrinth:terrablender:${project.terrablender_version}"
-
+	// Dev runs only: without TerraBlender, OverworldBiomeBuilderMixin adds plantz:graveyard to the
+	// built-in vanilla biome set, which the IDE-only Bootstrap.validate() rejects.
+	localRuntime "maven.modrinth:terrablender:${project.terrablender_version}"
 	compileOnly "maven.modrinth:iris:${project.iris_version}"
-	compileOnly "maven.modrinth:modmenu:${project.modmenu_version}"
 }
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": inputs.properties.version
-	}
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+	var replaceProperties = [
+		minecraft_version      : minecraft_version,
+		minecraft_version_range: minecraft_version_range,
+		neo_version            : neo_version,
+		kff_version            : kff_version,
+		mod_id                 : mod_id,
+		mod_name               : mod_name,
+		mod_license            : mod_license,
+		mod_version            : version.toString(),
+	]
+	inputs.properties replaceProperties
+	expand replaceProperties
+	from 'src/main/templates'
+	into 'build/generated/sources/modMetadata'
 }
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 25
+	options.encoding = 'UTF-8'
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-	kotlinOptions {
-		jvmTarget = 25
+jar {
+	inputs.property 'archivesName', project.base.archivesName
+
+	from('LICENSE') {
+		rename { "${it}_${inputs.properties.archivesName}" }
 	}
 }
 
-tasks.register("devBuild") {
-	group = "build"
-	description = "Builds a development jar (e.g. plants-and-zombies-1.5-dev.42.jar)"
+tasks.register('devBuild') {
+	group = 'build'
+	description = 'Builds a development jar (e.g. plants-and-zombies-1.5-dev.42.jar)'
 
 	doFirst {
 		def buildNum = getNextDevBuildNumber()
@@ -79,47 +130,27 @@ tasks.register("devBuild") {
 		println ">>> Building DEV version: ${devVersion}"
 	}
 
-	finalizedBy("build")
+	finalizedBy('build')
 }
 
-java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
-}
-
-jar {
-	inputs.property "archivesName", project.base.archivesName
-
-	from("LICENSE") {
-		rename { "${it}_${inputs.properties.archivesName}"}
-	}
-}
-
-// configure the maven publication
 publishing {
 	publications {
-		create("mavenJava", MavenPublication) {
+		register('mavenJava', MavenPublication) {
 			artifactId = project.archives_base_name
 			from components.java
 		}
 	}
+}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+idea {
+	module {
+		downloadSources = true
+		downloadJavadoc = true
 	}
 }
 
 def getNextDevBuildNumber() {
-	def numberFile = file("dev_build.number")
+	def numberFile = file('dev_build.number')
 
 	def current = 0
 	if (numberFile.exists()) {
@@ -127,7 +158,7 @@ def getNextDevBuildNumber() {
 	}
 
 	def next = current + 1
-	numberFile.text = next.toString() + "\n"
+	numberFile.text = next.toString() + '\n'
 
 	return next
 }

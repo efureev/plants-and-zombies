@@ -1,5 +1,7 @@
 package joshxviii.plantz.effect
 
+import joshxviii.plantz.neoforge.MobEffectInstanceHooks
+
 import joshxviii.plantz.PazEffects.HYPNOTIZED_GOAL_ATTACHMENT
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.mixin.MobAccessor
@@ -16,7 +18,7 @@ import net.minecraft.world.entity.monster.Enemy
 /**
  * A [MobEffect] that causes the user to attack entities of the same type.
  */
-class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(category, color) {
+class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(category, color), MobEffectInstanceHooks {
     companion object {
         const val CHECK_INTERVAL: Int = 100
     }
@@ -32,17 +34,17 @@ class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(c
     }
 
     override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectStarted(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectStarted(effectInstance, entity)
         tryAddGoal(entity)
     }
 
     override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectRemoved(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectRemoved(effectInstance, entity)
         if (entity !is Plant) {
             if(entity is Mob) {
-                val goal = entity.getAttached<Goal>(HYPNOTIZED_GOAL_ATTACHMENT)
+                val goal = entity.getExistingDataOrNull(HYPNOTIZED_GOAL_ATTACHMENT)
                 if (goal != null) (entity as MobAccessor).targetSelector.removeGoal(goal)
-                entity.setAttached(HYPNOTIZED_GOAL_ATTACHMENT, null)
+                entity.removeData(HYPNOTIZED_GOAL_ATTACHMENT)
             }
         }
     }
@@ -50,7 +52,7 @@ class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(c
     private fun tryAddGoal(entity: LivingEntity) {
         if (entity !is Plant) {
             if(entity is Mob) {
-                val oldGoal = entity.getAttached<Goal>(HYPNOTIZED_GOAL_ATTACHMENT)
+                val oldGoal = entity.getExistingDataOrNull(HYPNOTIZED_GOAL_ATTACHMENT)
                 if (oldGoal != null) return
 
                 val goal = NearestAttackableTargetGoal(entity, LivingEntity::class.java, true) { target, _ ->
@@ -58,7 +60,7 @@ class HypnotizedMobEffect(category: MobEffectCategory, color: Int) : MobEffect(c
                 }
 
                 (entity as MobAccessor).targetSelector.addGoal(0, goal)
-                entity.setAttached(HYPNOTIZED_GOAL_ATTACHMENT,goal)
+                entity.setData(HYPNOTIZED_GOAL_ATTACHMENT, goal)
             }
         }
     }

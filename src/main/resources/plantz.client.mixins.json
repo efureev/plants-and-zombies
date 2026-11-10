@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "joshxviii.plantz.mixin.client",
+  "compatibilityLevel": "JAVA_25",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "AvatarRendererMixin",
+    "BossHealthOverlayMixin",
+    "HudMixin",
+    "HumanoidModelMixin",
+    "LivingEntityRendererMixin",
+    "NowPlayingToastMixin",
+    "SoundManagerMixin"
+  ]
+}

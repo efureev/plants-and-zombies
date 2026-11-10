@@ -8,7 +8,8 @@ import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
-import net.fabricmc.fabric.api.event.player.UseBlockCallback
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 import net.minecraft.core.Vec3i
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
@@ -88,9 +89,14 @@ interface PlantHeadAttachment {
     fun `plantz$setPlantData`(value: CompoundTag)
     companion object {
         fun register() {
-            UseBlockCallback.EVENT.register { player, level, hand, hitResult ->
-                if (hand != InteractionHand.MAIN_HAND || !player.mainHandItem.isEmpty) InteractionResult.PASS
-                else placeWornPlant(player, level, hitResult.blockPos, hitResult.direction)
+            NeoForge.EVENT_BUS.addListener(PlayerInteractEvent.RightClickBlock::class.java) { event ->
+                val player = event.entity
+                if (event.hand != InteractionHand.MAIN_HAND || !player.mainHandItem.isEmpty) return@addListener
+                val result = placeWornPlant(player, event.level, event.pos, event.hitVec.direction)
+                if (result != InteractionResult.PASS) {
+                    event.isCanceled = true
+                    event.cancellationResult = result
+                }
             }
         }
 

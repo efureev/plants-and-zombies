@@ -8,7 +8,7 @@ import joshxviii.plantz.block.MailboxState
 import joshxviii.plantz.inventory.MailCollectionBoxMenu
 import joshxviii.plantz.networking.MailboxSendResult
 import joshxviii.plantz.networking.SendMailRequestPayload.Companion.trySendStack
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
+import joshxviii.plantz.neoforge.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList

@@ -1,5 +1,7 @@
 package joshxviii.plantz.effect
 
+import joshxviii.plantz.neoforge.MobEffectInstanceHooks
+
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectCategory
@@ -14,16 +16,16 @@ class ButteredMobEffect(
     category: MobEffectCategory,
     color: Int,
     particleOptions: ParticleOptions
-) : MobEffect(category, color, particleOptions) {
+) : MobEffect(category, color, particleOptions), MobEffectInstanceHooks {
     companion object {
 
     }
 
     override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectStarted(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectStarted(effectInstance, entity)
     }
 
     override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectRemoved(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectRemoved(effectInstance, entity)
     }
 }

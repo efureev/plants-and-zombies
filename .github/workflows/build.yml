@@ -7,18 +7,16 @@ name: build
 on:
   pull_request:
     paths:
-      - 'src/main/resources/fabric.mod.json'
-      - 'src/main/java/**'
-      - 'src/main/kotlin/**'
-      - 'src/client/java/**'
-      - 'src/client/kotlin/**'
+      - 'src/main/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
   push:
     paths:
-      - 'src/main/resources/fabric.mod.json'
-      - 'src/main/java/**'
-      - 'src/main/kotlin/**'
-      - 'src/client/java/**'
-      - 'src/client/kotlin/**'
+      - 'src/main/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
   workflow_dispatch:
 
 jobs:

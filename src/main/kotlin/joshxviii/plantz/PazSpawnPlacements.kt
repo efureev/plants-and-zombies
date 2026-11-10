@@ -5,9 +5,7 @@ import joshxviii.plantz.entity.zombie.DiggerZombie
 import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.entity.zombie.Zombat
 import joshxviii.plantz.entity.zombie.ZombieYeti
-import joshxviii.plantz.mixin.SpawnPlacementsInvoker
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectionContext
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.*
 import net.minecraft.world.level.biome.Biome
@@ -168,16 +166,32 @@ object PazSpawnPlacements {
         // endregion
     }
 
+    /** A spawn added to every biome in [biomeTag]; applied by [joshxviii.plantz.neoforge.PazSpawnsBiomeModifier]. */
+    data class BiomeSpawn(
+        val biomeTag: TagKey<Biome>,
+        val entityType: EntityType<*>,
+        val category: MobCategory,
+        val weight: Int,
+        val minGroupSize: Int,
+        val maxGroupSize: Int,
+    )
+
+    private val biomeSpawns = mutableListOf<BiomeSpawn>()
+    private val spawnPlacements = mutableListOf<(RegisterSpawnPlacementsEvent) -> Unit>()
+
+    val allBiomeSpawns: List<BiomeSpawn> get() = biomeSpawns
+
     fun <T : Mob> addBiomeSpawn(biomeTag: TagKey<Biome>, entityType: EntityType<T>, weight: Int, minGroupSize: Int, maxGroupSize: Int, category: MobCategory = MobCategory.AMBIENT) {
-        BiomeModifications.addSpawn({ biomeSelector: BiomeSelectionContext -> biomeSelector.hasTag(biomeTag) }, category, entityType, weight, minGroupSize, maxGroupSize)
+        biomeSpawns += BiomeSpawn(biomeTag, entityType, category, weight, minGroupSize, maxGroupSize)
     }
 
     fun <T : Mob> registerSpawnPlacement(entityType: EntityType<T>, spawnRules: SpawnPlacements.SpawnPredicate<T>, heightmap: Heightmap.Types = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,spawnPlacements: SpawnPlacementType = SpawnPlacementTypes.ON_GROUND) {
-        SpawnPlacementsInvoker.invokeRegister(
-            entityType,
-            spawnPlacements,
-            heightmap,
-            spawnRules
-        )
+        this.spawnPlacements += { event ->
+            event.register(entityType, spawnPlacements, heightmap, spawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE)
+        }
+    }
+
+    fun registerSpawnPlacements(event: RegisterSpawnPlacementsEvent) {
+        spawnPlacements.forEach { it(event) }
     }
 }
