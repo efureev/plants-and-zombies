@@ -93,6 +93,8 @@
 
   "commands.sproutsquad.help": "Sprout Squad — сообщите о проблеме на GitHub: %s",
   "commands.sproutsquad.help.url": "https://github.com/efureev/plants-and-zombies/issues",
+  "commands.sproutsquad.gallery.success": "Галерея готова: растений — %s, зомби — %s, прочих — %s. Убрать: /pz gallery clear",
+  "commands.sproutsquad.gallery.cleared": "Убрано существ из галереи: %s",
   "commands.sproutsquad.help.hover": "",
   "commands.sproutsquad.raid.no_raid_nearby": "Поблизости нет активного рейда",
   "commands.sproutsquad.raid.start.success": "Рейд начат в точке %s, %s, %s",

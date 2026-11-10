@@ -1,5 +1,6 @@
 package joshxviii.plantz.neoforge
 
+import dev.efureev.sproutsquad.SproutSquad
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.PazNetwork
@@ -35,6 +36,8 @@ class PazNeoForge(modBus: IEventBus, container: ModContainer) {
     private var lastRegistry: Identifier? = null
 
     init {
+        SproutSquad.init(modBus)
+
         modBus.addListener(RegisterEvent::class.java) { event ->
             val last = lastRegistry ?: GameData.getRegistrationOrder().last().also { lastRegistry = it }
             if (event.registryKey.identifier() == last) {

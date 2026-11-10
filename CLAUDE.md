@@ -23,9 +23,11 @@ Minecraft 26.3 · NeoForge 26.3.x · ModDevGradle ≥ 2.0.147 · Kotlin for Forg
 ./gradlew build            # сборка + проверка
 ./gradlew runClient        # клиент для ручной проверки
 ./gradlew runServer        # выделенный сервер — обязательно проверять после изменений в общем коде
-./gradlew runGameTestServer   # быстрый прогон загрузки мода на сервере (сам завершается)
+./gradlew runGameTestServer   # прогон загрузки мода и GameTest-ов (в т.ч. `sproutsquad:gallery`), сам завершается
 ```
 JDK 25: `export JAVA_HOME=/opt/homebrew/opt/openjdk@25`.
+
+В игре: `/pz gallery [labels]` выставляет всех персонажей в ряд (замороженными), `/pz gallery clear` убирает — для скриншотов и проверки арта. Новые персонажи попадают в галерею сами (берутся из реестра сущностей).
 
 `runClient` открывает окно игры. Запускай строго один экземпляр. При ошибке загрузки NeoForge показывает экран ошибки и **не завершает процесс**, поэтому следи за логом и закрывай клиент сам (`pkill -f net.neoforged.devlaunch.Main`).
 

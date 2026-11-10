@@ -93,6 +93,8 @@
 
   "commands.sproutsquad.help": "Sprout Squad - report a problem on GitHub: %s",
   "commands.sproutsquad.help.url": "https://github.com/efureev/plants-and-zombies/issues",
+  "commands.sproutsquad.gallery.success": "Gallery built: %s plants, %s zombies, %s others. Remove it with /pz gallery clear",
+  "commands.sproutsquad.gallery.cleared": "Removed %s gallery entities",
   "commands.sproutsquad.help.hover": "",
   "commands.sproutsquad.raid.no_raid_nearby": "There is no active raid nearby",
   "commands.sproutsquad.raid.start.success": "Started a raid at %s, %s, %s",
