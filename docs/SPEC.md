@@ -129,7 +129,7 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 | M5 Клиент | 🧪 | `main` ← `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
 | M6 Миксины | 🧪 | `main` ← `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
 | M7 Совместимость | ⏳ | | |
-| M8 Ребрендинг | ⏳ | | |
+| M8 Ребрендинг | ⏳ | | Иконка мода уже заменена (`sprout_squad_icon.png`, маскот), логотип README готов |
 | M9 Первый свой персонаж | ⏳ | | |
 | M10 Релиз 0.1 | ⏳ | | |
 
