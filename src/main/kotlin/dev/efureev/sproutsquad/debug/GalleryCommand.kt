@@ -28,7 +28,6 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
-import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -117,7 +116,7 @@ object GalleryCommand {
             val probe = type.create(level, EntitySpawnReason.COMMAND) ?: continue
             val kind = when (probe) {
                 is Plant -> plants
-                is Zombie, is Enemy -> zombies
+                is Zombie -> zombies
                 is Mob -> others
                 else -> null
             }
