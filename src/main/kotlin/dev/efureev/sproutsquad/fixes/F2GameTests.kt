@@ -8,7 +8,6 @@ import joshxviii.plantz.entity.gnome.GnomeVariant
 import joshxviii.plantz.entity.plant.Squash
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Holder
-import net.minecraft.core.SectionPos
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
@@ -135,8 +134,8 @@ object F2GameTests {
         val spawns = jurassic?.attributes?.applyModifier(EnvironmentAttributes.NATURAL_MOB_SPAWNS, MobSpawnSettings.EMPTY)
         if (spawns == null || spawns.getMobsToSpawn(MobCategory.CREATURE).isEmpty) {
             problems += "jurassic_period has no creature spawns"
-        } else if (spawns.getMobsToSpawn(MobCategory.MONSTER).unwrap().none { it.value().type() == EntityTypes.OCELOT }) {
-            problems += "jurassic_period lost its ocelot spawn"
+        } else if (spawns.getMobsToSpawn(MobCategory.MONSTER).isEmpty) {
+            problems += "jurassic_period has no monster spawns"
         }
 
         if (problems.isNotEmpty()) {
@@ -148,19 +147,21 @@ object F2GameTests {
 
     /** A squash next to a zombie leaps on it, kills it in one hit and is used up. */
     fun squash(helper: GameTestHelper) {
-        // The 1x1x1 "empty" test structure is encased in barriers, which block line of sight: use open ground beside it.
-        // Only the structure's chunk is force-loaded, so force the arena too and wait until it ticks entities
-        // (a fresh chunk may need generating first). The runner unforces all chunks after the batch.
-        val arena = (-1..3).flatMap { x -> (4..6).map { z -> helper.absolutePos(BlockPos(x, 0, z)) } }
-        for (pos in arena) helper.level.setChunkForced(SectionPos.blockToSectionCoord(pos.x), SectionPos.blockToSectionCoord(pos.z), true)
+        // The 1x1x1 "empty" test structure is encased in barriers, which block line of sight: use open
+        // ground 5 blocks beside it, but inside the structure's own chunk. Only that chunk is loaded
+        // for the test; a neighbouring chunk forced by hand may never start ticking entities.
+        val origin = helper.absolutePos(BlockPos.ZERO)
+        val dx = if (Math.floorMod(origin.x, 16) <= 12) 0 else -2
+        val dz = if (Math.floorMod(origin.z, 16) <= 9) 5 else -5
+        val arena = (0..2).map { x -> helper.absolutePos(BlockPos(dx + x, 0, dz)) }
         lateinit var squash: Squash
         lateinit var zombie: Zombie
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
             .thenExecute {
-                for (x in 0..2) helper.setBlock(BlockPos(x, -1, 5), Blocks.STONE)
-                squash = helper.spawn(PazEntities.SQUASH, BlockPos(0, 0, 5))
-                zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(2, 0, 5))
+                for (x in 0..2) helper.setBlock(BlockPos(dx + x, -1, dz), Blocks.STONE)
+                squash = helper.spawn(PazEntities.SQUASH, BlockPos(dx, 0, dz))
+                zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(dx + 2, 0, dz))
                 zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
             }
             .thenWaitUntil {

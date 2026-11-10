@@ -120,7 +120,7 @@
 | 1 | Пустые сокровища рейдов | `loot_table/raid/winter/treasure.json`, `raid/zomboween/treasure.json`, `raid/zomboss/treasure.json` — `"entries": []` | Заполнить (раздел 6.3) | S |
 | 2 | Мобы без лут-таблиц | Imp, Pirate Captain, Pirate Captain Ghost, Zombat, Zombie Goat, Backup Dancer, Gnome | Раздел 6.3 | S |
 | 3 | **Эпохи пустые** | `worldgen/biome/ancient_egypt.json`, `jurassic_period.json`, `dark_ages.json`, `far_future.json`: только ванильные фичи и мобы (в Far Future — только эндермены). Своего — лишь `future_crystals` (шипы из плотного льда) и `jurassic_ferns`; музыка ванильная. Ни структур, ни зомби или растений мода | Фазы Ф7–Ф10 | L |
-| 4 | Ошибка в спавне | В `jurassic_period.json` в категории `monster` указан `minecraft:ocelot` | Перенести в `creature` | S |
+| 4 | ✅ Ошибка в спавне | В `jurassic_period.json` в категории `monster` указан `minecraft:ocelot`. Проверка показала: в ванильных джунглях 26.3 оцелот тоже в `monster`, это не ошибка. Настоящая ошибка — спавны четырёх биомов эпох были в старом формате, который 26.3 игнорирует (исправлено в Ф2) | — | S |
 | 5 | Zombie Goat без места в игре | Нигде не спавнится и не участвует в рейдах | Спавн в горах, имп-наездник (Ф2) | S–M |
 | 6 | Неиспользуемые ассеты и хуки | `textures/item/music_disc_the_great_pumpkin.png` (диска нет). `textures/block/dye_vat.png`, `old_dye_vat.png`, `models/block/dye_vat.json` (блока нет — видимо, задуман чан с краской для Dye Blaster). `SeasonalEvents.isChristmas()` (`Utils.kt:76`) нигде не вызывается. Звук `GARGANTUAR_DIG` не используется. Теги `plant/has_repeater` и `plant/has_winter_melon` не участвуют в спавне, `plant/has_potatomine` пуст | Использовать в наборах: диск — Хэллоуин, чан — Ф2 или позже, `isChristmas` — Ф3 | S каждое |
 | 7 | Однообразная рейдовая музыка | Все тематические треки (`music.raid.bucket` … `music.raid.zomboss`) в `assets/sproutsquad/sounds.json` ссылаются на те же 3 файла `loon_griefers_*` | Свои треки к наборам (раздел 4, дорожка «Музыка») | M за трек |
@@ -199,7 +199,7 @@ M8 (ребрендинг) закрыт. M7 (проверка в игре и со
 | Газонокосилка: поведение «последнего рубежа» у флага | Рабочая боевая машина | M | чертежи |
 | Zombie Goat: спавн в горах, имп-наездник | Моб при деле | S–M | — |
 | ✅ Запасной источник Brainz Flag; рецепт тако из ванили | Нет тупиков прогрессии | S | — |
-| Исправить `ocelot` в Юрском периоде, кик за полёт с шарами | Мелкие баги | S–M | — |
+| Спавны биомов эпох (✅, вместо «ocelot в Юрском периоде» — он как в ванили), кик за полёт с шарами | Мелкие баги | S–M | — |
 | ✅ Отскок растения при получении урона (`funnyBounce` уже есть) | Живость (см. 8.2) | S | — |
 
 ### Ф3. Новогодние варианты и подарки — 3–6 вечеров, до ~20 декабря 2026
