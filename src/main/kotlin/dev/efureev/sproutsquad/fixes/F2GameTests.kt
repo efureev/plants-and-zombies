@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.world.attribute.EnvironmentAttributes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.item.Item
@@ -30,6 +31,7 @@ import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.item.crafting.BrewingInput
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.biome.MobSpawnSettings
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
@@ -40,12 +42,14 @@ import net.neoforged.neoforge.registries.RegisterEvent
 import java.util.function.Consumer
 
 /**
- * GameTests for phase F2: the new loot tables, recipes and brewing load and roll what they should.
+ * GameTests for phase F2: the new loot tables, recipes and brewing load and roll what they should,
+ * and the Squash attacks.
  * Runs with `./gradlew runGameTestServer`.
  */
 object F2GameTests {
     private val ENVIRONMENT = id("f2")
     private val DATA = id("f2_data")
+    private val SQUASH = id("f2_squash")
 
     /** Rolls per randomized check; every checked drop has a chance of at least 3%, so a miss is ~1e-4 or less. */
     private const val ROLLS = 300
@@ -55,11 +59,13 @@ object F2GameTests {
 
     fun registerFunctions(event: RegisterEvent) {
         event.register(Registries.TEST_FUNCTION, DATA) { Consumer<GameTestHelper>(::data) }
+        event.register(Registries.TEST_FUNCTION, SQUASH) { Consumer<GameTestHelper>(::squash) }
     }
 
     fun registerTests(event: RegisterGameTestsEvent) {
         val environment = event.registerEnvironment(ENVIRONMENT)
         event.registerTest(DATA, FunctionGameTestInstance(function(DATA), TestData(environment, Identifier.withDefaultNamespace("empty"), 100, 0, true)))
+        event.registerTest(SQUASH, FunctionGameTestInstance(function(SQUASH), TestData(environment, Identifier.withDefaultNamespace("empty"), 200, 0, true)))
     }
 
     private fun data(helper: GameTestHelper) {
@@ -156,6 +162,19 @@ object F2GameTests {
             return
         }
         helper.succeed()
+    }
+
+    /** A squash next to a zombie leaps on it, kills it in one hit and is used up. */
+    private fun squash(helper: GameTestHelper) {
+        // The 1x1x1 "empty" test structure is encased in barriers, which block line of sight: use open ground beside it.
+        for (x in 0..2) helper.setBlock(BlockPos(x, -1, 5), Blocks.STONE)
+        val squash = helper.spawn(PazEntities.SQUASH, BlockPos(0, 0, 5))
+        val zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(2, 0, 5))
+        zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
+        helper.succeedWhen {
+            helper.assertTrue(squash.isRemoved, "squash has not attacked yet")
+            helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved, "zombie survived the squash")
+        }
     }
 
     private fun lootTable(server: MinecraftServer, path: String): LootTable =
