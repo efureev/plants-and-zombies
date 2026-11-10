@@ -65,6 +65,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "sproutsquad:brainzium",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
           "name": "sproutsquad:dye_blaster",
           "weight": 4
         }
