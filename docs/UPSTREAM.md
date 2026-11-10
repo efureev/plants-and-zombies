@@ -30,7 +30,7 @@ git log --oneline upstream-base-977cfb46..upstream/26.3
 | 58 субтитров без перевода; у пяти звуков смерти ключ `"subtitles"`, у гнома ключи без префикса, у `scaredyshroom.peek` и `super_brainz.punch/lazer` чужие субтитры | Ключи в `sounds.json` исправлены, тексты добавлены в `en_us` и `ru_ru` |
 | `music.gnome_space` ссылался на несуществующий `music/raid/low.ogg` | Ссылка на `music/raid/loon_griefers_low.ogg` |
 | Звуки `entity.gnome.voice_1.jump`, `voice_2.jump`, `entity.snowchunk` зарегистрированы, но не описаны в `sounds.json` | Добавлены (прыжок — общий звук гнома, снежный ком — ванильный звук снега) |
-| Нет текстуры яйца гига-гаргантюа | Временно используется текстура яйца гаргантюа |
+| Нет текстуры яйца гига-гаргантюа | Нарисована в стиле яйца гига-футболиста: угольная одежда, яркие красные детали |
 | Текстура частиц портала машины времени с неверным namespace | `plantz:block/time_machine/portal1` |
 | Модель щита-двери: неверные пути текстур двери, нет текстуры частиц | Пути `minecraft:block/oak_door_*`, `particle` |
 | `LivingEntityAccessor` — `@Invoker` на методы самого мода (предупреждения Mixin) | Заменён обычным интерфейсом `PazEffectFlags` |
