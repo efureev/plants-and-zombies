@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#c:foods/bread",
+    "minecraft:cooked_beef",
+    "minecraft:beetroot",
+    "minecraft:carrot"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:taco"
+  }
+}
