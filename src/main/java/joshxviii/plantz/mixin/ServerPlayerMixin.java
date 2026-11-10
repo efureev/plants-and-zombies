@@ -35,7 +35,7 @@ public abstract class ServerPlayerMixin {
     @Inject(method = "loadAndSpawnParentVehicle", at = @At(value = "HEAD"))
     public void respawnAttachedPlant(ValueInput playerInput, CallbackInfo ci) {
         if ( !((PlantHeadAttachment) this).plantz$getPlantData().isEmpty() ) {
-            Optional<ValueInput> rootTag = playerInput.child("plantz:AttachedPlant");
+            Optional<ValueInput> rootTag = playerInput.child("sproutsquad:AttachedPlant");
             if (rootTag.isPresent()) {
                 ServerLevel serverLevel = this.level();
                 Entity entity = EntityType.loadEntityRecursive(

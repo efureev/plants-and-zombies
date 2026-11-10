@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:plant_pot_minecart"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.plant_pot_minecart"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.plant_pot_minecart.description"
+    }
+  },
+  "parent": "sproutsquad:grow_plant_seeds",
+  "criteria": {
+    "plant_pot_minecart": {
+      "trigger": "sproutsquad:plant_pot_minecart"
+    }
+  },
+  "sends_telemetry_event": false
+}

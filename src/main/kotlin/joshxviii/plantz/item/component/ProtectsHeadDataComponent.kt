@@ -50,7 +50,7 @@ data class ProtectsHeadDataComponent(
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        consumer.accept(Component.translatable("component.plantz.protects_head").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
+        consumer.accept(Component.translatable("component.sproutsquad.protects_head").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
     }
 
     fun canBlockFrom(source: DamageSource, user: LivingEntity): Boolean {

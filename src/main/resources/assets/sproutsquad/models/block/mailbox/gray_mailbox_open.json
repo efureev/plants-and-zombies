@@ -1,0 +1,6 @@
+{
+	"parent": "sproutsquad:block/mailbox/mailbox",
+	"textures": {
+		"0": "sproutsquad:block/mailbox/gray_mailbox_open"
+	}
+}

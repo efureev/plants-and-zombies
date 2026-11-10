@@ -1,0 +1,24 @@
+{
+  "additional_wants": {
+    "id": "sproutsquad:sun",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 10,
+      "max": 16
+    }
+  },
+  "gives": {
+    "id": "sproutsquad:watering_can"
+  },
+  "max_uses": 3,
+  "reputation_discount": 0.3,
+  "wants": {
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 10,
+      "max": 15
+    },
+    "id": "minecraft:emerald"
+  },
+  "xp": 25
+}

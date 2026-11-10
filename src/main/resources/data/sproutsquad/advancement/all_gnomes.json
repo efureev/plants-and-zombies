@@ -1,0 +1,65 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:golden_garden_gnome"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.all_gnomes"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.all_gnomes.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "sproutsquad:receive_hero_mail",
+  "criteria": {
+    "blue_gnome": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": "sproutsquad:blue_garden_gnome" }
+        ]
+      }
+    },
+    "green_gnome": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": "sproutsquad:green_garden_gnome" }
+        ]
+      }
+    },
+    "red_gnome": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": "sproutsquad:red_garden_gnome" }
+        ]
+      }
+    },
+    "yellow_gnome": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": "sproutsquad:yellow_garden_gnome" }
+        ]
+      }
+    },
+    "golden_gnome": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          { "items": "sproutsquad:golden_garden_gnome" }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    ["blue_gnome"],
+    ["green_gnome"],
+    ["red_gnome"],
+    ["yellow_gnome"],
+    ["golden_gnome"]
+  ],
+  "sends_telemetry_event": false
+}

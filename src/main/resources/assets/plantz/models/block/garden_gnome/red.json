@@ -1,7 +1,0 @@
-{
-	"format_version": "1.21.11",
-	"texture_size": [32, 32],
-	"textures": {
-		"particle": "plantz:block/garden_gnome/red"
-	}
-}

@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:brainz_alloy"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_brainz_alloy": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:brainz_alloy"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brainz_alloy"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:sun_battery",
+      "sproutsquad:brainz_alloy_by_block",
+      "sproutsquad:brainz_alloy_block",
+      "sproutsquad:brainz_alloy_stairs",
+      "sproutsquad:brainz_alloy_slab",
+      "sproutsquad:reinforced_brainz_alloy_block",
+      "sproutsquad:treaded_brainz_alloy_block",
+      "sproutsquad:brainz_alloy_fence",
+      "sproutsquad:brainz_alloy_door",
+      "sproutsquad:brainz_alloy_trapdoor"
+    ]
+  }
+}

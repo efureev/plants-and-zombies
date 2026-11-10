@@ -1,0 +1,9 @@
+{
+  "mutations": [
+    {
+      "biome": "#sproutsquad:plant/has_winter_melon",
+      "chance": 0.333,
+      "result": "sproutsquad:winter_melon"
+    }
+  ]
+}

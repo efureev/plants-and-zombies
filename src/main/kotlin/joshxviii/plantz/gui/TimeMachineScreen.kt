@@ -55,7 +55,7 @@ class TimeMachineScreen(
         }
 
         val dimensionName = Component.translatable(minecraft.level?.dimensionTypeRegistration()?.registeredName ?: "").withStyle(ChatFormatting.GREEN)
-        val wipText = Component.translatable("container.plantz.time_machine.display", dimensionName).withoutShadow().withStyle(ChatFormatting.RED).withFont(Fonts.DOT_DISPLAY)
+        val wipText = Component.translatable("container.sproutsquad.time_machine.display", dimensionName).withoutShadow().withStyle(ChatFormatting.RED).withFont(Fonts.DOT_DISPLAY)
 
         if (hasPower()) drawScrollingText(
             graphics,

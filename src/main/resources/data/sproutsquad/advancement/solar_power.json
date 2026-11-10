@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:sun_battery",
+      "components": {
+        "sproutsquad:stored_sun": {
+          "stored_sun": 1,
+          "is_fully_charged": true
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.solar_power"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.solar_power.description"
+    }
+  },
+  "parent": "sproutsquad:plant_pot_minecart",
+  "criteria": {
+    "has_sun_battery": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:sun_battery",
+            "components": {
+              "sproutsquad:stored_sun": {
+                "stored_sun": 512,
+                "is_fully_charged": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

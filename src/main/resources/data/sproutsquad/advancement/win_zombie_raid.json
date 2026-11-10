@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:brainz_flag"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.win_zombie_raid"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.win_zombie_raid.description"
+    }
+  },
+  "parent": "sproutsquad:craft_plant_flag",
+  "criteria": {
+    "win_zombie_raid": {
+      "trigger": "sproutsquad:win_zombie_raid"
+    }
+  },
+  "sends_telemetry_event": false
+}

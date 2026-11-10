@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:gardening_glove"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.wallnut_bowling"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.wallnut_bowling.description"
+    }
+  },
+  "parent": "sproutsquad:plant_pot_minecart",
+  "criteria": {
+    "bowl": {
+      "conditions": {
+        "hit_count": 10
+      },
+      "trigger": "sproutsquad:wallnut_bowling"
+    }
+  },
+  "requirements": [
+    ["bowl"]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "@": "#sproutsquad:mailboxes",
+    "#": [
+      "sproutsquad:brainz_alloy"
+    ],
+    "+": [
+      "sproutsquad:newspaper"
+    ],
+    "*": [
+      "minecraft:redstone"
+    ]
+  },
+  "pattern": [
+    "###",
+    "#+#",
+    "*@*"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:mail_collection_box"
+  }
+}

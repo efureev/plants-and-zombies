@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": [
+      "minecraft:iron_ingot"
+    ],
+    "@": [
+      "minecraft:iron_trapdoor"
+    ],
+    "*": [
+      "sproutsquad:newspaper"
+    ]
+  },
+  "pattern": [
+    "###",
+    "#*@"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:mailbox"
+  }
+}

@@ -31,7 +31,7 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
 
     companion object {
         fun addToTooltip(consumer: MutableList<Component>) {
-            consumer.add(1, Component.translatable("item.plantz.dye_blaster.description", AMMO_CHANCE.percentFormat())
+            consumer.add(1, Component.translatable("item.sproutsquad.dye_blaster.description", AMMO_CHANCE.percentFormat())
                 .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         }
 

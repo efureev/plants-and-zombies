@@ -157,27 +157,27 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveCustomFlags(ValueOutput output, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
-        output.putBoolean("plantz:IsHypnotized", PazSyncedData.HYPNOTIZED.get(self));
-        output.putBoolean("plantz:IsChilled", PazSyncedData.CHILLED.get(self));
-        output.putBoolean("plantz:IsFrozen", PazSyncedData.FROZEN.get(self));
-        output.putBoolean("plantz:IsButtered", PazSyncedData.BUTTERED.get(self));
-        output.store("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), PazSyncedData.PAINTED_COLORS.get(self));
+        output.putBoolean("sproutsquad:IsHypnotized", PazSyncedData.HYPNOTIZED.get(self));
+        output.putBoolean("sproutsquad:IsChilled", PazSyncedData.CHILLED.get(self));
+        output.putBoolean("sproutsquad:IsFrozen", PazSyncedData.FROZEN.get(self));
+        output.putBoolean("sproutsquad:IsButtered", PazSyncedData.BUTTERED.get(self));
+        output.store("sproutsquad:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), PazSyncedData.PAINTED_COLORS.get(self));
         if (!this.plantz$getPlantData().isEmpty()) {
-            output.store("plantz:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
+            output.store("sproutsquad:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }
-        if (self instanceof ServerPlayer) output.store("plantz:CompletedWaveList", Codec.list(CompletedWave.Companion.getCODEC()), this.plantz$getWaveList());
+        if (self instanceof ServerPlayer) output.store("sproutsquad:CompletedWaveList", Codec.list(CompletedWave.Companion.getCODEC()), this.plantz$getWaveList());
     }
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void loadCustomFlags(ValueInput input, CallbackInfo ci) {
         var self = (LivingEntity) (Object) this;
-        PazSyncedData.HYPNOTIZED.set(self, input.getBooleanOr("plantz:IsHypnotized", false));
-        PazSyncedData.CHILLED.set(self, input.getBooleanOr("plantz:IsChilled", false));
-        PazSyncedData.FROZEN.set(self, input.getBooleanOr("plantz:IsFrozen", false));
-        PazSyncedData.BUTTERED.set(self, input.getBooleanOr("plantz:IsButtered", false));
-        PazSyncedData.PAINTED_COLORS.set(self, input.read("plantz:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
-        plantz$setPlantData(input.read("plantz:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
+        PazSyncedData.HYPNOTIZED.set(self, input.getBooleanOr("sproutsquad:IsHypnotized", false));
+        PazSyncedData.CHILLED.set(self, input.getBooleanOr("sproutsquad:IsChilled", false));
+        PazSyncedData.FROZEN.set(self, input.getBooleanOr("sproutsquad:IsFrozen", false));
+        PazSyncedData.BUTTERED.set(self, input.getBooleanOr("sproutsquad:IsButtered", false));
+        PazSyncedData.PAINTED_COLORS.set(self, input.read("sproutsquad:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT)).orElseGet(HashMap::new));
+        plantz$setPlantData(input.read("sproutsquad:AttachedPlant", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         if (self instanceof ServerPlayer) {
-            plantz$setWaveList(input.read("plantz:CompletedWaveList", Codec.list(CompletedWave.Companion.getCODEC())).orElseGet(List::of));
+            plantz$setWaveList(input.read("sproutsquad:CompletedWaveList", Codec.list(CompletedWave.Companion.getCODEC())).orElseGet(List::of));
         }
 
         if (self instanceof PathfinderMob mob) {

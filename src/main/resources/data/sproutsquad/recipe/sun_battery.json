@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": [
+      "sproutsquad:brainz_alloy"
+    ],
+    "=": [
+      "sproutsquad:reinforced_brainz_alloy_block"
+    ],
+    "@": [
+      "minecraft:daylight_detector"
+    ],
+    "*": [
+      "minecraft:glass"
+    ]
+  },
+  "pattern": [
+    "#@#",
+    "* *",
+    "#=#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:sun_battery"
+  }
+}

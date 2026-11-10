@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sproutsquad:item/blueprint/blueprint",
+    "layer1": "sproutsquad:item/blueprint/electro_turret"
+  }
+}

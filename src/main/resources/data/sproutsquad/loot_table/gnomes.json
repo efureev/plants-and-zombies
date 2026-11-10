@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:generic",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blue_garden_gnome",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:green_garden_gnome",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:red_garden_gnome",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:yellow_garden_gnome",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:golden_garden_gnome",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "random_sequence": "chests/gnomes"
+}

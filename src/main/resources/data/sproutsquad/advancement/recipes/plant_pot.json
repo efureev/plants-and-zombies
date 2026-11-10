@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:plant_pot"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_sun": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:sun"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_sun"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:plant_pot"
+    ]
+  }
+}

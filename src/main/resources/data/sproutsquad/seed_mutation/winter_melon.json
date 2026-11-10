@@ -1,0 +1,13 @@
+{
+  "mutations": [
+    {
+      "biome": "#sproutsquad:plant/has_winter_melon",
+      "chance": 1.0,
+      "result": "sproutsquad:winter_melon"
+    },
+    {
+      "chance": 0.15,
+      "result": "sproutsquad:melonpult"
+    }
+  ]
+}

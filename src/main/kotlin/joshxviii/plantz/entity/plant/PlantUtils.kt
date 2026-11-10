@@ -119,7 +119,7 @@ fun Plant.processGloveItem(player: Player, item: ItemStack, hand: InteractionHan
         // hold plant
         (player.isSecondaryUseActive) -> {
             if (item.has(DataComponents.ENTITY_DATA)) {
-                player.sendOverlayMessage(Component.translatable("message.plantz.glove_full").withStyle(ChatFormatting.RED))
+                player.sendOverlayMessage(Component.translatable("message.sproutsquad.glove_full").withStyle(ChatFormatting.RED))
                 return true
             }
 
@@ -161,7 +161,7 @@ fun Plant.processSeedPacketInteraction(player: Player, itemStack: ItemStack, han
             when {
                 !isAsleep -> PacketInteractionResult.NO_INTERACTION
                 isGrowingSeeds -> {
-                    player.sendOverlayMessage(Component.translatable("message.plantz.growing", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
+                    player.sendOverlayMessage(Component.translatable("message.sproutsquad.growing", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                     PacketInteractionResult.FAIL
                 }
                 cantAfford -> PacketInteractionResult.CANT_AFFORD
@@ -178,7 +178,7 @@ fun Plant.processSeedPacketInteraction(player: Player, itemStack: ItemStack, han
 
     when (result) {
         PacketInteractionResult.CANT_AFFORD -> {// show error message
-            player.sendOverlayMessage(Component.translatable("message.plantz.not_enough_item", PazItems.SUN.name(), availableSun, sunCost).withStyle(ChatFormatting.RED))
+            player.sendOverlayMessage(Component.translatable("message.sproutsquad.not_enough_item", PazItems.SUN.name(), availableSun, sunCost).withStyle(ChatFormatting.RED))
         }
         PacketInteractionResult.SUCCESS -> {
             if (!player.hasInfiniteMaterials()) {// remove used sun
@@ -217,8 +217,8 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
             val filteredData = pumpkinData.copy().apply {
                 remove("Health")
                 remove("CustomName")
-                remove("plantz:State")
-                remove("plantz:Cooldown")
+                remove("sproutsquad:State")
+                remove("sproutsquad:Cooldown")
             }
             val mergedData = TypedEntityData.of(seedType, seedData.copyTagWithoutId().merge(filteredData))
             mergedData.loadInto(it)
@@ -239,7 +239,7 @@ fun Entity.saveAsCompoundTag(discards: List<String> = listOf("Pos")): CompoundTa
         saveWithoutId(output)
         if (this is Plant) plantSaveData(output)
         discards.forEach { output.discard(it) }
-        output.discard("plantz:PumpkinArmor")
+        output.discard("sproutsquad:PumpkinArmor")
         output.discard("Motion")
         output.discard("leash")
         output.discard("UUID")

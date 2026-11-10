@@ -6,6 +6,15 @@
 
 Изменения из оригинала переносятся только через `git cherry-pick` (см. `docs/SPEC.md` §5.2).
 
+После этапа M8 у форка свой mod id `sproutsquad`, а в оригинале — `plantz`. После каждого cherry-pick:
+
+```bash
+python3 tools/upstream/rename_modid.py .                 # строки в коде и ресурсах
+python3 tools/upstream/nbt_rename.py <новые .nbt файлы>  # структуры (нужен nbtlib)
+```
+
+Файлы, попавшие в `assets/plantz` или `data/plantz`, перенести в `assets/sproutsquad` / `data/sproutsquad`.
+
 ## Просмотр новых коммитов
 
 ```bash

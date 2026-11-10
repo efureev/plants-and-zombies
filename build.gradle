@@ -81,7 +81,7 @@ dependencies {
 	implementation "thedarkcolour:kotlinforforge-neoforge:${project.kff_version}"
 
 	compileOnly "maven.modrinth:terrablender:${project.terrablender_version}"
-	// Dev runs only: without TerraBlender, OverworldBiomeBuilderMixin adds plantz:graveyard to the
+	// Dev runs only: without TerraBlender, OverworldBiomeBuilderMixin adds sproutsquad:graveyard to the
 	// built-in vanilla biome set, which the IDE-only Bootstrap.validate() rejects.
 	localRuntime "maven.modrinth:terrablender:${project.terrablender_version}"
 	compileOnly "maven.modrinth:iris:${project.iris_version}"
@@ -120,7 +120,7 @@ jar {
 
 tasks.register('devBuild') {
 	group = 'build'
-	description = 'Builds a development jar (e.g. plants-and-zombies-1.5-dev.42.jar)'
+	description = 'Builds a development jar (e.g. sprout-squad-0.1.0-dev.42.jar)'
 
 	doFirst {
 		def buildNum = getNextDevBuildNumber()

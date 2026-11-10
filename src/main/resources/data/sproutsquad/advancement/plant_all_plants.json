@@ -1,0 +1,407 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "sproutsquad:melonpult"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.plant_all_plants"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.plant_all_plants.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "sproutsquad:grave_buster_bust",
+  "criteria": {
+    "sproutsquad:sunflower": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:sunflower"
+          }
+        }
+      }
+    },
+    "sproutsquad:marigold": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:marigold"
+          }
+        }
+      }
+    },
+    "sproutsquad:peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:peashooter"
+          }
+        }
+      }
+    },
+    "sproutsquad:wallnut": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:wallnut"
+          }
+        }
+      }
+    },
+    "sproutsquad:explode_o_nut": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:explode_o_nut"
+          }
+        }
+      }
+    },
+    "sproutsquad:chomper": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:chomper"
+          }
+        }
+      }
+    },
+    "sproutsquad:cherrybomb": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:cherrybomb"
+          }
+        }
+      }
+    },
+    "sproutsquad:potatomine": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:potatomine"
+          }
+        }
+      }
+    },
+    "sproutsquad:repeater": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:repeater"
+          }
+        }
+      }
+    },
+    "sproutsquad:ice_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:ice_peashooter"
+          }
+        }
+      }
+    },
+    "sproutsquad:fire_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:fire_peashooter"
+          }
+        }
+      }
+    },
+    "sproutsquad:electric_peashooter": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:electric_peashooter"
+          }
+        }
+      }
+    },
+    "sproutsquad:cactus": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:cactus"
+          }
+        }
+      }
+    },
+    "sproutsquad:lightning_reed": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:lightning_reed"
+          }
+        }
+      }
+    },
+    "sproutsquad:cabbagepult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:cabbagepult"
+          }
+        }
+      }
+    },
+    "sproutsquad:kernelpult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:kernelpult"
+          }
+        }
+      }
+    },
+    "sproutsquad:melonpult": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:melonpult"
+          }
+        }
+      }
+    },
+    "sproutsquad:winter_melon": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:winter_melon"
+          }
+        }
+      }
+    },
+    "sproutsquad:bonkchoy": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:bonkchoy"
+          }
+        }
+      }
+    },
+    "sproutsquad:tanglekelp": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:tanglekelp"
+          }
+        }
+      }
+    },
+    "sproutsquad:puffshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:puffshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:fumeshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:fumeshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:scaredyshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:scaredyshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:sunshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:sunshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:hypnoshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:hypnoshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:iceshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:iceshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:doomshroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:doomshroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:seashroom": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:seashroom"
+          }
+        }
+      }
+    },
+    "sproutsquad:coffeebean": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:coffeebean"
+          }
+        }
+      }
+    },
+    "sproutsquad:grave_buster": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:grave_buster"
+          }
+        }
+      }
+    },
+    "sproutsquad:pumpkin": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:pumpkin"
+          }
+        }
+      }
+    },
+    "sproutsquad:squash": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:squash"
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

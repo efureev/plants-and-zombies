@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "sproutsquad:block/zen_plant_pot" },
+    "facing=south": { "model": "sproutsquad:block/zen_plant_pot", "y": 180 },
+    "facing=east":  { "model": "sproutsquad:block/zen_plant_pot", "y": 90 },
+    "facing=west":  { "model": "sproutsquad:block/zen_plant_pot", "y": 270 }
+  }
+}

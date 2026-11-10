@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack
 class PlantPotHelmetItem(properties: Properties) : Item(properties) {
     companion object {
         fun addToTooltip(consumer: MutableList<Component>) {
-            consumer.add(1, Component.translatable("item.plantz.plant_pot_helmet.description")
+            consumer.add(1, Component.translatable("item.sproutsquad.plant_pot_helmet.description")
                 .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         }
     }

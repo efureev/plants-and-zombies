@@ -12,7 +12,7 @@ import json
 import sys
 from pathlib import Path
 
-LANG_DIR = Path("src/main/resources/assets/plantz/lang")
+LANG_DIR = Path("src/main/resources/assets/sproutsquad/lang")
 BASE_FILE = LANG_DIR / "en_us.json"
 
 def load_json(path: Path) -> dict:
@@ -40,7 +40,7 @@ def main() -> None:
     print(f"✅ Loaded {BASE_FILE.name} ({len(base_keys)} keys)\n")
 
     if len(sys.argv) > 1: # get files to check from cl
-        files_to_check = [Path(f"src/main/resources/assets/plantz/lang/{f}") for f in sys.argv[1:] if Path(f"src/main/resources/assets/plantz/lang/{f}").name != "en_us.json"]
+        files_to_check = [Path(f"src/main/resources/assets/sproutsquad/lang/{f}") for f in sys.argv[1:] if Path(f"src/main/resources/assets/sproutsquad/lang/{f}").name != "en_us.json"]
     else: # if no arguments are present, check everything
         files_to_check = sorted(p for p in LANG_DIR.glob("*.json") if p.name != "en_us.json")
 

@@ -1,0 +1,32 @@
+{
+  "replace": false,
+  "values": [
+    "sproutsquad:peashooter",
+    "sproutsquad:sunflower",
+    "sproutsquad:marigold",
+    "sproutsquad:chomper",
+    "sproutsquad:wallnut",
+    "sproutsquad:explode_o_nut",
+    "sproutsquad:cherrybomb",
+    "sproutsquad:potatomine",
+    "sproutsquad:repeater",
+    "sproutsquad:ice_peashooter",
+    "sproutsquad:fire_peashooter",
+    "sproutsquad:electric_peashooter",
+    "sproutsquad:cactus",
+    "sproutsquad:lightning_reed",
+    "sproutsquad:cabbagepult",
+    "sproutsquad:kernelpult",
+    "sproutsquad:melonpult",
+    "sproutsquad:winter_melon",
+    "sproutsquad:coffeebean",
+    "sproutsquad:bonkchoy",
+    "sproutsquad:tanglekelp",
+    "sproutsquad:grave_buster",
+    "sproutsquad:pumpkin",
+    "sproutsquad:squash",
+    "sproutsquad:citron",
+    "sproutsquad:royal_sunflower",
+    "#sproutsquad:mushroom"
+  ]
+}

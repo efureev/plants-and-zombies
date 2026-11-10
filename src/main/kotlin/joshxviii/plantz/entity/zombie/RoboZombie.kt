@@ -245,7 +245,7 @@ class RoboZombie(type: EntityType<out RoboZombie>, level: Level) : PazZombie(typ
     }
 
     override fun getTypeName(): Component {
-        return if (variant != RoboZombieVariant.ROBO) Component.translatable("entity.plantz.robo_zombie.variant.${variant.name.lowercase()}")
+        return if (variant != RoboZombieVariant.ROBO) Component.translatable("entity.sproutsquad.robo_zombie.variant.${variant.name.lowercase()}")
         else super.getTypeName()
     }
 

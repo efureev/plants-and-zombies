@@ -1,0 +1,13 @@
+{
+  "mutations": [
+    {
+      "biome": "#sproutsquad:plant/has_fire_peashooter",
+      "chance": 1.0,
+      "result": "sproutsquad:fire_peashooter"
+    },
+    {
+      "chance": 0.15,
+      "result": "sproutsquad:peashooter"
+    }
+  ]
+}

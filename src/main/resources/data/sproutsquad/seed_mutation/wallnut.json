@@ -1,0 +1,8 @@
+{
+  "mutations": [
+    {
+      "chance": 0.08,
+      "result": "sproutsquad:explode_o_nut"
+    }
+  ]
+}

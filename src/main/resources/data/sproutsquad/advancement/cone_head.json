@@ -1,0 +1,38 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:cone"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.cone_head"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.cone_head.description"
+    }
+  },
+  "parent": "sproutsquad:root",
+  "criteria": {
+    "wearing_cone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:equipment": {
+              "head": {
+                "items": "sproutsquad:cone"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "wearing_cone"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

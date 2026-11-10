@@ -76,7 +76,7 @@ class TimeMachineBlockEntity(
     }
 
     override fun getScreenOpeningData(player: ServerPlayer): TimeMachineData = TimeMachineData(blockPos)
-    override fun getDisplayName(): Component  = Component.translatable("block.plantz.time_machine")
+    override fun getDisplayName(): Component  = Component.translatable("block.sproutsquad.time_machine")
     override fun createMenu(containerId: Int, inventory: Inventory, player: Player): AbstractContainerMenu = TimeMachineMenu(containerId, inventory, blockPos, this)
 
     override fun getTheItem(): ItemStack = item

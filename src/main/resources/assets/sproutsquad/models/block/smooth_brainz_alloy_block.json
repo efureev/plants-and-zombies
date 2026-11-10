@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "sproutsquad:block/smooth_brainz_alloy_block"
+  }
+}

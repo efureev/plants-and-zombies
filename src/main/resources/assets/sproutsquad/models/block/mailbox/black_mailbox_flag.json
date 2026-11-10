@@ -1,0 +1,6 @@
+{
+	"parent": "sproutsquad:block/mailbox/mailbox_flag",
+	"textures": {
+		"0": "sproutsquad:block/mailbox/black_mailbox"
+	}
+}

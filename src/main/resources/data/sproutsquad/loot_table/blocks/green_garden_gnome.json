@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:green_garden_gnome"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "sproutsquad:blocks/green_garden_gnome"
+}

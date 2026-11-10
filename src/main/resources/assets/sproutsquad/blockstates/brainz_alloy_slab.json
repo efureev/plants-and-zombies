@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "sproutsquad:block/brainz_alloy_slab"
+    },
+    "type=double": {
+      "model": "sproutsquad:block/brainz_alloy_block"
+    },
+    "type=top": {
+      "model": "sproutsquad:block/brainz_alloy_slab_top"
+    }
+  }
+}

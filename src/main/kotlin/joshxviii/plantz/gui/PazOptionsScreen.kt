@@ -33,17 +33,17 @@ class ToggleOption(
 object PazClientOptions {
     val ALL: List<ToggleOption> = listOf(
         ToggleOption(
-            "options.plantz.show_sun_info",
+            "options.sproutsquad.show_sun_info",
             get = { PazConfig.client.showSunInfo },
             set = { PazConfig.client.showSunInfo = it },
         ),
         ToggleOption(
-            "options.plantz.show_raid_ui",
+            "options.sproutsquad.show_raid_ui",
             get = { PazConfig.client.showRaidUi },
             set = { PazConfig.client.showRaidUi = it },
         ),
         ToggleOption(
-            "options.plantz.split_item_tabs",
+            "options.sproutsquad.split_item_tabs",
             get = { PazConfig.client.splitItemTabs },
             set = { PazConfig.client.splitItemTabs = it },
             onChange = {
@@ -54,7 +54,7 @@ object PazClientOptions {
     )
 }
 
-class PazOptionsScreen(private val parent: Screen? = null) : Screen(Component.translatable("options.plantz.title")) {
+class PazOptionsScreen(private val parent: Screen? = null) : Screen(Component.translatable("options.sproutsquad.title")) {
     private companion object {
         const val HEADER_HEIGHT = 32
         const val FOOTER_HEIGHT = 36

@@ -17,7 +17,7 @@ class BossDefeatTrigger : SimpleCriterionTrigger<BossDefeatTrigger.TriggerInstan
     fun trigger(player: ServerPlayer) {
         val advancement = player.level().server.advancements
             .get(pazResource("boss_slayer"))
-            ?: error("Missing required advancement plantz:boss_slayer")
+            ?: error("Missing required advancement sproutsquad:boss_slayer")
         val defeatedBossCount = player.advancements
             .getOrStartProgress(advancement)
             .completedCriteria

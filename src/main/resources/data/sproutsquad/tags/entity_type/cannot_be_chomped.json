@@ -1,0 +1,25 @@
+{
+  "values": [
+    "minecraft:player",
+    "minecraft:ender_dragon",
+    "minecraft:warden",
+    "minecraft:wither",
+    "minecraft:elder_guardian",
+    "minecraft:ravager",
+    "minecraft:iron_golem",
+    "minecraft:hoglin",
+    "minecraft:zoglin",
+    "minecraft:ghast",
+    "minecraft:giant",
+    "minecraft:camel",
+    "minecraft:camel_husk",
+    "sproutsquad:zombie_yeti",
+    "sproutsquad:robo_zombie",
+    "sproutsquad:super_brainz",
+    "sproutsquad:gargantuar",
+    {
+      "id": "#c:bosses",
+      "required": false
+    }
+  ]
+}

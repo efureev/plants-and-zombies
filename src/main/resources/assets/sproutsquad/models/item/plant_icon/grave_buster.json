@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sproutsquad:item/plant_icon/grave_buster"
+  }
+}

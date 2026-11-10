@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:brainz_flag"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.win_hardest_raid"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.win_hardest_raid.description"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "sproutsquad:win_zombie_raid",
+  "criteria": {
+    "win_hardest_raid": {
+      "trigger": "sproutsquad:win_hardest_raid"
+    }
+  },
+  "sends_telemetry_event": false
+}

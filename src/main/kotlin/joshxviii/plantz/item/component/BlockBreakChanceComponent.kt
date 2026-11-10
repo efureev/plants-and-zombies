@@ -22,7 +22,7 @@ data class BlockBreakChanceComponent(val chance: Float) : TooltipProvider {
     ) {
         val percent = DecimalFormat("0.#", DecimalFormatSymbols.getInstance(Locale.ROOT)).format(chance * 100.0f)
         consumer.accept(
-            Component.translatable("component.plantz.block_break_chance", percent)
+            Component.translatable("component.sproutsquad.block_break_chance", percent)
                 .withStyle(ChatFormatting.DARK_GRAY)
         )
     }

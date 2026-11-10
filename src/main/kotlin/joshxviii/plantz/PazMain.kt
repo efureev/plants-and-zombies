@@ -24,9 +24,9 @@ import org.apache.logging.log4j.Logger
 
 
 object PazMain {
-	const val MODID = "plantz"
+	const val MODID = "sproutsquad"
 	@JvmField
-	val LOGGER: Logger = LogManager.getLogger("Plants & Zombies")
+	val LOGGER: Logger = LogManager.getLogger("Sprout Squad")
 
 	/** Called once, during the last NeoForge RegisterEvent (all registries are unfrozen then). */
 	fun onInitialize() {

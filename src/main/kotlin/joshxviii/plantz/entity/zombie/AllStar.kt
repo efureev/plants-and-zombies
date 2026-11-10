@@ -158,7 +158,7 @@ class AllStar(type: EntityType<out AllStar>, level: Level) : PazZombie(type, lev
     }
 
     override fun getTypeName(): Component {
-        return if (variant != AllStarVariant.ALL_STAR) Component.translatable("entity.plantz.all_star.variant.${variant.name.lowercase()}")
+        return if (variant != AllStarVariant.ALL_STAR) Component.translatable("entity.sproutsquad.all_star.variant.${variant.name.lowercase()}")
         else super.getTypeName()
     }
 

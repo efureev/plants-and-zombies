@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "sproutsquad:item/letter_overlay",
+    "layer1": "sproutsquad:item/letter"
+  }
+}

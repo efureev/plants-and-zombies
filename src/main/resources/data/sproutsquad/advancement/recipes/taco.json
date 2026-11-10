@@ -1,0 +1,46 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:foods/leafy_green" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/tomato" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/onion" } }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:taco"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_ingredients": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:foods/leafy_green"
+          },
+          {
+            "items": "#c:crops/tomato"
+          },
+          {
+            "items": "#c:crops/onion"
+          },
+          {
+            "items": "minecraft:cooked_beef"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_ingredients"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:taco"
+    ]
+  }
+}

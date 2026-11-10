@@ -1,6 +1,0 @@
-{
-	"parent": "plantz:block/mailbox/mailbox",
-	"textures": {
-		"0": "plantz:block/mailbox/black_mailbox_open"
-	}
-}

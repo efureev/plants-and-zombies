@@ -129,7 +129,7 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 | M5 Клиент | 🧪 | `main` ← `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
 | M6 Миксины | 🧪 | `main` ← `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
 | M7 Совместимость | ⏳ | | |
-| M8 Ребрендинг | ⏳ | | Иконка мода уже заменена (`sprout_squad_icon.png`, маскот), логотип README готов |
+| M8 Ребрендинг | 🧪 | `main` ← `port/rebrand` | mod id `sproutsquad`, «Sprout Squad» 0.1.0, ресурсы перенесены, id в JSON/NBT-структурах/переводах заменены, иконка и логотип; сборка, сервер и клиент без ошибок. В игре — вместе с M7 |
 | M9 Первый свой персонаж | ⏳ | | |
 | M10 Релиз 0.1 | ⏳ | | |
 
@@ -217,6 +217,8 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 - Проверка на выделенном сервере (`runServer`) + клиент по сети — обязательна.
 
 ### M8. Ребрендинг (смена mod id и названия)
+
+> **Сделано:** `plantz` → `sproutsquad` скриптом `tools/upstream/rename_modid.py` (строки в коде и ресурсах) и `tools/upstream/nbt_rename.py` (34 ссылки в структуре мавзолея и 4 в декоре кладбища). Версия мода — 0.1.0, артефакт `sprout-squad`, конфиги — `config/sproutsquad/*.json`, команда помощи ведёт на GitHub issues форка.
 - Выполняется после M7, **до начала игры в «настоящем» мире**.
 - `plantz` → `<modid>` (D2): `assets/plantz` → `assets/<modid>`, `data/plantz` → `data/<modid>`, все `ResourceLocation`/`Identifier` (функция `pazResource`), ключи локализации, `neoforge.mods.toml`, имена миксин-конфигов, теги, ссылки внутри JSON (рецепты, лут-таблицы, advancements, worldgen, `customPlantEntityLimits` в конфиге).
 - Пакет `joshxviii.plantz` **не переименовывается** — это облегчает cherry-pick из оригинала; свой код живёт в своём пакете (D3).

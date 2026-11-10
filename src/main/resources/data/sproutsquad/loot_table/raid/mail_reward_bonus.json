@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:generic",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:taco",
+          "weight": 30,
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 12,
+                "max": 24
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "sproutsquad:balloons",
+          "weight": 15
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "sproutsquad:gnomes",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:lawn_flamingo",
+          "weight": 3
+        }
+      ]
+    }
+  ],
+  "random_sequence": "sproutsquad:raid/default_mail_rewards"
+}

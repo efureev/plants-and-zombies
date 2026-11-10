@@ -1,0 +1,47 @@
+{
+  "parent": "sproutsquad:recipes/mailbox",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:mailbox/mailbox"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_mailbox": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#sproutsquad:mailboxes"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_mailbox"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:mailbox/white_mailbox",
+      "sproutsquad:mailbox/light_gray_mailbox",
+      "sproutsquad:mailbox/gray_mailbox",
+      "sproutsquad:mailbox/black_mailbox",
+      "sproutsquad:mailbox/brown_mailbox",
+      "sproutsquad:mailbox/red_mailbox",
+      "sproutsquad:mailbox/orange_mailbox",
+      "sproutsquad:mailbox/yellow_mailbox",
+      "sproutsquad:mailbox/lime_mailbox",
+      "sproutsquad:mailbox/green_mailbox",
+      "sproutsquad:mailbox/cyan_mailbox",
+      "sproutsquad:mailbox/light_blue_mailbox",
+      "sproutsquad:mailbox/blue_mailbox",
+      "sproutsquad:mailbox/purple_mailbox",
+      "sproutsquad:mailbox/magenta_mailbox",
+      "sproutsquad:mailbox/pink_mailbox"
+    ]
+  }
+}

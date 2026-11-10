@@ -242,13 +242,13 @@ class Balloon(
     override fun addAdditionalSaveData(output: ValueOutput) {
         this.writeLeashData(output, balloonLeashData)
         this.entityData.set(DYE_COLOR, dyeColor)
-        output.store("plantz:Color", DyeColor.CODEC, dyeColor)
+        output.store("sproutsquad:Color", DyeColor.CODEC, dyeColor)
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         this.readLeashData(input)
         this.dyeColor = this.entityData.get(DYE_COLOR)
-        input.read("plantz:Color", DyeColor.CODEC).ifPresent { dyeColor -> this.dyeColor = dyeColor }
+        input.read("sproutsquad:Color", DyeColor.CODEC).ifPresent { dyeColor -> this.dyeColor = dyeColor }
     }
 
     override fun getLeashData(): LeashData? {

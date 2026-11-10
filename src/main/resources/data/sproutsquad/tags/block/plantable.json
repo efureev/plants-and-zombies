@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:mud",
+    "minecraft:dirt_path",
+    "minecraft:lily_pad",
+    "minecraft:flower_pot",
+    "minecraft:clay",
+    "minecraft:soul_soil",
+    "minecraft:pale_moss_carpet",
+    "minecraft:moss_carpet",
+    "#minecraft:dirt",
+    "#minecraft:grass_blocks",
+    "#minecraft:nylium",
+    "#minecraft:moss_blocks",
+    "#sproutsquad:gives_plant_pot_protection",
+    "#sproutsquad:farmable"
+  ]
+}

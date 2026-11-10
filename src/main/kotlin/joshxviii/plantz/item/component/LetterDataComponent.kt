@@ -35,10 +35,10 @@ data class LetterDataComponent(
         components: DataComponentGetter
     ) {
         if (signed) consumer.accept(
-            Component.translatable("component.plantz.letter.signed", Component.translatable(author)).withStyle(ChatFormatting.GRAY)
+            Component.translatable("component.sproutsquad.letter.signed", Component.translatable(author)).withStyle(ChatFormatting.GRAY)
         )
         if (!item.isEmpty) consumer.accept(
-            Component.translatable("component.plantz.letter.item", item.hoverName, item.count).withStyle(ChatFormatting.GRAY)
+            Component.translatable("component.sproutsquad.letter.item", item.hoverName, item.count).withStyle(ChatFormatting.GRAY)
         )
     }
 
@@ -83,7 +83,7 @@ enum class LetterBackground(val id: Int) : StringRepresentable {
     TORN(3);
 
     val translationKey: String
-        get() = "letter_background.plantz.${name.lowercase()}"
+        get() = "letter_background.sproutsquad.${name.lowercase()}"
 
     override fun getSerializedName(): String = this.name.lowercase()
     fun getBackground(): Identifier {
@@ -109,7 +109,7 @@ enum class LetterFont(val id: Int) : StringRepresentable {
     override fun getSerializedName(): String = this.name.lowercase()
 
     val translationKey: String
-        get() = "letter_font.plantz.${name.lowercase()}"
+        get() = "letter_font.sproutsquad.${name.lowercase()}"
 
     fun getFont(): Identifier = Identifier.withDefaultNamespace(
         when (this) {

@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "sproutsquad:graveyard_fence",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 2,
+    "separation": 0,
+    "salt": 1649204713,
+    "frequency": 1.0
+  }
+}

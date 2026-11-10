@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:sun"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.root"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.root.description"
+    },
+    "background": "sproutsquad:gui/advancements/background"
+  },
+  "criteria": {
+    "has_sun": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:sun"
+          }
+        ]
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

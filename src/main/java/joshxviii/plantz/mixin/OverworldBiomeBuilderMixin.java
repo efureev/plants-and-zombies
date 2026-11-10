@@ -21,7 +21,7 @@ public abstract class OverworldBiomeBuilderMixin {
     @Unique
     private static final ResourceKey<Biome> PLANTZ_GRAVEYARD = ResourceKey.create(
         Registries.BIOME,
-        Identifier.fromNamespaceAndPath("plantz", "graveyard")
+        Identifier.fromNamespaceAndPath("sproutsquad", "graveyard")
     );
 
     @Inject(method = "addBiomes", at = @At("HEAD"))

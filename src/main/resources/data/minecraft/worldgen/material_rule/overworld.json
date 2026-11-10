@@ -12,7 +12,7 @@
       "then_run": {
         "type": "minecraft:sequence",
         "sequence": [
-          "plantz:graveyard",
+          "sproutsquad:graveyard",
           "minecraft:overworld/surface"
         ]
       }

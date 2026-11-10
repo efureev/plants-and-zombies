@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "sproutsquad:hypnoshroom"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.disco_hypno"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.disco_hypno.description"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "sproutsquad:big_three",
+  "criteria": {
+    "disco_hypno": {
+      "trigger": "sproutsquad:disco_hypno"
+    }
+  },
+  "sends_telemetry_event": false
+}

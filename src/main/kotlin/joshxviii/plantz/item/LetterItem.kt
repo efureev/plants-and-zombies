@@ -19,7 +19,7 @@ class LetterItem(properties: Properties) : Item(properties) {
         if (!level.isClientSide && player is ServerPlayer) {
             val handIndex = if (hand == InteractionHand.MAIN_HAND) 0 else 1
             player.openMenu(object : ExtendedMenuProvider<Int> {
-                override fun getDisplayName(): Component = Component.translatable("gui.plantz.letter")
+                override fun getDisplayName(): Component = Component.translatable("gui.sproutsquad.letter")
 
                 override fun createMenu(
                     containerId: Int,

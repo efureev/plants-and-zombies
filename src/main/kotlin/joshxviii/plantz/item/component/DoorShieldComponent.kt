@@ -22,7 +22,7 @@ data class DoorShieldComponent(
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        //consumer.accept(Component.translatable("component.plantz.door_shield", doorType.name).withStyle(ChatFormatting.GRAY))
+        //consumer.accept(Component.translatable("component.sproutsquad.door_shield", doorType.name).withStyle(ChatFormatting.GRAY))
     }
 
 

@@ -24,7 +24,7 @@ data object WornBodyBlockerComponent: TooltipProvider {
         flag: TooltipFlag,
         components: DataComponentGetter
     ) {
-        consumer.accept(Component.translatable("component.plantz.worn_body_blocker").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
+        consumer.accept(Component.translatable("component.sproutsquad.worn_body_blocker").withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
     }
 
     @JvmField

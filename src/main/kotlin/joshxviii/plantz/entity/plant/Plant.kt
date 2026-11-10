@@ -337,37 +337,37 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
         plantSaveData(output)
-        output.putBoolean("plantz:IsPoweredUp", poweredUp)
-        output.putBoolean("plantz:IsRolling", rolling)
-        attachedPlayerReference.let { EntityReference.store(it, output, "plantz:AttachedPlayer") }
+        output.putBoolean("sproutsquad:IsPoweredUp", poweredUp)
+        output.putBoolean("sproutsquad:IsRolling", rolling)
+        attachedPlayerReference.let { EntityReference.store(it, output, "sproutsquad:AttachedPlayer") }
     }
 
     fun plantSaveData(output: ValueOutput) {
-        output.putInt("plantz:ReceivedSun", receivedSun)
-        output.putInt("plantz:ReceivedWater", receivedWater)
-        output.putInt("plantz:SeedGrowTime", seedGrowCooldown)
-        output.putInt("plantz:CoffeeBuff", coffeeBuff)
-        output.putFloat("plantz:PumpkinArmor", pumpkinArmor)
-        pumpkinEntityData?.let { output.store("plantz:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC), it) }
-        output.putInt("plantz:Cooldown", cooldown)
-        output.putInt("plantz:State", state.ordinal)
-        output.putBoolean("plantz:IsAsleep", isAsleep)
+        output.putInt("sproutsquad:ReceivedSun", receivedSun)
+        output.putInt("sproutsquad:ReceivedWater", receivedWater)
+        output.putInt("sproutsquad:SeedGrowTime", seedGrowCooldown)
+        output.putInt("sproutsquad:CoffeeBuff", coffeeBuff)
+        output.putFloat("sproutsquad:PumpkinArmor", pumpkinArmor)
+        pumpkinEntityData?.let { output.store("sproutsquad:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC), it) }
+        output.putInt("sproutsquad:Cooldown", cooldown)
+        output.putInt("sproutsquad:State", state.ordinal)
+        output.putBoolean("sproutsquad:IsAsleep", isAsleep)
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
-        receivedSun = input.getInt("plantz:ReceivedSun").getOrElse { 0 }
-        receivedWater = input.getInt("plantz:ReceivedWater").getOrElse { 0 }
-        seedGrowCooldown = input.getInt("plantz:SeedGrowTime").getOrElse { 0 }
-        coffeeBuff = input.getInt("plantz:CoffeeBuff").getOrElse { 0 }
-        pumpkinArmor = input.getFloatOr("plantz:PumpkinArmor", 0f)
-        pumpkinEntityData = input.read("plantz:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC)).orElse(null)
-        cooldown = input.getInt("plantz:Cooldown").getOrElse { this.entityData.get(COOLDOWN) }.coerceAtLeast(0)
-        state = PlantState.entries[input.getInt("plantz:State").getOrElse { 1 }].takeIf { it != PlantState.ACTION }?: PlantState.IDLE
-        isAsleep = input.getBooleanOr("plantz:IsAsleep", false)
-        poweredUp = input.getBooleanOr("plantz:IsPoweredUp", false)
-        rolling = input.getBooleanOr("plantz:IsRolling", false)
-        attachedPlayerReference = Optional.ofNullable((EntityReference.read<LivingEntity>(input, "plantz:AttachedPlayer"))).getOrNull()
+        receivedSun = input.getInt("sproutsquad:ReceivedSun").getOrElse { 0 }
+        receivedWater = input.getInt("sproutsquad:ReceivedWater").getOrElse { 0 }
+        seedGrowCooldown = input.getInt("sproutsquad:SeedGrowTime").getOrElse { 0 }
+        coffeeBuff = input.getInt("sproutsquad:CoffeeBuff").getOrElse { 0 }
+        pumpkinArmor = input.getFloatOr("sproutsquad:PumpkinArmor", 0f)
+        pumpkinEntityData = input.read("sproutsquad:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC)).orElse(null)
+        cooldown = input.getInt("sproutsquad:Cooldown").getOrElse { this.entityData.get(COOLDOWN) }.coerceAtLeast(0)
+        state = PlantState.entries[input.getInt("sproutsquad:State").getOrElse { 1 }].takeIf { it != PlantState.ACTION }?: PlantState.IDLE
+        isAsleep = input.getBooleanOr("sproutsquad:IsAsleep", false)
+        poweredUp = input.getBooleanOr("sproutsquad:IsPoweredUp", false)
+        rolling = input.getBooleanOr("sproutsquad:IsRolling", false)
+        attachedPlayerReference = Optional.ofNullable((EntityReference.read<LivingEntity>(input, "sproutsquad:AttachedPlayer"))).getOrNull()
         loadedFromSave = true
     }
 
@@ -1042,7 +1042,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun verifyOwner(player: Player): Boolean {
         if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {
-            player.sendOverlayMessage(Component.translatable("message.plantz.not_yours", name.copy().withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.RED))
+            player.sendOverlayMessage(Component.translatable("message.sproutsquad.not_yours", name.copy().withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.RED))
             return false
         }
         return true

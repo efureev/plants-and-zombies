@@ -1,0 +1,24 @@
+{
+  "additional_wants": {
+    "id": "sproutsquad:sun",
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 12,
+      "max": 22
+    }
+  },
+  "gives": {
+    "id": "sproutsquad:gardening_glove"
+  },
+  "max_uses": 1,
+  "reputation_discount": 0.1,
+  "wants": {
+    "count": {
+      "type": "minecraft:uniform",
+      "min": 12,
+      "max": 20
+    },
+    "id": "minecraft:emerald"
+  },
+  "xp": 15
+}

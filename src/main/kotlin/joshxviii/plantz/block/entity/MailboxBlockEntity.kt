@@ -63,7 +63,7 @@ class MailboxBlockEntity(
 
     companion object {
         const val HERO_MAIL_EJECT_DELAY = 50
-        val DEFAULT_NAME = Component.translatable("item.plantz.mailbox");
+        val DEFAULT_NAME = Component.translatable("item.sproutsquad.mailbox");
         private fun spread(spread: Double, random: RandomSource): Double = (2.0 * random.nextDouble() - 1.0) * spread
 
         fun tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: MailboxBlockEntity) {

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": ["sproutsquad:brainz_alloy_block"]
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_brainz_alloy_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "sproutsquad:brainz_alloy_block"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_brainz_alloy_block"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "sproutsquad:brainz_alloy_by_block"
+    ]
+  }
+}

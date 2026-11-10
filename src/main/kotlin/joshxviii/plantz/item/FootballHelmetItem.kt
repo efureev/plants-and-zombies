@@ -23,7 +23,7 @@ import kotlin.math.sqrt
 class FootballHelmetItem(properties: Properties) : Item(properties) {
     companion object {
         fun addToTooltip(consumer: MutableList<Component>) {
-            consumer.add(1, Component.translatable("item.plantz.football_helmet.description")
+            consumer.add(1, Component.translatable("item.sproutsquad.football_helmet.description")
                 .withStyle(ChatFormatting.DARK_GRAY).withStyle(ChatFormatting.ITALIC))
         }
 

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#sproutsquad:plantable",
+    {
+      "id": "#c:stones",
+      "required": false
+    }
+  ]
+}

@@ -9,7 +9,7 @@
 
 ## Статус
 
-Идёт перенос на NeoForge. План работ и этапы — в [`docs/SPEC.md`](docs/SPEC.md).
+Перенос на NeoForge и переименование в Sprout Squad выполнены, идёт проверка в игре. План работ и этапы — в [`docs/SPEC.md`](docs/SPEC.md).
 
 | | |
 |---|---|
@@ -21,7 +21,7 @@
 ## Сборка
 
 ```bash
-./gradlew build        # jar появится в build/libs/
+./gradlew build        # jar появится в build/libs/ (sprout-squad-<версия>.jar)
 ./gradlew runClient    # запуск клиента для проверки
 ./gradlew runServer    # запуск выделенного сервера
 ```

@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "sproutsquad:grave_buster"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.grave_buster_bust"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.grave_buster_bust.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "sproutsquad:grow_plant_seeds",
+  "criteria": {
+    "grave_buster_bust": {
+      "trigger": "sproutsquad:grave_buster_bust"
+    }
+  },
+  "sends_telemetry_event": false
+}

@@ -8,8 +8,9 @@ NeoForge-форк мода [Plants & Zombies](https://github.com/joshxviii/plant
 
 ## Ключевые решения
 - Название: **Sprout Squad**, mod id: **`sproutsquad`**, артефакт: `sprout-squad`.
-- **До этапа M8 mod id остаётся `plantz`.** Не переименовывай `assets/plantz`, `data/plantz` и ресурсные id раньше M8.
-- Пакет оригинала `joshxviii.plantz` **не переименовывать никогда** (ради cherry-pick из upstream).
+- Mod id `sproutsquad` (с этапа M8): ресурсы в `assets/sproutsquad` и `data/sproutsquad`, все id — `sproutsquad:…`. Менять id существующих блоков/предметов/сущностей нельзя — это ломает миры.
+- Пакет оригинала `joshxviii.plantz` **не переименовывать никогда** (ради cherry-pick из upstream); префиксы `plantz$` у членов миксинов тоже остаются.
+- После cherry-pick из оригинала прогоняй `python3 tools/upstream/rename_modid.py .` (и `tools/upstream/nbt_rename.py` для структур `.nbt`): у автора namespace по-прежнему `plantz`.
 - Свой новый код — только в `dev.efureev.sproutsquad.*` со своими `DeferredRegister`; файлы оригинала правим минимально.
 - Только NeoForge. Fabric не поддерживаем, мультилоадер не нужен.
 

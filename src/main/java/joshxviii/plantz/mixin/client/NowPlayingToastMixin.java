@@ -15,6 +15,6 @@ public class NowPlayingToastMixin {
     @Inject(method = "getCurrentSongName", at = @At(value = "HEAD"), cancellable = true)
     private static void getCurrentSongName(CallbackInfoReturnable<String> cir) {
         var raidMusic = RaidMusicManager.INSTANCE.getTargetMusicLayer();
-        if (raidMusic != null) cir.setReturnValue("music.plantz.raid." + raidMusic.getMusicName());
+        if (raidMusic != null) cir.setReturnValue("music.sproutsquad.raid." + raidMusic.getMusicName());
     }
 }

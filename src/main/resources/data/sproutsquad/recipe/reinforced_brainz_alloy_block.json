@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "@": "sproutsquad:brainz_alloy_block",
+    "#": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "###",
+    "#@#",
+    "###"
+  ],
+  "result": {
+    "id": "sproutsquad:reinforced_brainz_alloy_block"
+  }
+}

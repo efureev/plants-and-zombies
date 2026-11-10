@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "@": [
+      "sproutsquad:plant_pot"
+    ],
+    "#": [
+      "minecraft:bamboo_slab"
+    ],
+    "*": [
+      "minecraft:bamboo"
+    ]
+  },
+  "pattern": [
+    "   ",
+    " @ ",
+    "*#*"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:zen_plant_pot"
+  }
+}

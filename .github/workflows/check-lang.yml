@@ -3,10 +3,10 @@ name: Check Language Files
 on:
   pull_request:
     paths:
-      - 'src/main/resources/assets/plantz/lang/**'
+      - 'src/main/resources/assets/sproutsquad/lang/**'
   push:
     paths:
-      - 'src/main/resources/assets/plantz/lang/**'
+      - 'src/main/resources/assets/sproutsquad/lang/**'
   workflow_dispatch:
 
 jobs:
@@ -46,7 +46,7 @@ jobs:
 
           git fetch --no-tags --depth=1 origin "$LEFT_SHA"
           git diff --name-only -z --diff-filter=AM "$LEFT_SHA" "$CURRENT_SHA" -- \
-            'src/main/resources/assets/plantz/lang/*.json' > "$RUNNER_TEMP/changed-lang-files"
+            'src/main/resources/assets/sproutsquad/lang/*.json' > "$RUNNER_TEMP/changed-lang-files"
 
           mapfile -d '' -t changed_paths < "$RUNNER_TEMP/changed-lang-files"
           files=()

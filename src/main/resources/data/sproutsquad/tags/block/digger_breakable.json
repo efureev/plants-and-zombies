@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "sproutsquad:plant_pot",
+    "minecraft:pointed_dripstone",
+    "minecraft:bricks",
+    "#minecraft:stone_bricks",
+    "#minecraft:rails",
+    "#minecraft:dirt",
+    "#minecraft:sand",
+    "#minecraft:terracotta",
+    "#minecraft:sculk_replaceable",
+
+    {
+      "id": "#c:glass_blocks",
+      "required": false
+    },
+    {
+      "id": "#c:cobblestones",
+      "required": false
+    },
+    {
+      "id": "#c:concretes",
+      "required": false
+    }
+  ]
+}

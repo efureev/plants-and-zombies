@@ -84,7 +84,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
     }
 
     override fun getTypeName(): Component {
-        return if (variant != BrownCoatVariant.BROWNCOAT) Component.translatable("entity.plantz.browncoat.variant.${variant.name.lowercase()}")
+        return if (variant != BrownCoatVariant.BROWNCOAT) Component.translatable("entity.sproutsquad.browncoat.variant.${variant.name.lowercase()}")
         else super.getTypeName()
     }
 

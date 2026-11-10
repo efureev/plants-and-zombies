@@ -48,7 +48,7 @@ class MailboxScreen(
     }
 
     fun initSearchBar(x: Int, y: Int): EditBox {
-        val txt = EditBox(font, x, y, 94, 12, Component.translatable("container.plantz.address_search"));
+        val txt = EditBox(font, x, y, 94, 12, Component.translatable("container.sproutsquad.address_search"));
         txt.setCanLoseFocus(true)
         txt.setTextColor(-1)
         txt.setTextColorUneditable(-1)
@@ -162,7 +162,7 @@ class MailboxScreen(
             graphics.requestCursor(if (scrolling) CursorTypes.RESIZE_NS else CursorTypes.POINTING_HAND)
         }
         // show message when no addresses are available
-        if (addressButtons.isEmpty()) graphics.textWithWordWrap(font, Component.translatable("container.plantz.no_address").withColor(0x777777), xo+53, yo+29, 96, -1, false)
+        if (addressButtons.isEmpty()) graphics.textWithWordWrap(font, Component.translatable("container.sproutsquad.no_address").withColor(0x777777), xo+53, yo+29, 96, -1, false)
     }
 
     override fun containerTick() {

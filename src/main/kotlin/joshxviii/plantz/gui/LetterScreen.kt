@@ -26,7 +26,7 @@ import net.minecraft.world.entity.player.Inventory
 class LetterScreen(
     val menu: LetterMenu,
     inventory: Inventory,
-    title: Component = Component.translatable("gui.plantz.letter")
+    title: Component = Component.translatable("gui.sproutsquad.letter")
 ) : AbstractContainerScreen<LetterMenu>(menu, inventory, title, MENU_WIDTH, MENU_HEIGHT) {
     companion object {
         private const val TEXT_WIDTH = 148
@@ -99,7 +99,7 @@ class LetterScreen(
                 }.pos(leftPos + LETTER_WIDTH + 4, topPos + 51).width(CONTROL_WIDTH).build()
             )
             addRenderableWidget(
-                Button.builder(Component.translatable("gui.plantz.letter.sign")) {
+                Button.builder(Component.translatable("gui.sproutsquad.letter.sign")) {
                     Minecraft.getInstance().gui.setScreen(
                         ConfirmScreen(
                             { confirmed ->
@@ -110,9 +110,9 @@ class LetterScreen(
                                     Minecraft.getInstance().gui.setScreen(this)
                                 }
                             },
-                            Component.translatable("gui.plantz.letter.confirm_title"),
-                            Component.translatable("gui.plantz.letter.confirm_message"),
-                            Component.translatable("gui.plantz.letter.confirm_sign"),
+                            Component.translatable("gui.sproutsquad.letter.confirm_title"),
+                            Component.translatable("gui.sproutsquad.letter.confirm_message"),
+                            Component.translatable("gui.sproutsquad.letter.confirm_sign"),
                             CommonComponents.GUI_CANCEL
                         )
                     )
@@ -232,11 +232,11 @@ class LetterScreen(
     }
 
     private fun fontButtonLabel() = Component.translatable(
-        "gui.plantz.letter.font", Component.translatable(selectedFont.translationKey)
+        "gui.sproutsquad.letter.font", Component.translatable(selectedFont.translationKey)
     )
 
     private fun backgroundButtonLabel() = Component.translatable(
-        "gui.plantz.letter.background", Component.translatable(selectedBackground.translationKey)
+        "gui.sproutsquad.letter.background", Component.translatable(selectedBackground.translationKey)
     )
 
     fun backgroundLeft() = if (editable) leftPos else (width - LETTER_WIDTH) / 2

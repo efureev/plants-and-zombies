@@ -29,17 +29,17 @@ import net.minecraft.world.entity.ai.village.poi.PoiManager
 import java.net.URI
 
 object PazCommands {
-    val HELP_URL = Component.translatable("commands.plantz.help.url")
+    val HELP_URL = Component.translatable("commands.sproutsquad.help.url")
 
-    private val NO_FLAG = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.start.no_flag"))
-    private val RAID_NOT_STARTED = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.start.failed"))
-    private val RAID_ALREADY_ACTIVE = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.start.already_active"))
-    private val NO_RAID = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.no_raid_nearby"))
-    private val RAID_INACTIVE = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.wave_start.not_ongoing"))
-    private val FINAL_WAVE = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.wave_start.final_wave"))
-    private val WAVE_FAILED = SimpleCommandExceptionType(Component.translatable("commands.plantz.raid.wave_start.failed"))
-    private val UNKNOWN_WAVE_TYPE = DynamicCommandExceptionType { Component.translatable("commands.plantz.raid.wave_start.unknown_wave_type", it) }
-    private val UNKNOWN_BOSS_TYPE = DynamicCommandExceptionType { Component.translatable("commands.plantz.raid.wave_start.unknown_boss_type", it) }
+    private val NO_FLAG = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.start.no_flag"))
+    private val RAID_NOT_STARTED = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.start.failed"))
+    private val RAID_ALREADY_ACTIVE = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.start.already_active"))
+    private val NO_RAID = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.no_raid_nearby"))
+    private val RAID_INACTIVE = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.wave_start.not_ongoing"))
+    private val FINAL_WAVE = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.wave_start.final_wave"))
+    private val WAVE_FAILED = SimpleCommandExceptionType(Component.translatable("commands.sproutsquad.raid.wave_start.failed"))
+    private val UNKNOWN_WAVE_TYPE = DynamicCommandExceptionType { Component.translatable("commands.sproutsquad.raid.wave_start.unknown_wave_type", it) }
+    private val UNKNOWN_BOSS_TYPE = DynamicCommandExceptionType { Component.translatable("commands.sproutsquad.raid.wave_start.unknown_boss_type", it) }
 
     fun initialize() {
         NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent::class.java) { register(it.dispatcher) }
@@ -85,9 +85,9 @@ object PazCommands {
                 .withColor(ChatFormatting.AQUA)
                 .withUnderlined(true)
                 .withClickEvent(ClickEvent.OpenUrl(URI.create(HELP_URL.string)))
-                .withHoverEvent(HoverEvent.ShowText(Component.translatable("commands.plantz.help.hover")))
+                .withHoverEvent(HoverEvent.ShowText(Component.translatable("commands.sproutsquad.help.hover")))
         )
-        ctx.source.sendSuccess({ Component.translatable("commands.plantz.help", link) }, false)
+        ctx.source.sendSuccess({ Component.translatable("commands.sproutsquad.help", link) }, false)
         return 1
     }
 
@@ -111,7 +111,7 @@ object PazCommands {
             ).isPresent
             throw if (flagNearby) RAID_NOT_STARTED.create() else NO_FLAG.create()
         }
-        ctx.source.sendSuccess({ Component.translatable("commands.plantz.raid.start.success", raid.center.x, raid.center.y, raid.center.z) }, true)
+        ctx.source.sendSuccess({ Component.translatable("commands.sproutsquad.raid.start.success", raid.center.x, raid.center.y, raid.center.z) }, true)
         return 1
     }
 
@@ -121,7 +121,7 @@ object PazCommands {
         val raid = level.getZombieRaids().getNearbyRaid(player.blockPosition(), ZombieRaid.RAID_DISTANCE) ?: throw NO_RAID.create()
         raid.stop(level)
         level.getZombieRaids().setDirty()
-        ctx.source.sendSuccess({ Component.translatable("commands.plantz.raid.stop.success", raid.center.x, raid.center.y, raid.center.z) }, true)
+        ctx.source.sendSuccess({ Component.translatable("commands.sproutsquad.raid.stop.success", raid.center.x, raid.center.y, raid.center.z) }, true)
         return 1
     }
 
