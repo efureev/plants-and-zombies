@@ -32,6 +32,7 @@ object PazLootTables {
     @JvmField val MAIL_REWARD_ARMY = registerLootTable("raid/mail_reward_army")
     @JvmField val MAIL_REWARD_LEAGUE = registerLootTable("raid/mail_reward_league")
     @JvmField val MAIL_REWARD_ZOMBOSS = registerLootTable("raid/mail_reward_zomboss")
+    @JvmField val MAIL_REWARD_DISCO = registerLootTable("raid/mail_reward_disco")
 
     private fun registerLootTable(
         name: String
