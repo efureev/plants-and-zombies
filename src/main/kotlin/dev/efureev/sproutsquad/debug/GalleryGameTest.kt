@@ -2,39 +2,19 @@ package dev.efureev.sproutsquad.debug
 
 import joshxviii.plantz.PazMain
 import net.minecraft.core.BlockPos
-import net.minecraft.core.registries.Registries
-import net.minecraft.gametest.framework.FunctionGameTestInstance
 import net.minecraft.gametest.framework.GameTestHelper
-import net.minecraft.gametest.framework.TestData
-import net.minecraft.resources.Identifier
-import net.minecraft.resources.ResourceKey
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import net.neoforged.neoforge.event.RegisterGameTestsEvent
-import net.neoforged.neoforge.registries.RegisterEvent
-import java.util.function.Consumer
 
 /**
  * GameTest for `/pz gallery`: builds the gallery in the test world, checks that every exhibit
- * spawned frozen, then clears it. Runs with `./gradlew runGameTestServer`.
+ * spawned frozen, then clears it. Registered in [SquadGameTests].
  */
 object GalleryGameTest {
-    private val ID: Identifier = Identifier.fromNamespaceAndPath(PazMain.MODID, "gallery")
-    private val FUNCTION: ResourceKey<Consumer<GameTestHelper>> = ResourceKey.create(Registries.TEST_FUNCTION, ID)
-
     /** Lower bound: the mod has 34 plants and 20+ zombies, plus variants. */
     private const val MIN_EXHIBITS = 60
 
-    fun registerFunction(event: RegisterEvent) {
-        event.register(Registries.TEST_FUNCTION, ID) { Consumer<GameTestHelper>(::run) }
-    }
-
-    fun registerTest(event: RegisterGameTestsEvent) {
-        val environment = event.registerEnvironment(Identifier.fromNamespaceAndPath(PazMain.MODID, "default"))
-        event.registerTest(ID, FunctionGameTestInstance(FUNCTION, TestData(environment, Identifier.withDefaultNamespace("empty"), 100, 0, true)))
-    }
-
-    private fun run(helper: GameTestHelper) {
+    fun run(helper: GameTestHelper) {
         val level = helper.level
         val pos = helper.absolutePos(BlockPos(0, 1, 0))
         val source = level.server.createCommandSourceStack()

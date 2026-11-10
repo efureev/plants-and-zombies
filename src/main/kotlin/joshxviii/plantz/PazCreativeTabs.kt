@@ -55,6 +55,7 @@ object PazCreativeTabs {
             output.accept(SeedPacketItem.stackFor(PazEntities.CITRON))
             output.accept(SeedPacketItem.stackFor(PazEntities.ROYAL_SUNFLOWER))
         }
+        dev.efureev.sproutsquad.registry.SquadEntities.addSeedPackets(output)
     }
 
     private fun customEggs(output: CreativeModeTab.Output, stacks: List<ItemStack>) {

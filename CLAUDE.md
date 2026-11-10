@@ -48,6 +48,8 @@ JDK 25: `export JAVA_HOME=/opt/homebrew/opt/openjdk@25`.
 ## Контент
 - Любой новый текст — минимум в `en_us.json` и `ru_ru.json`.
 - Свои персонажи: реестр и карточки в `docs/CHARACTERS.md`, исходники Blockbench и эскизы — в `art/<name>/`, чек-лист — `docs/SPEC.md` §9.3.
+- Как добавить растение (файлы, шаги, образец «Горшочек») — `docs/WORKSHOP.md`. Тест `sproutsquad:squad_plants` проверяет чек-лист для всех своих растений.
+- GameTest-ы регистрируются в `dev/efureev/sproutsquad/debug/SquadGameTests.kt`; у каждого своё окружение (id окружения регистрируется только один раз).
 - После M8 запрещено менять id существующих блоков/предметов/сущностей без миграции — это ломает миры.
 
 ## Git

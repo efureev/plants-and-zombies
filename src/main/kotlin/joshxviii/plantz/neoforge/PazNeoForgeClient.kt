@@ -1,5 +1,6 @@
 package joshxviii.plantz.neoforge
 
+import dev.efureev.sproutsquad.client.SproutSquadClient
 import joshxviii.plantz.PazClient
 import joshxviii.plantz.PazClientNetwork
 import joshxviii.plantz.PazMain
@@ -39,6 +40,7 @@ class PazNeoForgeClient(modBus: IEventBus, container: ModContainer) {
         modBus.addListener(RegisterRangeSelectItemModelPropertyEvent::class.java) { BatteryFullness.register(it) }
         modBus.addListener(EntityRenderersEvent.RegisterLayerDefinitions::class.java) { PazModels.registerLayerDefinitions(it) }
         modBus.addListener(EntityRenderersEvent.RegisterRenderers::class.java) { PazModels.registerRenderers(it) }
+        SproutSquadClient.init(modBus)
         modBus.addListener(RegisterParticleGroupsEvent::class.java) { PazParticles.registerGroups(it) }
         modBus.addListener(RegisterParticleProvidersEvent::class.java) { PazParticles.registerProviders(it) }
         modBus.addListener(RegisterMenuScreensEvent::class.java) { PazScreens.registerMenuScreens(it) }
