@@ -565,6 +565,9 @@
   "sproutsquad.subtitles.music.raid.zomboss": "Играет музыка рейда",
 
   "item.sproutsquad.smooth_brainz_alloy_block": "Гладкий сплав мозгания",
+  "item.minecraft.tipped_arrow.effect.hypnotize": "Стрела гипноза",
+  "item.minecraft.tipped_arrow.effect.buttered": "Стрела масла",
+  "item.minecraft.tipped_arrow.effect.electrified": "Стрела электричества",
   "biome.sproutsquad.graveyard": "Кладбище",
   "biome.sproutsquad.ancient_egypt": "Древний Египет",
   "biome.sproutsquad.jurassic_period": "Юрский период",
