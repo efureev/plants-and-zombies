@@ -31,6 +31,7 @@
 ## Документация
 
 - [`docs/SPEC.md`](docs/SPEC.md) — техническое задание и этапы
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — план развития: персонажи, лут, предметы, рецепты, внешний вид
 - [`docs/CHARACTERS.md`](docs/CHARACTERS.md) — собственные персонажи
 - [`docs/UPSTREAM.md`](docs/UPSTREAM.md) — изменения, перенесённые из оригинала
 
