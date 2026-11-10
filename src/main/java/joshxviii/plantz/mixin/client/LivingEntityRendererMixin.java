@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.mojang.blaze3d.vertex.PoseStack;
 import joshxviii.plantz.item.RollerSkatesItem;
 import joshxviii.plantz.renderer.*;
-import joshxviii.plantz.mixin.LivingEntityAccessor;
+import joshxviii.plantz.PazEffectFlags;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -50,15 +50,15 @@ abstract public class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Inject(method = "extractRenderState*", at = @At("TAIL"))
     private void checkForHypnoEffect(@Coerce Entity entity, @Coerce EntityRenderState entityRenderState, float v, CallbackInfo ci) {
-        boolean hasHypno = ((LivingEntityAccessor) entity).plantz$getHypnoId();
+        boolean hasHypno = ((PazEffectFlags) entity).plantz$getHypnoId();
         entityRenderState.setRenderData(HAS_HYPNO_KEY, hasHypno);
-        boolean hasChill = ((LivingEntityAccessor) entity).plantz$getChillId();
+        boolean hasChill = ((PazEffectFlags) entity).plantz$getChillId();
         entityRenderState.setRenderData(HAS_CHILL_KEY, hasChill);
-        boolean hasFrozen = ((LivingEntityAccessor) entity).plantz$getFrozenId();
+        boolean hasFrozen = ((PazEffectFlags) entity).plantz$getFrozenId();
         entityRenderState.setRenderData(HAS_FROZEN_KEY, hasFrozen);
-        boolean hasButter = ((LivingEntityAccessor) entity).plantz$getButterId();
+        boolean hasButter = ((PazEffectFlags) entity).plantz$getButterId();
         entityRenderState.setRenderData(HAS_BUTTER_KEY, hasButter);
-        Map<Integer, Integer> paintColors = ((LivingEntityAccessor) entity).plantz$getPaintedColors();
+        Map<Integer, Integer> paintColors = ((PazEffectFlags) entity).plantz$getPaintedColors();
         entityRenderState.setRenderData(PAINT_COLORS_KEY, paintColors);
 
         if (entity instanceof LivingEntity living && entityRenderState instanceof LivingEntityRenderState livingState) {

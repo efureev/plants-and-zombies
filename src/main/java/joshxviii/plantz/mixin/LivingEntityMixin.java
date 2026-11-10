@@ -45,10 +45,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
+import joshxviii.plantz.PazEffectFlags;
 import joshxviii.plantz.neoforge.PazSyncedData;
 
 @Mixin(LivingEntity.class)
-abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHeroRewards {
+abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHeroRewards, PazEffectFlags {
 
 
 
@@ -107,23 +108,23 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         completedRaidWaveList = value;
     }
 
-    @Unique
+    @Override
     public boolean plantz$getHypnoId() {
         return PazSyncedData.HYPNOTIZED.get(((Entity) (Object) this));
     }
-    @Unique
+    @Override
     public boolean plantz$getChillId() {
         return PazSyncedData.CHILLED.get(((Entity) (Object) this));
     }
-    @Unique
+    @Override
     public boolean plantz$getFrozenId() {
         return PazSyncedData.FROZEN.get(((Entity) (Object) this));
     }
-    @Unique
+    @Override
     public boolean plantz$getButterId() {
         return PazSyncedData.BUTTERED.get(((Entity) (Object) this));
     }
-    @Unique
+    @Override
     public Map<Integer, Integer> plantz$getPaintedColors() {
         return PazSyncedData.PAINTED_COLORS.get(((Entity) (Object) this));
     }

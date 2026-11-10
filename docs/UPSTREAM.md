@@ -19,13 +19,25 @@ git log --oneline upstream-base-977cfb46..upstream/26.3
 |---|---|---|---|---|
 | — | — | — | — | пока ничего не переносилось |
 
-## Известные проблемы в данных оригинала
+## Ошибки оригинала, исправленные в форке
 
-Обнаружены при запуске порта; к переносу на NeoForge не относятся, есть и в Fabric-версии.
+Найдены при запуске порта, есть и в Fabric-версии. Исправлены в ветке `fix/upstream-data`; при переносе изменений из оригинала эти файлы могут конфликтовать.
 
-| Что | Где | Проявление |
-|---|---|---|
-| Достижения ссылаются на несуществующего родителя `plantz:robo_zombie` | `data/plantz/advancement/bigger_three.json`, `biggest_three.json` | `Couldn't load advancements: [plantz:bigger_three, plantz:biggest_three]` |
-| Рецепт тако требует теги `c:crops/tomato`, `c:crops/onion`, `c:foods/leafy_green`, пустые без других модов | `data/plantz/recipe/taco.json` | `Recipe plantz:taco can't be placed due to empty ingredients` |
-| Нет переводов субтитров для ~55 звуков | `assets/plantz/sounds.json`, `lang/*.json` | В dev-клиенте: `Missing subtitle translation` |
-| Звук `music/raid/low.ogg` указан у события `music.gnome_space`, файла нет | `assets/plantz/sounds.json` | `File plantz:sounds/music/raid/low.ogg does not exist` |
+| Что было | Исправление |
+|---|---|
+| Достижения `bigger_three`/`biggest_three` не загружались: родитель `plantz:robo_zombie` не существует | Родитель — `plantz:big_three`; метка критерия Robo-Zombie исправлена |
+| Рецепт тако с пустыми тегами `c:crops/tomato`, `c:crops/onion`, `c:foods/leafy_green` (без модов-ферм) | Рецепт и его достижение-разблокировка загружаются только при непустых тегах (`neoforge:conditions`) |
+| 58 субтитров без перевода; у пяти звуков смерти ключ `"subtitles"`, у гнома ключи без префикса, у `scaredyshroom.peek` и `super_brainz.punch/lazer` чужие субтитры | Ключи в `sounds.json` исправлены, тексты добавлены в `en_us` и `ru_ru` |
+| `music.gnome_space` ссылался на несуществующий `music/raid/low.ogg` | Ссылка на `music/raid/loon_griefers_low.ogg` |
+| Звуки `entity.gnome.voice_1.jump`, `voice_2.jump`, `entity.snowchunk` зарегистрированы, но не описаны в `sounds.json` | Добавлены (прыжок — общий звук гнома, снежный ком — ванильный звук снега) |
+| Нет текстуры яйца гига-гаргантюа | Временно используется текстура яйца гаргантюа |
+| Текстура частиц портала машины времени с неверным namespace | `plantz:block/time_machine/portal1` |
+| Модель щита-двери: неверные пути текстур двери, нет текстуры частиц | Пути `minecraft:block/oak_door_*`, `particle` |
+| `LivingEntityAccessor` — `@Invoker` на методы самого мода (предупреждения Mixin) | Заменён обычным интерфейсом `PazEffectFlags` |
+| Русская локализация: 111 непереведённых строк, 13 устаревших ключей, 3 строки без `%s`, опечатки | Перевод дополнен до 100 %, устаревшие ключи удалены |
+
+### Ещё не исправлено
+
+| Что | Почему |
+|---|---|
+| Текстура `block/plant_pot_particle` 14×14 — Minecraft отключает мипмапы всего атласа блоков | Нужна перерисовка текстуры в 16×16 |

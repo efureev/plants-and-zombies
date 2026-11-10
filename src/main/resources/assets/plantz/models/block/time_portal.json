@@ -1,5 +1,5 @@
 {
   "textures": {
-    "particle": "minecraft:block/time_machine/portal1"
+    "particle": "plantz:block/time_machine/portal1"
   }
 }

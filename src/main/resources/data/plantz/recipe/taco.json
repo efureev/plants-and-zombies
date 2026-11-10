@@ -1,4 +1,9 @@
 {
+  "neoforge:conditions": [
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:foods/leafy_green" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/tomato" } },
+    { "type": "neoforge:not", "value": { "type": "neoforge:tag_empty", "tag": "c:crops/onion" } }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
