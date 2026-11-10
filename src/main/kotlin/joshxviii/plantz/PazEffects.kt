@@ -1,5 +1,7 @@
 package joshxviii.plantz
 
+import java.util.function.Supplier
+
 import joshxviii.plantz.effect.ButteredMobEffect
 import joshxviii.plantz.effect.ElectrifyMobEffect
 import joshxviii.plantz.effect.FreezeMobEffect
@@ -9,8 +11,8 @@ import joshxviii.plantz.effect.PaintedMobEffect
 import joshxviii.plantz.effect.TangledMobEffect
 import joshxviii.plantz.effect.ToxicMobEffect
 import joshxviii.plantz.effect.ZombieOmenMobEffect
-import net.fabricmc.fabric.api.attachment.v1.AttachmentType
-import net.fabricmc.fabric.impl.attachment.AttachmentRegistryImpl
+import net.neoforged.neoforge.attachment.AttachmentType
+import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.minecraft.core.Holder
 import net.minecraft.core.Registry
 import net.minecraft.core.particles.BlockParticleOption
@@ -98,8 +100,12 @@ object PazEffects {
         )
     }
 
-    val HYPNOTIZED_GOAL_ATTACHMENT: AttachmentType<Goal> =
-        AttachmentRegistryImpl.builder<Goal>().buildAndRegister(pazResource("hypnotized_goal"))
+    // Transient (not serialized): only accessed through getExistingDataOrNull/setData/removeData.
+    val HYPNOTIZED_GOAL_ATTACHMENT: AttachmentType<Goal> = Registry.register(
+        NeoForgeRegistries.ATTACHMENT_TYPES,
+        pazResource("hypnotized_goal"),
+        AttachmentType.builder(Supplier<Goal> { throw IllegalStateException("hypnotized_goal has no default value") }).build()
+    )
 
     fun initialize() {
 

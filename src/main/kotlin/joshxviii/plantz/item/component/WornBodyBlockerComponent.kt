@@ -17,7 +17,7 @@ import java.util.function.Consumer
  * blocks attacks at all times (using its [DataComponents.BLOCKS_ATTACKS])
  * and is rendered on the wearer's body.
  */
-object WornBodyBlockerComponent: TooltipProvider {
+data object WornBodyBlockerComponent: TooltipProvider {
     override fun addToTooltip(
         context: Item.TooltipContext,
         consumer: Consumer<Component>,

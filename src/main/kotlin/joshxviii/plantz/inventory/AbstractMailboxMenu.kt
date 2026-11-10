@@ -2,7 +2,7 @@ package joshxviii.plantz.inventory
 
 import joshxviii.plantz.MailboxData
 import joshxviii.plantz.block.entity.MailboxManager
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType
+import joshxviii.plantz.neoforge.ExtendedMenuType
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.Container

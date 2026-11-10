@@ -115,14 +115,32 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 
 Каждый этап заканчивается сборкой `./gradlew build` без ошибок и проверкой по критериям приёмки.
 
-### M0. Подготовка репозитория
+### Статус этапов
+
+Обновляется при закрытии каждого этапа. ✅ — сделан и принят, 🧪 — код перенесён, мод загружается, ждёт проверки в игре, 🔄 — в работе, ⏳ — не начат.
+
+| Этап | Статус | Ветка / коммит | Примечание |
+|---|---|---|---|
+| M0 Подготовка репозитория | ✅ 2026-11-10 | `main` @ `b29b5ab5` | `main` — ветка по умолчанию, `upstream` и тег `upstream-base-977cfb46`, README, `docs/UPSTREAM.md`, `docs/CHARACTERS.md` |
+| M1 Сборка под NeoForge | ✅ 2026-11-10 | `port/build` | MDG 2.0.148, NeoForge 26.3.0.102, KFF 6.5.0, Kotlin 2.4.21; `build` зелёный, `runClient` доходит до главного меню |
+| M2 Регистрация | 🧪 | `port/build` | Регистрация оригинала оставлена прямой (`Registry.register`), запускается в последнем `RegisterEvent`; ошибок регистрации нет |
+| M3 Логика, сеть, меню, конфиг | 🧪 | `port/build` | Пакеты, меню с доп. данными (прослойка `ExtendedMenu*`), команды, конфиг, экран настроек вместо ModMenu |
+| M4 Мир | 🧪 | `port/build` | Спавны — biome modifier `plantz:spawns`, лут — `LootTableLoadEvent`, TerraBlender — `FMLCommonSetupEvent`; `graveyard.json` переведён на `overlay` |
+| M5 Клиент | 🧪 | `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
+| M6 Миксины | 🧪 | `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
+| M7 Совместимость | ⏳ | | |
+| M8 Ребрендинг | ⏳ | | |
+| M9 Первый свой персонаж | ⏳ | | |
+| M10 Релиз 0.1 | ⏳ | | |
+
+### M0. Подготовка репозитория ✅
 - Ветка `main`, `upstream`, тег точки форка (5.1–5.2).
 - В `README.md` — раздел «Это форк», ссылка на оригинал и автора, лицензия.
 - Добавить `docs/SPEC.md` (этот документ), `docs/UPSTREAM.md`, `docs/CHARACTERS.md` (реестр своих персонажей, раздел 9).
 
 **Приёмка:** `main` — ветка по умолчанию на GitHub, README обновлён.
 
-### M1. Сборка под NeoForge
+### M1. Сборка под NeoForge ✅
 - Удалить Loom, `fabric.mod.json`, зависимости Fabric API / Fabric Kotlin / ModMenu, репозиторий Fabric в `settings.gradle`.
 - Подключить MDG, NeoForge 26.3, KFF, Kotlin JVM-плагин (версия из KFF), toolchain Java 25.
 - Создать `src/main/resources/META-INF/neoforge.mods.toml`: modId, version, displayName, authors (оригинальный автор + форк), license `MPL-2.0`, зависимости `neoforge`, `minecraft` `[26.3,26.4)`, `kotlinforforge`, опциональные `terrablender`, `iris`; секция `[[mixins]]` для обоих конфигов.
@@ -134,6 +152,9 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 **Приёмка:** `./gradlew build` проходит; `./gradlew runClient` запускает игру с модом в списке модов (контент может ещё не работать).
 
 ### M2. Регистрация контента
+
+> **Как сделано фактически.** Переписывать все `Registry.register` на `DeferredRegister` не стали: это меняет тип сотен ссылок (`PazItems.X` → `.get()`) и ломает cherry-pick из оригинала. NeoForge держит все реестры открытыми на всё время `RegisterEvent`, поэтому `PazMain.onInitialize()` вызывается из последнего `RegisterEvent` и регистрирует контент как раньше. `DeferredRegister` обязателен для нового кода (`dev.efureev.sproutsquad`).
+
 - Все 43 прямых `Registry.register` / `registerForHolder` → `DeferredRegister` (блоки, предметы, сущности, блок-энтити, эффекты, зелья, меню, звуки, частицы, креативные вкладки, критерии, POI, сериализаторы данных и т.д.).
 - Kotlin `object`-регистры (`PazBlocks`, `PazItems`, `PazEntities`, …) переписываются на `DeferredHolder`/`DeferredItem`/`DeferredBlock`; регистры подписываются на mod event bus в конструкторе главного класса `@Mod`.
 - `FabricDefaultAttributeRegistry` → `EntityAttributeCreationEvent`.

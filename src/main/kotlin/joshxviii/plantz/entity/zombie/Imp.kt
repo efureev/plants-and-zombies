@@ -4,7 +4,6 @@ import joshxviii.plantz.*
 import joshxviii.plantz.PazDataSerializers.IMP_VARIANT
 import joshxviii.plantz.entity.Balloon
 import joshxviii.plantz.entity.plant.ExplosivePlant.Companion.scaledExplosion
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup.level
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers

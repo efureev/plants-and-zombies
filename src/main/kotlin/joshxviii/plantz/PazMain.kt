@@ -10,52 +10,51 @@ import joshxviii.plantz.networking.ServerConfigResponsePayload
 import joshxviii.plantz.recipe.DoorShieldRecipe
 import joshxviii.plantz.raid.ZombieRaids
 import joshxviii.plantz.raid.getZombieRaids
-import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.entity.player.PlayerEvent
+import net.neoforged.neoforge.event.server.ServerStartingEvent
+import net.neoforged.neoforge.event.tick.LevelTickEvent
+import net.neoforged.neoforge.event.tick.ServerTickEvent
+import net.neoforged.neoforge.network.PacketDistributor
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 
 
-object PazMain : ModInitializer {
+object PazMain {
 	const val MODID = "plantz"
 	@JvmField
 	val LOGGER: Logger = LogManager.getLogger("Plants & Zombies")
 
-	override fun onInitialize() {
+	/** Called once, during the last NeoForge RegisterEvent (all registries are unfrozen then). */
+	fun onInitialize() {
 		PazRegistries.initialize()
 		DoorShieldRecipe.register()
 		PazEnchantments.initialize()
 		PazConfig.load()
 		// clear client raid cache + load config
-		ServerLifecycleEvents.SERVER_STARTING.register {
+		NeoForge.EVENT_BUS.addListener(ServerStartingEvent::class.java) {
 			ZombieRaids.clearActiveRaidCenters()
 			PazConfig.load()
 		}
 		// config sync
-		ServerPlayerEvents.JOIN.register { player ->
+		NeoForge.EVENT_BUS.addListener(PlayerEvent.PlayerLoggedInEvent::class.java) { event ->
+			val player = event.entity as? ServerPlayer ?: return@addListener
 			val json = PazConfig.let { it.GSON.toJson(it.server) }
 			val payload = ServerConfigResponsePayload(json)
-			ServerPlayNetworking.send(player, payload)
+			PacketDistributor.sendToPlayer(player, payload)
 
 			LOGGER.info("Sent server config to ${player.name.string}")
 		}
 		// raid ticking
-		ServerTickEvents.END_LEVEL_TICK.register { it.getZombieRaids().tick(it) }
-		ServerTickEvents.END_SERVER_TICK.register { it.overworld().getTimeMachineManager().tick(it) }
-
-		// mailbox managing
-		ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register { blockEntity, level ->
-			(blockEntity as? TimeMachineBlockEntity)?.let { level.getTimeMachineManager().register(it) }
-			(blockEntity as? MailboxBlockEntity)?.let {
-				MailboxManager.registerMailbox(level, it)
-				level.getMailboxMailQueue().deliverTo(it)
-			}
+		NeoForge.EVENT_BUS.addListener(LevelTickEvent.Post::class.java) { event ->
+			(event.level as? ServerLevel)?.let { it.getZombieRaids().tick(it) }
 		}
-		ServerBlockEntityEvents.BLOCK_ENTITY_UNLOAD.register { blockEntity, level -> }
+		NeoForge.EVENT_BUS.addListener(ServerTickEvent.Post::class.java) { event ->
+			event.server.overworld().getTimeMachineManager().tick(event.server)
+		}
 
 		PazCommands.initialize()
 		PazServerParticles.initialize()
@@ -63,6 +62,7 @@ object PazMain : ModInitializer {
 		PazItems.initialize()
 		PazLootTables.initialize()
 		PazEffects.initialize()
+		joshxviii.plantz.neoforge.PazSyncedData.initialize()
 		PazCreativeTabs.initialize()
 		PazEntities.initialize()
 		PazDamageTypes.initialize()
@@ -72,10 +72,18 @@ object PazMain : ModInitializer {
 		PazSounds.initialize()
 		PazSpawnPlacements.initialize()
 		PazMenus.initialize()
-		PazNetwork.initialize()
 		PazJukeboxSongs.initialize()
 		PazPoiTypes.initialize()
 		PazWorldGen.initialize()
 		PlantHeadAttachment.register()
+	}
+
+	/** Mailbox / time machine bookkeeping; called from [BlockEntity.onLoad] on the server. */
+	fun onBlockEntityLoad(blockEntity: BlockEntity, level: ServerLevel) {
+		(blockEntity as? TimeMachineBlockEntity)?.let { level.getTimeMachineManager().register(it) }
+		(blockEntity as? MailboxBlockEntity)?.let {
+			MailboxManager.registerMailbox(level, it)
+			level.getMailboxMailQueue().deliverTo(it)
+		}
 	}
 }

@@ -8,7 +8,8 @@ import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.block.entity.getMailboxMailQueue
 import joshxviii.plantz.inventory.MailboxMenu
 import joshxviii.plantz.pazResource
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.neoforged.neoforge.network.PacketDistributor
+import net.neoforged.neoforge.network.handling.IPayloadContext
 import net.minecraft.core.BlockPos
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
@@ -33,8 +34,8 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
                 ::SendMailRequestPayload
             )
 
-        fun handleSendMailPacket(payload: SendMailRequestPayload, context: ServerPlayNetworking.Context) {
-            val player = context.player()
+        fun handleSendMailPacket(payload: SendMailRequestPayload, context: IPayloadContext) {
+            val player = context.player() as ServerPlayer
             val level = player.level()
             val targetPos = payload.targetPos
 
@@ -53,13 +54,13 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
                 targetBE?.setChanged()
                 targetBE?.updateMailboxState(MailboxState.HAS_MAIL)
                 level.playSound(null, menu.data.blockPos, SoundEvents.UI_LOOM_SELECT_PATTERN, SoundSource.BLOCKS, 0.3f, 1.2f)
-                ServerPlayNetworking.send(player, SendMailResponsePayload(
+                PacketDistributor.sendToPlayer(player, SendMailResponsePayload(
                     Component.translatable("container.plantz.mailbox_success").withColor(0x00FF00)
                 ))
             }
             else {
                 level.playSound(null, menu.data.blockPos, SoundEvents.BARREL_CLOSE, SoundSource.BLOCKS, 0.3f, 1.2f)
-                ServerPlayNetworking.send(player, SendMailResponsePayload(
+                PacketDistributor.sendToPlayer(player, SendMailResponsePayload(
                     Component.translatable("container.plantz.mailbox_full", targetBE?.name ?: Component.translatable("item.plantz.mailbox")).withColor(0xFF0000)
                 ))
             }

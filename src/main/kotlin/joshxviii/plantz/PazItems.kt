@@ -29,8 +29,9 @@ import joshxviii.plantz.PazTags.ItemTags.BUCKET_WEARABLE
 import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.item.*
 import joshxviii.plantz.item.component.*
-import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
-import net.fabricmc.fabric.api.item.v1.ItemComponentTooltipProviderRegistry
+import net.neoforged.neoforge.common.tooltip.TooltipAppender
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent
+import net.neoforged.neoforge.event.RegisterTooltipAppendersEvent
 import net.minecraft.core.Direction
 import net.minecraft.core.Holder
 import net.minecraft.core.HolderSet
@@ -470,24 +471,29 @@ object PazItems {
         )
     }
 
+    /** Custom data components shown in item tooltips (Fabric: ItemComponentTooltipProviderRegistry). */
+    fun registerTooltipAppenders(event: RegisterTooltipAppendersEvent) {
+        event.registerComponentAppenderBeforeAll(PazComponents.PROTECTS_HEAD, TooltipAppender.createComponentAppender(PazComponents.PROTECTS_HEAD))
+        event.registerComponentAppenderBeforeAll(PazComponents.WORN_BODY_BLOCKER, TooltipAppender.createComponentAppender(PazComponents.WORN_BODY_BLOCKER))
+        event.registerComponentAppenderAfterAll(PazComponents.DOOR_SHIELD, TooltipAppender.createComponentAppender(PazComponents.DOOR_SHIELD))
+        event.registerComponentAppenderBeforeAll(PazComponents.BLOCK_BREAK_CHANCE, TooltipAppender.createComponentAppender(PazComponents.BLOCK_BREAK_CHANCE))
+        event.registerComponentAppenderAfterAll(PazComponents.STORED_WATER, TooltipAppender.createComponentAppender(PazComponents.STORED_WATER))
+        event.registerComponentAppenderAfterAll(PazComponents.STORED_SUN, TooltipAppender.createComponentAppender(PazComponents.STORED_SUN))
+        event.registerComponentAppenderAfterAll(PazComponents.SUN_COST, TooltipAppender.createComponentAppender(PazComponents.SUN_COST))
+        event.registerComponentAppenderAfterAll(PazComponents.BRAINZ_ALLOY_COST, TooltipAppender.createComponentAppender(PazComponents.BRAINZ_ALLOY_COST))
+        event.registerComponentAppenderAfterAll(PazComponents.LETTER_DATA, TooltipAppender.createComponentAppender(PazComponents.LETTER_DATA))
+    }
+
+    /** Fabric: DefaultItemComponentEvents.MODIFY. */
+    fun modifyDefaultComponents(event: ModifyDefaultComponentsEvent) {
+        event.modifyMatching(
+            { item, _ -> item.builtInRegistryHolder().`is`(BUCKET_WEARABLE) },
+            { builder, _, item -> bucketHeadItem(builder, item) }
+        )
+        //event.modifyMatching({ item, _ -> item.builtInRegistryHolder().`is`(ItemTags.DOORS) }, { builder, _, item -> doorShield(builder, item) })
+    }
+
     fun initialize() {
-        // Modify components
-        ItemComponentTooltipProviderRegistry.addFirst(PazComponents.PROTECTS_HEAD)
-        ItemComponentTooltipProviderRegistry.addFirst(PazComponents.WORN_BODY_BLOCKER)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.DOOR_SHIELD)
-        ItemComponentTooltipProviderRegistry.addFirst(PazComponents.BLOCK_BREAK_CHANCE)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.STORED_WATER)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.STORED_SUN)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.SUN_COST)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.BRAINZ_ALLOY_COST)
-        ItemComponentTooltipProviderRegistry.addLast(PazComponents.LETTER_DATA)
-
-
-        DefaultItemComponentEvents.MODIFY.register { ctx ->
-            ctx.modify({ it.defaultInstance.`is`(BUCKET_WEARABLE)}, ::bucketHeadItem)
-            //ctx.modify({ it.defaultInstance.`is`(ItemTags.DOORS)}, ::doorShield)
-        }
-
         // Dispenser behavior
         DispenserBlock.registerBehavior(
             SEED_PACKET, object : DefaultDispenseItemBehavior() {

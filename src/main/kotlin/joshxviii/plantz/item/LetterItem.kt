@@ -1,7 +1,7 @@
 package joshxviii.plantz.item
 
 import joshxviii.plantz.inventory.LetterMenu
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
+import joshxviii.plantz.neoforge.ExtendedMenuProvider
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.stats.Stats

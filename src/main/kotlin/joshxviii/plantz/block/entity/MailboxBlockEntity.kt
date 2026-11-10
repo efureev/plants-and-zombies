@@ -8,7 +8,7 @@ import joshxviii.plantz.block.MailboxState
 import joshxviii.plantz.inventory.MailboxMenu
 import joshxviii.plantz.raid.CompletedWave
 import joshxviii.plantz.raid.GardenHeroRewards
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
+import joshxviii.plantz.neoforge.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.NonNullList
@@ -140,6 +140,11 @@ class MailboxBlockEntity(
     }
     override fun getEntitiesWithContainerOpen(): MutableList<ContainerUser> {
         return openersCounter.getEntitiesWithContainerOpen(getLevel()!!, blockPos)
+    }
+
+    override fun onLoad() {
+        super.onLoad()
+        (level as? ServerLevel)?.let { PazMain.onBlockEntityLoad(this, it) }
     }
 
     override fun createMenu(containerId: Int, inventory: Inventory): AbstractContainerMenu = MailboxMenu(containerId, inventory, asMailBoxData(), this)

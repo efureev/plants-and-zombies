@@ -1,5 +1,7 @@
 package joshxviii.plantz.effect
 
+import joshxviii.plantz.neoforge.MobEffectInstanceHooks
+
 import joshxviii.plantz.ElectricArcParticleOptions
 import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazEffects
@@ -23,7 +25,7 @@ class ElectrifyMobEffect(
     category: MobEffectCategory,
     color: Int,
     particleOptions: ParticleOptions
-) : MobEffect(category, color, particleOptions) {
+) : MobEffect(category, color, particleOptions), MobEffectInstanceHooks {
     companion object {
         const val ZAP_INTERVAL: Int = 12
         const val ZAP_RANGE: Double = 3.0
@@ -90,14 +92,14 @@ class ElectrifyMobEffect(
     }
 
     override fun onEffectAdded(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectAdded(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectAdded(effectInstance, entity)
     }
 
     override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectStarted(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectStarted(effectInstance, entity)
     }
 
     override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectRemoved(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectRemoved(effectInstance, entity)
     }
 }

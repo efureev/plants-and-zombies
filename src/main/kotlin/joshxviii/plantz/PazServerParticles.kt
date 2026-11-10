@@ -3,7 +3,6 @@ package joshxviii.plantz
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes
 import net.minecraft.core.Registry
 import net.minecraft.core.particles.ParticleOptions
 import net.minecraft.core.particles.ParticleType
@@ -52,7 +51,7 @@ object PazServerParticles {
     @JvmField val BEAM: ParticleType<BeamParticleOptions> = register("beam", { BeamParticleOptions.CODEC}, {BeamParticleOptions.STREAM_CODEC})
 
     fun registerSimple(name: String): SimpleParticleType {
-        val particleType = FabricParticleTypes.simple()
+        val particleType = SimpleParticleType(false)
         Registry.register(BuiltInRegistries.PARTICLE_TYPE, pazResource(name), particleType)
         return particleType
     }

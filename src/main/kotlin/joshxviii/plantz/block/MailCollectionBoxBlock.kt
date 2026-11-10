@@ -7,7 +7,7 @@ import joshxviii.plantz.block.entity.MailCollectionBoxEntity
 import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.inventory.MailCollectionBoxMenu
 import joshxviii.plantz.networking.MailboxListResponsePayload
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.neoforged.neoforge.network.PacketDistributor
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
@@ -72,7 +72,7 @@ class MailCollectionBoxBlock(
                 val mailboxes = MailboxManager.getMailboxesInLevel(level).sortedBy { it.blockPos.distSqr(pos) }
                 player.openMenu(currentMailbox)
                 (player.containerMenu as? MailCollectionBoxMenu)?.availableMailboxes = mailboxes
-                ServerPlayNetworking.send(player as ServerPlayer, MailboxListResponsePayload(level.dimension(), mailboxes))
+                PacketDistributor.sendToPlayer(player as ServerPlayer, MailboxListResponsePayload(level.dimension(), mailboxes))
             }
         }
         return InteractionResult.SUCCESS

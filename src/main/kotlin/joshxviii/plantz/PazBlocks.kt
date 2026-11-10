@@ -6,7 +6,6 @@ import joshxviii.plantz.item.FlagItem
 import joshxviii.plantz.item.component.BlockBreakChanceComponent
 import joshxviii.plantz.item.component.ProtectsHeadDataComponent
 import joshxviii.plantz.item.component.StoredWater.Companion.DEFAULT_CAPACITY
-import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.component.DataComponents
@@ -397,11 +396,7 @@ object PazBlocks {
         vararg validBlocks: Block,
     ): BlockEntityType<T> {
         val key = ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, pazResource(name))
-        val builder = FabricBlockEntityTypeBuilder.create(
-            factory,
-            *validBlocks
-        )
-        val blockEntity = builder.build()
+        val blockEntity = BlockEntityType({ pos, state -> factory(pos, state) }, *validBlocks)
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, key, blockEntity)
         return blockEntity
     }

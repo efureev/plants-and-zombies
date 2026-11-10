@@ -1,6 +1,7 @@
 package joshxviii.plantz.block.entity
 
 import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.PazMain
 import joshxviii.plantz.TimeMachineData
 import joshxviii.plantz.block.TimeMachineBlock
 import joshxviii.plantz.block.TimeMachineBlock.Companion.FACING
@@ -8,7 +9,7 @@ import joshxviii.plantz.block.TimeMachineBlock.Companion.STATE
 import joshxviii.plantz.block.TimeMachineState
 import joshxviii.plantz.block.TimePortalBlock
 import joshxviii.plantz.inventory.TimeMachineMenu
-import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider
+import joshxviii.plantz.neoforge.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
@@ -68,6 +69,11 @@ class TimeMachineBlockEntity(
     }
 
     override fun getContainerBlockEntity(): BlockEntity = this
+
+    override fun onLoad() {
+        super.onLoad()
+        (level as? ServerLevel)?.let { PazMain.onBlockEntityLoad(this, it) }
+    }
 
     override fun getScreenOpeningData(player: ServerPlayer): TimeMachineData = TimeMachineData(blockPos)
     override fun getDisplayName(): Component  = Component.translatable("block.plantz.time_machine")

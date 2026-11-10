@@ -1,7 +1,8 @@
 package joshxviii.plantz
 
-import net.fabricmc.fabric.api.loot.v3.LootTableEvents
-import net.minecraft.core.HolderLookup
+import net.minecraft.core.HolderGetter
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.LootTableLoadEvent
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
@@ -45,8 +46,8 @@ object PazLootTables {
     }
 
     fun initialize() {
-        LootTableEvents.MODIFY.register { key, builder, source, provider ->
-            LootInjector.attemptInjection(key.identifier(), provider, builder::withPool)
+        NeoForge.EVENT_BUS.addListener(LootTableLoadEvent::class.java) { event ->
+            LootInjector.attemptInjection(event.name, event.registries) { pool -> event.table.addPool(pool.build()) }
         }
     }
 
@@ -73,7 +74,7 @@ object LootInjector {
     private val injectionIds = injections.map {it.identifier()}.toSet()
     private val villageInjectionIds = villageHouseBuiltInLootTables.map { it.identifier() }.toSet()
 
-    fun attemptInjection(key: Identifier, provider: HolderLookup.Provider, builder: (LootPool.Builder) -> Unit): Boolean {
+    fun attemptInjection(key: Identifier, provider: HolderGetter.Provider, builder: (LootPool.Builder) -> Unit): Boolean {
         if (!this.injectionIds.contains(key)) {
             return false
         }
@@ -92,7 +93,7 @@ object LootInjector {
 
     private fun injectLootPool(
         resulting: Identifier,
-        registries: HolderLookup.Provider
+        registries: HolderGetter.Provider
     ): LootPool.Builder {
         val tableKey = ResourceKey.create(Registries.LOOT_TABLE, resulting)
         val holder = registries.lookupOrThrow(Registries.LOOT_TABLE).getOrThrow(tableKey)

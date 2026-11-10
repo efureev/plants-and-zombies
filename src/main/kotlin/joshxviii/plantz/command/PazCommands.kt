@@ -14,8 +14,9 @@ import joshxviii.plantz.raid.WaveType
 import joshxviii.plantz.raid.ZombieRaid
 import joshxviii.plantz.raid.getZombieRaids
 import joshxviii.plantz.networking.OpenOptionsScreenPayload
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.RegisterCommandsEvent
+import net.neoforged.neoforge.network.PacketDistributor
 import net.minecraft.ChatFormatting
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -41,7 +42,7 @@ object PazCommands {
     private val UNKNOWN_BOSS_TYPE = DynamicCommandExceptionType { Component.translatable("commands.plantz.raid.wave_start.unknown_boss_type", it) }
 
     fun initialize() {
-        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ -> register(dispatcher) }
+        NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent::class.java) { register(it.dispatcher) }
     }
 
     private fun register(dispatcher: CommandDispatcher<CommandSourceStack>) {
@@ -91,7 +92,7 @@ object PazCommands {
     }
 
     private fun options(ctx: CommandContext<CommandSourceStack>): Int {
-        ServerPlayNetworking.send(ctx.source.playerOrException, OpenOptionsScreenPayload)
+        PacketDistributor.sendToPlayer(ctx.source.playerOrException, OpenOptionsScreenPayload)
         return 1
     }
 

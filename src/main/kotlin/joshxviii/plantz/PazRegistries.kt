@@ -1,7 +1,7 @@
 package joshxviii.plantz
 
 import joshxviii.plantz.api.SeedMutationData
-import net.fabricmc.fabric.api.event.registry.DynamicRegistries
+import net.neoforged.neoforge.registries.NewDatapackRegistryEvent
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.Registries
 import net.minecraft.core.registries.Registries.ROOT_REGISTRY_NAME
@@ -19,6 +19,10 @@ object PazRegistries {
     }
 
     fun initialize() {
-        DynamicRegistries.register(SEED_MUTATION, SeedMutationData.CODEC)
+    }
+
+    /** Server-only datapack registries (Fabric: DynamicRegistries.register). */
+    fun registerDataPackRegistries(event: NewDatapackRegistryEvent) {
+        event.worldRegistry(SEED_MUTATION, SeedMutationData.CODEC)
     }
 }

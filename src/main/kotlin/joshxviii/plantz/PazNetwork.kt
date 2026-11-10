@@ -12,8 +12,7 @@ import joshxviii.plantz.networking.UpdateLetterPayload
 import joshxviii.plantz.networking.UpdateLetterPayload.Companion.handleUpdateLetterPacket
 import joshxviii.plantz.networking.ZombieRaidClientData
 import joshxviii.plantz.networking.ZombieRaidResponsePayload
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.neoforged.neoforge.network.registration.PayloadRegistrar
 import java.util.UUID
 
 object PazNetwork {
@@ -30,22 +29,17 @@ object PazNetwork {
         fun isActive() = active.isNotEmpty()
     }
 
-    fun initialize() {
-        // Register payloads
-        PayloadTypeRegistry.serverboundPlay().register(SendMailRequestPayload.ID, SendMailRequestPayload.STREAM_CODEC)
-        PayloadTypeRegistry.serverboundPlay().register(UpdateCollectionBoxPayload.ID, UpdateCollectionBoxPayload.STREAM_CODEC)
-        PayloadTypeRegistry.serverboundPlay().register(UpdateLetterPayload.ID, UpdateLetterPayload.STREAM_CODEC)
+    fun registerPayloads(registrar: PayloadRegistrar) {
+        // Serverbound payloads
+        registrar.playToServer(SendMailRequestPayload.ID, SendMailRequestPayload.STREAM_CODEC, ::handleSendMailPacket)
+        registrar.playToServer(UpdateCollectionBoxPayload.ID, UpdateCollectionBoxPayload.STREAM_CODEC, ::handleUpdateCollectionBoxPacket)
+        registrar.playToServer(UpdateLetterPayload.ID, UpdateLetterPayload.STREAM_CODEC, ::handleUpdateLetterPacket)
 
-        PayloadTypeRegistry.clientboundPlay().register(SendMailRequestPayload.ID, SendMailRequestPayload.STREAM_CODEC)
-        PayloadTypeRegistry.clientboundPlay().register(SendMailResponsePayload.ID, SendMailResponsePayload.STREAM_CODEC)
-        PayloadTypeRegistry.clientboundPlay().register(MailboxListResponsePayload.ID, MailboxListResponsePayload.STREAM_CODEC)
-        PayloadTypeRegistry.clientboundPlay().register(ServerConfigResponsePayload.ID, ServerConfigResponsePayload.STREAM_CODEC)
-        PayloadTypeRegistry.clientboundPlay().register(ZombieRaidResponsePayload.ID, ZombieRaidResponsePayload.STREAM_CODEC)
-        PayloadTypeRegistry.clientboundPlay().register(OpenOptionsScreenPayload.ID, OpenOptionsScreenPayload.STREAM_CODEC)
-
-        // Register server receiver
-        ServerPlayNetworking.registerGlobalReceiver(SendMailRequestPayload.ID, ::handleSendMailPacket)
-        ServerPlayNetworking.registerGlobalReceiver(UpdateCollectionBoxPayload.ID, ::handleUpdateCollectionBoxPacket)
-        ServerPlayNetworking.registerGlobalReceiver(UpdateLetterPayload.ID, ::handleUpdateLetterPacket)
+        // Clientbound payloads (handlers are registered on the client, see PazClientNetwork)
+        registrar.playToClient(SendMailResponsePayload.ID, SendMailResponsePayload.STREAM_CODEC)
+        registrar.playToClient(MailboxListResponsePayload.ID, MailboxListResponsePayload.STREAM_CODEC)
+        registrar.playToClient(ServerConfigResponsePayload.ID, ServerConfigResponsePayload.STREAM_CODEC)
+        registrar.playToClient(ZombieRaidResponsePayload.ID, ZombieRaidResponsePayload.STREAM_CODEC)
+        registrar.playToClient(OpenOptionsScreenPayload.ID, OpenOptionsScreenPayload.STREAM_CODEC)
     }
 }

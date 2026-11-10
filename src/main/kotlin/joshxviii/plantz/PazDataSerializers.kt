@@ -12,7 +12,8 @@ import joshxviii.plantz.entity.zombie.GargantuarVariant
 import joshxviii.plantz.entity.zombie.ImpVariant
 import joshxviii.plantz.entity.zombie.RoboZombieVariant
 import joshxviii.plantz.entity.zombie.SuperBrainzVariant
-import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityDataRegistry
+import net.minecraft.core.Registry
+import net.neoforged.neoforge.registries.NeoForgeRegistries
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.syncher.EntityDataSerializer
 import net.minecraft.world.item.DyeColor
@@ -34,18 +35,18 @@ object PazDataSerializers {
     @JvmField val GNOME_SOUND_VARIANT = EntityDataSerializer.forValueType<GnomeSoundVariant>(GnomeSoundVariant.STREAM_CODEC)
 
     fun initialize() {
-        FabricEntityDataRegistry.register(pazResource("paint_colors"), DATA_PAINT_COLORS)
-        FabricEntityDataRegistry.register(pazResource("dye_color"), DATA_DYE_COLOR)
-        FabricEntityDataRegistry.register(pazResource("plant_state"), DATA_PLANT_STATE)
-        FabricEntityDataRegistry.register(pazResource("zombie_state"), DATA_ZOMBIE_STATE)
-        FabricEntityDataRegistry.register(pazResource("brown_coat_variant"), BROWN_COAT_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("imp_variant"), IMP_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("all_star_variant"), ALL_STAR_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("robo_zombie_variant"), ROBO_ZOMBIE_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("super_brainz_variant"), SUPER_BRAINZ_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("electric_slide_variant"), ELECTRIC_SLIDE_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("gargantuar_variant"), GARGANTUAR_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("gnome_variant"), GNOME_VARIANT)
-        FabricEntityDataRegistry.register(pazResource("gnome_sound_variant"), GNOME_SOUND_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("paint_colors"), DATA_PAINT_COLORS)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("dye_color"), DATA_DYE_COLOR)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("plant_state"), DATA_PLANT_STATE)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("zombie_state"), DATA_ZOMBIE_STATE)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("brown_coat_variant"), BROWN_COAT_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("imp_variant"), IMP_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("all_star_variant"), ALL_STAR_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("robo_zombie_variant"), ROBO_ZOMBIE_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("super_brainz_variant"), SUPER_BRAINZ_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("electric_slide_variant"), ELECTRIC_SLIDE_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("gargantuar_variant"), GARGANTUAR_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("gnome_variant"), GNOME_VARIANT)
+        Registry.register(NeoForgeRegistries.ENTITY_DATA_SERIALIZERS, pazResource("gnome_sound_variant"), GNOME_SOUND_VARIANT)
     }
 }

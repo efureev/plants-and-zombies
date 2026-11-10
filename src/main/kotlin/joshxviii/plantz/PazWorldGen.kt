@@ -1,6 +1,5 @@
 package joshxviii.plantz
 
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.Level
@@ -33,6 +32,6 @@ object PazWorldGen {
     fun isTimeDimension(dimension: ResourceKey<Level>): Boolean = dimension == TIME_SPACE || dimension == GNOME_SPACE
 
     fun initialize() {
-        if (FabricLoader.getInstance().isModLoaded("terrablender")) PazTerraBlender.register()
+        // TerraBlender regions are registered in FMLCommonSetupEvent, see PazNeoForge
     }
 }

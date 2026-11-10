@@ -4,6 +4,7 @@ NeoForge-форк мода [Plants & Zombies](https://github.com/joshxviii/plant
 Цели: порт с Fabric на NeoForge → свой mod id → свои персонажи (придумываем вместе с сыном).
 
 **Полное ТЗ: [`docs/SPEC.md`](docs/SPEC.md).** Перед началом любой задачи сверься с текущим этапом (M0–M10) и картой переноса (разделы 6–8).
+При закрытии этапа обязательно отмечай его в таблице «Статус этапов» (`docs/SPEC.md` §6) и значком ✅ в заголовке этапа.
 
 ## Ключевые решения
 - Название: **Sprout Squad**, mod id: **`sproutsquad`**, артефакт: `sprout-squad`.
@@ -20,11 +21,20 @@ Minecraft 26.3 · NeoForge 26.3.x · ModDevGradle ≥ 2.0.147 · Kotlin for Forg
 ./gradlew build            # сборка + проверка
 ./gradlew runClient        # клиент для ручной проверки
 ./gradlew runServer        # выделенный сервер — обязательно проверять после изменений в общем коде
-./gradlew runGameTestServer
+./gradlew runGameTestServer   # быстрый прогон загрузки мода на сервере (сам завершается)
 ```
+JDK 25: `export JAVA_HOME=/opt/homebrew/opt/openjdk@25`.
+
+`runClient` открывает окно игры. Запускай строго один экземпляр. При ошибке загрузки NeoForge показывает экран ошибки и **не завершает процесс**, поэтому следи за логом и закрывай клиент сам (`pkill -f net.neoforged.devlaunch.Main`).
 
 ## Правила кода
-- Регистрация только через `DeferredRegister` / `DeferredHolder`. Никаких `Registry.register(...)` и никаких `.get()` у holder'ов в инициализаторах Kotlin `object`.
+- **Код оригинала** (`joshxviii.plantz`) регистрирует контент напрямую через `Registry.register` в Kotlin `object`. Это работает, потому что `PazMain.onInitialize()` вызывается из *последнего* `RegisterEvent` (см. `neoforge/PazNeoForge.kt`), когда все реестры ещё открыты. Не трогай `Paz*`-объекты до этого момента: ни в конструкторе `@Mod`, ни в статических полях миксинов.
+- **Новый код** (`dev.efureev.sproutsquad`) — только `DeferredRegister` / `DeferredHolder`, без `.get()` в инициализаторах.
+- Слой порта — пакет `joshxviii.plantz.neoforge` (точки входа `@Mod`, прослойки вместо Fabric API) и миксины в `joshxviii.plantz.mixin.neoforge`.
+- Подписка на события из Kotlin — только с явным классом: `bus.addListener(SomeEvent::class.java) { }`. Вариант `addListener<SomeEvent> { }` компилируется, но NeoForge не может определить тип события по Kotlin-лямбде.
+- Синхронизируемые данные на ванильных сущностях — через data attachments (`neoforge/PazSyncedData.kt`), а не `SynchedEntityData.defineId` в миксинах: NeoForge это запрещает (в dev — падение).
+- Компоненты предметов обязаны реализовывать `equals`/`hashCode`: `data class`, `data object`, record или enum.
+- Приватные поля Minecraft, которые нужны коду, открываются в `src/main/resources/META-INF/accesstransformer.cfg`.
 - Общий код не импортирует клиентские классы (`net.minecraft.client.*`, рендер, экраны) — иначе падает выделенный сервер. Клиент — через `@EventBusSubscriber(value = Dist.CLIENT)` / клиентский `@Mod(dist = Dist.CLIENT)`.
 - Новая логика на Kotlin; Java — только миксины. Стиль — как в оригинале.
 - Миксины: `defaultRequire = 1`. Если в NeoForge есть подходящее событие — предпочитай его миксину.

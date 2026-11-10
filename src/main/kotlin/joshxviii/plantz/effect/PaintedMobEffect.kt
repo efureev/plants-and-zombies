@@ -1,5 +1,7 @@
 package joshxviii.plantz.effect
 
+import joshxviii.plantz.neoforge.MobEffectInstanceHooks
+
 import io.netty.buffer.ByteBuf
 import joshxviii.plantz.PazEffects.PAINTED
 import joshxviii.plantz.PazServerParticles
@@ -22,7 +24,7 @@ class PaintedMobEffect(
     category: MobEffectCategory,
     var paintColor: Int = DyeColor.WHITE.fireworkColor,
     private var random: RandomSource = RandomSource.create()
-) : MobEffect(category, paintColor, PazServerParticles.PAINT_DRIP) {
+) : MobEffect(category, paintColor, PazServerParticles.PAINT_DRIP), MobEffectInstanceHooks {
     companion object {
 
         @JvmStatic
@@ -53,16 +55,16 @@ class PaintedMobEffect(
     }
 
     override fun onEffectAdded(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectAdded(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectAdded(effectInstance, entity)
     }
 
     override fun onEffectStarted(effectInstance: MobEffectInstance, entity: LivingEntity) {
         random = RandomSource.create(entity.level().gameTime)
-        super.onEffectStarted(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectStarted(effectInstance, entity)
     }
 
     override fun onEffectRemoved(effectInstance: MobEffectInstance, entity: LivingEntity) {
-        super.onEffectRemoved(effectInstance, entity)
+        super<MobEffectInstanceHooks>.onEffectRemoved(effectInstance, entity)
     }
 
     fun getRandomness(): RandomSource {
