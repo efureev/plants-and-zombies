@@ -18,5 +18,6 @@ object SproutSquad {
 
         modBus.addListener(RegisterEvent::class.java) { GalleryGameTest.registerFunction(it) }
         modBus.addListener(RegisterGameTestsEvent::class.java) { GalleryGameTest.registerTest(it) }
+        dev.efureev.sproutsquad.fixes.F2Hooks.register(modBus)
     }
 }
