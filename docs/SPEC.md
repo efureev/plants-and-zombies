@@ -123,12 +123,12 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 |---|---|---|---|
 | M0 Подготовка репозитория | ✅ 2026-11-10 | `main` @ `b29b5ab5` | `main` — ветка по умолчанию, `upstream` и тег `upstream-base-977cfb46`, README, `docs/UPSTREAM.md`, `docs/CHARACTERS.md` |
 | M1 Сборка под NeoForge | ✅ 2026-11-10 | `main` ← `port/build` | MDG 2.0.148, NeoForge 26.3.0.102, KFF 6.5.0, Kotlin 2.4.21; `build` зелёный, `runClient` доходит до главного меню |
-| M2 Регистрация | 🧪 | `main` ← `port/build` | Регистрация оригинала оставлена прямой (`Registry.register`), запускается в последнем `RegisterEvent`; ошибок регистрации нет |
-| M3 Логика, сеть, меню, конфиг | 🧪 | `main` ← `port/build` | Пакеты, меню с доп. данными (прослойка `ExtendedMenu*`), команды, конфиг, экран настроек вместо ModMenu |
-| M4 Мир | 🧪 | `main` ← `port/build` | Спавны — biome modifier `plantz:spawns`, лут — `LootTableLoadEvent`, TerraBlender — `FMLCommonSetupEvent`; `graveyard.json` переведён на `overlay` |
-| M5 Клиент | 🧪 | `main` ← `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
-| M6 Миксины | 🧪 | `main` ← `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
-| M7 Совместимость | ⏳ | | |
+| M2 Регистрация | ✅ 2026-11-10 | `main` ← `port/build` | Проверено в игре: все растения, зомби и варианты на месте (`/pz gallery`, 75 экспонатов), вкладки креатива, посадка из семян |
+| M3 Логика, сеть, меню, конфиг | 🧪 | `main` ← `port/build` | Проверено на выделенном сервере: синхронизация конфига, бой растений с зомби, команды. Осталось: почта (меню с доп. данными), рейд |
+| M4 Мир | 🧪 | `main` ← `port/build` | Осталось: естественный спавн, кладбище и мавзолей, лут в сундуках |
+| M5 Клиент | ✅ 2026-11-10 | `main` ← `port/build` | Проверено в игре: модели и текстуры всех персонажей днём и ночью, подписи, HUD |
+| M6 Миксины | 🧪 | `main` ← `port/build` | Запуск без ошибок миксинов на клиенте и сервере. Осталось: растение на голове, оверлей и музыка рейда |
+| M7 Совместимость | 🧪 | `main` | Выделенный сервер + клиент по сети — работает. Осталось: Iris с шейдерами |
 | M8 Ребрендинг | 🧪 | `main` ← `port/rebrand` | mod id `sproutsquad`, «Sprout Squad» 0.1.0, ресурсы перенесены, id в JSON/NBT-структурах/переводах заменены, иконка и логотип; сборка, сервер и клиент без ошибок. В игре — вместе с M7 |
 | M9 Первый свой персонаж | ⏳ | | |
 | M10 Релиз 0.1 | ⏳ | | |
@@ -151,7 +151,7 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 
 **Приёмка:** `./gradlew build` проходит; `./gradlew runClient` запускает игру с модом в списке модов (контент может ещё не работать).
 
-### M2. Регистрация контента
+### M2. Регистрация контента ✅
 
 > **Как сделано фактически.** Переписывать все `Registry.register` на `DeferredRegister` не стали: это меняет тип сотен ссылок (`PazItems.X` → `.get()`) и ломает cherry-pick из оригинала. NeoForge держит все реестры открытыми на всё время `RegisterEvent`, поэтому `PazMain.onInitialize()` вызывается из последнего `RegisterEvent` и регистрирует контент как раньше. `DeferredRegister` обязателен для нового кода (`dev.efureev.sproutsquad`).
 
@@ -188,7 +188,7 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 
 **Приёмка:** в новом мире зомби и гномы спавнятся в ожидаемых биомах, структуры генерируются, лут из сундуков/мобов содержит предметы мода, измерение доступно.
 
-### M5. Клиент: рендер, модели, интерфейс
+### M5. Клиент: рендер, модели, интерфейс ✅
 - Слои моделей: `ModelLayerRegistry` → `EntityRenderersEvent.RegisterLayerDefinitions`; рендереры → `EntityRenderersEvent.RegisterRenderers`.
 - `RenderStateDataKey` (доп. данные в render state) → механизм NeoForge для render state (`RegisterRenderStateModifiersEvent` / `setRenderData` с `ContextKey`) — уточнить по актуальному API 26.3.
 - `FabricLayerRenderState` в `DoorShieldItemModel` и `WrapperBakedItemModel` в `raid/BossType.kt` → эквиваленты NeoForge для кастомных моделей предметов (`RegisterSpecialModelRendererEvent` / `RegisterItemModelsEvent`) — **исследовательская задача**, при отсутствии аналога — переписать на ванильные special item models.
