@@ -1,6 +1,8 @@
-# Sprout Squad
+<p align="center">
+  <img src="docs/images/logo.png" alt="Sprout Squad" width="600">
+</p>
 
-Мод для Minecraft 26.3 на **NeoForge**: растения защищают базу от зомби, а отряд пополняется собственными персонажами.
+<p align="center">Мод для Minecraft 26.3 на <b>NeoForge</b>: растения защищают базу от зомби, а отряд пополняется собственными персонажами.</p>
 
 > Неофициальный форк мода [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) от **joshxviii**, перенесённый с Fabric на NeoForge.
 > Unofficial NeoForge fork of Plants & Zombies by joshxviii, licensed under MPL-2.0.
