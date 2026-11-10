@@ -122,12 +122,12 @@ Conventional Commits: `feat:`, `fix:`, `port:`, `chore:`, `docs:`, `assets:`.
 | Этап | Статус | Ветка / коммит | Примечание |
 |---|---|---|---|
 | M0 Подготовка репозитория | ✅ 2026-11-10 | `main` @ `b29b5ab5` | `main` — ветка по умолчанию, `upstream` и тег `upstream-base-977cfb46`, README, `docs/UPSTREAM.md`, `docs/CHARACTERS.md` |
-| M1 Сборка под NeoForge | ✅ 2026-11-10 | `port/build` | MDG 2.0.148, NeoForge 26.3.0.102, KFF 6.5.0, Kotlin 2.4.21; `build` зелёный, `runClient` доходит до главного меню |
-| M2 Регистрация | 🧪 | `port/build` | Регистрация оригинала оставлена прямой (`Registry.register`), запускается в последнем `RegisterEvent`; ошибок регистрации нет |
-| M3 Логика, сеть, меню, конфиг | 🧪 | `port/build` | Пакеты, меню с доп. данными (прослойка `ExtendedMenu*`), команды, конфиг, экран настроек вместо ModMenu |
-| M4 Мир | 🧪 | `port/build` | Спавны — biome modifier `plantz:spawns`, лут — `LootTableLoadEvent`, TerraBlender — `FMLCommonSetupEvent`; `graveyard.json` переведён на `overlay` |
-| M5 Клиент | 🧪 | `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
-| M6 Миксины | 🧪 | `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
+| M1 Сборка под NeoForge | ✅ 2026-11-10 | `main` ← `port/build` | MDG 2.0.148, NeoForge 26.3.0.102, KFF 6.5.0, Kotlin 2.4.21; `build` зелёный, `runClient` доходит до главного меню |
+| M2 Регистрация | 🧪 | `main` ← `port/build` | Регистрация оригинала оставлена прямой (`Registry.register`), запускается в последнем `RegisterEvent`; ошибок регистрации нет |
+| M3 Логика, сеть, меню, конфиг | 🧪 | `main` ← `port/build` | Пакеты, меню с доп. данными (прослойка `ExtendedMenu*`), команды, конфиг, экран настроек вместо ModMenu |
+| M4 Мир | 🧪 | `main` ← `port/build` | Спавны — biome modifier `plantz:spawns`, лут — `LootTableLoadEvent`, TerraBlender — `FMLCommonSetupEvent`; `graveyard.json` переведён на `overlay` |
+| M5 Клиент | 🧪 | `main` ← `port/build` | Слои/рендереры/частицы/HUD/пайплайны через события; `DoorShieldItemModel` переписан на ванильные квады |
+| M6 Миксины | 🧪 | `main` ← `port/build` | Удалены `SpawnPlacementsInvoker`, `RangeSelectItemModelPropertiesMixin`, `ExampleClientMixin`; добавлены хуки эффектов; синхр. данные `LivingEntity`/`Zombie` → data attachments |
 | M7 Совместимость | ⏳ | | |
 | M8 Ребрендинг | ⏳ | | |
 | M9 Первый свой персонаж | ⏳ | | |
