@@ -6,7 +6,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
 
 /**
- * Горшочек / Potling — the Sprout Squad mascot. A cheap support plant: every minute it shakes
+ * Potling, the Sprout Squad mascot. A cheap support plant: every minute it shakes
  * its sprout and drops a sun; sleeps at night. Kept deliberately simple as the template for
  * new characters (see docs/CHARACTERS.md).
  */

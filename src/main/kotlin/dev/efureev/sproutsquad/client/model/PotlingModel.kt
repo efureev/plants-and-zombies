@@ -18,7 +18,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.model.geom.builders.MeshDefinition
 
 /**
- * Горшочек / Potling: a terracotta pot with a face and a two-leaf sprout.
+ * Potling: a terracotta pot with a face and a two-leaf sprout.
  *
  * Parts: body → pot (base, walls, rim) → stem → leaf_left, leaf_right.
  * Texture 64×64, drawn by `art/potling/draw_potling.py`.

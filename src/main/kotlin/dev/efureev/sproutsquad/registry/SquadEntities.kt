@@ -38,10 +38,10 @@ object SquadEntities {
     )
 
     private val plantEntries = mutableListOf<PlantEntry>()
-    val plants: List<PlantEntry> get() = plantEntries
+    val plants: List<PlantEntry> get() = plantEntries.toList()
 
     // region Plants
-    /** Горшочек: the mascot. A cheap sun maker and the template for new plants. */
+    /** Potling, the mascot: a cheap sun maker and the template for new plants. */
     val POTLING = plant("potling", ::Potling, width = 0.65f, height = 1.0f, sunCost = 3,
         attributes = Plant.Companion.PlantAttributes(maxHealth = 12.0))
     // endregion
@@ -51,8 +51,9 @@ object SquadEntities {
         modBus.addListener(EntityAttributeCreationEvent::class.java) { event ->
             plantEntries.forEach { event.put(it.type.get(), it.attributes.apply(Mob.createMobAttributes()).build()) }
         }
-        modBus.addListener(FMLCommonSetupEvent::class.java) {
-            plantEntries.forEach { PazConfig.registerDefaultSunCost("${PazMain.MODID}:${it.name}", it.sunCost) }
+        // Common setup runs in parallel across mods; the config map is not thread-safe.
+        modBus.addListener(FMLCommonSetupEvent::class.java) { event ->
+            event.enqueueWork { plantEntries.forEach { PazConfig.registerDefaultSunCost("${PazMain.MODID}:${it.name}", it.sunCost) } }
         }
     }
 

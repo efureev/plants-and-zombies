@@ -14,11 +14,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class PlantModel extends EntityModel<@NotNull PlantRenderState> {
 
-    KeyframeAnimation initAnimation;
-    KeyframeAnimation idleAnimation;
-    KeyframeAnimation actionAnimation;
-    KeyframeAnimation sleepAnimation;
-    KeyframeAnimation walkAnimation;
+    protected KeyframeAnimation initAnimation;
+    protected KeyframeAnimation idleAnimation;
+    protected KeyframeAnimation actionAnimation;
+    protected KeyframeAnimation sleepAnimation;
+    protected KeyframeAnimation walkAnimation;
     final KeyframeAnimation bounceAnimation;
 
     protected PlantModel(ModelPart root) {

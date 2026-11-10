@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Textures for Potling (Горшочек), the Sprout Squad mascot plant.
+"""Textures for Potling, the Sprout Squad mascot plant.
 
 Usage (needs Pillow), from the repository root:
     python3 art/potling/draw_potling.py [preview_dir]

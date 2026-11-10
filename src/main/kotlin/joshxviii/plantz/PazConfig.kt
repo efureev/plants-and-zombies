@@ -235,9 +235,12 @@ object PazConfig {
         return chance
     }
 
-    /** Default sun cost for plants registered outside the original mod (Sprout Squad's own characters). */
+    /**
+     * Default sun cost for plants registered outside the original mod (Sprout Squad's own characters).
+     * Must run before the first [getSunCost] for that id; afterwards the value lives in server.json.
+     */
     fun registerDefaultSunCost(entityId: String, sunCost: Int) {
-        defaultServerConfig.sunCosts.putIfAbsent(entityId, sunCost)
+        defaultServerConfig.sunCosts.putIfAbsent(entityId, sunCost.coerceAtLeast(0))
     }
 
     fun putDefaultSunCost(entityId: Identifier, sunCost: Int) {

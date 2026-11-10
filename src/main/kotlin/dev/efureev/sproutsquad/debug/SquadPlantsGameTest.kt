@@ -15,7 +15,7 @@ import net.minecraft.world.entity.EntitySpawnReason
 
 /**
  * Checklist for Sprout Squad's own plants (docs/WORKSHOP.md), as a GameTest: every plant in
- * [SquadEntities] must spawn, cost what it declares, be in the `plant` tag, have a seed packet
+ * [SquadEntities] must spawn with its declared health, have a sun cost, be in the `plant` tag, have a seed packet
  * recipe, textures (main and `_sleep`), a seed packet icon and en/ru names.
  * Registered in [SquadGameTests].
  */
@@ -34,7 +34,8 @@ object SquadPlantsGameTest {
             val plant = type.create(helper.level, EntitySpawnReason.COMMAND)
             if (plant !is Plant) problem("does not spawn as a Plant")
             else if (plant.maxHealth != entry.attributes.maxHealth.toFloat()) problem("max health ${plant.maxHealth}, expected ${entry.attributes.maxHealth}")
-            if (PazConfig.getSunCost(type) != entry.sunCost) problem("sun cost ${PazConfig.getSunCost(type)}, expected ${entry.sunCost}")
+            // the value itself may be tuned in config/sproutsquad/server.json, only check that it is known
+            if (PazConfig.getSunCost(type) < 0) problem("no sun cost (not registered in PazConfig)")
             if (!type.builtInRegistryHolder().`is`(PazTags.EntityTypes.PLANT)) problem("not in #${PazMain.MODID}:plant (add it to squad_plants.json)")
 
             val recipe = ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(PazMain.MODID, "${name}_seed_packet"))
