@@ -1,7 +1,7 @@
 package joshxviii.plantz.mixin;
 
 import com.mojang.datafixers.util.Pair;
-import net.neoforged.fml.loading.LoadingModList;
+import net.neoforged.fml.loading.FMLLoader;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -29,7 +29,7 @@ public abstract class OverworldBiomeBuilderMixin {
         Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> biomes,
         CallbackInfo ci
     ) {
-        if (LoadingModList.get().getModFileById("terrablender") != null) return;
+        if (FMLLoader.getCurrent().getLoadingModList().getModFileById("terrablender") != null) return;
 
         Climate.Parameter temperature = Climate.Parameter.span(-0.45F, 0.55F);
         Climate.Parameter humidity = Climate.Parameter.span(-0.1F, 1.0F);
