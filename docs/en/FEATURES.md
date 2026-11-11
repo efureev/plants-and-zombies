@@ -199,15 +199,15 @@ Zombies spawn in the dark like vanilla monsters, never on Peaceful. In the Grave
 | <img src="../images/characters/zombie_yeti.png" alt="" width="112"> | [Zombie Yeti](characters/zombie_yeti.md) | Snowy and cold biomes, icy peaks | Throws powder snow (Chilled) |
 | <img src="../images/characters/zombat.png" alt="" width="112"> | [Zombat](characters/zombat.md) | Graveyard, even by day | Flies, heals itself when it hurts a mob |
 | <img src="../images/characters/zombie_goat.png" alt="" width="112"> | [Zombie Goat](characters/zombie_goat.md) | Snowy slopes, peaks, groves, windswept hills, at night | 40% of them carry an Imp rider (Sprout Squad) |
+| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Engineer Zombie](characters/engineer_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Avoids players and plants and builds hostile machines |
+| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Soldier Zombie](characters/soldier_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Fires a Dye Blaster |
+| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Robo-Zombie](characters/robo_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Transforms, fires missiles |
 
 Only in raids (or from spawn eggs):
 
 | | Zombie | Notes |
 |---|---|---|
 | <img src="../images/characters/backup_dancer.png" alt="" width="112"> | [Backup Dancer](characters/backup_dancer.md) | Summoned by the Disco Zombie |
-| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Engineer Zombie](characters/engineer_zombie.md) | Avoids players and plants and builds hostile machines |
-| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Soldier Zombie](characters/soldier_zombie.md) | Fires a Dye Blaster |
-| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Robo-Zombie](characters/robo_zombie.md) | Transforms, fires missiles |
 | <img src="../images/characters/pirate_captain.png" alt="" width="112"> | [Pirate Captain](characters/pirate_captain.md) | Fires fireworks; comes back as a [Pirate Captain Ghost](characters/pirate_captain_ghost.md) |
 | <img src="../images/characters/super_brainz.png" alt="" width="112"> | [Super Brainz](characters/super_brainz.md) | Energy beams and punches |
 | <img src="../images/characters/gargantuar.png" alt="" width="112"> | [Gargantuar](characters/gargantuar.md) | Huge, smashes and throws Imps |
@@ -360,13 +360,13 @@ A blueprint builds a machine. Right-click a block with it: the machine appears f
 | <img src="../images/characters/zombie_drone.png" alt="" width="112"> | [Zombie Drone](characters/zombie_drone.md) | 8 | Flies and attacks |
 | <img src="../images/characters/lawn_mower.png" alt="" width="112"> | [Lawn Mower](characters/lawn_mower.md) | 14 | The last line of defence: waits until a monster comes right up to its front, then drives up to 40 blocks (or until it hits a wall) and mows down every monster on its way; bosses take 40 damage. Used up after one run, placed with its handle toward you, and only a player can break it |
 
-- Blueprints: Engineer Zombie (8.5%, one of its three machines) and the Robo Army treasure (all four machines, the Lawn Mower is rare). Costs are set by the server option `alloyCosts`.
-- In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.
+- Blueprints: Engineer Zombie (8.5%, one of its three machines), the Robo Army treasure (all four machines, the Lawn Mower is rare) and the workshop chest of the [Robo Junkyard](STRUCTURES.md#robo-junkyard) (always one, the Lawn Mower is rare). Costs are set by the server option `alloyCosts`.
+- In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. No machine calls reinforcements when it is hit. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.
 
 <!-- pictures: brainz_alloy -->
 <p><img src="../images/items/brainz_alloy.png" alt="Brainz Alloy" title="Brainz Alloy" width="112"></p>
 
-**Brainz Alloy** comes from zombies: a Gargantuar always drops 18–25, a Robo-Zombie 2–5 (90%), Super Brainz 1–3 (70%), an Engineer 1–2 (30%). It is also found in grave loot, mausoleum chests and raid rewards, and 1 Brainzium + 4 copper ingots + 4 iron ingots make 16. It builds machines, repairs the Dye Blaster and is used for Brainz Alloy blocks (block, stairs, slab, smooth, treaded, reinforced, fence, door, trapdoor), the Solar Battery, the Collection Box and the Time Machine.
+**Brainz Alloy** comes from zombies: a Gargantuar always drops 18–25, a Robo-Zombie 2–5 (90%), Super Brainz 1–3 (70%), an Engineer 1–2 (30%). It is also found in grave loot, mausoleum chests, Robo Junkyard chests and barrels and raid rewards, and 1 Brainzium + 4 copper ingots + 4 iron ingots make 16. It builds machines, repairs the Dye Blaster and is used for Brainz Alloy blocks (block, stairs, slab, smooth, treaded, reinforced, fence, door, trapdoor), the Solar Battery, the Collection Box and the Time Machine.
 
 <!-- pictures: brainzium -->
 <p><img src="../images/items/brainzium.png" alt="Brainzium" title="Brainzium" width="112"></p>
@@ -495,6 +495,11 @@ All structures, the planned ones with sketches, and how a structure is made: [ST
 <!-- pictures 200: structure:garden_shack_* -->
 <p><img src="../images/structures/garden_shack_cherry.png" alt="Garden Shack (cherry)" title="Garden Shack (cherry)" width="200"> <img src="../images/structures/garden_shack_oak.png" alt="Garden Shack (oak)" title="Garden Shack (oak)" width="200"> <img src="../images/structures/garden_shack_spruce.png" alt="Garden Shack (spruce)" title="Garden Shack (spruce)" width="200"></p>
 
+- **Robo Junkyard** (badlands, savannas; added by Sprout Squad): a scrap yard with a workshop where Engineer Zombies build machines. A hostile Zombie Turret on a scrap pile and an Electro Turret by the workshop door guard it, and Engineer Zombies, Soldier Zombies and, rarely, a Robo-Zombie come at night. The workshop chest always holds a blueprint and Brainz Alloy, plus iron, copper and redstone, rarely Brainzium; the scrap barrels hold iron nuggets, copper, chains and a little alloy. A Cartographer (level 3) sells a map to the nearest one; finding one gives the advancement "Spare Parts".
+
+<!-- pictures 200: structure:robo_junkyard_yard -->
+<p><img src="../images/structures/robo_junkyard_yard.png" alt="Robo Junkyard" title="Robo Junkyard" width="200"></p>
+
 ### Loot in vanilla chests, fishing and trades
 
 | Where | What |
@@ -505,6 +510,7 @@ All structures, the planned ones with sketches, and how a structure is made: [ST
 | Carving a pumpkin | Pumpkin seeds (5.5%) |
 | Farmer, level 1 | Buys 32 sun for an emerald |
 | Cartographer, level 1 | Garden Shack Map (6 emeralds and a compass) |
+| Cartographer, level 3 | Robo Junkyard Map (12 emeralds and a compass) |
 | Farmer, level 2 | Watering Can (emeralds + sun), Potato Mine seeds |
 | Farmer, level 3 | Gardening Glove (emeralds + sun), Cherry Bomb seeds |
 | Wandering Trader | Brainz Flag for 12 emeralds (rare) |

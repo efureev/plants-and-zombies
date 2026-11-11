@@ -352,7 +352,7 @@ def garden_shack():
     s.sprite("peashooter", 12, 1, 9, 1.1, entity="sproutsquad:peashooter")
     s.sprite("wallnut", 15, 1, 9, 1.1, entity="sproutsquad:wallnut")
     s.sprite("potling", 12, 1, 14, 0.9, entity="sproutsquad:potling")
-    s.sprite("browncoat", 19, 1, 15, 2.0)
+    # Browncoats come at night: spawn_overrides of worldgen/structure/garden_shack.json
     return s
 
 
@@ -425,9 +425,10 @@ def crypt():
 def junkyard():
     s = Scene(7)
     s.fill(0, -1, 0, 25, -1, 25, "dirt")
+    # the whole floor is #sproutsquad:plantable, so plants set against the turrets do not dry out
     s.fill(0, 0, 0, 25, 0, 25, "coarse_dirt")
-    s.fill(0, 0, 0, 25, 0, 25, "gravel", chance=0.2)
-    s.fill(0, 0, 0, 25, 0, 25, "red_sand", chance=0.06)
+    s.fill(0, 0, 0, 25, 0, 25, "rooted_dirt", chance=0.2)
+    s.fill(0, 0, 0, 25, 0, 25, "mud", chance=0.06)
     for i in range(0, 26):
         for x, z in ((i, 0), (i, 25), (0, i), (25, i)):
             if s.rng.random() < 0.85 and not (z == 25 and 10 <= x <= 14):
@@ -442,25 +443,31 @@ def junkyard():
                     s.put(x, y, z, s.rng.choice(["sproutsquad:smooth_brainz_alloy_block", "sproutsquad:treaded_brainz_alloy_block",
                                                  "iron_block", "iron_block", "weathered_copper", "sproutsquad:brainz_alloy_block",
                                                  "sproutsquad:brainz_alloy_block"]))
-    s.put(7, 4, 6, "anvil", facing="east"); s.put(19, 3, 6, "chain", axis="y")
-    # 7×7 workshop without a roof, door to the south
+    s.put(7, 4, 6, "anvil", facing="east"); s.put(19, 3, 6, "iron_chain", axis="y")
+    # 7×7 workshop, door to the south; the lantern keeps zombies from spawning inside
     s.fill(15, 0, 14, 21, 0, 20, "sproutsquad:smooth_brainz_alloy_block")
     for x in range(15, 22):
         for z in range(14, 21):
             if x in (15, 21) or z in (14, 20):
-                tall = x == 15 or z == 14
-                s.fill(x, 1, z, x, 4 if tall else 2, z, "sproutsquad:reinforced_brainz_alloy_block" if (x in (15, 21) and z in (14, 20)) else "sproutsquad:brainz_alloy_block")
-    s.clear(18, 1, 20, 18, 2, 20)
+                corner = x in (15, 21) and z in (14, 20)
+                s.fill(x, 1, z, x, 4, z, "sproutsquad:reinforced_brainz_alloy_block" if corner else "sproutsquad:brainz_alloy_block")
+    s.fill(15, 5, 14, 21, 5, 20, "sproutsquad:brainz_alloy_slab", type="bottom", waterlogged="false")
+    s.put(18, 1, 20, "sproutsquad:brainz_alloy_door", facing="north", half="lower", hinge="left", open="false", powered="false")
+    s.put(18, 2, 20, "sproutsquad:brainz_alloy_door", facing="north", half="upper", hinge="left", open="false", powered="false")
+    s.put(15, 2, 17, "iron_bars"); s.put(21, 2, 17, "iron_bars")
+    s.put(18, 4, 17, "lantern", hanging="true", waterlogged="false")
     s.put(16, 1, 15, "crafting_table"); s.put(17, 1, 15, "smithing_table"); s.put(18, 1, 15, "anvil", facing="east")
     s.put(20, 1, 15, "sketch:chest", facing="south"); s.put(20, 1, 17, "barrel", facing="up", open="false")
+    # scrap barrels in the yard
+    s.put(10, 1, 3, "barrel", facing="up", open="false"); s.put(23, 1, 12, "barrel", facing="up", open="false")
     # broken lawn mower
     s.fill(9, 1, 20, 10, 1, 21, "red_concrete"); s.put(8, 1, 20, "coal_block"); s.put(8, 1, 21, "coal_block")
     s.put(11, 1, 20, "iron_bars"); s.put(11, 2, 20, "iron_bars")
     s.connect()
-    s.sprite("zombie_turret", 12, 3, 9, 1.4)
-    s.sprite("electro_turret", 17, 1, 12, 1.3)
-    s.sprite("engineer_zombie", 13, 1, 17, 2.0)
-    s.sprite("robo_zombie", 4, 1, 12, 2.2)
+    # the guards: a turret on top of the scrap pile, an electro turret by the workshop door
+    s.sprite("zombie_turret", 12, 4, 9, 1.4, entity="sproutsquad:zombie_turret")
+    s.sprite("electro_turret", 17, 1, 22, 1.3, entity="sproutsquad:electro_turret")
+    # Engineers, Soldiers and Robo-Zombies come at night: spawn_overrides of worldgen/structure/robo_junkyard.json
     return s
 
 
@@ -717,7 +724,6 @@ def stranded_brig():
 # has its real pictures in docs/images/structures and is no longer sketched.
 SKETCHES = {
     "graveyard_crypt": ({"en": "Crypt (cut open)", "ru": "Склеп (разрез)"}, crypt, 35, 48),
-    "robo_junkyard": ({"en": "Robo Junkyard", "ru": "Свалка роботов"}, junkyard, 35, 38),
     "dig_site": ({"en": "Dig Site", "ru": "Раскопки"}, dig_site, 35, 40),
     "pharaoh_tomb": ({"en": "Pharaoh's Tomb (cut open)", "ru": "Гробница фараона (разрез)"}, pharaoh_tomb, 35, 30),
     "watchtower": ({"en": "Watchtower", "ru": "Сторожевая башня"}, watchtower, 35, 28),
@@ -754,6 +760,14 @@ def garden_shack_block_entity(block, props):
     return None
 
 
+def junkyard_block_entity(block, props):
+    if block == "minecraft:chest":
+        return {"id": "minecraft:chest", "LootTable": "sproutsquad:chests/robo_junkyard/workshop"}
+    if block == "minecraft:barrel":
+        return {"id": "minecraft:barrel", "LootTable": "sproutsquad:chests/robo_junkyard/scrap"}
+    return None
+
+
 EXPORTS = {
     "garden_shack": {
         "build": garden_shack,
@@ -767,6 +781,12 @@ EXPORTS = {
                        "oak_fence": "cherry_fence", "oak_fence_gate": "cherry_fence_gate"},
         },
         "block_entity": garden_shack_block_entity,
+    },
+    "robo_junkyard": {
+        "build": junkyard,
+        "bounds": (0, 0, 0, 25, 6, 25),
+        "variants": {"yard": {}},
+        "block_entity": junkyard_block_entity,
     },
 }
 REAL_BLOCKS = {  # blocks that only the sketch draws as boxes

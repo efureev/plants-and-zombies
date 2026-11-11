@@ -15,7 +15,7 @@ A zombie with a blueprint instead of a weapon. It does not fight itself, but kee
 | Speed | 0.24 |
 | Knockback resistance | 0.2 |
 | Size | 0.63 × 1.95 blocks |
-| Spawns | no natural spawns |
+| Spawns | in the dark at the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) only: weight 3 of the junkyard's 7, alone |
 | Raids | regular waves from wave 8; Robo Army (waves 10–16, only after the raid starter has seen the end credits) |
 | Leader / boss | no |
 | Drops | 30 %: 1–2 Brainz Alloy (any death); 8.5 %: a blueprint of the [Zombie Turret](zombie_turret.md), [Electro Turret](electro_turret.md) or [Zombie Drone](zombie_drone.md), if killed by a player or a plant |

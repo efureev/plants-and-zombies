@@ -16,8 +16,8 @@ A stationary laser gun. Engineer zombies build it to fire at players and plants;
 | Attack | a laser bolt about every 0.8 s, up to 20 blocks; 0.5 damage (hostile) or 2 damage (player-built) |
 | Knockback resistance | 0.2 |
 | Blueprint cost | 12 Brainz Alloy |
-| Spawns | built by an [Engineer Zombie](engineer_zombie.md); never spawns on its own |
-| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave |
+| Spawns | built by an [Engineer Zombie](engineer_zombie.md); one stands at every [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (on a scrap pile), hostile, and never despawns there |
+| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave; the workshop chest of the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (3 chests in 10) |
 
 ## Abilities
 

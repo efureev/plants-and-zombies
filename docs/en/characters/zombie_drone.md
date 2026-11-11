@@ -17,7 +17,7 @@ A small flying robot that strikes its target in melee. Hostile drones come with 
 | Knockback resistance | −2: hits throw it far back |
 | Blueprint cost | 8 Brainz Alloy |
 | Spawns | built by an [Engineer Zombie](engineer_zombie.md); 2–10 per wave in the Robo Army raid wave |
-| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave |
+| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave; the workshop chest of the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (3 chests in 10) |
 
 ## Abilities
 

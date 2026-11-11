@@ -582,5 +582,8 @@
   "book.sproutsquad.gardener_letter.page3": "Поливай грядки, ночью не подпускай зомби к забору, и огород снова зацветёт.\n\nУдачи!\n\n- старый садовник",
   "filled_map.sproutsquad.garden_shack": "Карта огородной сторожки",
   "advancements.sproutsquad.find_garden_shack": "Чужой огород",
-  "advancements.sproutsquad.find_garden_shack.description": "Найдите огородную сторожку"
+  "advancements.sproutsquad.find_garden_shack.description": "Найдите огородную сторожку",
+  "filled_map.sproutsquad.robo_junkyard": "Карта свалки роботов",
+  "advancements.sproutsquad.find_robo_junkyard": "Запчасти",
+  "advancements.sproutsquad.find_robo_junkyard.description": "Найдите свалку роботов"
 }

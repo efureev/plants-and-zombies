@@ -6,12 +6,17 @@ import dev.efureev.sproutsquad.fixes.OriginalGapsGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
 import dev.efureev.sproutsquad.structures.StructuresGameTests
 import joshxviii.plantz.PazMain
+import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.FunctionGameTestInstance
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.gametest.framework.GameTestServer
 import net.minecraft.gametest.framework.TestData
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.phys.AABB
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.event.RegisterGameTestsEvent
 import net.neoforged.neoforge.registries.RegisterEvent
@@ -29,7 +34,7 @@ object SquadGameTests {
                        val structure: Identifier = Identifier.withDefaultNamespace("empty"))
 
     private val tests = listOf(
-        Test("gallery", GalleryGameTest::run),
+        Test("gallery", GalleryGameTest::run, structure = id("gametest/gallery_area")),
         Test("squad_plants", SquadPlantsGameTest::run),
         Test("f2_data", F2GameTests::data),
         Test("f2_squash", F2GameTests::squash, maxTicks = 600),
@@ -50,11 +55,14 @@ object SquadGameTests {
         Test("machines_mower", MachinesGameTests::mower, maxTicks = 400),
         Test("structures_templates", StructuresGameTests::templates),
         Test("structures_garden_shack", StructuresGameTests::gardenShack, structure = id("garden_shack/oak")),
+        Test("structures_robo_junkyard", StructuresGameTests::roboJunkyard, maxTicks = 400, structure = id("robo_junkyard/yard")),
     )
 
     fun register(modBus: IEventBus) {
         modBus.addListener(RegisterEvent::class.java) { event ->
-            tests.forEach { test -> event.register(Registries.TEST_FUNCTION, id(test.name)) { Consumer<GameTestHelper>(test.run) } }
+            tests.forEach { test ->
+                event.register(Registries.TEST_FUNCTION, id(test.name)) { Consumer<GameTestHelper> { helper -> clearStrays(helper); test.run(helper) } }
+            }
         }
         modBus.addListener(RegisterGameTestsEvent::class.java) { event ->
             tests.forEach { test ->
@@ -63,6 +71,26 @@ object SquadGameTests {
                 event.registerTest(id(test.name), FunctionGameTestInstance(function, TestData(environment, test.structure, test.maxTicks, 0, true)))
             }
         }
+    }
+
+    /** How far from a test's position what earlier tests left behind is removed. */
+    private const val STRAY_RADIUS = 48.0
+
+    /**
+     * The GameTest server lays the tests out side by side, eight in a row, without clearing between
+     * batches, and the runner clears only what is inside a test's structure. Many tests work on a strip
+     * of ground beside their 1x1x1 "empty" structure, so what they left there (diggers tunnelling off,
+     * zombies knocked aside, a lawn mower) walked or drove into the next tests and was targeted
+     * instead of their own mobs. On the GameTest server (`runGameTestServer`) each test starts with
+     * every entity but players within [STRAY_RADIUS] removed, except inside its own structure: the
+     * runner has just cleared that area and placed the structure's own entities there. A test started
+     * with `/test` in a normal world leaves everything around it alone: it may be someone's base.
+     */
+    private fun clearStrays(helper: GameTestHelper) {
+        if (helper.level.server !is GameTestServer) return
+        val arena = helper.bounds
+        val area = AABB(helper.absolutePos(BlockPos.ZERO)).inflate(STRAY_RADIUS)
+        helper.level.getEntities(null as Entity?, area) { it !is Player && !arena.intersects(it.boundingBox) }.forEach { it.discard() }
     }
 
     private fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(PazMain.MODID, path)

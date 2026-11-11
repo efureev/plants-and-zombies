@@ -582,5 +582,8 @@
   "book.sproutsquad.gardener_letter.page3": "Water the beds, keep the zombies off the fence at night, and the garden will grow again.\n\nGood luck!\n\n- the old gardener",
   "filled_map.sproutsquad.garden_shack": "Garden Shack Map",
   "advancements.sproutsquad.find_garden_shack": "Someone Else's Garden",
-  "advancements.sproutsquad.find_garden_shack.description": "Find a Garden Shack"
+  "advancements.sproutsquad.find_garden_shack.description": "Find a Garden Shack",
+  "filled_map.sproutsquad.robo_junkyard": "Robo Junkyard Map",
+  "advancements.sproutsquad.find_robo_junkyard": "Spare Parts",
+  "advancements.sproutsquad.find_robo_junkyard.description": "Find a Robo Junkyard"
 }

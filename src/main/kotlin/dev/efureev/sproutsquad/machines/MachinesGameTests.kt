@@ -4,6 +4,7 @@ import dev.efureev.sproutsquad.registry.SquadAttachments
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
+import joshxviii.plantz.PazMain
 import joshxviii.plantz.entity.blueprint_machines.LawnMower
 import joshxviii.plantz.entity.zombie.ZombieRobot
 import joshxviii.plantz.item.BlueprintItem
@@ -12,6 +13,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.InteractionHand
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -43,7 +47,7 @@ object MachinesGameTests {
 
     /**
      * Removes every mob around the strip. The runner only cleans the test structure itself, and all
-     * batches run at the same spot: a player's turret left behind would shoot the next test's zombie.
+     * tests stand side by side: a player's turret left behind would shoot the next test's zombie.
      */
     private fun clearMobs(helper: GameTestHelper, dx: Int, dz: Int) {
         val area = AABB.encapsulatingFullBlocks(helper.absolutePos(BlockPos(dx, 0, dz)), helper.absolutePos(BlockPos(dx + STRIP - 1, 1, dz))).inflate(3.0)
@@ -75,15 +79,34 @@ object MachinesGameTests {
         return near(helper, type, pos).singleOrNull()
     }
 
-    /** Building from a blueprint marks the machine as the player's and spends the alloy. */
+    /**
+     * Building from a blueprint marks the machine as the player's and spends the alloy. No machine
+     * can come as a reinforcement (MachineReinforcements): on Hard a hit machine would call a copy of
+     * itself, in the air or underground, and a hostile one for a player's machine.
+     */
     fun build(helper: GameTestHelper) {
         val (dx, dz) = strip(helper)
         prepare(helper, dx, dz)
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(ticking(helper, dx, dz), "strip is not ticking yet") }
+            .thenExecute { checkNoReinforcements(helper, BlockPos(dx, 0, dz)) }
             .thenExecute { checkBuild(helper, dx, dz) }
             .thenExecute { clearMobs(helper, dx, dz) }
             .thenSucceed()
+    }
+
+    /** Every machine type of the mod: its spawn rule refuses a reinforcement, whatever the chance to call one. */
+    private fun checkNoReinforcements(helper: GameTestHelper, pos: BlockPos) {
+        val level = helper.level
+        val machines = BuiltInRegistries.ENTITY_TYPE.filter {
+            BuiltInRegistries.ENTITY_TYPE.getKey(it).namespace == PazMain.MODID && it.create(level, EntitySpawnReason.COMMAND) is ZombieRobot
+        }
+        helper.assertTrue(machines.size >= 3, "found only ${machines.size} machine types")
+        for (type in machines) {
+            @Suppress("UNCHECKED_CAST")
+            val reinforcement = SpawnPlacements.checkSpawnRules(type as EntityType<Entity>, level, EntitySpawnReason.REINFORCEMENT, helper.absolutePos(pos), level.random)
+            helper.assertTrue(!reinforcement, "${type.toShortString()} may come as a reinforcement")
+        }
     }
 
     private fun checkBuild(helper: GameTestHelper, dx: Int, dz: Int) {

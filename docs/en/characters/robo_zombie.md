@@ -15,7 +15,7 @@ A heavily armoured war robot. It bashes up close, fires missiles from afar and t
 | Speed | 0.215; +0.15 as a tank |
 | Knockback resistance | 0.85 |
 | Size | 1.4 × 1.95 blocks |
-| Spawns | no natural spawns |
+| Spawns | in the dark at the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) only: weight 1 of the junkyard's 7, alone |
 | Raids | regular waves from wave 17 (in 60 % of them, up to 2); Robo Army (waves 10–16, only after the raid starter has seen the end credits; up to 4) |
 | Leader / boss | raid boss as the Robo-General in waves 10–20 of regular and Robo Army waves, one per seven wave numbers (at least one) |
 | Drops | 90 %: 2–5 Brainz Alloy (any death) |

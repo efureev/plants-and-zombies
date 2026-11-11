@@ -15,9 +15,9 @@ An armoured ranged zombie with a Dye Blaster. It keeps its distance and peppers 
 | Speed | 0.237 |
 | Knockback resistance | 0.2 |
 | Size | 0.6 × 1.95 blocks |
-| Spawns | no natural spawns |
+| Spawns | in the dark at the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) only: weight 3 of the junkyard's 7, groups of 1–2 |
 | Raids | regular waves from wave 11 and Robo Army (waves 10–16), both only after the raid starter has seen the end credits; in Robo Army a third of the [Robo-Zombies](robo_zombie.md) carry one on top |
-| Leader / boss | can be a leader (`can_be_leader`), but as it never spawns naturally it never calls a group; never a boss |
+| Leader / boss | can be a leader (`can_be_leader`): a Soldier that spawns at the Robo Junkyard sometimes (more often at high regional difficulty) holds a Brainz Flag, drops it on death and calls 4–7 more zombies out of the ground, like a [Browncoat](browncoat.md) leader; never a boss |
 | Drops | 2 %: Dye Blaster at 60–90 % durability, if killed by a player or a plant |
 
 ## Abilities

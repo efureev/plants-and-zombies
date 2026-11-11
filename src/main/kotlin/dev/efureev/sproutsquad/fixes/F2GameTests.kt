@@ -154,10 +154,11 @@ object F2GameTests {
         val arena = (0..2).map { x -> helper.absolutePos(BlockPos(dx + x, 0, dz)) }
         lateinit var squash: Squash
         lateinit var zombie: Zombie
+        var leapAt: LivingEntity? = null
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
             .thenExecute {
-                // all batches run at the same spot: remove mobs other tests left on the arena
+                // tests stand side by side: remove mobs other tests left on the arena since the test started
                 helper.level.getEntities(null as Entity?, AABB.encapsulatingFullBlocks(arena.first(), arena.last()).inflate(3.0)) { it !is net.minecraft.world.entity.player.Player }
                     .forEach { it.discard() }
                 for (x in 0..2) helper.setBlock(BlockPos(dx + x, -1, dz), Blocks.STONE)
@@ -166,8 +167,10 @@ object F2GameTests {
                 zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
             }
             .thenWaitUntil {
+                if (!squash.isRemoved) squash.target?.let { leapAt = it }
                 helper.assertTrue(squash.isRemoved, "squash has not attacked yet")
-                helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved, "zombie survived the squash")
+                helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved,
+                    "zombie survived the squash, which went for ${leapAt?.type?.toShortString()} at ${leapAt?.blockPosition()?.toShortString()}")
             }
             .thenSucceed()
     }
