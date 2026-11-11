@@ -1,5 +1,7 @@
 # Grave Digger
 
+<p align="center"><img src="../../images/characters/grave_digger.png" alt="Grave Digger" width="320"></p>
+
 **Zombie · gravestone thrower** · Plants & Zombies (original)
 
 A zombie with a shovel that digs up Gravestones and hurls them at its target. Every Gravestone it leaves behind keeps raising new zombies in the dark.

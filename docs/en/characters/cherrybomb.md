@@ -1,5 +1,7 @@
 # Cherry Bomb
 
+<p align="center"><img src="../../images/characters/cherrybomb.png" alt="Cherry Bomb" width="320"></p>
+
 **Plant · explosive** · Plants & Zombies (original)
 
 A single-use bomb: when an enemy comes close, it swells up and explodes, hitting everything around it.

@@ -1,5 +1,7 @@
 # Puff Shroom
 
+<p align="center"><img src="../../images/characters/puffshroom.png" alt="Puff Shroom" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 A free short-range mushroom that shoots toxic spores; it works at night and sleeps in daylight.

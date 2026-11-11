@@ -1,5 +1,7 @@
 # Potatomine
 
+<p align="center"><img src="../../images/characters/potatomine.png" alt="Potatomine" width="320"></p>
+
 **Plant · mine** · Plants & Zombies (original)
 
 A cheap trap: it arms itself after planting and blows up the first enemy that steps on it.

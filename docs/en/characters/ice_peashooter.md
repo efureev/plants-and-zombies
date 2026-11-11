@@ -1,5 +1,7 @@
 # Snow Pea
 
+<p align="center"><img src="../../images/characters/ice_peashooter.png" alt="Snow Pea" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 A Peashooter from snowy lands whose frozen peas slow enemies down.

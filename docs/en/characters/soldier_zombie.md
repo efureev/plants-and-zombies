@@ -1,5 +1,7 @@
 # Soldier Zombie
 
+<p align="center"><img src="../../images/characters/soldier_zombie.png" alt="Soldier Zombie" width="320"></p>
+
 **Zombie · shooter** · Plants & Zombies (original)
 
 An armoured ranged zombie with a Dye Blaster. It keeps its distance and peppers its target with paint balls.

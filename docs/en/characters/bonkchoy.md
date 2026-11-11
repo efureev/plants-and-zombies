@@ -1,5 +1,7 @@
 # Bonk Choy
 
+<p align="center"><img src="../../images/characters/bonkchoy.png" alt="Bonk Choy" width="320"></p>
+
 **Plant · melee fighter** · Plants & Zombies (original)
 
 A close-combat plant that punches anything within reach and now and then knocks it into the air with an uppercut.

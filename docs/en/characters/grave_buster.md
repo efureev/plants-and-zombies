@@ -1,5 +1,7 @@
 # Grave Buster
 
+<p align="center"><img src="../../images/characters/grave_buster.png" alt="Grave Buster" width="320"></p>
+
 **Plant · grave remover** · Plants & Zombies (original)
 
 Eats gravestones: planted on one, it chews it up, drops the grave's treasure and disappears.

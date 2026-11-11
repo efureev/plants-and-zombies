@@ -25,6 +25,15 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 SRC = "src/main"
+
+# Entities that share a model layer with another one (see PazModels.registerRenderers)
+MODEL_LAYER = {
+    "browncoat": "paz_zombie", "newspaper_zombie": "paz_zombie", "digger_zombie": "digger",
+    "engineer_zombie": "engineer", "backup_dancer": "disco_zombie", "explode_o_nut": "wallnut",
+    "zombie_drone": "drone_turret",
+}
+# Textures that do not follow textures/entity/<kind>/<id>/<id>.png
+TEXTURE = {"gnome": "gnome/red.png"}
 NUM = r"-?\d+(?:\.\d+)?(?:[eE]-?\d+)?[fFdD]?"
 
 
@@ -35,7 +44,8 @@ def num(s):
 # ---------------------------------------------------------------- sources
 
 def find_model(entity_id):
-    pattern = re.compile(r'LAYER_LOCATION\s*=\s*(?:new\s+)?ModelLayerLocation\(\s*pazResource\("%s"\)' % re.escape(entity_id))
+    layer = MODEL_LAYER.get(entity_id, entity_id)
+    pattern = re.compile(r'LAYER_LOCATION\s*=\s*(?:new\s+)?ModelLayerLocation\(\s*pazResource\("%s"\)' % re.escape(layer))
     for root, _, files in os.walk(SRC):
         for f in files:
             if f.endswith((".java", ".kt")) and "Model" in f:
@@ -61,6 +71,8 @@ def find_animation(model_path, model_text):
 
 
 def find_texture(entity_id):
+    if entity_id in TEXTURE:
+        return os.path.join(SRC, "resources/assets/sproutsquad/textures/entity", TEXTURE[entity_id])
     for kind in ("plant", "zombie", "blueprint_machine", "gnome", ""):
         path = os.path.join(SRC, "resources/assets/sproutsquad/textures/entity", kind, entity_id, entity_id + ".png")
         if os.path.exists(path):
@@ -80,7 +92,13 @@ class Part:
         self.children = []
 
 
+def strip_comments(text):
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    return re.sub(r"//[^\n]*", "", text)
+
+
 def parse_model(text):
+    text = strip_comments(text)
     size = re.search(r"LayerDefinition\.create\(\s*\w+\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", text)
     tex_w, tex_h = (int(size.group(1)), int(size.group(2))) if size else (64, 64)
     root = Part("root", None)
@@ -163,6 +181,14 @@ def apply_pose(part, pose):
         apply_pose(c, pose)
 
 
+def zombie_arms(part, pose):
+    """Vanilla ZombieModel holds the arms out in front (AnimationUtils.animateZombieArms), not an animation."""
+    if part.name in ("right_arm", "left_arm") and "ROTATION" not in pose.get(part.name, {}):
+        part.rotation = part.rotation + np.array([-1.45, 0.08 if part.name == "right_arm" else -0.08, 0.0])
+    for c in part.children:
+        zombie_arms(c, pose)
+
+
 # ---------------------------------------------------------------- geometry
 
 def rot_x(a):
@@ -225,7 +251,10 @@ def collect_faces(part, parent_matrix, faces):
 def render(entity_id, out, yaw, pitch, size, pose_name):
     model_path, model_text = find_model(entity_id)
     root, (tex_w, tex_h) = parse_model(model_text)
-    apply_pose(root, parse_pose(find_animation(model_path, model_text), pose_name))
+    pose = parse_pose(find_animation(model_path, model_text), pose_name)
+    apply_pose(root, pose)
+    if "PazZombieModel" in model_text and pose_name != "__none__":
+        zombie_arms(root, pose)
     texture_path = find_texture(entity_id)
     textures = [(Image.open(texture_path).convert("RGBA"), False)]
     emissive = texture_path.replace(".png", "_emissive.png")
@@ -297,17 +326,22 @@ def render(entity_id, out, yaw, pitch, size, pose_name):
             quad = [tuple(so), tuple(so + sa), tuple(so + sa + sb), tuple(so + sb)]
             mask = Image.new("L", canvas.size, 0)
             ImageDraw.Draw(mask).polygon(quad, fill=255)
-            if not glow:
-                r, g, bl, al = warped.split()
-                r, g, bl = (ch.point(lambda x: int(x * shade)) for ch in (r, g, bl))
-                warped = Image.merge("RGBA", (r, g, bl, al))
             alpha = Image.composite(warped.getchannel("A"), Image.new("L", canvas.size, 0), mask)
-            warped.putalpha(alpha)
+            if glow:
+                # the game draws the emissive layer additively (RenderTypes.eyes): add it, do not cover
+                glow_rgb = np.asarray(warped.convert("RGB"), dtype=np.float32) * (np.asarray(alpha, dtype=np.float32)[..., None] / 255.0)
+                base = np.asarray(canvas, dtype=np.float32)
+                base[..., :3] = np.minimum(255.0, base[..., :3] + glow_rgb * 0.6 * (base[..., 3:4] / 255.0))
+                canvas = Image.fromarray(base.astype(np.uint8), "RGBA")
+                continue
+            r, g, bl, _ = warped.split()
+            r, g, bl = (ch.point(lambda x: int(x * shade)) for ch in (r, g, bl))
+            warped = Image.merge("RGBA", (r, g, bl, alpha))
             canvas.alpha_composite(warped)
 
     result = canvas.resize((size, size), Image.LANCZOS)
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
-    result.save(out)
+    result.save(out, optimize=True)
     print(out, result.size, len(projected), "faces")
 
 

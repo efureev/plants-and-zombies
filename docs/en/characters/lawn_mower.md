@@ -1,5 +1,7 @@
 # Lawn Mower
 
+<p align="center"><img src="../../images/characters/lawn_mower.png" alt="Lawn Mower" width="320"></p>
+
 **Machine · last line of defence** · Sprout Squad (the entity and model come from Plants & Zombies, where it did nothing; the fork added the run)
 
 A one-shot last line of defence, as in the original game. It waits until a monster walks right up to its front, then drives straight ahead and mows down every monster in its way.

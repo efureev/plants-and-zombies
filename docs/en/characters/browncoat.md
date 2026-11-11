@@ -1,5 +1,7 @@
 # Browncoat
 
+<p align="center"><img src="../../images/characters/browncoat.png" alt="Browncoat" width="320"></p>
+
 **Zombie · basic** · Plants & Zombies (original)
 
 The most common zombie of the mod and the backbone of every raid. On its own it is as weak as a vanilla zombie, but it often wears a cone, a bucket or a door, may float on balloons and changes its look with the biome.

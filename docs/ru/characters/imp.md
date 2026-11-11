@@ -1,5 +1,7 @@
 # Чертёнок
 
+<p align="center"><img src="../../images/characters/imp.png" alt="Чертёнок" width="320"></p>
+
 **Зомби · мелкий** · Plants & Zombies (оригинал)
 
 Маленький шустрый зомби с ядовитым укусом. [Гаргантюа](gargantuar.md) носит его на спине и бросает в бой, а в Sprout Squad чертята ещё и ездят на [Зомби-Козлах](zombie_goat.md).

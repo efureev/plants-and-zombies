@@ -1,5 +1,7 @@
 # Coffee Bean
 
+<p align="center"><img src="../../images/characters/coffeebean.png" alt="Coffee Bean" width="320"></p>
+
 **Plant · support** · Plants & Zombies (original)
 
 A one-shot wake-up call: it wakes a sleeping plant next to it for 40 minutes and then disappears.

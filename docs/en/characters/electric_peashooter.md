@@ -1,5 +1,7 @@
 # Electric Peashooter
 
+<p align="center"><img src="../../images/characters/electric_peashooter.png" alt="Electric Peashooter" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 A Peashooter charged by lightning: its peas electrify enemies, and the charge jumps from one to another.

@@ -1,5 +1,7 @@
 # Sun Shroom
 
+<p align="center"><img src="../../images/characters/sunshroom.png" alt="Sun Shroom" width="320"></p>
+
 **Plant · sun producer** · Plants & Zombies (original)
 
 A sun maker for the dark: it produces sun at night, in caves and under a roof, and gives more once it has grown up.

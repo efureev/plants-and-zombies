@@ -1,5 +1,7 @@
 # Garden Gnome
 
+<p align="center"><img src="../../images/characters/gnome.png" alt="Garden Gnome" width="320"></p>
+
 **Other · hostile gnome** · Plants & Zombies (original); its drops were added by Sprout Squad
 
 A small hopping gnome that fights for no side. It attacks players, plants and zombies alike, likes to ride small animals, and sometimes leaves behind a garden gnome statue.

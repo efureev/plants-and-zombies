@@ -1,5 +1,7 @@
 # Backup Dancer
 
+<p align="center"><img src="../../images/characters/backup_dancer.png" alt="Backup Dancer" width="320"></p>
+
 **Zombie · minion** · Plants & Zombies (original)
 
 A fast, fragile dancer that the [Disco Zombie](disco_zombie.md) summons in groups of up to three.

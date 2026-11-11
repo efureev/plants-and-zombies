@@ -1,5 +1,7 @@
 # Огненный Горохострел
 
+<p align="center"><img src="../../images/characters/fire_peashooter.png" alt="Огненный Горохострел" width="320"></p>
+
 **Растение · стрелок** · Plants & Zombies (оригинал)
 
 Горохострел из Нижнего мира: его горошины поджигают цель.

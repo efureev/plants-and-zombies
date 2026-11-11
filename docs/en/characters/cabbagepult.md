@@ -1,5 +1,7 @@
 # Cabbage Pult
 
+<p align="center"><img src="../../images/characters/cabbagepult.png" alt="Cabbage Pult" width="320"></p>
+
 **Plant · catapult** · Plants & Zombies (original)
 
 A catapult that lobs cabbages over walls and fences at enemies it does not even need to see.

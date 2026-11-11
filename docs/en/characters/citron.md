@@ -1,5 +1,7 @@
 # Citron
 
+<p align="center"><img src="../../images/characters/citron.png" alt="Citron" width="320"></p>
+
 **Plant · walking laser** · Plants & Zombies (original), experimental
 
 A walking citrus that chases enemies and shoots a thin laser beam at them. It is experimental and hidden unless experimental features are switched on.

@@ -1,5 +1,7 @@
 # Lightning Reed
 
+<p align="center"><img src="../../images/characters/lightning_reed.png" alt="Lightning Reed" width="320"></p>
+
 **Plant · zapper** · Plants & Zombies (original)
 
 A thin reed that appears in thunderstorms and strikes nearby enemies with electric arcs that jump on to their neighbours.

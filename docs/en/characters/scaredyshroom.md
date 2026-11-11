@@ -1,5 +1,7 @@
 # Scaredy Shroom
 
+<p align="center"><img src="../../images/characters/scaredyshroom.png" alt="Scaredy Shroom" width="320"></p>
+
 **Plant · long-range shooter** · Plants & Zombies (original)
 
 A long-range spore shooter that hides as soon as an enemy gets too close.

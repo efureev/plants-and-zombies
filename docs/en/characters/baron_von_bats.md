@@ -1,5 +1,7 @@
 # Baron Von Bats
 
+<p align="center"><img src="../../images/characters/baron_von_bats.png" alt="Baron Von Bats" width="320"></p>
+
 **Zombie · vampire boss** · Plants & Zombies (original)
 
 A vampire lord that appears only as a raid boss. It keeps its distance, shoots a staff beam, calls Vampire Zombies, teleports away and dissolves into a swarm of Zombats.

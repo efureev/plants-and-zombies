@@ -1,5 +1,7 @@
 # Squash
 
+<p align="center"><img src="../../images/characters/squash.png" alt="Squash" width="320"></p>
+
 **Plant · crusher** · Plants & Zombies (original); attack by Sprout Squad
 
 A single-use plant that leaps onto a nearby zombie and flattens it. In the original mod the Squash had no attack; the leap and slam were added by Sprout Squad.

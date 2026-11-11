@@ -1,5 +1,7 @@
 # Fire Peashooter
 
+<p align="center"><img src="../../images/characters/fire_peashooter.png" alt="Fire Peashooter" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 A Peashooter from the Nether whose peas set targets on fire.

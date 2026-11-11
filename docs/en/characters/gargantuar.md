@@ -1,5 +1,7 @@
 # Gargantuar
 
+<p align="center"><img src="../../images/characters/gargantuar.png" alt="Gargantuar" width="320"></p>
+
 **Zombie · giant** · Plants & Zombies (original)
 
 A huge zombie that appears only as a raid boss. It smashes the ground, punches, tramples everything in its way and throws the Imp riding on its back.

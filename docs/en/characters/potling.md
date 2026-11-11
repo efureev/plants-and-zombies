@@ -1,5 +1,7 @@
 # Potling
 
+<p align="center"><img src="../../images/characters/potling.png" alt="Potling" width="320"></p>
+
 **Plant · sun producer** · Sprout Squad
 
 The mod's mascot: a terracotta pot with a face and a two-leaf sprout. A cheap starter plant that slowly makes sun, and the template every new Sprout Squad plant is built from.

@@ -1,5 +1,7 @@
 # Zombie Turret
 
+<p align="center"><img src="../../images/characters/zombie_turret.png" alt="Zombie Turret" width="320"></p>
+
 **Machine · shooter** · Plants & Zombies (original); Sprout Squad made player-built turrets fight for the player
 
 A stationary laser gun. Engineer zombies build it to fire at players and plants; a player who has its blueprint can build one to guard the base against monsters.

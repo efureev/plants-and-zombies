@@ -1,5 +1,7 @@
 # Winter Melon
 
+<p align="center"><img src="../../images/characters/winter_melon.png" alt="Winter Melon" width="320"></p>
+
 **Plant · catapult** · Plants & Zombies (original)
 
 A frost version of the [Melon Pult](melonpult.md) that lobs frozen melons and chills everything around the impact. It hits softer and less often than the Melon Pult, but slows the crowd.

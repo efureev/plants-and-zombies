@@ -1,5 +1,7 @@
 # Zombie Drone
 
+<p align="center"><img src="../../images/characters/zombie_drone.png" alt="Zombie Drone" width="320"></p>
+
 **Machine · flying melee** · Plants & Zombies (original); Sprout Squad made player-built drones fight for the player
 
 A small flying robot that strikes its target in melee. Hostile drones come with Engineer zombies and the Robo Army; a player can build one from a blueprint to chase monsters.

@@ -1,5 +1,7 @@
 # Doom Shroom
 
+<p align="center"><img src="../../images/characters/doomshroom.png" alt="Doom Shroom" width="320"></p>
+
 **Plant · explosive** · Plants & Zombies (original)
 
 The strongest explosive plant: one huge blast that also tears a crater into the ground.

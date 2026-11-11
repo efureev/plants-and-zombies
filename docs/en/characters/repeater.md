@@ -1,5 +1,7 @@
 # Repeater
 
+<p align="center"><img src="../../images/characters/repeater.png" alt="Repeater" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 A Peashooter that fires peas in pairs, doing twice the damage of the ordinary one.

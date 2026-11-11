@@ -1,5 +1,7 @@
 # Wall Nut
 
+<p align="center"><img src="../../images/characters/wallnut.png" alt="Wall Nut" width="320"></p>
+
 **Plant · wall** · Plants & Zombies (original)
 
 A sturdy living wall: it does not attack, but blocks the way and keeps zombies busy chewing on it.

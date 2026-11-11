@@ -1,5 +1,7 @@
 # Imp
 
+<p align="center"><img src="../../images/characters/imp.png" alt="Imp" width="320"></p>
+
 **Zombie · small** · Plants & Zombies (original)
 
 A small, quick zombie with a toxic bite. The [Gargantuar](gargantuar.md) carries one on its back and throws it into battle, and in Sprout Squad Imps also ride [Zombie Goats](zombie_goat.md).

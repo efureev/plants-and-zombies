@@ -9,7 +9,8 @@ Every card `docs/<locale>/characters/<id>.md` starts with:
     **<Kind> · <role>** · <origin>
     <one-paragraph summary>
     | | |  ...a table with a "Health" / "Здоровье" row...
-Cards with a "## Card" / "## Карточка" section are the mod's own characters.
+Cards with a "## Card" / "## Карточка" section are the mod's own characters. A picture in
+docs/images/characters/<id>.png (tools/docs/render_character.py) becomes a thumbnail in the index.
 """
 import os
 import re
@@ -20,14 +21,16 @@ LOCALES = {
         "intro": "Every plant, zombie and machine of the mod has its own card. How to add a new character, the checklist and the style guide are in [WORKSHOP](../WORKSHOP.md); what the mod offers overall is in [FEATURES](../FEATURES.md).",
         "groups": [("own", "Own characters (Sprout Squad)"), ("plant", "Plants"), ("zombie", "Zombies"), ("machine", "Machines"), ("other", "Other creatures")],
         "kinds": {"plant": "plant", "zombie": "zombie", "machine": "machine"},
-        "columns": "| Character | Role | Health | What it does |\n|---|---|---|---|",
-        "own_columns": "| Character | Role | Status | What it does |\n|---|---|---|---|",
+        "columns": "| | Character | Role | Health | What it does |\n|---|---|---|---|---|",
+        "own_columns": "| | Character | Role | Status | What it does |\n|---|---|---|---|---|",
         "health": "Health",
         "card": "Card",
         "status": "Status",
         "template_title": "Card template for a new own character",
-        "template_intro": "Copy it to `docs/en/characters/<id>.md` and write the Russian card `docs/ru/characters/<id>.md` too; then rebuild this index with `python3 tools/docs/build_character_index.py`. Statuses: `idea` → `model` → `in code` → `done`.",
+        "template_intro": "Copy it to `docs/en/characters/<id>.md` and write the Russian card `docs/ru/characters/<id>.md` too; render its picture with `python3 tools/docs/render_character.py <id>`, then rebuild this index with `python3 tools/docs/build_character_index.py`. Statuses: `idea` → `model` → `in code` → `done`.",
         "template": """# <Name>
+
+<p align="center"><img src="../../images/characters/<id>.png" alt="<Name>" width="320"></p>
 
 **Plant · <role>** · Sprout Squad
 
@@ -60,14 +63,16 @@ One or two sentences: what it is for.
         "intro": "У каждого растения, зомби и машины мода — своя карточка. Как добавить нового персонажа, чек-лист и гайд по стилю — в [WORKSHOP](../WORKSHOP.md); что позволяет мод в целом — в [FEATURES](../FEATURES.md).",
         "groups": [("own", "Свои персонажи (Sprout Squad)"), ("plant", "Растения"), ("zombie", "Зомби"), ("machine", "Машины"), ("other", "Другие существа")],
         "kinds": {"растение": "plant", "зомби": "zombie", "машина": "machine"},
-        "columns": "| Персонаж | Роль | Здоровье | Что делает |\n|---|---|---|---|",
-        "own_columns": "| Персонаж | Роль | Статус | Что делает |\n|---|---|---|---|",
+        "columns": "| | Персонаж | Роль | Здоровье | Что делает |\n|---|---|---|---|---|",
+        "own_columns": "| | Персонаж | Роль | Статус | Что делает |\n|---|---|---|---|---|",
         "health": "Здоровье",
         "card": "Карточка",
         "status": "Статус",
         "template_title": "Шаблон карточки нового своего персонажа",
-        "template_intro": "Скопируйте в `docs/ru/characters/<id>.md` и напишите английскую карточку `docs/en/characters/<id>.md`; затем пересоберите это оглавление командой `python3 tools/docs/build_character_index.py`. Статусы: `идея` → `модель` → `в коде` → `готов`.",
+        "template_intro": "Скопируйте в `docs/ru/characters/<id>.md` и напишите английскую карточку `docs/en/characters/<id>.md`; нарисуйте картинку командой `python3 tools/docs/render_character.py <id>`, затем пересоберите это оглавление командой `python3 tools/docs/build_character_index.py`. Статусы: `идея` → `модель` → `в коде` → `готов`.",
         "template": """# <Имя>
+
+<p align="center"><img src="../../images/characters/<id>.png" alt="<Имя>" width="320"></p>
 
 **Растение · <роль>** · Sprout Squad
 
@@ -151,7 +156,9 @@ def build(locale, cfg):
         out += [f"## {heading} ({len(group)})", "", cfg["own_columns"] if key == "own" else cfg["columns"]]
         for c in group:
             third = c["status"] if key == "own" else c["health"]
-            out.append(f"| [{c['title']}]({c['id']}.md) | {c['role']} | {third} | {first_sentence(c['summary'])} |")
+            image = os.path.join("docs", "images", "characters", c["id"] + ".png")
+            thumb = f'<img src="../../images/characters/{c["id"]}.png" alt="" width="56">' if os.path.exists(image) else ""
+            out.append(f"| {thumb} | [{c['title']}]({c['id']}.md) | {c['role']} | {third} | {first_sentence(c['summary'])} |")
         out.append("")
     out += [f"## {cfg['template_title']}", "", cfg["template_intro"], "", "```markdown", cfg["template"], "```", ""]
     with open(os.path.join(folder, "README.md"), "w", encoding="utf-8") as f:
