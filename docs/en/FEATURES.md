@@ -383,20 +383,22 @@ Potions are brewed from an Awkward Potion; gunpowder turns them into splash poti
 
 ### Helmets, armor and equipment
 
-| Item | How to get | What it does |
-|---|---|---|
-| Cone | Zombies, grave loot, raid rewards | Helmet (8 armor) against hits from above; can also be placed as a block |
-| Bucket | Vanilla bucket | Can be worn: 15 armor against hits from above |
-| Football Helmet | All Star (2%), Half-Time rewards | While sprinting: faster, knocks back mobs in front of you |
-| Party Hat | Backup Dancer (8%), Disco rewards | Decorative hat, 1 armor |
-| Plant Pot Helmet | Late raid rewards, Farmer at level 4 | Carry a plant on your head ([see above](#plants-on-your-head)) |
-| Coffin | 3 wooden trapdoors + 3 wooden slabs | Worn on the chest, blocks direct attacks from every side |
-| Door Shield | Any door + a shield | A shield that looks like the door |
-| Newspaper | Newspaper Zombie (5%), grave loot | Blocks from the front like a flimsy shield; used for Mailboxes |
-| Ducky Tube | Fishing treasure, grave loot, raid rewards | Worn as leggings, keeps you afloat in water |
-| Roller Skates | Electric Slide (2%) | Much faster, even more so while sprinting |
-| Dye Blaster | Soldier Zombie (2%), Robo Army rewards | Hold use to fire paint balls; uses dye from your inventory as ammo, a 40% chance per shot to use up the loaded dye; Painted |
-| Baron's Staff | Baron Von Bats (8.5%) | Fires an energy beam (7 damage, 14 blocks) |
+| | Item | How to get | What it does |
+|---|---|---|---|
+| <img src="../images/items/cone.png" alt="" width="112"> | Cone | Zombies, grave loot, raid rewards | Helmet (8 armor) against hits from above; can also be placed as a block |
+| <img src="../images/items/bucket.png" alt="" width="112"> | Bucket | Vanilla bucket | Can be worn: 15 armor against hits from above |
+| <img src="../images/items/football_helmet.png" alt="" width="112"> | Football Helmet | All Star (2%), Half-Time rewards | While sprinting: faster, knocks back mobs in front of you |
+| <img src="../images/items/party_hat.png" alt="" width="112"> | Party Hat | Backup Dancer (8%), Disco rewards | Decorative hat, 1 armor |
+| <img src="../images/items/plant_pot_helmet.png" alt="" width="112"> | Plant Pot Helmet | Late raid rewards, Farmer at level 4 | Carry a plant on your head ([see above](#plants-on-your-head)) |
+| <img src="../images/items/coffin.png" alt="" width="112"> | Coffin | 3 wooden trapdoors + 3 wooden slabs | Worn on the chest, blocks direct attacks from every side |
+| <img src="../images/items/door_shield.png" alt="" width="112"> | Door Shield | Any door + a shield | A shield that looks like the door |
+| <img src="../images/items/newspaper.png" alt="" width="112"> | Newspaper | Newspaper Zombie (5%), grave loot | Blocks from the front like a flimsy shield; used for Mailboxes |
+| <img src="../images/items/ducky_tube.png" alt="" width="112"> | Ducky Tube | Fishing treasure, grave loot, raid rewards | Worn as leggings, keeps you afloat in water |
+| <img src="../images/items/roller_skates.png" alt="" width="112"> | Roller Skates | Electric Slide (2%) | Much faster, even more so while sprinting |
+| <img src="../images/items/dye_blaster.png" alt="" width="112"> | Dye Blaster | Soldier Zombie (2%), Robo Army rewards | Hold use to fire paint balls; uses dye from your inventory as ammo, a 40% chance per shot to use up the loaded dye; Painted |
+| <img src="../images/items/baron_staff.png" alt="" width="112"> | Baron's Staff | Baron Von Bats (8.5%) | Fires an energy beam (7 damage, 14 blocks) |
+
+<img src="../images/items/taco.png" alt="" width="112">
 
 Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a second recipe for farming mods. Boss bonuses give 12–24 at a time.
 
