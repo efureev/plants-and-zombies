@@ -73,3 +73,4 @@ Found while launching the port; they are present in the Fabric version too. Fixe
 | 16 dye-colour and rainbow Marigold textures were never used | Marigolds can be dyed with any dye; a Marigold named "Rainbow" is rainbow (`fixes/MarigoldColors.kt`) |
 | Citron never switched to its ball form (`BALL_TRANSFORMATION` is never set) | A gardening glove push turns it into a ball for 15 s |
 | Emissive layers fell back to plain variants: with no `<variant>_emissive` texture, the lookup drew e.g. the `_sleep`, `_baby` or `_damage_low` texture full-bright, so sleeping plants, damaged Wall Nuts and (once babies spawn) baby zombies glowed | The glow layer is `<drawn texture>_emissive.png` or nothing (`getEmissiveTextureLocation`) |
+| A Mailbox loaded without an `EjectTimer` tag (placed by a structure template or by a command with NBT) crashed: `getInt("EjectTimer").get()` | Missing timer reads as 0 (`MailboxBlockEntity.loadAdditional`) |

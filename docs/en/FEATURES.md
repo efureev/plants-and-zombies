@@ -480,7 +480,7 @@ The era dimension (`sproutsquad:time_space`) holds the four era biomes and is re
 
 ### Structures
 
-Planned structures, with sketches, and how a structure is made: [STRUCTURES](STRUCTURES.md).
+All structures, the planned ones with sketches, and how a structure is made: [STRUCTURES](STRUCTURES.md).
 
 <!-- pictures 240: structure:graveyard_mausoleum -->
 <p><img src="../images/structures/graveyard_mausoleum.png" alt="Mausoleum" title="Mausoleum" width="240"></p>
@@ -490,6 +490,10 @@ Planned structures, with sketches, and how a structure is made: [STRUCTURES](STR
 
 - **Mausoleum** (Graveyard). The treasure chest always holds a Brainz Flag, plus coffins, shovels, Ominous Bottles, bones, Grave Buster and Fume-shroom seeds and Brainz Alloy; pots hold bones, rotten flesh, beetroots, arrows and emeralds.
 - **Graveyard fences**: small fence structures in the Graveyard.
+- **Garden Shack** (plains, sunflower plains, meadows, flower forests, cherry groves; added by Sprout Squad): an abandoned vegetable garden with a shed of oak, spruce or cherry. Wild Sunflowers, Peashooters, Wall Nuts and a Potling grow on the beds and can be tamed with sun; the garden grows new ones once they are gone, and Browncoats come at night. The shed chest holds seed packets, sun, plant pots and bone meal, sometimes a Watering Can or a Gardening Glove; the barrels hold vegetables and seeds. The Mailbox by the gate holds the Gardener's Letter, a book with a taming tip: right-click the mailbox. A Cartographer (level 1) sells a map to the nearest one; finding one gives the advancement "Someone Else's Garden".
+
+<!-- pictures 200: structure:garden_shack_* -->
+<p><img src="../images/structures/garden_shack_cherry.png" alt="Garden Shack (cherry)" title="Garden Shack (cherry)" width="200"> <img src="../images/structures/garden_shack_oak.png" alt="Garden Shack (oak)" title="Garden Shack (oak)" width="200"> <img src="../images/structures/garden_shack_spruce.png" alt="Garden Shack (spruce)" title="Garden Shack (spruce)" width="200"></p>
 
 ### Loot in vanilla chests, fishing and trades
 
@@ -500,6 +504,7 @@ Planned structures, with sketches, and how a structure is made: [STRUCTURES](STR
 | Fishing | Sea-shroom seeds (7.5% of fish catches); treasure: Ducky Tube or Watering Can (30%) |
 | Carving a pumpkin | Pumpkin seeds (5.5%) |
 | Farmer, level 1 | Buys 32 sun for an emerald |
+| Cartographer, level 1 | Garden Shack Map (6 emeralds and a compass) |
 | Farmer, level 2 | Watering Can (emeralds + sun), Potato Mine seeds |
 | Farmer, level 3 | Gardening Glove (emeralds + sun), Cherry Bomb seeds |
 | Wandering Trader | Brainz Flag for 12 emeralds (rare) |

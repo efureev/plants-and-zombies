@@ -245,7 +245,8 @@ class MailboxBlockEntity(
         super.loadAdditional(input)
         color = input.read("Color", DyeColor.CODEC).getOrDefault(DyeColor.WHITE)
         this.name = parseCustomNameSafe(input, "CustomName")
-        ejectTimer = input.getInt("EjectTimer").get()
+        // Sprout Squad: a mailbox placed by a structure or a command has no timer yet (was .get(): crash)
+        ejectTimer = input.getIntOr("EjectTimer", 0)
         ContainerHelper.loadAllItems(input, inventory.items)
     }
 

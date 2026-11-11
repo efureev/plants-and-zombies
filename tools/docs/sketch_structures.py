@@ -8,6 +8,13 @@ Usage (needs Pillow and numpy), from the repository root:
     python3 tools/docs/sketch_structures.py                 # every sketch and both overview sheets
     python3 tools/docs/sketch_structures.py garden_shack    # one
 A sketch is not the structure: sizes and rooms are approximate, it is something to talk over.
+
+A scene can also become the mod's real structure template (EXPORTS):
+    python3 tools/docs/sketch_structures.py --export garden_shack
+writes data/sproutsquad/structure/<id>/<variant>.nbt: the blocks inside the export bounds (empty
+places as air, so the structure clears grass and flowers), block entities with their loot tables
+or items, and the characters marked as entities. Once a template is reworked in the game with a
+structure block, the .nbt is the source and the export is not run again.
 """
 import json
 import math
@@ -21,6 +28,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 sys.path.insert(0, "tools/docs")
 import render_item as R  # noqa: E402
 import render_structure as RS  # noqa: E402
+import pictures as P  # noqa: E402
 
 OUT = "docs/images/sketches/structures"
 CHARACTERS = "docs/images/characters"
@@ -36,26 +44,13 @@ def first_frame(texture_id):
 
 R.load_texture = first_frame
 
-# --- blocks without a plain model (the game draws chests, pots, bells and water in code)
-def box(f, t, texture, tint=-1):
-    faces = {n: {"texture": texture, "cullface": n, **({"tintindex": tint} if tint >= 0 else {})}
-             for n in ("north", "south", "west", "east", "up", "down")}
-    return {"from": f, "to": t, "faces": faces}
-
-
+# --- blocks without a plain model: the boxes of render_structure.py, plus a coffin for the sketches
+box = RS.box
 CUSTOM = {
-    "sketch:water": {"textures": {}, "elements": [box([0, 0, 0], [16, 14, 16], "minecraft:block/water_still", 0)], "tint": 0x3F76E4},
-    "sketch:chest": {"textures": {}, "elements": [
-        box([1, 0, 1], [15, 10, 15], "minecraft:block/oak_planks"),
-        box([1, 10, 1], [15, 14, 15], "minecraft:block/stripped_oak_log"),
-        box([7, 7, 0], [9, 11, 1], "minecraft:block/iron_block")]},
-    "sketch:pot": {"textures": {}, "elements": [
-        box([2, 0, 2], [14, 12, 14], "minecraft:block/terracotta"),
-        box([5, 12, 5], [11, 16, 11], "minecraft:block/terracotta")]},
-    "sketch:bell": {"textures": {}, "elements": [
-        box([1, 0, 7], [3, 16, 9], "minecraft:block/stone"), box([13, 0, 7], [15, 16, 9], "minecraft:block/stone"),
-        box([1, 13, 7], [15, 15, 9], "minecraft:block/dark_oak_planks"),
-        box([5, 5, 5], [11, 12, 11], "minecraft:block/gold_block"), box([4, 4, 4], [12, 5, 12], "minecraft:block/gold_block")]},
+    "sketch:water": RS.EXTRA_MODELS["minecraft:water"],
+    "sketch:chest": RS.EXTRA_MODELS["minecraft:chest"],
+    "sketch:pot": RS.EXTRA_MODELS["minecraft:decorated_pot"],
+    "sketch:bell": RS.EXTRA_MODELS["minecraft:bell"],
     "sketch:coffin": {"textures": {}, "elements": [box([2, 0, 0], [14, 6, 16], "minecraft:block/dark_oak_planks"),
                                                    box([5, 6, 3], [11, 7, 13], "minecraft:block/gold_block")]},
 }
@@ -85,6 +80,7 @@ class Scene:
     def __init__(self, seed=1):
         self.grid = {}
         self.sprites = []
+        self.entities = []
         self.rng = random.Random(seed)
 
     def put(self, x, y, z, block, **props):
@@ -112,8 +108,11 @@ class Scene:
             if block in mapping and self.rng.random() < chance:
                 self.grid[pos] = (ns(self.rng.choice(mapping[block])), props)
 
-    def sprite(self, name, x, y, z, height):
+    def sprite(self, name, x, y, z, height, entity=None):
+        """A character drawn on the sketch; with an entity id it is also placed in an exported template."""
         self.sprites.append((name, (x, y, z), height))
+        if entity:
+            self.entities.append((entity, (x, y, z)))
 
     def connect(self):
         """Fences, bars, walls and panes connect to their neighbours as in the game."""
@@ -343,16 +342,16 @@ def garden_shack():
     s.put(7, 1, 5, "barrel", facing="up", open="false"); s.put(7, 2, 5, "barrel", facing="up", open="false")
     s.put(4, 1, 12, "oak_fence"); s.put(4, 2, 12, "hay_block", axis="y"); s.put(4, 3, 12, "carved_pumpkin", facing="south")
     s.put(3, 2, 12, "oak_fence"); s.put(5, 2, 12, "oak_fence")
-    s.put(12, 1, 18, "sproutsquad:mailbox", mailbox_state="inactive", face="floor", facing="south")
+    s.put(12, 1, 18, "sproutsquad:mailbox", mailbox_state="has_mail", face="floor", facing="south")
     for _ in range(40):
         x, z = s.rng.randint(0, 20), s.rng.randint(0, 20)
         if (x, 1, z) not in s.grid and s.grid.get((x, 0, z), ("",))[0] == "minecraft:grass_block" and not (2 <= x <= 7 and 2 <= z <= 7):
             s.put(x, 1, z, s.rng.choice(["short_grass", "short_grass", "poppy", "dandelion", "cornflower"]))
     s.connect()
-    s.sprite("sunflower", 9, 1, 13, 1.25)
-    s.sprite("peashooter", 12, 1, 9, 1.1)
-    s.sprite("wallnut", 15, 1, 9, 1.1)
-    s.sprite("potling", 12, 1, 14, 0.9)
+    s.sprite("sunflower", 9, 1, 13, 1.25, entity="sproutsquad:sunflower")
+    s.sprite("peashooter", 12, 1, 9, 1.1, entity="sproutsquad:peashooter")
+    s.sprite("wallnut", 15, 1, 9, 1.1, entity="sproutsquad:wallnut")
+    s.sprite("potling", 12, 1, 14, 0.9, entity="sproutsquad:potling")
     s.sprite("browncoat", 19, 1, 15, 2.0)
     return s
 
@@ -714,8 +713,9 @@ def stranded_brig():
     return s
 
 
-SKETCHES = {  # id: (names, build, yaw, pitch); "cut open" marks a cutaway
-    "garden_shack": ({"en": "Garden Shack", "ru": "Огородная сторожка"}, garden_shack, 35, 32),
+# id: (names, build, yaw, pitch); "cut open" marks a cutaway. A structure that is in the mod (EXPORTS)
+# has its real pictures in docs/images/structures and is no longer sketched.
+SKETCHES = {
     "graveyard_crypt": ({"en": "Crypt (cut open)", "ru": "Склеп (разрез)"}, crypt, 35, 48),
     "robo_junkyard": ({"en": "Robo Junkyard", "ru": "Свалка роботов"}, junkyard, 35, 38),
     "dig_site": ({"en": "Dig Site", "ru": "Раскопки"}, dig_site, 35, 40),
@@ -725,6 +725,92 @@ SKETCHES = {  # id: (names, build, yaw, pitch); "cut open" marks a cutaway
     "gnome_station": ({"en": "Gnome Station", "ru": "Гномья станция"}, gnome_station, 35, 30),
     "stranded_brig": ({"en": "Stranded Brig", "ru": "Бриг на мели"}, stranded_brig, 35, 30),
 }
+
+
+# ================================================================ export to a structure template
+
+DATA_VERSION = 5023  # of the game the templates are written for (as in the vanilla templates of 26.3)
+STRUCTURE_DATA = "src/main/resources/data/sproutsquad/structure"
+
+
+def gardener_letter():
+    """The Gardener's Letter: a written book whose name and pages are translated by the game."""
+    pages = [json.dumps({"translate": f"book.sproutsquad.gardener_letter.page{i}"}) for i in (1, 2, 3)]
+    return {"Slot": P.Byte(0), "id": "minecraft:written_book", "count": 1, "components": {
+        "minecraft:custom_name": {"translate": "item.sproutsquad.gardener_letter"},
+        "minecraft:written_book_content": {"title": "The Gardener's Letter", "author": "-", "pages": pages, "resolved": P.Byte(1)},
+        # the author line is a plain string, not translated: keep it out of the tooltip
+        "minecraft:tooltip_display": {"hidden_components": ["minecraft:written_book_content"]},
+    }}
+
+
+def garden_shack_block_entity(block, props):
+    if block == "minecraft:chest":
+        return {"id": "minecraft:chest", "LootTable": "sproutsquad:chests/garden_shack/shed"}
+    if block == "minecraft:barrel":
+        return {"id": "minecraft:barrel", "LootTable": "sproutsquad:chests/garden_shack/barrel"}
+    if block == "sproutsquad:mailbox":
+        return {"id": "sproutsquad:mailbox", "Color": "white", "Items": [gardener_letter()]}
+    return None
+
+
+EXPORTS = {
+    "garden_shack": {
+        "build": garden_shack,
+        "bounds": (0, 0, 0, 18, 7, 19),  # x0 y0 z0 x1 y1 z1; y=0 is the ground layer
+        "variants": {  # wood of the shed: the generator picks one of the three
+            "oak": {},
+            "spruce": {"oak_planks": "spruce_planks", "oak_log": "spruce_log", "oak_door": "spruce_door",
+                       "spruce_stairs": "dark_oak_stairs", "spruce_slab": "dark_oak_slab",
+                       "oak_fence": "spruce_fence", "oak_fence_gate": "spruce_fence_gate"},
+            "cherry": {"oak_planks": "cherry_planks", "oak_log": "cherry_log", "oak_door": "cherry_door",
+                       "oak_fence": "cherry_fence", "oak_fence_gate": "cherry_fence_gate"},
+        },
+        "block_entity": garden_shack_block_entity,
+    },
+}
+REAL_BLOCKS = {  # blocks that only the sketch draws as boxes
+    "sketch:water": ("minecraft:water", {"level": "0"}),
+    "sketch:chest": ("minecraft:chest", {"type": "single", "waterlogged": "false"}),
+    "sketch:pot": ("minecraft:decorated_pot", {"cracked": "false", "waterlogged": "false"}),
+    "sketch:bell": ("minecraft:bell", {"attachment": "floor", "powered": "false"}),
+}
+
+
+def export(name):
+    spec = EXPORTS[name]
+    x0, y0, z0, x1, y1, z1 = spec["bounds"]
+    for variant, renames in spec["variants"].items():
+        scene = spec["build"]()
+        palette, index, blocks = [], {}, []
+        for x in range(x0, x1 + 1):
+            for y in range(y0, y1 + 1):
+                for z in range(z0, z1 + 1):
+                    block, props = scene.grid.get((x, y, z), ("minecraft:air", {}))
+                    if block in REAL_BLOCKS:
+                        real, extra = REAL_BLOCKS[block]
+                        props = {**extra, **({"facing": props["facing"]} if "facing" in props else {})}
+                        block = real
+                    if block.startswith("minecraft:"):
+                        block = ns(renames.get(block.split(":")[1], block.split(":")[1]))
+                    key = (block, tuple(sorted(props.items())))
+                    if key not in index:
+                        index[key] = len(palette)
+                        palette.append({"id": block, **({"properties": dict(sorted(props.items()))} if props else {})})
+                    entry = {"pos": [x - x0, y - y0, z - z0], "state": index[key]}
+                    nbt = spec["block_entity"](block, props)
+                    if nbt:
+                        entry["nbt"] = nbt
+                    blocks.append(entry)
+        entities = []
+        for entity, (x, y, z) in scene.entities:
+            yaw = P.Float(scene.rng.uniform(-180, 180))
+            entities.append({"pos": [x - x0 + 0.5, float(y - y0), z - z0 + 0.5], "blockPos": [x - x0, y - y0, z - z0],
+                             "nbt": {"id": entity, "PersistenceRequired": P.Byte(1), "Rotation": [yaw, P.Float(0.0)]}})
+        out = os.path.join(STRUCTURE_DATA, name, variant + ".nbt")
+        P.write_nbt(out, {"size": [x1 - x0 + 1, y1 - y0 + 1, z1 - z0 + 1], "entities": entities, "blocks": blocks,
+                          "palette": palette, "DataVersion": DATA_VERSION})
+        print(out, len(blocks), "blocks,", len(palette), "states,", len(entities), "entities")
 
 
 def overview(names, locale):
@@ -748,6 +834,10 @@ def overview(names, locale):
 
 
 def main():
+    if sys.argv[1:2] == ["--export"]:
+        for name in sys.argv[2:] or list(EXPORTS):
+            export(name)
+        return
     names = sys.argv[1:] or list(SKETCHES)
     for name in names:
         title, build, yaw, pitch = SKETCHES[name]

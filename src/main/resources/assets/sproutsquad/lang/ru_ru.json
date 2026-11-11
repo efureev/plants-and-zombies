@@ -575,5 +575,12 @@
   "biome.sproutsquad.jurassic_period": "Юрский период",
   "biome.sproutsquad.dark_ages": "Тёмные века",
   "biome.sproutsquad.far_future": "Далёкое будущее",
-  "biome.sproutsquad.gnome_space": "Гномий космос"
+  "biome.sproutsquad.gnome_space": "Гномий космос",
+  "item.sproutsquad.gardener_letter": "Письмо садовника",
+  "book.sproutsquad.gardener_letter.page1": "Тому, кто найдёт мой огород.\n\nМне пришлось уйти, а растения остались. Они одичали и пока не станут за тебя сражаться.",
+  "book.sproutsquad.gardener_letter.page2": "Угости дикое растение солнцем: щёлкни по нему ПКМ, держа солнце в руке. Может, не с первого раза, но если растение тебе поверит, оно станет твоим. Прирученное растение можно выкопать лопатой и унести пачкой семян.",
+  "book.sproutsquad.gardener_letter.page3": "Поливай грядки, ночью не подпускай зомби к забору, и огород снова зацветёт.\n\nУдачи!\n\n- старый садовник",
+  "filled_map.sproutsquad.garden_shack": "Карта огородной сторожки",
+  "advancements.sproutsquad.find_garden_shack": "Чужой огород",
+  "advancements.sproutsquad.find_garden_shack.description": "Найдите огородную сторожку"
 }

@@ -4,6 +4,7 @@ import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalGapsGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
+import dev.efureev.sproutsquad.structures.StructuresGameTests
 import joshxviii.plantz.PazMain
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.FunctionGameTestInstance
@@ -23,7 +24,9 @@ import java.util.function.Consumer
  * An environment id can be registered only once.
  */
 object SquadGameTests {
-    private class Test(val name: String, val run: (GameTestHelper) -> Unit, val maxTicks: Int = 100)
+    /** [structure] is the test's arena; the framework loads its whole area before the test starts. */
+    private class Test(val name: String, val run: (GameTestHelper) -> Unit, val maxTicks: Int = 100,
+                       val structure: Identifier = Identifier.withDefaultNamespace("empty"))
 
     private val tests = listOf(
         Test("gallery", GalleryGameTest::run),
@@ -45,6 +48,8 @@ object SquadGameTests {
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),
         Test("machines_electro_turret", MachinesGameTests::electroTurret, maxTicks = 1200),
         Test("machines_mower", MachinesGameTests::mower, maxTicks = 400),
+        Test("structures_templates", StructuresGameTests::templates),
+        Test("structures_garden_shack", StructuresGameTests::gardenShack, structure = id("garden_shack/oak")),
     )
 
     fun register(modBus: IEventBus) {
@@ -55,7 +60,7 @@ object SquadGameTests {
             tests.forEach { test ->
                 val environment = event.registerEnvironment(id(test.name))
                 val function = ResourceKey.create(Registries.TEST_FUNCTION, id(test.name))
-                event.registerTest(id(test.name), FunctionGameTestInstance(function, TestData(environment, Identifier.withDefaultNamespace("empty"), test.maxTicks, 0, true)))
+                event.registerTest(id(test.name), FunctionGameTestInstance(function, TestData(environment, test.structure, test.maxTicks, 0, true)))
             }
         }
     }

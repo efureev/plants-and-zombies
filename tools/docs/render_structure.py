@@ -2,8 +2,8 @@
 """Renders a structure of the mod (data/sproutsquad/structure/<path>.nbt) from its blocks, for
 the docs: every block's model from its blockstate (variants or multipart, with the x/y rotation),
 faces hidden by a neighbouring full opaque block left out, drawn like render_item.py draws
-block models. Block entities without a JSON model (chests) and jigsaw/structure blocks are not
-drawn. A structure that the world generation sinks into the ground (a negative start_height
+block models. Jigsaw and structure blocks are not drawn; blocks without a JSON model are
+drawn as simple boxes (EXTRA_MODELS: water, chests, decorated pots, bells). A structure that the world generation sinks into the ground (a negative start_height
 projected to the surface, like the Mausoleum's crypt) is drawn from the ground up; --whole draws
 all of it.
 
@@ -27,6 +27,48 @@ DATA = "src/main/resources/data/sproutsquad/structure"
 SKIP = {"air", "cave_air", "void_air", "jigsaw", "structure_block", "structure_void", "barrier", "light"}
 DIRECTIONS = {"north": (0, 0, -1), "south": (0, 0, 1), "west": (-1, 0, 0), "east": (1, 0, 0), "up": (0, 1, 0), "down": (0, -1, 0)}
 TINT = {"value": 0x7CBD6B}  # grass and leaves: a plains-like green
+
+
+def box(f, t, texture, tint=-1):
+    faces = {n: {"texture": texture, "cullface": n, **({"tintindex": tint} if tint >= 0 else {})}
+             for n in ("north", "south", "west", "east", "up", "down")}
+    return {"from": f, "to": t, "faces": faces}
+
+
+# Blocks the game draws in code (fluids, block entity renderers): simple boxes in their place.
+# A chest's lock is on its north face, so facing turns it like a blockstate y rotation.
+EXTRA_MODELS = {
+    "minecraft:water": {"textures": {}, "tint": 0x3F76E4, "same_culls": True,
+                        "elements": [box([0, 0, 0], [16, 14, 16], "minecraft:block/water_still", 0)]},
+    "minecraft:chest": {"textures": {}, "elements": [
+        box([1, 0, 1], [15, 10, 15], "minecraft:block/oak_planks"),
+        box([1, 10, 1], [15, 14, 15], "minecraft:block/stripped_oak_log"),
+        box([7, 7, 0], [9, 11, 1], "minecraft:block/iron_block")]},
+    "minecraft:decorated_pot": {"textures": {}, "elements": [
+        box([2, 0, 2], [14, 12, 14], "minecraft:block/terracotta"),
+        box([5, 12, 5], [11, 16, 11], "minecraft:block/terracotta")]},
+    "minecraft:bell": {"textures": {}, "elements": [
+        box([1, 0, 7], [3, 16, 9], "minecraft:block/stone"), box([13, 0, 7], [15, 16, 9], "minecraft:block/stone"),
+        box([1, 13, 7], [15, 15, 9], "minecraft:block/dark_oak_planks"),
+        box([5, 5, 5], [11, 12, 11], "minecraft:block/gold_block"), box([4, 4, 4], [12, 5, 12], "minecraft:block/gold_block")]},
+}
+EXTRA_MODELS["minecraft:trapped_chest"] = EXTRA_MODELS["minecraft:chest"]
+FACING_Y = {"north": 0, "east": 90, "south": 180, "west": 270}
+
+
+def extra_parts(block, props):
+    """(model, x, y) for a block in EXTRA_MODELS, or None."""
+    model = EXTRA_MODELS.get(block)
+    if model is None:
+        return None
+    return [(model, 0, FACING_Y.get(props.get("facing", "north"), 0) if block != "minecraft:bell" else 0)]
+
+
+def extra_faces(model):
+    tints = [{"value": model["tint"]}] * 3 if "tint" in model else []
+    faces = R.model_faces(model, tints=tints)
+    culls = [face.get("cullface") for el in model["elements"] for face in el["faces"].values()]
+    return [(*f, c) for f, c in zip(faces, culls)]
 
 
 def state_of(entry):
@@ -91,7 +133,7 @@ def occludes(block, props):
 
 
 def ground_level(structure):
-    """How many bottom layers the world generation puts underground: -start_height of the
+    """How many bottom layers the world generation puts underground, from the start_height of the
     jigsaw structure whose start pool places this template, when it is projected to the surface."""
     root = "src/main/resources/data/sproutsquad/worldgen"
     location = "sproutsquad:" + structure
@@ -106,7 +148,7 @@ def ground_level(structure):
         config = json.load(open(os.path.join(root, "structure", f)))
         height = config.get("start_height", {}).get("absolute", 0)
         if config.get("start_pool") in pools and config.get("project_start_to_heightmap") and height < 0:
-            return -height
+            return -height - 1  # the layer at start_height -1 replaces the top ground block: it is the visible floor
     return 0
 
 
@@ -120,13 +162,16 @@ def structure_faces(path, from_y=0):
     for pos, (block, props) in grid.items():
         if block.split(":")[1] in SKIP or pos[1] < from_y:
             continue
-        for model_id, rx, ry in models_of(block, props):
-            model = R.load_model(model_id)
+        for model, rx, ry in extra_parts(block, props) or models_of(block, props):
+            own = extra_faces(model) if isinstance(model, dict) else block_faces(R.load_model(model))
             matrix = turn(rx, ry)
-            for pts, image, uv, normal, flat, cull in block_faces(model):
+            for pts, image, uv, normal, flat, cull in own:
                 if cull:
                     direction = np.rint(matrix @ np.array(DIRECTIONS[cull], dtype=float)).astype(int)
                     neighbour = grid.get(tuple(int(p + d) for p, d in zip(pos, direction)))
+                    if neighbour and neighbour[0] == block and (isinstance(model, dict) and model.get("same_culls")
+                                                                or "glass" in block or block.endswith("ice")):
+                        continue  # water next to water, glass next to the same glass
                     if neighbour and neighbour[0].split(":")[1] not in SKIP and occludes(*neighbour):
                         continue
                 base = np.array(pos, dtype=float) * 16

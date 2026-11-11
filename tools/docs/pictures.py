@@ -43,7 +43,10 @@ VANILLA_ITEMS = {"bucket": {"en": "Bucket", "ru": "Ведро"}}
 EFFECT_ALIASES = {"painted": {"en": "Painted", "ru": "Покрашен"}}
 STRUCTURES = "src/main/resources/data/sproutsquad/structure"
 STRUCTURE_NAMES = {"graveyard/mausoleum": {"en": "Mausoleum", "ru": "Мавзолей"},
-                   "graveyard/fence*": {"en": "Graveyard fence", "ru": "Ограда кладбища"}}
+                   "graveyard/fence*": {"en": "Graveyard fence", "ru": "Ограда кладбища"},
+                   "garden_shack/oak": {"en": "Garden Shack (oak)", "ru": "Огородная сторожка (дуб)"},
+                   "garden_shack/spruce": {"en": "Garden Shack (spruce)", "ru": "Огородная сторожка (ель)"},
+                   "garden_shack/cherry": {"en": "Garden Shack (cherry)", "ru": "Огородная сторожка (вишня)"}}
 LOOK_TITLES = {"zombat_baron": {"en": "Baron's bat", "ru": "Зомбимышь Барона"}}
 
 Picture = namedtuple("Picture", "kind id name base look", defaults=(None, None))
@@ -245,6 +248,77 @@ def read_nbt(path):
     tag = unpack("b")
     string()
     return payload(tag)
+
+
+class Byte(int):
+    """NBT tag types that Python values cannot tell apart; plain int is an Int, float a Double."""
+
+
+class Short(int):
+    pass
+
+
+class Long(int):
+    pass
+
+
+class Float(float):
+    pass
+
+
+def write_nbt(path, value, name=""):
+    """Writes a compound as a gzipped NBT file (the format of structure templates)."""
+    out = bytearray()
+
+    def tag_of(v):
+        if isinstance(v, bool) or isinstance(v, Byte):
+            return 1
+        if isinstance(v, Short):
+            return 2
+        if isinstance(v, Long):
+            return 4
+        if isinstance(v, int):
+            return 3
+        if isinstance(v, Float):
+            return 5
+        if isinstance(v, float):
+            return 6
+        if isinstance(v, str):
+            return 8
+        if isinstance(v, list):
+            return 9
+        if isinstance(v, dict):
+            return 10
+        raise TypeError(f"no NBT tag for {v!r}")
+
+    def string(v):
+        data = v.encode("utf-8")
+        out.extend(struct.pack(">H", len(data)) + data)
+
+    def payload(v):
+        tag = tag_of(v)
+        if tag in (1, 2, 3, 4, 5, 6):
+            out.extend(struct.pack(">" + "bhiqfd"[tag - 1], v))
+        elif tag == 8:
+            string(v)
+        elif tag == 9:
+            item = tag_of(v[0]) if v else 0
+            out.extend(struct.pack(">bi", item, len(v)))
+            for element in v:
+                payload(element)
+        elif tag == 10:
+            for key, element in v.items():
+                out.extend(struct.pack(">b", tag_of(element)))
+                string(key)
+                payload(element)
+            out.extend(b"\0")
+
+    out.extend(struct.pack(">b", 10))
+    string(name)
+    payload(value)
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with gzip.open(path, "wb") as f:
+        f.write(bytes(out))
 
 
 def block_count(path):
