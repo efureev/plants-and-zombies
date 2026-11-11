@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntitySpawnReason
 
 /**
- * Checklist for Sprout Squad's own plants (docs/WORKSHOP.md), as a GameTest: every plant in
+ * Checklist for Sprout Squad's own plants (docs/en/WORKSHOP.md), as a GameTest: every plant in
  * [SquadEntities] must spawn with its declared health, have a sun cost, be in the `plant` tag, have a seed packet
  * recipe, textures (main and `_sleep`), a seed packet icon and en/ru names.
  * Registered in [SquadGameTests].

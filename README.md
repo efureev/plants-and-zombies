@@ -2,49 +2,59 @@
   <img src="docs/images/logo.png" alt="Sprout Squad" width="600">
 </p>
 
-<p align="center">Мод для Minecraft 26.3 на <b>NeoForge</b>: растения защищают базу от зомби, а отряд пополняется собственными персонажами.</p>
+<p align="center">A Minecraft 26.3 mod for <b>NeoForge</b>: plants defend your base from zombies, and the squad keeps growing with characters of its own.</p>
 
-> Неофициальный форк мода [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) от **joshxviii**, перенесённый с Fabric на NeoForge.
-> Unofficial NeoForge fork of Plants & Zombies by joshxviii, licensed under MPL-2.0.
+<p align="center"><b>English</b> · <a href="docs/ru/README.md">Русский</a></p>
 
-## Статус
+> Unofficial NeoForge fork of [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) by **joshxviii**, ported from Fabric, licensed under MPL-2.0.
 
-Перенос на NeoForge и переименование в Sprout Squad выполнены, идёт проверка в игре. План работ и этапы — в [`docs/SPEC.md`](docs/SPEC.md).
+## Status
+
+The port to NeoForge and the rename to Sprout Squad are done; in-game testing is in progress.
+
+What the fork adds on top of the original:
+
+- **Fixes for content you could not get or use**: battle machines built from blueprints fight for the player, the lawn mower works as the last line of defence, Squash attacks, brewable potions, loot for raids and mobs, Zombie Goat spawns, no kicks for flying on balloons ([full list](docs/en/UPSTREAM.md)).
+- **Its own characters**, starting with the mascot plant Potling ([characters](docs/en/CHARACTERS.md)).
 
 | | |
 |---|---|
 | Minecraft | 26.3 |
-| Загрузчик | NeoForge 26.3.x |
-| Зависимости | Kotlin for Forge; опционально TerraBlender, Iris |
+| Loader | NeoForge 26.3.x |
+| Dependencies | Kotlin for Forge; optional TerraBlender, Iris |
 | Java | 25 |
 
-## Сборка
+## Building
 
 ```bash
-./gradlew build        # jar появится в build/libs/ (sprout-squad-<версия>.jar)
-./gradlew runClient    # запуск клиента для проверки
-./gradlew runServer    # запуск выделенного сервера
+./gradlew build              # the jar ends up in build/libs/ (sprout-squad-<version>.jar)
+./gradlew runClient          # start a client for testing
+./gradlew runServer          # start a dedicated server
+./gradlew runGameTestServer  # load the mod and run its GameTests, then exit
 ```
 
-Нужен JDK 25.
+JDK 25 is required.
 
-Отладка (оператор сервера, уровень 2):
+Debug commands (server operator, level 2):
 
 ```text
-/pz gallery           # выставить всех растений, зомби и их варианты в ряд перед собой (с подписями)
-/pz gallery false     # то же без подписей — для скриншотов
-/pz gallery clear     # убрать галерею (подставки остаются)
+/pz gallery           # line up every plant, zombie and variant in front of you (with name labels)
+/pz gallery false     # the same without labels, for screenshots
+/pz gallery clear     # remove the gallery (the pedestals stay)
 ```
 
-## Документация
+## Documentation
 
-- [`docs/SPEC.md`](docs/SPEC.md) — техническое задание и этапы
-- [`docs/ROADMAP.md`](docs/ROADMAP.md) — план развития: персонажи, лут, предметы, рецепты, внешний вид
-- [`docs/CHARACTERS.md`](docs/CHARACTERS.md) — собственные персонажи
-- [`docs/UPSTREAM.md`](docs/UPSTREAM.md) — изменения, перенесённые из оригинала
+English is the main version; the same documents are available [in Russian](docs/ru/README.md).
 
-## Лицензия и авторство
+| Document | English | Русский |
+|---|---|---|
+| Own characters | [CHARACTERS](docs/en/CHARACTERS.md) | [CHARACTERS](docs/ru/CHARACTERS.md) |
+| How to add a character, style guide | [WORKSHOP](docs/en/WORKSHOP.md) | [WORKSHOP](docs/ru/WORKSHOP.md) |
+| Upstream changes and fixes to the original | [UPSTREAM](docs/en/UPSTREAM.md) | [UPSTREAM](docs/ru/UPSTREAM.md) |
 
-Код основан на [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) (© joshxviii) и распространяется под лицензией [Mozilla Public License 2.0](LICENSE). Файлы оригинала, изменённые в этом форке, остаются под MPL-2.0.
+## License and credits
 
-Plants vs. Zombies — товарный знак PopCap Games / Electronic Arts. Этот проект с ними не связан.
+The code is based on [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) (© joshxviii) and is distributed under the [Mozilla Public License 2.0](LICENSE). Files of the original that were changed in this fork remain under MPL-2.0.
+
+Plants vs. Zombies is a trademark of PopCap Games / Electronic Arts. This project is not affiliated with them.
