@@ -587,11 +587,14 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             // Sprout Squad: isBaby was read before it is set, so no zombie ever spawned as a baby
             isBaby = canSpawnAsBaby() && ((groupData as? ZombieGroupData)?.isBaby ?: Zombie.getSpawnAsBabyOdds(level.random))
         )
-        val level = level() as ServerLevel
         if (newData.isRaider) {
-            val raid = level.getZombieRaids().getNearbyRaid(blockPosition(), RAID_DISTANCE)
+            // Sprout Squad: the ServerLevel only for the raid. Everything else uses the given level, which is
+            // the generation region when a structure places the zombie on a world generation thread
+            // (ServerLevel.random throws when two threads use it at once).
+            val serverLevel = level() as ServerLevel
+            val raid = serverLevel.getZombieRaids().getNearbyRaid(blockPosition(), RAID_DISTANCE)
             this.setCountHealth(newData.isCountedTowardRaidHealth)
-            raid?.joinRaid(level, this)
+            raid?.joinRaid(serverLevel, this)
         }
         (this as? ZombieRaider)?.`plantz$setIgnoreFlag`(newData.ignoreFlag)
 
