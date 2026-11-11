@@ -12,10 +12,22 @@
 
 The port to NeoForge and the rename to Sprout Squad are done; in-game testing is in progress.
 
+## What the mod lets you do
+
+- **Grow a garden of defenders.** More than 30 plants — shooters, catapults, walls, bombs, mushrooms for the night — planted from seed packets and paid for with sun.
+- **Collect sun** from Sunflowers, Sun Shrooms and other producers; keep it in Bottles of Sun and Solar Batteries.
+- **Fight zombies.** 20 zombie types with variants: some roam the Overworld at night, the toughest — up to Gargantuars and bosses — come with raids.
+- **Run raids.** Craft a Plantz Flag from a Brainz Flag, place it and bring a Bad Omen: waves of zombies with leaders and bosses attack the flag, and rewards arrive by mail.
+- **Build battle machines.** Turrets, a drone and a lawn mower from blueprints and Brainz Alloy fight on your side.
+- **Use the gear.** Hypnosis and other potions, balloons, helmets, garden gnome statues, plant pots and a watering can.
+- **Explore the Graveyard.** A gloomy biome with gravestones that raise zombies and mausoleums with treasure. With experimental features on, the Time Machine opens era biomes: Ancient Egypt, Dark Ages, Far Future, Jurassic Period.
+
+The full guide is in [FEATURES](docs/en/FEATURES.md); every plant, zombie and machine has its own card in [characters](docs/en/characters/README.md).
+
 What the fork adds on top of the original:
 
 - **Fixes for content you could not get or use**: battle machines built from blueprints fight for the player, the lawn mower works as the last line of defence, Squash attacks, brewable potions, loot for raids and mobs, Zombie Goat spawns, no kicks for flying on balloons ([full list](docs/en/UPSTREAM.md)).
-- **Its own characters**, starting with the mascot plant Potling ([characters](docs/en/CHARACTERS.md)).
+- **Its own characters**, starting with the mascot plant [Potling](docs/en/characters/potling.md).
 
 | | |
 |---|---|
@@ -49,7 +61,8 @@ English is the main version; the same documents are available [in Russian](docs/
 
 | Document | English | Русский |
 |---|---|---|
-| Own characters | [CHARACTERS](docs/en/CHARACTERS.md) | [CHARACTERS](docs/ru/CHARACTERS.md) |
+| Full guide: what the mod lets you do | [FEATURES](docs/en/FEATURES.md) | [FEATURES](docs/ru/FEATURES.md) |
+| Characters: a card for every plant, zombie and machine | [characters](docs/en/characters/README.md) | [characters](docs/ru/characters/README.md) |
 | How to add a character, style guide | [WORKSHOP](docs/en/WORKSHOP.md) | [WORKSHOP](docs/ru/WORKSHOP.md) |
 | Upstream changes and fixes to the original | [UPSTREAM](docs/en/UPSTREAM.md) | [UPSTREAM](docs/ru/UPSTREAM.md) |
 
