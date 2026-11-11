@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.fixes.F2GameTests
+import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
 import joshxviii.plantz.PazMain
 import net.minecraft.core.registries.Registries
@@ -28,6 +29,8 @@ object SquadGameTests {
         Test("squad_plants", SquadPlantsGameTest::run),
         Test("f2_data", F2GameTests::data),
         Test("f2_squash", F2GameTests::squash, maxTicks = 600),
+        Test("f2_zombie_goat", F2WorldGameTests::zombieGoat),
+        Test("f2_balloon_flight", F2WorldGameTests::balloonFlight),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),

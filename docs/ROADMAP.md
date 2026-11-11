@@ -108,7 +108,7 @@
 | 4 | **Выбор эпохи** | Портал всегда ведёт в `time_space` (`block/TimePortalBlock.kt:99`), эпоха зависит от шума биомов. Экран показывает сырой id типа измерения (`gui/TimeMachineScreen.kt:56–58`). Строка `container.sproutsquad.time_machine.wip` = «???» | Ф6 | M–L |
 | 5 | **Gnome Space недостижим** | `dimension/gnome_space.json` есть, портала нет. Звук `music.gnome_space` зарегистрирован, но не используется (`PazSounds.kt:90`). У гнома нет естественного спавна (`Gnome.checkGnomeSpawnRules` нигде не вызывается) | Ф11 | L |
 | 6 | Электроатака гаргантюа | TODO «add electric attack on <.5 health» (`entity/zombie/Gargantuar.kt:141`) | По образцу Electric Slide | S–M |
-| 7 | Полёт на шарах | TODO «players can get kicked for flying when using balloons» (`entity/Balloon.kt:30`) | Важно для игры на сервере вдвоём | S–M |
+| 7 | ✅ Полёт на шарах | TODO «players can get kicked for flying when using balloons» (`entity/Balloon.kt:30`) | Важно для игры на сервере вдвоём | S–M |
 | 8 | Звуки-заглушки | Около 15 TODO «custom sounds»: `entity/plant/Plant.kt:379–386, 487, 992`, `BonkChoy.kt:43`, `DoomShroom.kt:52`, `Chomper.kt:69`, `ai/goal/GenerateSunGoal.kt:34`, `ai/goal/SleepGoal.kt:58`, `RoboZombie.kt:111`, `effect/ElectrifyMobEffect.kt:85`, `PazSounds.kt:104–105`. У гнома 2 голоса из задуманных нескольких (`GnomeSoundVariant.kt:20`) | Записать голосом сына (Ф1 и дальше) | S за пачку |
 | 9 | Рейды «зашиты» в код | Enum `WaveType` и `BossType` с TODO «data-driven» (`raid/WaveType.kt:49`, `raid/BossType.kt:34`) | Новые волны пока дописываем в конец enum (см. раздел 3) | — |
 | 10 | Прочие TODO | Слой динамического спавна (`PazSpawnPlacements.kt:18`), теги «can survive on» для всех растений (`PazTags.kt:21`) | По необходимости | S |
@@ -121,7 +121,7 @@
 | 2 | Мобы без лут-таблиц | Imp, Pirate Captain, Pirate Captain Ghost, Zombat, Zombie Goat, Backup Dancer, Gnome | Раздел 6.3 | S |
 | 3 | **Эпохи пустые** | `worldgen/biome/ancient_egypt.json`, `jurassic_period.json`, `dark_ages.json`, `far_future.json`: только ванильные фичи и мобы (в Far Future — только эндермены). Своего — лишь `future_crystals` (шипы из плотного льда) и `jurassic_ferns`; музыка ванильная. Ни структур, ни зомби или растений мода | Фазы Ф7–Ф10 | L |
 | 4 | ✅ Ошибка в спавне | В `jurassic_period.json` в категории `monster` указан `minecraft:ocelot`. Проверка показала: в ванильных джунглях 26.3 оцелот тоже в `monster`, это не ошибка. Настоящая ошибка — спавны четырёх биомов эпох были в старом формате, который 26.3 игнорирует (исправлено в Ф2) | — | S |
-| 5 | Zombie Goat без места в игре | Нигде не спавнится и не участвует в рейдах | Спавн в горах, имп-наездник (Ф2) | S–M |
+| 5 | ✅ Zombie Goat без места в игре | Нигде не спавнится и не участвует в рейдах | Спавн в горах, имп-наездник (Ф2, сделано; в рейдах пока нет) | S–M |
 | 6 | Неиспользуемые ассеты и хуки | `textures/item/music_disc_the_great_pumpkin.png` (диска нет). `textures/block/dye_vat.png`, `old_dye_vat.png`, `models/block/dye_vat.json` (блока нет — видимо, задуман чан с краской для Dye Blaster). `SeasonalEvents.isChristmas()` (`Utils.kt:76`) нигде не вызывается. Звук `GARGANTUAR_DIG` не используется. Теги `plant/has_repeater` и `plant/has_winter_melon` не участвуют в спавне, `plant/has_potatomine` пуст | Использовать в наборах: диск — Хэллоуин, чан — Ф2 или позже, `isChristmas` — Ф3 | S каждое |
 | 7 | Однообразная рейдовая музыка | Все тематические треки (`music.raid.bucket` … `music.raid.zomboss`) в `assets/sproutsquad/sounds.json` ссылаются на те же 3 файла `loon_griefers_*` | Свои треки к наборам (раздел 4, дорожка «Музыка») | M за трек |
 
@@ -186,7 +186,7 @@ M8 (ребрендинг) закрыт. M7 (проверка в игре и со
 | ✅ Рецепт семени: рецепт крафта с результатом `seed_packet` и компонентом `minecraft:entity_data` (так уже устроены лут-таблицы) | Получение своих растений без нового кода | S | — |
 | Карточка в `docs/CHARACTERS.md`, эскиз в `art/<id>/`, скриншот | Документирование | S | ↑ |
 
-### Ф2. Починка и доступность — 6–8 вечеров
+### Ф2. Починка и доступность — 6–8 вечеров ✅
 
 | Что | Зачем | Размер | Зависит от |
 |---|---|---|---|
@@ -197,9 +197,9 @@ M8 (ребрендинг) закрыт. M7 (проверка в игре и со
 | ✅ Варка трёх зелий | Зелья в игре | S | — |
 | ✅ Squash: прыжок с раздавливанием | Растение из природы наконец работает | M | upstream |
 | ✅ Газонокосилка: поведение «последнего рубежа» (`machines/LawnMowerDrive.kt`) | Рабочая боевая машина | M | чертежи |
-| Zombie Goat: спавн в горах, имп-наездник | Моб при деле | S–M | — |
+| ✅ Zombie Goat: спавн в горах, имп-наездник (`fixes/ZombieGoatSpawns.kt`) | Моб при деле | S–M | — |
 | ✅ Запасной источник Brainz Flag; рецепт тако из ванили | Нет тупиков прогрессии | S | — |
-| Спавны биомов эпох (✅, вместо «ocelot в Юрском периоде» — он как в ванили), кик за полёт с шарами | Мелкие баги | S–M | — |
+| ✅ Спавны биомов эпох (вместо «ocelot в Юрском периоде» — он как в ванили), кик за полёт с шарами (`fixes/BalloonFlight.kt`) | Мелкие баги | S–M | — |
 | ✅ Отскок растения при получении урона (`funnyBounce` уже есть) | Живость (см. 8.2) | S | — |
 
 ### Ф3. Новогодние варианты и подарки — 3–6 вечеров, до ~20 декабря 2026
