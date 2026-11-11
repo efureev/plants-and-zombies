@@ -28,7 +28,7 @@ The strongest explosive plant: one huge blast that also tears a crater into the 
 ## Interactions
 
 - Also grows on netherrack: it spawns there in the Nether and no longer dries out on it (Sprout Squad).
-- Flint and steel lights it while it is idle and awake: it swells up and goes off (Sprout Squad fixed this; in the original the lighter never worked).
+- Flint and steel lights it while it is idle and awake: it swells up and goes off; the lighter wears out, and someone else's tamed plant follows the usual ownership rules (`coopPlanting`). Sprout Squad fixed this; in the original the lighter never worked.
 - If it wore a [Pumpkin](pumpkin.md), the Pumpkin is left standing after the blast.
 - A [Coffee Bean](coffeebean.md) keeps it awake by day for 40 minutes.
 - The [Ice Shroom](iceshroom.md) uses the same fuse, but freezes instead of exploding and is not used up.

@@ -191,7 +191,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
 
             // Sprout Squad: the plantCooldownEnabled option was never applied to planting. Only for real
             // planting (not a gardening glove move); the stacks are not changed, so they keep stacking.
-            if (consumeItem && !ignoreSunRequirement) dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, entityType)
+            if (consumeItem && !ignoreSunRequirement) dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, entityType, sunCost)
             if (consumeItem) itemStack.consume(1, player)
             if (!player.hasInfiniteMaterials() && !ignoreSunRequirement) {
                 player.removeSunFromStorageAndInventory(sunCost)

@@ -26,6 +26,6 @@ A cheap trap: it arms itself after planting and blows up the first enemy that st
 
 ## Interactions
 
-- Flint and steel lights it while it is idle and awake: it swells up and goes off (Sprout Squad fixed this; in the original the lighter never worked).
+- Flint and steel lights it while it is idle and awake: it swells up and goes off; the lighter wears out, and someone else's tamed plant follows the usual ownership rules (`coopPlanting`). Sprout Squad fixed this; in the original the lighter never worked.
 - It does not go off while a tamed mine is growing seeds on farmland.
 - For a stronger blast that does not need contact, see [Cherry Bomb](cherrybomb.md).

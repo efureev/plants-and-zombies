@@ -15,8 +15,8 @@ import java.util.EnumSet
  * The Digger Zombie digs through blocks in its way to the target (blocks in
  * `#sproutsquad:digger_breakable`: dirt, sand, stone bricks, glass, plant pots…). The original
  * had the tag, the mining animation and a path evaluator for it, but nothing that mined.
- * It digs when it walks into a wall or cannot find a path to a target at about its own height; it
- * does not dig a 1-block step it can jump. Respects `mobGriefing` and NeoForge's block-break event
+ * It digs only when there is no path to a target at about its own height (a wall it could walk
+ * around is left alone) and never a 1-block step it can jump. Respects `mobGriefing` and NeoForge's block-break event
  * (claim protection); the block drops as if mined with the Digger's pickaxe.
  */
 class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
@@ -40,22 +40,27 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         if (--checkIn > 0 || digger.tunnelTime > 0) return false
         checkIn = CHECK_PERIOD / 2
         val target = digger.target?.takeIf { it.isAlive } ?: return false
-        // blocked: walking into a wall, or no path at all (then the zombie does not move)
-        val blocked = digger.horizontalCollision || digger.navigation.isDone || digger.navigation.isStuck
         val distanceSqr = digger.distanceToSqr(target)
-        if (!blocked || distanceSqr < 2.25 || distanceSqr > MAX_TARGET_DISTANCE * MAX_TARGET_DISTANCE) return false
+        if (distanceSqr < 2.25 || distanceSqr > MAX_TARGET_DISTANCE * MAX_TARGET_DISTANCE) return false
         // a target far above or below is not reached by digging sideways (tunnelling handles that)
         if (kotlin.math.abs(target.y - digger.y) > 2.0 || horizontalDistanceSqr(target) < 1.0) return false
         val level = digger.level() as? ServerLevel ?: return false
         if (!EventHooks.canEntityGrief(level, digger)) return false
-        pos = blockInTheWay(level)
-        return pos != null
+        val candidate = blockInTheWay(level) ?: return false
+        // only when the target cannot be reached on foot (checked last: it computes a path)
+        val path = digger.navigation.createPath(target, 0)
+        if (path != null && path.canReach()) return false
+        if (!EventHooks.onEntityDestroyBlock(digger, candidate, level.getBlockState(candidate))) return false
+        pos = candidate
+        return true
     }
 
     override fun canContinueToUse(): Boolean {
         val level = digger.level() as? ServerLevel ?: return false
         val current = pos ?: return false
-        return digger.isAlive && ticks <= MINE_TICKS && breakable(level, current)
+        // still next to the block (not knocked away) and still chasing
+        return digger.isAlive && ticks <= MINE_TICKS && digger.target?.isAlive == true &&
+            digger.distanceToSqr(Vec3.atCenterOf(current)) < 6.25 && breakable(level, current)
     }
 
     override fun requiresUpdateEveryTick(): Boolean = true
@@ -76,6 +81,7 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         if (ticks >= MINE_TICKS) {
             level.destroyBlockProgress(digger.id, current, -1)
             val state = level.getBlockState(current)
+            if (!EventHooks.onEntityDestroyBlock(digger, current, state)) { pos = null; return } // protected meanwhile
             Block.dropResources(state, level, current, level.getBlockEntity(current), digger, digger.mainHandItem)
             level.destroyBlock(current, false, digger)
             pos = null
@@ -108,7 +114,6 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
 
     private fun breakable(level: ServerLevel, pos: BlockPos): Boolean {
         val state = level.getBlockState(pos)
-        return !state.isAir && state.`is`(PazTags.BlockTags.DIGGER_BREAKABLE) && state.getDestroySpeed(level, pos) >= 0 &&
-            EventHooks.onEntityDestroyBlock(digger, pos, state)
+        return !state.isAir && state.`is`(PazTags.BlockTags.DIGGER_BREAKABLE) && state.getDestroySpeed(level, pos) >= 0
     }
 }

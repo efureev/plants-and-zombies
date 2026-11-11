@@ -180,6 +180,36 @@ object OriginalGapsGameTests {
             .thenSucceed()
     }
 
+    /** A wall the Digger can walk around stays whole: it only digs when the target is unreachable. */
+    fun diggerWalksAround(helper: GameTestHelper) {
+        val pos = spot(helper)
+        clear(helper, pos)
+        // open floor with a 1-wide, 2-high dirt wall in the middle row
+        for (x in -1..5) for (z in -1..1) {
+            helper.setBlock(pos.offset(x, -1, z), Blocks.STONE)
+            helper.setBlock(pos.offset(x, 0, z), Blocks.AIR)
+            helper.setBlock(pos.offset(x, 1, z), Blocks.AIR)
+        }
+        val wall = pos.offset(2, 0, 0)
+        lateinit var digger: DiggerZombie
+        lateinit var plant: Plant
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(helper.level.isPositionEntityTicking(helper.absolutePos(pos)), "spot is not ticking yet") }
+            .thenExecute {
+                helper.setBlock(wall, Blocks.DIRT)
+                helper.setBlock(wall.above(), Blocks.DIRT)
+                plant = helper.spawn(PazEntities.SUNFLOWER, pos.offset(4, 0, 0))
+                digger = helper.spawn(PazEntities.DIGGER_ZOMBIE, pos)
+                digger.tunnelCooldown = 100_000
+            }
+            .thenIdle(160)
+            .thenExecute {
+                helper.assertTrue(!helper.getBlockState(wall).isAir && !helper.getBlockState(wall.above()).isAir, "the Digger dug a wall it could walk around")
+                clear(helper, pos)
+            }
+            .thenSucceed()
+    }
+
     /** A dye recolours the player's own Marigold and is used up; a wild one stays as it is. */
     fun marigoldDye(helper: GameTestHelper) {
         val marigold = helper.spawn(PazEntities.MARIGOLD, BlockPos(0, 1, 0))
@@ -196,12 +226,13 @@ object OriginalGapsGameTests {
         helper.succeed()
     }
 
-    /** A rolling Citron (pushed with a gardening glove) switches to its ball form. */
+    /** A Citron pushed with a gardening glove switches to its ball form. */
     fun citronBall(helper: GameTestHelper) {
         val citron = helper.spawn(PazEntities.CITRON, BlockPos(0, 1, 0))
-        citron.rolling = true
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        citron.attackedWithGlove(player, ItemStack(PazItems.GARDENING_GLOVE), InteractionHand.MAIN_HAND)
         val speed = citron.getAttribute(Attributes.MOVEMENT_SPEED)!!
-        helper.assertTrue(speed.hasModifier(Citron.TRANSFORMED_ID), "the rolling Citron did not switch to the ball form")
+        helper.assertTrue(speed.hasModifier(Citron.TRANSFORMED_ID), "the pushed Citron did not switch to the ball form")
         citron.discard()
         helper.succeed()
     }

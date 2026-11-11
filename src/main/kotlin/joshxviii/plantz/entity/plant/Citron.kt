@@ -40,7 +40,12 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
         private val STEP_HEIGHT_MODIFIER = AttributeModifier(TRANSFORMED_ID, 1.0, AttributeModifier.Operation.ADD_VALUE)
 
         const val BEAM_COLOR = 0xEE9933
+        /** Sprout Squad: how long the ball form lasts after a gardening glove push (ticks). */
+        const val BALL_FORM_TICKS = 300
     }
+
+    private var ballFormTicks = 0
+    private val isBallForm: Boolean get() = entityData.get(BALL_TRANSFORMATION)
 
     val transformAnimation : AnimationState = AnimationState()
 
@@ -55,6 +60,9 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
 
     override fun attackedWithGlove(attacker: LivingEntity, item: ItemStack, hand: InteractionHand) {
         rolling = true
+        // Sprout Squad: BALL_TRANSFORMATION was never set; a push now turns the Citron into a ball for a while
+        ballFormTicks = BALL_FORM_TICKS
+        entityData.set(BALL_TRANSFORMATION, true)
         val direction = attacker.lookAngle.horizontal()
         applyImpulse(direction, pow = 0.35f, uncertainty = 0.1f, ignoreResistance = true)
         GardeningGloveItem.hurtAndDropPlant(item, attacker, hand)
@@ -116,16 +124,22 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
         reassessNavigation()
     }
 
+    override fun tick() {
+        super.tick()
+        if (!level().isClientSide && ballFormTicks > 0 && --ballFormTicks == 0) entityData.set(BALL_TRANSFORMATION, false)
+    }
+
     fun reassessNavigation() {
         transformAnimation.start(tickCount)
         goalSelector.removeGoal(walkGoal)
         goalSelector.removeGoal(ballGoal)
-        if (rolling) {
+        if (isBallForm) { // Sprout Squad: was `rolling`, which never ends while the ball goal keeps it moving
             getAttribute(Attributes.MOVEMENT_SPEED)!!.let { if (!it.hasModifier(TRANSFORMED_ID)) it.addTransientModifier(
                 SPEED_MODIFIER
             ) }
-            // Sprout Squad: the ball form now always comes with rolling, which already raises the step height
-            // (ROLLING_ID); adding STEP_HEIGHT_MODIFIER on top let it climb 2-block walls.
+            getAttribute(Attributes.STEP_HEIGHT)!!.let { if (!it.hasModifier(TRANSFORMED_ID)) it.addTransientModifier(
+                STEP_HEIGHT_MODIFIER
+            ) }
 
             goalSelector.addGoal(3, ballGoal)
         }
@@ -143,8 +157,7 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
 
     override fun onSyncedDataUpdated(accessor: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(accessor)
-        // Sprout Squad: BALL_TRANSFORMATION is never set; the ball form follows rolling (gardening glove)
-        if (accessor == BALL_TRANSFORMATION || accessor == ROLLING) reassessNavigation()
+        if (accessor == BALL_TRANSFORMATION) reassessNavigation()
     }
 
 }

@@ -38,9 +38,10 @@ object PlantingCooldown {
         return true
     }
 
-    fun start(player: Player, type: EntityType<*>?) {
+    /** [sunCost]: what the packet charged; the configured cost of the type when unknown. */
+    fun start(player: Player, type: EntityType<*>?, sunCost: Int? = null) {
         if (!active(player, type)) return
-        val seconds = PazConfig.getCooldownTime(PazConfig.getSunCost(type))
+        val seconds = PazConfig.getCooldownTime((sunCost ?: PazConfig.getSunCost(type)).coerceAtLeast(0))
         player.cooldowns.addCooldown(group(type!!), (seconds * 20).toInt())
     }
 }

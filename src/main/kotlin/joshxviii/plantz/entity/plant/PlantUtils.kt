@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.item.component.SunCost
 import com.mojang.logging.LogUtils
 import joshxviii.plantz.*
 import joshxviii.plantz.item.GardeningGloveItem
@@ -201,13 +202,18 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
     if (this.hasPumpkinArmor()) return PacketInteractionResult.NO_INTERACTION
     if (this !is Pumpkin) {
         if (this.`is`(PazTags.EntityTypes.CANNOT_PUMPKIN)) return PacketInteractionResult.NO_INTERACTION
+        val pumpkinType = itemStack.get(DataComponents.ENTITY_DATA)?.type()
+        if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, pumpkinType)) return PacketInteractionResult.NO_INTERACTION
         applyPumpkinArmor(pumpkinData = itemStack.get(DataComponents.ENTITY_DATA))
+        dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, pumpkinType, SunCost.getSunCost(itemStack))
         return PacketInteractionResult.SUCCESS
     }
     val seedData = itemStack.get(DataComponents.ENTITY_DATA)?: return PacketInteractionResult.NO_INTERACTION
     val seedType = seedData.type()
     if (BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(seedType).`is`(PazTags.EntityTypes.CANNOT_PUMPKIN)) return PacketInteractionResult.NO_INTERACTION
     if (cantAfford) return PacketInteractionResult.CANT_AFFORD
+    // Sprout Squad: planting into a Pumpkin is planting too (plantCooldownEnabled)
+    if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, seedType)) return PacketInteractionResult.NO_INTERACTION
     (level() as? ServerLevel)?.let { level ->
         seedType.create(
             level, EntityType.createDefaultStackConfig(level, itemStack, null), blockPosition(), EntitySpawnReason.SPAWN_ITEM_USE, true, true
@@ -225,7 +231,10 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
             if (it is Plant) it.applyPumpkinArmor(
                 amount = pumpkinData.getFloatOr("Health", PazConfig.PUMPKIN_ARMOR_AMOUNT.toFloat()),
                 pumpkinData = TypedEntityData.of(this.type, pumpkinData))
-            if (level.addFreshEntity(it)) discard()
+            if (level.addFreshEntity(it)) {
+                discard()
+                dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, seedType, SunCost.getSunCost(itemStack))
+            }
         }
         return PacketInteractionResult.SUCCESS
     }

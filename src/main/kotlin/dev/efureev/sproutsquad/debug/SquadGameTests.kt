@@ -37,6 +37,7 @@ object SquadGameTests {
         Test("gaps_flint_and_steel", OriginalGapsGameTests::flintAndSteel),
         Test("gaps_plant_cooldown", OriginalGapsGameTests::plantCooldown),
         Test("gaps_digger_mines", OriginalGapsGameTests::diggerMines, maxTicks = 600),
+        Test("gaps_digger_walks_around", OriginalGapsGameTests::diggerWalksAround, maxTicks = 400),
         Test("gaps_marigold_dye", OriginalGapsGameTests::marigoldDye),
         Test("gaps_citron_ball", OriginalGapsGameTests::citronBall),
         Test("machines_build", MachinesGameTests::build),
