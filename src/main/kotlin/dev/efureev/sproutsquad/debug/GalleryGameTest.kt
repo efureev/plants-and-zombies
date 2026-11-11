@@ -2,7 +2,6 @@ package dev.efureev.sproutsquad.debug
 
 import joshxviii.plantz.PazMain
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
@@ -33,7 +32,7 @@ object GalleryGameTest {
         val level = helper.level
         val pos = helper.absolutePos(COMMAND_POS)
         // "south in the template" turns with the test (`/test run ... <rotation>`), like the area
-        val facing = helper.testRotation.rotate(Direction.SOUTH)
+        val facing = helper.testDirection
         val source = level.server.createCommandSourceStack()
             .withLevel(level)
             .withPosition(Vec3.atBottomCenterOf(pos))

@@ -425,9 +425,10 @@ def crypt():
 def junkyard():
     s = Scene(7)
     s.fill(0, -1, 0, 25, -1, 25, "dirt")
+    # the whole floor is #sproutsquad:plantable, so plants set against the turrets do not dry out
     s.fill(0, 0, 0, 25, 0, 25, "coarse_dirt")
-    s.fill(0, 0, 0, 25, 0, 25, "gravel", chance=0.2)
-    s.fill(0, 0, 0, 25, 0, 25, "red_sand", chance=0.06)
+    s.fill(0, 0, 0, 25, 0, 25, "rooted_dirt", chance=0.2)
+    s.fill(0, 0, 0, 25, 0, 25, "mud", chance=0.06)
     for i in range(0, 26):
         for x, z in ((i, 0), (i, 25), (0, i), (25, i)):
             if s.rng.random() < 0.85 and not (z == 25 and 10 <= x <= 14):

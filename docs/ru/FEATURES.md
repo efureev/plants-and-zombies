@@ -199,15 +199,15 @@ Sprout Squad — мод для Minecraft 26.3 на NeoForge, который пр
 | <img src="../images/characters/zombie_yeti.png" alt="" width="112"> | [Зомби-Йети](characters/zombie_yeti.md) | Снежные и холодные биомы, ледяные вершины | Кидается рыхлым снегом («Прохлада») |
 | <img src="../images/characters/zombat.png" alt="" width="112"> | [Зомбимышь](characters/zombat.md) | Кладбище, даже днём | Летает, лечится, когда ранит моба |
 | <img src="../images/characters/zombie_goat.png" alt="" width="112"> | [Зомби-Козёл](characters/zombie_goat.md) | Заснеженные склоны, вершины, рощи, ветреные холмы — ночью | В 40 % случаев на нём едет Чертёнок (Sprout Squad) |
+| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Зомби-Инженер](characters/engineer_zombie.md) | [Свалка роботов](STRUCTURES.md#свалка-роботов) — ночью (Sprout Squad) | Избегает игроков и растений и строит враждебные машины |
+| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Зомби-Солдат](characters/soldier_zombie.md) | [Свалка роботов](STRUCTURES.md#свалка-роботов) — ночью (Sprout Squad) | Стреляет из Пейнтбольного маркера |
+| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Робо-Зомби](characters/robo_zombie.md) | [Свалка роботов](STRUCTURES.md#свалка-роботов) — ночью (Sprout Squad) | Трансформируется, стреляет ракетами |
 
 Только в рейдах (или из яиц призыва):
 
 | | Зомби | Особенности |
 |---|---|---|
 | <img src="../images/characters/backup_dancer.png" alt="" width="112"> | [Подтанцовщик](characters/backup_dancer.md) | Его призывает Зомби-Танцор |
-| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Зомби-Инженер](characters/engineer_zombie.md) | Избегает игроков и растений и строит враждебные машины |
-| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Зомби-Солдат](characters/soldier_zombie.md) | Стреляет из Пейнтбольного маркера |
-| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Робо-Зомби](characters/robo_zombie.md) | Трансформируется, стреляет ракетами |
 | <img src="../images/characters/pirate_captain.png" alt="" width="112"> | [Капитан Пиратов](characters/pirate_captain.md) | Стреляет фейерверками; после смерти возвращается [Призраком Капитана Пиратов](characters/pirate_captain_ghost.md) |
 | <img src="../images/characters/super_brainz.png" alt="" width="112"> | [Супермозг](characters/super_brainz.md) | Энергетические лучи и удары кулаками |
 | <img src="../images/characters/gargantuar.png" alt="" width="112"> | [Гаргантюа](characters/gargantuar.md) | Огромный, крушит и метает Чертят |

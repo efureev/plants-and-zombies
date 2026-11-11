@@ -199,15 +199,15 @@ Zombies spawn in the dark like vanilla monsters, never on Peaceful. In the Grave
 | <img src="../images/characters/zombie_yeti.png" alt="" width="112"> | [Zombie Yeti](characters/zombie_yeti.md) | Snowy and cold biomes, icy peaks | Throws powder snow (Chilled) |
 | <img src="../images/characters/zombat.png" alt="" width="112"> | [Zombat](characters/zombat.md) | Graveyard, even by day | Flies, heals itself when it hurts a mob |
 | <img src="../images/characters/zombie_goat.png" alt="" width="112"> | [Zombie Goat](characters/zombie_goat.md) | Snowy slopes, peaks, groves, windswept hills, at night | 40% of them carry an Imp rider (Sprout Squad) |
+| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Engineer Zombie](characters/engineer_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Avoids players and plants and builds hostile machines |
+| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Soldier Zombie](characters/soldier_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Fires a Dye Blaster |
+| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Robo-Zombie](characters/robo_zombie.md) | [Robo Junkyard](STRUCTURES.md#robo-junkyard), at night (Sprout Squad) | Transforms, fires missiles |
 
 Only in raids (or from spawn eggs):
 
 | | Zombie | Notes |
 |---|---|---|
 | <img src="../images/characters/backup_dancer.png" alt="" width="112"> | [Backup Dancer](characters/backup_dancer.md) | Summoned by the Disco Zombie |
-| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Engineer Zombie](characters/engineer_zombie.md) | Avoids players and plants and builds hostile machines |
-| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Soldier Zombie](characters/soldier_zombie.md) | Fires a Dye Blaster |
-| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Robo-Zombie](characters/robo_zombie.md) | Transforms, fires missiles |
 | <img src="../images/characters/pirate_captain.png" alt="" width="112"> | [Pirate Captain](characters/pirate_captain.md) | Fires fireworks; comes back as a [Pirate Captain Ghost](characters/pirate_captain_ghost.md) |
 | <img src="../images/characters/super_brainz.png" alt="" width="112"> | [Super Brainz](characters/super_brainz.md) | Energy beams and punches |
 | <img src="../images/characters/gargantuar.png" alt="" width="112"> | [Gargantuar](characters/gargantuar.md) | Huge, smashes and throws Imps |

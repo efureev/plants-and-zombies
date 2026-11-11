@@ -14,6 +14,7 @@ import joshxviii.plantz.entity.blueprint_machines.ZombieTurret
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.zombie.ZombieRobot
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.GameTestHelper
@@ -25,11 +26,11 @@ import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.core.component.DataComponents
 import net.minecraft.tags.TagKey
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.SpawnPlacementTypes
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
@@ -40,6 +41,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
@@ -130,18 +132,16 @@ object StructuresGameTests {
         val level = helper.level
         val problems = mutableListOf<String>()
         // the test's arena is the oak shack (SquadGameTests): its area is loaded; every variant is placed over it
-        val origin = helper.absolutePos(BlockPos.ZERO)
+        val box = helper.bounds
         for (wood in GARDEN_SHACK_VARIANTS) {
             val template = level.structureTemplateManager.get(id("garden_shack/$wood")).orElse(null)
             if (template == null) {
                 problems += "no template garden_shack/$wood"
                 continue
             }
-            val box = AABB(Vec3.atLowerCornerOf(origin), Vec3.atLowerCornerOf(origin.offset(template.size)))
             level.getEntitiesOfClass(Plant::class.java, box).forEach { it.discard() }
-            val settings = StructurePlaceSettings().setFinalizeEntities(true)
-            template.placeInWorld(level, origin, origin, settings, level.random, Block.UPDATE_CLIENTS)
-            problems += shackProblems(helper, wood, origin, box)
+            placeOverArena(helper, template)
+            problems += shackProblems(helper, wood, box)
         }
         problems += registrationProblems(helper, "garden_shack", Biomes.PLAINS, tradeLevel = 1)
         if (problems.isNotEmpty()) helper.fail(problems.joinToString("; "))
@@ -177,13 +177,26 @@ object StructuresGameTests {
     private val JUNKYARD_CHEST = BlockPos(20, 1, 15)
     private val JUNKYARD_BARRELS = listOf(BlockPos(20, 1, 17), BlockPos(10, 1, 3), BlockPos(23, 1, 12))
     private val JUNKYARD_ELECTRO_TURRET = BlockPos(17, 1, 22)
-    /** On the floor of the workshop, four blocks below the lantern. */
+    /** On the workshop floor, three blocks below the lantern (18, 4, 17) and one block west of it. */
     private val JUNKYARD_WORKSHOP_FLOOR = BlockPos(17, 1, 17)
+    /** Free yard floor, where the test walls in a dark cell. */
+    private val JUNKYARD_DARK_CELL = BlockPos(3, 1, 22)
     private const val LOOT_ROLLS = 50
 
-    /** The loot table path of the container at [pos] relative to [origin], or null. */
-    private fun lootTable(level: ServerLevel, origin: BlockPos, pos: BlockPos): String? =
-        (level.getBlockEntity(origin.offset(pos)) as? RandomizableContainerBlockEntity)?.lootTable?.identifier()?.path
+    /**
+     * Places [template] over the test's arena the way the world generation places it (its entities
+     * set up), turned like the arena (`/test run ... <rotation>`): positions relative to the template
+     * are then [GameTestHelper.absolutePos] of the same positions.
+     */
+    private fun placeOverArena(helper: GameTestHelper, template: StructureTemplate) {
+        val origin = helper.absolutePos(BlockPos.ZERO)
+        val settings = StructurePlaceSettings().setRotation(helper.testRotation).setFinalizeEntities(true)
+        template.placeInWorld(helper.level, origin, origin, settings, helper.level.random, Block.UPDATE_CLIENTS)
+    }
+
+    /** The loot table path of the container at [pos] relative to the test, or null. */
+    private fun lootTable(helper: GameTestHelper, pos: BlockPos): String? =
+        (helper.level.getBlockEntity(helper.absolutePos(pos)) as? RandomizableContainerBlockEntity)?.lootTable?.identifier()?.path
 
     /**
      * The Robo Junkyard: placed as the world generation places it, it has its loot tables and two
@@ -192,23 +205,22 @@ object StructuresGameTests {
      * are registered. Then a plant is put next to the electro turret by the door, and the turret
      * must take it as its target: the turrets of the template are awake. Last, the zombies it brings
      * at night have spawn rules on the ground, and those rules keep them out of the workshop, which
-     * its lantern lights.
+     * its lantern lights, but let them spawn in a dark cell walled in on the yard.
      */
     fun roboJunkyard(helper: GameTestHelper) {
         val level = helper.level
         val problems = mutableListOf<String>()
         // the test's arena is the junkyard itself (SquadGameTests): its area is loaded
-        val origin = helper.absolutePos(BlockPos.ZERO)
         val template = level.structureTemplateManager.get(id("robo_junkyard/yard")).orElse(null)
             ?: return helper.fail("no template robo_junkyard/yard")
-        val box = AABB(Vec3.atLowerCornerOf(origin), Vec3.atLowerCornerOf(origin.offset(template.size)))
+        val box = helper.bounds
         level.getEntitiesOfClass(ZombieRobot::class.java, box).forEach { it.discard() }
-        template.placeInWorld(level, origin, origin, StructurePlaceSettings().setFinalizeEntities(true), level.random, Block.UPDATE_CLIENTS)
+        placeOverArena(helper, template)
 
-        val chestLoot = lootTable(level, origin, JUNKYARD_CHEST)
+        val chestLoot = lootTable(helper, JUNKYARD_CHEST)
         if (chestLoot != "chests/robo_junkyard/workshop") problems += "the workshop chest has loot $chestLoot"
         for (pos in JUNKYARD_BARRELS) {
-            val barrelLoot = lootTable(level, origin, pos)
+            val barrelLoot = lootTable(helper, pos)
             if (barrelLoot != "chests/robo_junkyard/scrap") problems += "the barrel at ${pos.toShortString()} has loot $barrelLoot"
         }
 
@@ -218,35 +230,46 @@ object StructuresGameTests {
         val guards = turrets + electroTurrets
         if (guards.any { PlayerMachines.isPlayerMachine(it) }) problems += "a turret of the junkyard is a player's machine"
         if (guards.any { !it.isPersistenceRequired }) problems += "a turret of the junkyard may despawn"
+        if (guards.any { it.getAttributeValue(Attributes.SPAWN_REINFORCEMENTS_CHANCE) > 0.0 }) problems += "a turret of the junkyard may call reinforcements"
 
-        problems += junkyardLootProblems(helper, origin)
+        problems += junkyardLootProblems(helper, helper.absolutePos(BlockPos.ZERO))
         problems += registrationProblems(helper, "robo_junkyard", Biomes.BADLANDS, tradeLevel = 3)
         if (problems.isNotEmpty()) return helper.fail(problems.joinToString("; "))
 
         val electro = electroTurrets.single()
         val plant = helper.spawn(PazEntities.WALL_NUT, JUNKYARD_ELECTRO_TURRET.south(2))
-        val floor = origin.offset(JUNKYARD_WORKSHOP_FLOOR)
+        val floor = helper.absolutePos(JUNKYARD_WORKSHOP_FLOOR)
+        // a closed stone cell: neither sky nor block light reaches it
+        val cell = helper.absolutePos(JUNKYARD_DARK_CELL)
+        helper.setBlock(JUNKYARD_DARK_CELL.below(), Blocks.STONE)
+        helper.setBlock(JUNKYARD_DARK_CELL.above(2), Blocks.STONE)
+        for (y in 0..1) {
+            helper.setBlock(JUNKYARD_DARK_CELL.above(y), Blocks.AIR)
+            for (side in Direction.Plane.HORIZONTAL) helper.setBlock(JUNKYARD_DARK_CELL.above(y).relative(side), Blocks.STONE)
+        }
         helper.startSequence()
             .thenWaitUntil {
                 helper.assertTrue(level.isPositionEntityTicking(electro.blockPosition()), "the junkyard does not tick entities yet")
                 helper.assertTrue(electro.target == plant, "the electro turret targets ${electro.target?.type?.toShortString()} instead of the plant")
             }
-            // light is computed after the template is placed
-            .thenWaitUntil { helper.assertTrue(level.getBrightness(LightLayer.BLOCK, floor) > 0, "the workshop is not lit yet") }
+            // light is computed after the blocks are placed
+            .thenWaitUntil {
+                helper.assertTrue(level.getBrightness(LightLayer.BLOCK, floor) > 0, "the workshop is not lit yet")
+                helper.assertTrue(level.getBrightness(LightLayer.SKY, cell) == 0 && level.getBrightness(LightLayer.BLOCK, cell) == 0, "the cell is not dark yet")
+            }
             .thenExecute {
-                // the rule itself, not only its placement: a rule that let them spawn anywhere would pass the first check
+                // the rule itself, not only its placement: a rule that let them spawn anywhere, or nowhere, fails here
                 fun <T : Entity> rules(type: EntityType<T>): String? = when {
                     SpawnPlacements.getPlacementType(type) != SpawnPlacementTypes.ON_GROUND -> "${type.toShortString()} has no spawn rules on the ground"
                     SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.NATURAL, floor, level.random) -> "${type.toShortString()} may spawn in the lit workshop"
+                    !SpawnPlacements.isSpawnPositionOk(type, level, cell) || !SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.NATURAL, cell, level.random) ->
+                        "${type.toShortString()} may not spawn in the dark"
                     else -> null
                 }
                 val wrong = listOfNotNull(rules(PazEntities.ENGINEER_ZOMBIE), rules(PazEntities.SOLDIER_ZOMBIE), rules(PazEntities.ROBO_ZOMBIE))
                 helper.assertTrue(wrong.isEmpty(), wrong.joinToString("; "))
             }
-            .thenExecute {
-                plant.discard()
-                level.getEntitiesOfClass(ZombieRobot::class.java, box).forEach { it.discard() }
-            }
+            // succeed() clears the arena's entities: the turrets and the plant
             .thenSucceed()
     }
 
@@ -269,18 +292,18 @@ object StructuresGameTests {
         return problems
     }
 
-    private fun shackProblems(helper: GameTestHelper, wood: String, origin: BlockPos, box: AABB): List<String> {
+    private fun shackProblems(helper: GameTestHelper, wood: String, box: AABB): List<String> {
         val level = helper.level
         val problems = mutableListOf<String>()
-        val shedLoot = lootTable(level, origin, BlockPos(3, 1, 3))
+        val shedLoot = lootTable(helper, BlockPos(3, 1, 3))
         if (shedLoot != "chests/garden_shack/shed") problems += "$wood: the shed chest has loot $shedLoot"
         for (y in 1..2) {
-            val barrelLoot = lootTable(level, origin, BlockPos(7, y, 5))
+            val barrelLoot = lootTable(helper, BlockPos(7, y, 5))
             if (barrelLoot != "chests/garden_shack/barrel") problems += "$wood: barrel $y has loot $barrelLoot"
         }
-        if (!level.getBlockState(origin.offset(10, 0, 8)).`is`(Blocks.WATER)) problems += "$wood: no water between the beds"
+        if (!level.getBlockState(helper.absolutePos(BlockPos(10, 0, 8))).`is`(Blocks.WATER)) problems += "$wood: no water between the beds"
 
-        val mailboxPos = origin.offset(12, 1, 18)
+        val mailboxPos = helper.absolutePos(BlockPos(12, 1, 18))
         val mailbox = level.getBlockEntity(mailboxPos) as? MailboxBlockEntity
         val letter = mailbox?.let { box -> (0 until box.containerSize).map { box.getItem(it) }.firstOrNull { !it.isEmpty } }
         val name = (letter?.get(DataComponents.CUSTOM_NAME)?.contents as? TranslatableContents)?.key
