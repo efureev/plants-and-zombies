@@ -21,6 +21,8 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
     companion object {
         const val MINE_TICKS = 30
         const val CHECK_PERIOD = 10
+        /** Does not dig towards targets further than this (blocks). */
+        const val MAX_TARGET_DISTANCE = 16.0
     }
 
     private var pos: BlockPos? = null
@@ -38,7 +40,8 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         val target = digger.target?.takeIf { it.isAlive } ?: return false
         // blocked: walking into a wall, or no path at all (then the zombie does not move)
         val blocked = digger.horizontalCollision || digger.navigation.isDone || digger.navigation.isStuck
-        if (!blocked || digger.distanceToSqr(target) < 2.25) return false
+        val distanceSqr = digger.distanceToSqr(target)
+        if (!blocked || distanceSqr < 2.25 || distanceSqr > MAX_TARGET_DISTANCE * MAX_TARGET_DISTANCE) return false
         val level = digger.level() as? ServerLevel ?: return false
         if (!EventHooks.canEntityGrief(level, digger)) return false
         pos = blockInTheWay(level)

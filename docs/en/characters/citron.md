@@ -26,5 +26,6 @@ A walking citrus that chases enemies and shoots a thin laser beam at them. It is
 
 ## Interactions
 
+- Pushed with a Gardening Glove it rolls and switches to its ball form: faster, steps up a full block and keeps 8 blocks away from its target (Sprout Squad turned this on; the original never switched).
 - Not required for the "Botanist" advancement (plant one of each plant).
 - The other experimental walking plant is the [Royal Sunflower](royal_sunflower.md).

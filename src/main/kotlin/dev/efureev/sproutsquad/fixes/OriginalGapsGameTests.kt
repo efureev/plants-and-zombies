@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -113,18 +114,23 @@ object OriginalGapsGameTests {
     fun plantCooldown(helper: GameTestHelper) {
         val pos = spot(helper)
         clear(helper, pos)
-        helper.setBlock(pos.below(), Blocks.GRASS_BLOCK)
-        helper.setBlock(pos, Blocks.AIR)
-        helper.setBlock(pos.above(), Blocks.AIR)
+        for (dx in 0..1) {
+            helper.setBlock(pos.below().east(dx), Blocks.GRASS_BLOCK)
+            helper.setBlock(pos.east(dx), Blocks.AIR)
+            helper.setBlock(pos.above().east(dx), Blocks.AIR)
+        }
         val config = PazConfig.server
         val wasEnabled = config.plantCooldownEnabled
         try {
             config.plantCooldownEnabled = true
             val player = helper.makeMockPlayer(GameType.SURVIVAL)
             player.inventory.add(ItemStack(PazItems.SUN, 32))
-            val packet = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER).copyWithCount(2)
+            val packet = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER) // a single packet: the stack is used up
             SeedPacketItem.tryPlant(helper.level, player, packet, helper.absolutePos(pos.below()), Direction.UP, Direction.NORTH)
-            helper.assertTrue(player.cooldowns.isOnCooldown(packet), "planting did not start the seed packet cooldown")
+            // another, fresh stack of the same plant must wait too
+            val another = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER)
+            val second = SeedPacketItem.tryPlant(helper.level, player, another, helper.absolutePos(pos.below().east()), Direction.UP, Direction.NORTH)
+            helper.assertTrue(second == InteractionResult.FAIL, "a second Peashooter was planted during the cooldown ($second)")
         } finally {
             config.plantCooldownEnabled = wasEnabled
             clear(helper, pos)

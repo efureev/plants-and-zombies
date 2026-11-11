@@ -113,6 +113,8 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
 
             val entityData = itemStack.get(DataComponents.ENTITY_DATA)
             val entityType = entityData?.type()
+            // Sprout Squad: the cooldown belongs to the plant type, not only to the stack that was used
+            if (consumeItem && !ignoreSunRequirement && dev.efureev.sproutsquad.fixes.PlantingCooldown.isOnCooldown(player, entityType)) return InteractionResult.FAIL
 
             val spawnPos = if (level.getBlockState(pos).getCollisionShape(level, pos).isEmpty) pos
             else pos.relative(face)
@@ -187,12 +189,13 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 return InteractionResult.FAIL
             }
 
+            // Sprout Squad: the plantCooldownEnabled option was never applied to planting. Only for real
+            // planting (not a gardening glove move), and before the last packet of the stack is used up.
+            if (consumeItem && !ignoreSunRequirement && !player.hasInfiniteMaterials()) applyCooldown(itemStack, player)
             if (consumeItem) itemStack.consume(1, player)
             if (!player.hasInfiniteMaterials() && !ignoreSunRequirement) {
                 player.removeSunFromStorageAndInventory(sunCost)
             }
-            // Sprout Squad: the plantCooldownEnabled option was never applied to planting
-            if (!player.hasInfiniteMaterials()) applyCooldown(itemStack, player)
             entity.playSound(SoundEvents.BIG_DRIPLEAF_PLACE)
             if (entity is TamableAnimal) entity.tame(player)
             level.gameEvent(player, GameEvent.ENTITY_PLACE, spawnPos)

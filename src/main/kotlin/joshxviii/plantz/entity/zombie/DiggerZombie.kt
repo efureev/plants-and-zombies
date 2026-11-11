@@ -86,7 +86,7 @@ class DiggerZombie(type: EntityType<out DiggerZombie>, level: Level) : PazZombie
     override fun registerGoals() {
         super.registerGoals()
         goalSelector.addGoal(1, TunnelNearTargetGoal(this))
-        goalSelector.addGoal(2, dev.efureev.sproutsquad.fixes.DiggerMineGoal(this))
+        goalSelector.addGoal(1, dev.efureev.sproutsquad.fixes.DiggerMineGoal(this)) // must preempt the attack goal (2)
     }
 
     override fun getAmbientSound(): SoundEvent {

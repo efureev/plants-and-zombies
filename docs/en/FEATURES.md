@@ -105,7 +105,7 @@ About wild plants:
 
 1. Put one of your plants on **farmland** or in a **Zen Plant Pot**.
 2. Water it: a water bottle, a water bucket, a watering can or rain.
-3. The plant falls asleep for a while. Expensive plants sleep longer; a Zen Plant Pot shortens the wait by 25%.
+3. The plant falls asleep while the seeds grow: 10 minutes plus 2 minutes per sun of its cost (server options `seedGrowTime` and `extraGrowTimePerSun`); a Zen Plant Pot shortens the wait by 25%.
 4. When it wakes up (a sun icon floats above it), right-click it with sun, one at a time. It needs about twice its sun cost, at least 4. If it was watered with a bucket or a watering can, it needs half as much.
 5. The plant pops out a seed packet, possibly of a different plant (see mutations). Water it again to start over.
 
@@ -154,7 +154,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 
 ### Plants on your head
 
-**Plant Pot Helmet** (late raid rewards; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet.
+**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet.
 
 **Gardening Glove** (Farmer level 3, late raid rewards; 325 durability, repaired with leather):
 
@@ -179,7 +179,7 @@ Zombies spawn in the dark like vanilla monsters, never on Peaceful. In the Grave
 |---|---|---|
 | [Browncoat](characters/browncoat.md) | Common biomes, rivers, oceans | The most common zombie; its look depends on the biome |
 | [Newspaper Zombie](characters/newspaper_zombie.md) | Common biomes, water | Gets angry when it loses its newspaper |
-| [Digger Zombie](characters/digger_zombie.md) | Common biomes, underground | Tunnels toward its target |
+| [Digger Zombie](characters/digger_zombie.md) | Common biomes, underground | Tunnels toward its target, digs through blocks in its way |
 | [Disco Zombie](characters/disco_zombie.md) | Common biomes | Summons Backup Dancers |
 | [All Star](characters/all_star.md) | Common biomes | Charges and tramples |
 | [Grave Digger](characters/grave_digger.md) | Common biomes | Digs up gravestones while chasing you, then retreats |
@@ -389,7 +389,7 @@ Potions are brewed from an Awkward Potion; gunpowder turns them into splash poti
 | Bucket | Vanilla bucket | Can be worn: 15 armor against hits from above |
 | Football Helmet | All Star (2%), Half-Time rewards | While sprinting: faster, knocks back mobs in front of you |
 | Party Hat | Backup Dancer (8%), Disco rewards | Decorative hat, 1 armor |
-| Plant Pot Helmet | Late raid rewards | Carry a plant on your head ([see above](#plants-on-your-head)) |
+| Plant Pot Helmet | Late raid rewards, Farmer at level 4 | Carry a plant on your head ([see above](#plants-on-your-head)) |
 | Coffin | 3 wooden trapdoors + 3 wooden slabs | Worn on the chest, blocks direct attacks from every side |
 | Door Shield | Any door + a shield | A shield that looks like the door |
 | Newspaper | Newspaper Zombie (5%), grave loot | Blocks from the front like a flimsy shield; used for Mailboxes |
@@ -485,7 +485,7 @@ Zombie drops (seed packets, Brainz Alloy, equipment) need a kill by a player or 
 | `coffeeBuffDuration` | `48000` | How long a plant stays awake after coffee, in ticks |
 | `pumpkinArmorAmount` | `35` | Pumpkin armor health |
 | `sunCostTamingThreshold` | `30` | Sun cost at which taming reaches its lowest chance (2%) |
-| `plantCooldownEnabled` | `false` | Planting cooldown (`plantCooldownTime` `4.0` s + `plantCooldownTimePerSun` `2.5` s per sun); currently it does not affect planting from seed packets |
+| `plantCooldownEnabled` | `false` | Planting cooldown for each plant type after planting from a seed packet (`plantCooldownTime` `4.0` s + `plantCooldownTimePerSun` `2.5` s per sun) |
 | `solarBatteryMax` | `512` | Solar Battery capacity |
 | `defaultPlantEntityLimit` | `30` | Plants of one kind within 32 blocks |
 | `customPlantEntityLimits` | Melon-pult, Winter Melon, Doom-shroom `20`; Coffee Bean, Grave Buster `-1` | Per-plant limits, `-1` means no limit |

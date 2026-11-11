@@ -20,6 +20,7 @@ A miner with an iron pickaxe that lives deep underground. From a distance it bur
 
 ## Abilities
 
+- Digs through blocks in its way to the target when it walks into a wall or has no path: stone, dirt, sand, gravel, bricks and stone bricks, cobblestone, terracotta, concrete, glass, rails and plant pots (`#sproutsquad:digger_breakable`), about 1.5 s per block; the blocks drop. Needs `mobGriefing` (Sprout Squad).
 - Tunnelling: when its target (in a raid without a target: the Plantz Flag) is 16–40 blocks away, it stops, sinks into the ground and after about 2 s resurfaces 78–93 % of the way there, on solid ground with room to stand. The whole move takes about 4 s.
 - After a tunnel (and after spawning) it waits 16–20 s before the next one; it does not tunnel while in water.
 - Carries an iron pickaxe that it never drops; does not pick up armour; breaks doors.

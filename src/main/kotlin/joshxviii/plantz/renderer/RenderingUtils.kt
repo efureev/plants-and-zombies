@@ -202,5 +202,12 @@ fun EntityRenderState.getEmissiveTextureLocation(basePath: String, suffixes: Mut
     val base = "${basePath}/${entityName}/${entityName}"
     val rm = Minecraft.getInstance().resourceManager
 
-    return resolveTextureLocation(base, rm, suffixes.apply { add("emissive") })
+    // Sprout Squad: only *_emissive textures. Appending "emissive" to the suffixes let the lookup fall
+    // back to a plain variant (e.g. _sleep, _baby, _damage_low) and draw it full-bright.
+    for (suffix in suffixes.permutationsDescending()) {
+        if (suffix.isEmpty()) break
+        val candidate = pazResource("${base}_${suffix}_emissive.png")
+        if (rm.getResource(candidate).isPresent) return candidate
+    }
+    return pazResource("${base}_emissive.png").takeIf { rm.getResource(it).isPresent }
 }

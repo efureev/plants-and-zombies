@@ -612,8 +612,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             }
         }
 
-        if (!level.isClientSide) tickSeedGrowth()
         val needs = testGrowConditions()
+        if (!level.isClientSide) tickSeedGrowth(needs)
         if (tickCount%25==0) {
             when (needs) {
                 PlantGrowNeeds.SUN -> PazServerParticles.NEEDS_SUN
@@ -793,8 +793,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     // Sprout Squad: testGrowConditions() is called many times per tick (goals, rendering, the
     // isGrowingSeeds getter), so its old side effects ran the seed timer several times too fast and
     // counted rain more than once. The side effects now run here, once per server tick.
-    private fun tickSeedGrowth() {
-        when (testGrowConditions()) {
+    private fun tickSeedGrowth(needs: PlantGrowNeeds) {
+        when (needs) {
             PlantGrowNeeds.WATER -> if (exposedToRain()) receivedWater += 1
             PlantGrowNeeds.TIME -> {
                 --seedGrowCooldown

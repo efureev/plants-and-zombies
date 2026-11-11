@@ -27,6 +27,7 @@ A reusable frost bomb: when an enemy comes close, it bursts with cold and freeze
 
 ## Interactions
 
+- Flint and steel lights it while it is idle and awake: it swells up and goes off (Sprout Squad fixed this; in the original the lighter never worked).
 - Uses the same fuse as the [Doom Shroom](doomshroom.md), but freezes instead of exploding and is not used up.
 - A [Coffee Bean](coffeebean.md) keeps it awake by day for 40 minutes.
 - Can wear a [Pumpkin](pumpkin.md).
