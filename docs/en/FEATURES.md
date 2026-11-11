@@ -16,6 +16,9 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 
 ### Seed packets and planting
 
+<!-- pictures: seed_packet -->
+<p><img src="../images/items/seed_packet.png" alt="Peashooter Seeds" title="Peashooter Seeds" width="112"></p>
+
 - A seed packet ("Peashooter Seeds" and so on) holds one plant. Right-click the top of a block to plant it. Water plants (Sea-shroom, Tangle Kelp) are placed on the water surface.
 - Planting costs sun: the cost is shown in the packet's tooltip. Sun is taken from Sun items in your inventory and from Solar Batteries you carry. In creative mode planting is free and ignores limits.
 - The block below must suit the plant. Every plant grows on dirt, grass, mud, moss, clay, soul soil, nylium, dirt paths, flower pots, lily pads, farmland and plant pots. Some accept more: Cactus (sand, soul sand), Potato Mine (sand, gravel), Snow Pea and Ice-shroom (snow), Doom-shroom (gravel, basalt), Grave Buster (gravestones), Cherry Bomb and Coffee Bean (any solid block), Squash and Pumpkin (anything).
@@ -28,13 +31,16 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 
 Sun is the plant currency.
 
+<!-- pictures: sun sun_battery -->
+<p><img src="../images/items/sun.png" alt="Sun" title="Sun" width="112"> <img src="../images/items/sun_battery.png" alt="Solar Battery" title="Solar Battery" width="112"></p>
+
 | | Source | What you get |
 |---|---|---|
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 1 sun about every 45 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 1 sun about every 60 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 1 sun about every 65 s, 2 once it has grown up; a mushroom, so it works at night and underground |
 |  | Killing a plant yourself | half of its sun cost |
-|  | Bottle of Sun | throw it to release 8 sun, or craft it back into 8 sun |
+| <img src="../images/items/sun_bottle.png" alt="" width="112"> | Bottle of Sun | throw it to release 8 sun, or craft it back into 8 sun |
 |  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
@@ -129,12 +135,12 @@ Datapacks can change these rules in `data/<namespace>/seed_mutation/<plant>.json
 
 ### Plant pots and watering
 
-| Item | Recipe | What it does |
-|---|---|---|
-| Plant Pot | 3 bricks, dirt, sun | A plant in it takes 50% less damage from monsters; zombies cannot walk through pots. Digger Zombies can break plain pots |
-| Zen Plant Pot | Plant Pot, 2 bamboo, a bamboo slab | The same protection, and it counts as farmland for growing seeds (25% faster) |
-| Minecart with Plant Pot | Plant Pot + minecart | A plant planted in it rides along on rails |
-| Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water: waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
+| | Item | Recipe | What it does |
+|---|---|---|---|
+| <img src="../images/items/plant_pot.png" alt="" width="112"> | Plant Pot | 3 bricks, dirt, sun | A plant in it takes 50% less damage from monsters; zombies cannot walk through pots. Digger Zombies can break plain pots |
+| <img src="../images/items/zen_plant_pot.png" alt="" width="112"> | Zen Plant Pot | Plant Pot, 2 bamboo, a bamboo slab | The same protection, and it counts as farmland for growing seeds (25% faster) |
+| <img src="../images/items/plant_pot_minecart.png" alt="" width="112"> | Minecart with Plant Pot | Plant Pot + minecart | A plant planted in it rides along on rails |
+| <img src="../images/items/watering_can.png" alt="" width="112"> | Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water: waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
 
 ### Taming and ownership
 
@@ -154,7 +160,13 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 
 ### Plants on your head
 
+<!-- pictures: plant_pot_helmet -->
+<p><img src="../images/items/plant_pot_helmet.png" alt="Plant Pot Helmet" title="Plant Pot Helmet" width="112"></p>
+
 **Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet.
+
+<!-- pictures: gardening_glove -->
+<p><img src="../images/items/gardening_glove.png" alt="Gardening Glove" title="Gardening Glove" width="112"></p>
 
 **Gardening Glove** (Farmer level 3, late raid rewards; 325 durability, repaired with leather):
 
@@ -240,16 +252,19 @@ A rare leader zombie (zombie, husk, drowned, Browncoat, Newspaper Zombie, Soldie
 
 ### Gravestones
 
+<!-- pictures: gravestone -->
+<p><img src="../images/items/gravestone.png" alt="Gravestone" title="Gravestone" width="112"></p>
+
 A Gravestone raises a zombie every 20–30 seconds when it is dark and a player is within 24 blocks (server option `graveStoneActivationRange`); in the Graveyard it works by day too. It keeps no more than two of its own zombies alive and waits while three zombies are near. It can only be picked up with Silk Touch. Plant a Grave Buster on it to remove it and get grave loot: Ominous Bottles, cones, newspapers, Ducky Tubes, Brainz Alloy, ingots and emeralds.
 
 ## Raids
 
 ### Flags
 
-| Flag | How to get | What it does |
-|---|---|---|
-| Brainz Flag | Leader zombies, Grave Digger (5%), Wandering Trader (12 emeralds), Graveyard mausoleum chest (always) | Decoration; ingredient of the Plantz Flag |
-| Plantz Flag | Brainz Flag + 8 sun | Center of a raid; plants within 5 blocks act 20% faster; held in hand: +20% movement and attack speed |
+| | Flag | How to get | What it does |
+|---|---|---|---|
+| <img src="../images/items/brainz_flag.png" alt="" width="112"> | Brainz Flag | Leader zombies, Grave Digger (5%), Wandering Trader (12 emeralds), Graveyard mausoleum chest (always) | Decoration; ingredient of the Plantz Flag |
+| <img src="../images/items/plantz_flag.png" alt="" width="112"> | Plantz Flag | Brainz Flag + 8 sun | Center of a raid; plants within 5 blocks act 20% faster; held in hand: +20% movement and attack speed |
 
 - Both flags are placed while sneaking.
 - A Plantz Flag has 40 health, 500 during a raid, and slowly heals when it has not been hit for a while. When it is destroyed, it drops a Brainz Flag.
@@ -335,6 +350,9 @@ The Giga-Football Zombie, Electric Boogaloo and Robo-General are enlarged versio
 
 A blueprint builds a machine. Right-click a block with it: the machine appears facing you, and its cost in Brainz Alloy is taken from your inventory. A blueprint lasts 20 builds.
 
+<!-- pictures: blueprint -->
+<p><img src="../images/items/blueprint.png" alt="Machine Blueprint" title="Machine Blueprint" width="112"></p>
+
 | | Machine | Brainz Alloy | What it does |
 |---|---|---|---|
 | <img src="../images/characters/zombie_turret.png" alt="" width="112"> | [Zombie Turret](characters/zombie_turret.md) | 12 | Shoots laser bolts |
@@ -345,7 +363,13 @@ A blueprint builds a machine. Right-click a block with it: the machine appears f
 - Blueprints: Engineer Zombie (8.5%, one of its three machines) and the Robo Army treasure (all four machines, the Lawn Mower is rare). Costs are set by the server option `alloyCosts`.
 - In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.
 
+<!-- pictures: brainz_alloy -->
+<p><img src="../images/items/brainz_alloy.png" alt="Brainz Alloy" title="Brainz Alloy" width="112"></p>
+
 **Brainz Alloy** comes from zombies: a Gargantuar always drops 18–25, a Robo-Zombie 2–5 (90%), Super Brainz 1–3 (70%), an Engineer 1–2 (30%). It is also found in grave loot, mausoleum chests and raid rewards, and 1 Brainzium + 4 copper ingots + 4 iron ingots make 16. It builds machines, repairs the Dye Blaster and is used for Brainz Alloy blocks (block, stairs, slab, smooth, treaded, reinforced, fence, door, trapdoor), the Solar Battery, the Collection Box and the Time Machine.
+
+<!-- pictures: brainzium -->
+<p><img src="../images/items/brainzium.png" alt="Brainzium" title="Brainzium" width="112"></p>
 
 **Brainzium** is a rare glowing material: 25% in a boss bonus, and in the Robo Army and League of Awesome treasure. It is used for Brainz Alloy and the Time Machine.
 
@@ -355,11 +379,11 @@ A blueprint builds a machine. Right-click a block with it: the machine appears f
 
 Potions are brewed from an Awkward Potion; gunpowder turns them into splash potions, dragon's breath into lingering ones, and lingering potions make tipped arrows.
 
-| Potion | Ingredient | Effect and duration |
-|---|---|---|
-| Potion of Hypnosis | Red Mushroom | Hypnotized, 3:00 |
-| Potion of Buttered | Honeycomb | Buttered, 0:05 |
-| Potion of Electricity | Lightning Rod (any) | Electrified, 0:10 |
+| | Potion | Ingredient | Effect and duration |
+|---|---|---|---|
+| <img src="../images/items/potion_hypnotize.png" alt="" width="112"> | Potion of Hypnosis | Red Mushroom | Hypnotized, 3:00 |
+| <img src="../images/items/potion_buttered.png" alt="" width="112"> | Potion of Buttered | Honeycomb | Buttered, 0:05 |
+| <img src="../images/items/potion_electrified.png" alt="" width="112"> | Potion of Electricity | Lightning Rod (any) | Electrified, 0:10 |
 
 | Effect | What it does | Where it comes from |
 |---|---|---|
@@ -375,6 +399,9 @@ Potions are brewed from an Awkward Potion; gunpowder turns them into splash poti
 | Hero of the Garden | Raid rewards from a Mailbox | Winning a raid |
 
 ### Balloons
+
+<!-- pictures: white_balloon red_balloon yellow_balloon lime_balloon light_blue_balloon magenta_balloon -->
+<p><img src="../images/items/white_balloon.png" alt="White Balloon" title="White Balloon" width="112"> <img src="../images/items/red_balloon.png" alt="Red Balloon" title="Red Balloon" width="112"> <img src="../images/items/yellow_balloon.png" alt="Yellow Balloon" title="Yellow Balloon" width="112"> <img src="../images/items/lime_balloon.png" alt="Lime Balloon" title="Lime Balloon" width="112"> <img src="../images/items/light_blue_balloon.png" alt="Light Blue Balloon" title="Light Blue Balloon" width="112"> <img src="../images/items/magenta_balloon.png" alt="Magenta Balloon" title="Magenta Balloon" width="112"></p>
 
 - 16 White Balloons from a phantom membrane, a wind charge and string; 8 balloons + a dye give 8 colored ones. Balloon Zombies drop them, and they are in many raid rewards.
 - Right-click a block with a balloon to inflate it, tied to you on a lead; right-click a fence to tie it there. A dispenser releases balloons and ties them to a mob standing in front of it.
@@ -398,17 +425,24 @@ Potions are brewed from an Awkward Potion; gunpowder turns them into splash poti
 | <img src="../images/items/dye_blaster.png" alt="" width="112"> | Dye Blaster | Soldier Zombie (2%), Robo Army rewards | Hold use to fire paint balls; uses dye from your inventory as ammo, a 40% chance per shot to use up the loaded dye; Painted |
 | <img src="../images/items/baron_staff.png" alt="" width="112"> | Baron's Staff | Baron Von Bats (8.5%) | Fires an energy beam (7 damage, 14 blocks) |
 
-<img src="../images/items/taco.png" alt="" width="112">
+<!-- pictures: taco -->
+<p><img src="../images/items/taco.png" alt="Taco" title="Taco" width="112"></p>
 
 Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a second recipe for farming mods. Boss bonuses give 12–24 at a time.
 
 ### Mail
+
+<!-- pictures: mailbox mail_collection_box letter -->
+<p><img src="../images/items/mailbox.png" alt="Mailbox" title="Mailbox" width="112"> <img src="../images/items/mail_collection_box.png" alt="Collection Box" title="Collection Box" width="112"> <img src="../images/items/letter.png" alt="Letter" title="Letter" width="112"></p>
 
 - **Mailbox**: 4 iron ingots, an iron trapdoor and a newspaper; any dye recolors it (16 colors). It has 5 slots. From its screen you send the contents to any other mailbox in the same dimension: the list is sorted by distance and can be searched. A mailbox with mail shows a notification icon; right-click it to take the mail out.
 - **Collection Box**: 5 Brainz Alloy, a newspaper, 2 redstone and a mailbox. Choose a target mailbox in it; a redstone pulse sends its contents there.
 - A Mailbox is also where raid rewards are collected.
 
 ### Decorations and other blocks
+
+<!-- pictures: blue_garden_gnome green_garden_gnome red_garden_gnome yellow_garden_gnome golden_garden_gnome lawn_flamingo brainz_alloy_block smooth_brainz_alloy_block treaded_brainz_alloy_block reinforced_brainz_alloy_block brainz_alloy_stairs brainz_alloy_slab brainz_alloy_fence brainz_alloy_door brainz_alloy_trapdoor music_disc_grassy_groove -->
+<p><img src="../images/items/blue_garden_gnome.png" alt="Blue Garden Gnome" title="Blue Garden Gnome" width="112"> <img src="../images/items/green_garden_gnome.png" alt="Green Garden Gnome" title="Green Garden Gnome" width="112"> <img src="../images/items/red_garden_gnome.png" alt="Red Garden Gnome" title="Red Garden Gnome" width="112"> <img src="../images/items/yellow_garden_gnome.png" alt="Yellow Garden Gnome" title="Yellow Garden Gnome" width="112"> <img src="../images/items/golden_garden_gnome.png" alt="Golden Garden Gnome" title="Golden Garden Gnome" width="112"> <img src="../images/items/lawn_flamingo.png" alt="Lawn Flamingo" title="Lawn Flamingo" width="112"> <img src="../images/items/brainz_alloy_block.png" alt="Block of Brainz Alloy" title="Block of Brainz Alloy" width="112"> <img src="../images/items/smooth_brainz_alloy_block.png" alt="Smooth Brainz Alloy" title="Smooth Brainz Alloy" width="112"> <img src="../images/items/treaded_brainz_alloy_block.png" alt="Treaded Brainz Alloy" title="Treaded Brainz Alloy" width="112"> <img src="../images/items/reinforced_brainz_alloy_block.png" alt="Reinforced Brainz Alloy" title="Reinforced Brainz Alloy" width="112"> <img src="../images/items/brainz_alloy_stairs.png" alt="Brainz Alloy Stairs" title="Brainz Alloy Stairs" width="112"> <img src="../images/items/brainz_alloy_slab.png" alt="Brainz Alloy Slab" title="Brainz Alloy Slab" width="112"> <img src="../images/items/brainz_alloy_fence.png" alt="Brainz Alloy Fence" title="Brainz Alloy Fence" width="112"> <img src="../images/items/brainz_alloy_door.png" alt="Brainz Alloy Door" title="Brainz Alloy Door" width="112"> <img src="../images/items/brainz_alloy_trapdoor.png" alt="Brainz Alloy Trapdoor" title="Brainz Alloy Trapdoor" width="112"> <img src="../images/items/music_disc_grassy_groove.png" alt="Music Disc" title="Music Disc" width="112"></p>
 
 - **Garden Gnome statues** (blue, green, red, yellow and the rare golden one): from boss bonuses and the Marigold; right-click to change the pose.
 - **Lawn Flamingo**: decoration from boss bonuses.
@@ -418,6 +452,9 @@ Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a 
 - The mod has its own advancements: from "Get some sun!" to winning the hardest raid and defeating 30 bosses.
 
 ### Time Machine
+
+<!-- pictures: time_machine -->
+<p><img src="../images/items/time_machine.png" alt="Time Machine" title="Time Machine" width="112"></p>
 
 Recipe: 2 Brainz Alloy, an amethyst shard, 2 redstone, Brainzium and 3 Reinforced Brainz Alloy. Right-click it with a charged Solar Battery and power it with redstone: a portal opens two blocks above it and leads to the era dimension (see [World](#world)), and an identical machine waits at the same spot on the other side. While active it burns 1 sun about every 2 seconds. In the era dimension the machine cannot be broken, and you cannot sleep or set a respawn point there.
 

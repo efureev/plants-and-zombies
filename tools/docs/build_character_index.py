@@ -4,10 +4,10 @@
 Usage, from the repository root:
     python3 tools/docs/build_character_index.py
 
-Also adds thumbnails to the tables of docs/<locale>/FEATURES.md whose rows start with a
-character link or with the name of an item pictured in docs/images/items
-(tools/docs/render_item.py), and puts an item's picture above a paragraph that opens with its
-name (once; safe to run again).
+Also puts pictures into docs/<locale>/FEATURES.md: thumbnails in the tables whose rows start
+with a character link or with the name of an item pictured in docs/images/items
+(tools/docs/render_item.py), and a row of pictures after each <!-- pictures: id ... --> line.
+Safe to run again.
 
 Every card `docs/<locale>/characters/<id>.md` starts with:
     # <Name>
@@ -172,48 +172,67 @@ def build(locale, cfg):
 
 
 THUMB = '<img src="../images/{folder}/{id}.png" alt="" width="112">'
+PICTURE = '<img src="../images/items/{id}.png" alt="{name}" title="{name}" width="112">'
 LINK = re.compile(r"^\s*\[[^\]]+\]\(characters/([\w]+)\.md\)")
+GALLERY = re.compile(r"^<!-- pictures: ([\w ]+) -->$")
 LANG = {"en": "en_us", "ru": "ru_ru"}
-VANILLA_ITEMS = {"Bucket": "bucket", "Ведро": "bucket"}
+VANILLA_ITEMS = {"bucket": {"en": "Bucket", "ru": "Ведро"}}
+
+
+def has_picture(item):
+    return os.path.exists(os.path.join("docs", "images", "items", item + ".png"))
 
 
 def item_names(locale):
-    """Item name (as the game shows it) -> item id, for items with a picture in docs/images/items."""
+    """Item id -> its name as the game shows it, for items with a picture in docs/images/items
+    (potion_<name> are the mod's potions)."""
     import json
     lang = json.load(open(f"src/main/resources/assets/sproutsquad/lang/{LANG[locale]}.json", encoding="utf-8"))
     names = {}
     for key, name in lang.items():
-        m = re.match(r"(?:item|block)\.sproutsquad\.(\w+)$", key)
-        if m and os.path.exists(os.path.join("docs", "images", "items", m.group(1) + ".png")):
-            names[name] = m.group(1)
-    names.update({k: v for k, v in VANILLA_ITEMS.items() if os.path.exists(os.path.join("docs", "images", "items", v + ".png"))})
+        m = re.match(r"(?:item|block)\.sproutsquad\.(\w+)$", key) or re.match(r"item\.minecraft\.(potion)\.effect\.(\w+)$", key)
+        item = "_".join(m.groups()) if m else None
+        if item and has_picture(item):
+            names[item] = name
+    names.update({item: n[locale] for item, n in VANILLA_ITEMS.items() if has_picture(item)})
+    if "seed_packet" in names:  # the picture shows a Peashooter's packet (tools/docs/render_item.py)
+        names["seed_packet"] = lang["item.sproutsquad.seed_packet.entity"] % lang["entity.sproutsquad.peashooter"]
     return names
 
 
 def thumbnails_in_features(locale):
-    """Adds a thumbnail column to the FEATURES tables whose rows start with a character link or an
-    item name that has a picture (idempotent); a short paragraph about the Taco gets one too."""
+    """Pictures in docs/<locale>/FEATURES.md (idempotent):
+    - a thumbnail column in the tables whose rows start with a character link or with the name of
+      an item that has a picture; a table that already has the column gets its empty cells filled;
+    - after a line <!-- pictures: id id ... -->, a row of those items' pictures (rebuilt each run)."""
     path = os.path.join("docs", locale, "FEATURES.md")
     if not os.path.exists(path):
         return 0
-    items = item_names(locale)
+    names = item_names(locale)
+    by_name = {name: item for item, name in names.items()}
 
     def picture(cell):
         m = LINK.match(cell)
         if m and os.path.exists(os.path.join("docs", "images", "characters", m.group(1) + ".png")):
             return THUMB.format(folder="characters", id=m.group(1))
-        if cell.strip() in items:
-            return THUMB.format(folder="items", id=items[cell.strip()])
+        name = cell.strip().strip("«»")  # the Russian docs quote some names: «Флаг мозгоф»
+        if name in by_name:
+            return THUMB.format(folder="items", id=by_name[name])
         return None
 
     lines = open(path, encoding="utf-8").read().split("\n")
-    # paragraphs that open with an item's name ("Taco: food ...", "Тако — еда ...") get its picture above
-    for k in range(len(lines) - 1, -1, -1):
-        for name, item in items.items():
-            if re.match(re.escape(name) + r"\s*[:—]", lines[k]) and f"items/{item}.png" not in "".join(lines[max(0, k - 2):k]):
-                lines[k:k] = [THUMB.format(folder="items", id=item), ""]
     out, i, count = [], 0, 0
     while i < len(lines):
+        gallery = GALLERY.match(lines[i].strip())
+        if gallery:
+            out.append(lines[i])
+            ids = [item for item in gallery.group(1).split() if item in names]
+            out.append("<p>" + " ".join(PICTURE.format(id=item, name=names[item]) for item in ids) + "</p>")
+            count += len(ids)
+            i += 2 if i + 1 < len(lines) and lines[i + 1].startswith("<p><img") else 1
+            if i >= len(lines) or lines[i].strip():
+                out.append("")
+            continue
         if not lines[i].startswith("|"):
             out.append(lines[i]); i += 1
             continue
@@ -221,9 +240,12 @@ def thumbnails_in_features(locale):
         while j < len(lines) and lines[j].startswith("|"):
             j += 1
         table = lines[i:j]
-        cells = [[c for c in row.strip().strip("|").split("|")] for row in table]
-        has_thumbs = any(c and c[0].strip().startswith("<img") for c in cells[2:])
-        if len(table) > 2 and not has_thumbs and any(picture(c[0]) for c in cells[2:] if c):
+        cells = [row.strip().strip("|").split("|") for row in table]
+        if len(table) > 2 and cells[0][0].strip() == "":  # already has the column: fill the gaps
+            for k in range(2, len(table)):
+                if cells[k][0].strip() == "" and len(cells[k]) > 1 and picture(cells[k][1]):
+                    table[k] = "| " + picture(cells[k][1]) + " |" + "|".join(cells[k][1:]) + "|"
+        elif len(table) > 2 and any(picture(c[0]) for c in cells[2:]):
             table = ["| |" + table[0][1:], "|---" + table[1]] + [
                 "| " + (picture(c[0]) or "") + " " + row for row, c in zip(table[2:], cells[2:])]
         count += sum(1 for row in table if "<img" in row)
@@ -236,7 +258,7 @@ def thumbnails_in_features(locale):
 
 def main():
     for locale, cfg in LOCALES.items():
-        print(locale, build(locale, cfg), "cards,", thumbnails_in_features(locale), "pictures in FEATURES tables")
+        print(locale, build(locale, cfg), "cards,", thumbnails_in_features(locale), "pictures in FEATURES")
 
 
 if __name__ == "__main__":
