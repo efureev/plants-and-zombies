@@ -48,3 +48,6 @@ replay_*.log
 
 # local agent worktrees
 /.claude/worktrees/
+
+# Working docs (specification, roadmap): Russian only, kept locally, not in git
+/plan/

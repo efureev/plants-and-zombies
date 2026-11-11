@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.DeferredRegister
  * Sprout Squad's own entities, registered through DeferredRegister (unlike the original mod's
  * direct Registry.register calls).
  *
- * Adding a plant (full checklist in docs/WORKSHOP.md):
+ * Adding a plant (full checklist in docs/en/WORKSHOP.md):
  * 1. a class in `content/plant/` (copy [Potling]);
  * 2. one `plant(...)` line below;
  * 3. model + renderer in `client/SproutSquadClient.kt`;

@@ -11,7 +11,7 @@ Writes:
 and, if preview_dir is given, potling_preview.png there (UV sheet + flat front view, x8).
 
 The UV layout follows PotlingModel.createBodyLayer() (box UV: top/bottom faces in the first
-row of a box, then east, north (front), west, south). Style: docs/ROADMAP.md, section 8.3 —
+row of a box, then east, north (front), west, south). Style: the style guide in docs/en/WORKSHOP.md —
 light from above, no black outlines, eyes #111f0a with a 1px shine, 1-2px mouth.
 """
 import os
@@ -31,9 +31,9 @@ def c(h):
 POT_DEEP, POT_SH, POT, POT_HI = c("6e3528"), c("8c4838"), c("b4654f"), c("c97758")
 RIM, RIM_HI = c("cf7c60"), c("e3967a")
 SOIL_SH, SOIL, SOIL_HI = c("3f2a1b"), c("5a3d28"), c("70503a")
-# greens: Peashooter scale (ROADMAP 8.1)
+# greens: Peashooter scale (style guide)
 LEAF_DEEP, LEAF_SH, LEAF, LEAF_HI, LEAF_TIP = c("3f6d1f"), c("4a7e26"), c("79b930"), c("98e244"), c("bdf77c")
-# face (ROADMAP 8.3)
+# face (style guide)
 EYE, SHINE, BLUSH, MOUTH = c("111f0a"), c("ffffff"), c("e88d7a"), c("4a2219")
 CLEAR = (0, 0, 0, 0)
 

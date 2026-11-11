@@ -4,7 +4,7 @@
 
 Точка форка: `977cfb46` (тег `upstream-base-977cfb46`, мод v1.5.2).
 
-Изменения из оригинала переносятся только через `git cherry-pick` (см. `docs/SPEC.md` §5.2).
+Изменения из оригинала переносятся только через `git cherry-pick`.
 
 После этапа M8 у форка свой mod id `sproutsquad`, а в оригинале — `plantz`. После каждого cherry-pick:
 
@@ -49,8 +49,8 @@ git log --oneline upstream-base-977cfb46..upstream/26.3
 | Ф2: Party Hat не выпадает (у зомби диско-волны шанс 0, лута нет) | Лут-таблица Backup Dancer (8 %); у волны Disco Party своя награда `raid/mail_reward_disco` с сокровищем `raid/disco/treasure` (`WaveType.DISCO_PARTY`, `PazLootTables.MAIL_REWARD_DISCO`) |
 | Ф2: `smooth_brainz_alloy_block` без рецепта, лут-таблицы, названия и места во вкладке креатива | Печь и камнерез из блока сплава, лут-таблица, перевод, вкладка креатива, разблокировка в `recipes/brainz_alloy_blocks` |
 | Ф2: фламинго `lawn_flamingo` ломается в ничто | Лут-таблица блока |
-| Ф2: пустые сокровища `raid/winter`, `raid/zomboween`, `raid/zomboss`; награда Zomboween брала `default_hard/treasure`; у `raid/zomboween/seeds` перевёрнутый диапазон бросков (min 2, max 1) | Сокровища заполнены (ROADMAP 6.3); награда Zomboween ссылается на своё сокровище, диапазон 1–2; награда Zomboss бросает и своё сокровище |
-| Ф2: нет лут-таблиц у Imp, Pirate Captain, Pirate Captain Ghost, Zombat, Zombie Goat, Backup Dancer, Gnome | Добавлены (ROADMAP 6.3), как у остальных зомби — только при убийстве игроком или растением; гном роняет статуэтку своего цвета (предикат `minecraft:nbt`) |
+| Ф2: пустые сокровища `raid/winter`, `raid/zomboween`, `raid/zomboss`; награда Zomboween брала `default_hard/treasure`; у `raid/zomboween/seeds` перевёрнутый диапазон бросков (min 2, max 1) | Сокровища заполнены; награда Zomboween ссылается на своё сокровище, диапазон 1–2; награда Zomboss бросает и своё сокровище |
+| Ф2: нет лут-таблиц у Imp, Pirate Captain, Pirate Captain Ghost, Zombat, Zombie Goat, Backup Dancer, Gnome | Добавлены, как у остальных зомби — только при убийстве игроком или растением; гном роняет статуэтку своего цвета (предикат `minecraft:nbt`) |
 | Ф2: зелья гипноза, масла и электричества зарегистрированы, но не варятся | Рецепты варки `recipe/brewing/*` (в 26.3 варка задаётся рецептами): неловкое зелье + красный гриб, пчелиные соты или громоотвод (`#minecraft:lightning_rods`), порох и драконье дыхание как у ванильных зелий; названия стрел |
 | Ф2: Brainz Flag есть только в сокровищнице мавзолея (первый рейд зависит от кладбища) | Grave Digger роняет флаг (5 %), странствующий торговец продаёт (редкая сделка, 12 изумрудов) |
 | Ф2: тако крафтится только с модами-фермами | Добавлен ванильный рецепт `taco_from_vanilla` (хлеб, жареная говядина, свёкла, морковь); рецепт с тегами не тронут |

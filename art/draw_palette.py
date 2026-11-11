@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sprout Squad palette (docs/ROADMAP.md, sections 8.1 and 8.3) as art/palette.png.
+"""Sprout Squad palette (style guide in docs/en/WORKSHOP.md) as art/palette.png.
 
 Usage (needs Pillow), from the repository root:
     python3 art/draw_palette.py
