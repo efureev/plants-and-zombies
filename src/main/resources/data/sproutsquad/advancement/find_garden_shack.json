@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:plant_pot"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.find_garden_shack"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.find_garden_shack.description"
+    }
+  },
+  "parent": "sproutsquad:root",
+  "criteria": {
+    "garden_shack": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "sproutsquad:garden_shack"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

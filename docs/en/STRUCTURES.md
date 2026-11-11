@@ -8,7 +8,7 @@ What you can find in the world of Sprout Squad, which structures are planned and
 
 ## In the mod now
 
-Both come from the original mod and appear only in the Graveyard biome. What is inside them is described in [FEATURES](FEATURES.md#structures).
+The Mausoleum and the fences come from the original mod and appear only in the Graveyard biome; the Garden Shack is the fork's own. What is inside them is also described in [FEATURES](FEATURES.md#structures).
 
 <!-- pictures 240: structure:graveyard_mausoleum -->
 <p><img src="../images/structures/graveyard_mausoleum.png" alt="Mausoleum" title="Mausoleum" width="240"></p>
@@ -19,6 +19,21 @@ Both come from the original mod and appear only in the Graveyard biome. What is 
 - **Mausoleum**: a small tomb on the surface with a crypt underneath; its treasure chest always holds a Brainz Flag. The picture shows the part above the ground.
 - **Graveyard fences**: six small fence pieces of tuff and iron bars that stand around the Graveyard.
 
+### Garden Shack
+
+`sproutsquad:garden_shack`
+
+<!-- pictures 240: structure:garden_shack_* -->
+<p><img src="../images/structures/garden_shack_cherry.png" alt="Garden Shack (cherry)" title="Garden Shack (cherry)" width="240"> <img src="../images/structures/garden_shack_oak.png" alt="Garden Shack (oak)" title="Garden Shack (oak)" width="240"> <img src="../images/structures/garden_shack_spruce.png" alt="Garden Shack (spruce)" title="Garden Shack (spruce)" width="240"></p>
+
+An abandoned vegetable garden with a shed: someone grew fighting plants here and then left. Often the first find in a new world, and it teaches how to tame plants.
+
+- **Where:** plains, sunflower plains, meadows, flower forests, cherry groves; about as rare as villages and never right next to one.
+- **Look:** 19×20 blocks. A fenced garden with a gate, beds with water between them, a 5×5 shed of oak, spruce or cherry (the game picks one), a scarecrow, a composter, barrels and a Mailbox by the gate.
+- **Inhabitants:** wild Sunflower, Peashooter, Wall Nut and Potling on the beds, which can be tamed with sun; once they are gone, the garden grows new ones. At night Browncoats come.
+- **Inside:** the shed chest has 2–3 seed packets, 8–16 sun, plant pots, bone meal or seeds, sometimes a Watering Can (20%) or a Gardening Glove (5%); the barrels hold potatoes, carrots, beetroots and seeds. The Mailbox holds the Gardener's Letter, a book with a tip on taming plants: right-click the mailbox and it pops out.
+- **Finding it:** a Cartographer at level 1 may sell a Garden Shack Map (6 emeralds and a compass); the first visit gives the advancement "Someone Else's Garden".
+
 ## Planned structures
 
 > **Concept, not a finished structure.** The pictures are sketches built from real game blocks (see [how they are made](#pictures)). Sizes, rooms, inhabitants and loot will change as the structures are built. Mobs and items marked *(planned)* do not exist yet; on the sketches, similar existing characters stand in for them. Underground structures are shown cut open.
@@ -27,7 +42,6 @@ Both come from the original mod and appear only in the Graveyard biome. What is 
 
 | Structure | Where | Highlight | Main rewards |
 |---|---|---|---|
-| [Garden Shack](#garden-shack) | Overworld: plains, meadows, flower forests, cherry groves | Overgrown beds with wild plants, a letter from the old gardener | Seeds, plant pots, a watering can; teaches taming |
 | [Crypt](#crypt) | Graveyard, underground | A trial that gives the Crypt Key, and a vault | The disc "The Great Pumpkin", Brainz Flag, crypt blocks, seeds |
 | [Robo Junkyard](#robo-junkyard) | Overworld: badlands, savannas, rarely plains | An Engineer's workshop guarded by hostile turrets | Blueprints, Brainz Alloy, rarely Brainzium |
 | [Dig Site](#dig-site) | Jurassic Period | A Rex skeleton in the ground, suspicious gravel for the brush | Amber, seeds of the era |
@@ -46,19 +60,6 @@ Both come from the original mod and appear only in the Graveyard biome. What is 
 - **Data, not code.** A structure is templates (`.nbt`), world-generation JSON, processors, loot tables, and trial spawner and vault configs. Code is needed only for new key items and a few events.
 - **Built from rooms.** Every room is its own template with jigsaw blocks at the joins, so the game puts the rooms together a little differently each time.
 - **Inhabited by the mod's mobs.** Spawns inside the structure's bounds (`spawn_overrides`), Gravestones (each keeps at most two of its zombies alive) and trial spawners configured in JSON.
-
-### Garden Shack
-
-`sproutsquad:garden_shack` (planned id)
-
-<p align="center"><img src="../images/sketches/structures/garden_shack.png" alt="Garden Shack" width="480"></p>
-
-An abandoned vegetable garden with a shed: someone grew fighting plants here and then left. Often the first find in a new world, and it teaches how to tame plants.
-
-- **Where:** plains, sunflower plains, meadows, flower forests, cherry groves; rarer than villages.
-- **Look:** about 15×15 blocks. A fenced garden with a gate, 4–6 beds with water between them, a 5×5 shed of planks and logs (oak, spruce or cherry), a scarecrow, a composter, barrels and a Mailbox by the gate.
-- **Inhabitants:** 2–4 wild plants on the beds (Sunflower, Peashooter, Wall Nut, sometimes Potling) that can be tamed with sun; over time the garden grows new ones. At night 1–2 Browncoats come.
-- **Inside:** the shed chest has seed packets, sun, plant pots and bone meal, sometimes a Watering Can or a Gardening Glove; barrels hold potatoes, carrots and beetroots. The Mailbox holds "The Gardener's Letter", a Letter with a tip on taming plants.
 
 ### Crypt
 
@@ -176,6 +177,8 @@ A pirate brig washed up on a beach. In the original the Pirate Captain appears o
 7. **World generation.** The JSON files below.
 8. **Check.** `/place structure sproutsquad:<id>`, `/locate structure sproutsquad:<id>`, a look at 5–10 of them; `./gradlew runServer`. A GameTest that loads every template and checks its loot tables, vault keys and trial spawner configs is planned.
 9. **Docs.** A paragraph here and in [FEATURES](FEATURES.md#structures) (both languages), a `<!-- pictures: structure:<id>_<piece> -->` line and the name in `STRUCTURE_NAMES` (`tools/docs/pictures.py`), then `python3 tools/docs/refresh.py`.
+
+**Or from a scene.** A structure can also start as a scene of blocks in `tools/docs/sketch_structures.py`: `python3 tools/docs/sketch_structures.py --export <id>` writes its templates, with loot tables, block entities and the characters marked as entities. The Garden Shack was made this way. Once a template is reworked in the game with a structure block, the `.nbt` is the source.
 
 Files of one structure:
 

@@ -575,5 +575,12 @@
   "biome.sproutsquad.jurassic_period": "Jurassic Period",
   "biome.sproutsquad.dark_ages": "Dark Ages",
   "biome.sproutsquad.far_future": "Far Future",
-  "biome.sproutsquad.gnome_space": "Gnome Space"
+  "biome.sproutsquad.gnome_space": "Gnome Space",
+  "item.sproutsquad.gardener_letter": "The Gardener's Letter",
+  "book.sproutsquad.gardener_letter.page1": "To whoever finds my garden:\n\nI had to leave, but the plants stayed. They have gone wild and will not fight for you yet.",
+  "book.sproutsquad.gardener_letter.page2": "Feed a wild plant some sun: right-click it with sun in your hand. It may take a few tries, but once it trusts you, it is yours. Dig up a tamed plant with a shovel to carry it as a seed packet.",
+  "book.sproutsquad.gardener_letter.page3": "Water the beds, keep the zombies off the fence at night, and the garden will grow again.\n\nGood luck!\n\n- the old gardener",
+  "filled_map.sproutsquad.garden_shack": "Garden Shack Map",
+  "advancements.sproutsquad.find_garden_shack": "Someone Else's Garden",
+  "advancements.sproutsquad.find_garden_shack.description": "Find a Garden Shack"
 }

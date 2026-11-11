@@ -1,0 +1,165 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2,
+        "max": 3
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "weight": 3,
+          "modifier": {
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:sunflower"
+              }
+            },
+            "type": "minecraft:set_components"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "weight": 3,
+          "modifier": {
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:peashooter"
+              }
+            },
+            "type": "minecraft:set_components"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "weight": 2,
+          "modifier": {
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:wallnut"
+              }
+            },
+            "type": "minecraft:set_components"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "weight": 2,
+          "modifier": {
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:potling"
+              }
+            },
+            "type": "minecraft:set_components"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:seed_packet",
+          "weight": 1,
+          "modifier": {
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:potatomine"
+              }
+            },
+            "type": "minecraft:set_components"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:sun",
+          "weight": 1,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 8,
+              "max": 16
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:plant_pot",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 2
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bone_meal",
+          "weight": 3,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 6
+            },
+            "type": "minecraft:set_count"
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:wheat_seeds",
+          "weight": 2,
+          "modifier": {
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 5
+            },
+            "type": "minecraft:set_count"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:watering_can",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:gardening_glove",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 75
+        }
+      ]
+    }
+  ],
+  "random_sequence": "sproutsquad:chests/garden_shack/shed"
+}
