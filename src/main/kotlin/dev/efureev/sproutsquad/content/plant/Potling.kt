@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level
 /**
  * Potling, the Sprout Squad mascot. A cheap support plant: every minute it shakes
  * its sprout and drops a sun; sleeps at night. Kept deliberately simple as the template for
- * new characters (see docs/en/CHARACTERS.md).
+ * new characters (see docs/en/characters/potling.md).
  */
 class Potling(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
     override fun attackGoals() {}
