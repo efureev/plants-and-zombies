@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.FarmlandBlock
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.EventHooks
@@ -49,7 +50,8 @@ object OriginalGapsGameTests {
     fun seedTimer(helper: GameTestHelper) {
         val pos = spot(helper)
         clear(helper, pos)
-        helper.setBlock(pos.below(), Blocks.FARMLAND)
+        // wet farmland: dry farmland may turn to dirt on its first random tick, and the timer stops on dirt
+        helper.setBlock(pos.below(), Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, FarmlandBlock.MAX_MOISTURE))
         helper.setBlock(pos, Blocks.AIR)
         helper.setBlock(pos.above(), Blocks.AIR)
         lateinit var plant: Plant

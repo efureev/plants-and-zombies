@@ -154,6 +154,7 @@ object F2GameTests {
         val arena = (0..2).map { x -> helper.absolutePos(BlockPos(dx + x, 0, dz)) }
         lateinit var squash: Squash
         lateinit var zombie: Zombie
+        var leapAt: LivingEntity? = null
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
             .thenExecute {
@@ -166,8 +167,10 @@ object F2GameTests {
                 zombie.setItemSlot(EquipmentSlot.HEAD, ItemStack(Items.IRON_HELMET)) // no sunlight burning
             }
             .thenWaitUntil {
+                if (!squash.isRemoved) squash.target?.let { leapAt = it }
                 helper.assertTrue(squash.isRemoved, "squash has not attacked yet")
-                helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved, "zombie survived the squash")
+                helper.assertTrue(zombie.isDeadOrDying || zombie.isRemoved,
+                    "zombie survived the squash, which went for ${leapAt?.type?.toShortString()} at ${leapAt?.blockPosition()?.toShortString()}")
             }
             .thenSucceed()
     }
