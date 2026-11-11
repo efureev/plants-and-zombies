@@ -144,7 +144,8 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
 
     override fun onSyncedDataUpdated(accessor: EntityDataAccessor<*>) {
         super.onSyncedDataUpdated(accessor)
-        if (accessor == BALL_TRANSFORMATION) reassessNavigation()
+        // Sprout Squad: BALL_TRANSFORMATION is never set; the ball form follows rolling (gardening glove)
+        if (accessor == BALL_TRANSFORMATION || accessor == ROLLING) reassessNavigation()
     }
 
 }

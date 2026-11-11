@@ -161,7 +161,7 @@ fun resolveTextureLocation(base: String, rm: ResourceManager, suffixes: List<Str
 
 val MAGIC_NAMES = mapOf<EntityType<*>, List<String>>(
     PazEntities.SUNFLOWER           to listOf("vampire"),
-    PazEntities.MARIGOLD            to listOf("flowey"),
+    PazEntities.MARIGOLD            to listOf("flowey", "rainbow"),
     PazEntities.CHOMPER             to listOf("chester"),
     PazEntities.FIRE_PEA_SHOOTER    to listOf("blaze"),
     PazEntities.DISCO_ZOMBIE        to listOf("mj"),

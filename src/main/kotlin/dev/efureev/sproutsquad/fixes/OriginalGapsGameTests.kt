@@ -3,8 +3,10 @@ package dev.efureev.sproutsquad.fixes
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
+import joshxviii.plantz.entity.plant.Citron
 import joshxviii.plantz.entity.plant.ExplosivePlant
 import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.zombie.DiggerZombie
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -12,7 +14,9 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.GameType
@@ -83,8 +87,10 @@ object OriginalGapsGameTests {
             baby
         }
         val browncoats = babies(PazEntities.BROWN_COAT)
-        helper.assertTrue(browncoats in 1..40, "$browncoats of 200 Browncoats spawned as babies, expected a few")
         val newspaper = babies(PazEntities.NEWSPAPER_ZOMBIE)
+        // leaders bring followers into the level: remove them, all tests run at the same spot
+        level.getEntities(null as Entity?, AABB(BlockPos.containing(pos)).inflate(32.0)) { it !is Player }.forEach { it.discard() }
+        helper.assertTrue(browncoats in 1..40, "$browncoats of 200 Browncoats spawned as babies, expected a few")
         helper.assertTrue(newspaper == 0, "$newspaper Newspaper Zombies spawned as babies")
         helper.succeed()
     }
@@ -123,6 +129,60 @@ object OriginalGapsGameTests {
             config.plantCooldownEnabled = wasEnabled
             clear(helper, pos)
         }
+        helper.succeed()
+    }
+
+    /** The Digger digs through a dirt wall in a closed obsidian corridor between it and its target. */
+    fun diggerMines(helper: GameTestHelper) {
+        val pos = spot(helper)
+        clear(helper, pos)
+        // corridor x 0..4: obsidian floor, side walls and roof, so going around the wall is impossible
+        for (x in -1..5) for (y in -1..2) for (z in -1..1) {
+            val inside = x in 0..4 && y in 0..1 && z == 0
+            helper.setBlock(pos.offset(x, y, z), if (inside) Blocks.AIR else Blocks.OBSIDIAN)
+        }
+        val wall = pos.offset(2, 0, 0)
+        lateinit var digger: DiggerZombie
+        lateinit var plant: Plant
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(helper.level.isPositionEntityTicking(helper.absolutePos(pos)), "spot is not ticking yet") }
+            .thenExecute {
+                helper.setBlock(wall, Blocks.DIRT)
+                helper.setBlock(wall.above(), Blocks.DIRT)
+                plant = helper.spawn(PazEntities.SUNFLOWER, pos.offset(4, 0, 0))
+                digger = helper.spawn(PazEntities.DIGGER_ZOMBIE, pos)
+                digger.tunnelCooldown = 100_000 // no burrowing past the wall
+            }
+            .thenWaitUntil {
+                if (digger.target == null) digger.target = plant
+                helper.assertTrue(helper.getBlockState(wall).isAir || helper.getBlockState(wall.above()).isAir, "the Digger has not dug through the wall")
+            }
+            .thenExecute {
+                clear(helper, pos)
+                for (x in -1..5) for (y in -1..2) for (z in -1..1) helper.setBlock(pos.offset(x, y, z), Blocks.AIR)
+            }
+            .thenSucceed()
+    }
+
+    /** A dye recolours a Marigold and is used up. */
+    fun marigoldDye(helper: GameTestHelper) {
+        val marigold = helper.spawn(PazEntities.MARIGOLD, BlockPos(0, 1, 0))
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.DYE.red(), 2))
+        player.interactOn(marigold, InteractionHand.MAIN_HAND, marigold.position())
+        helper.assertTrue(MarigoldColors.color(marigold) == DyeColor.RED, "the Marigold is ${MarigoldColors.color(marigold)}, not red")
+        helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).count == 1, "the dye was not used up")
+        marigold.discard()
+        helper.succeed()
+    }
+
+    /** A rolling Citron (pushed with a gardening glove) switches to its ball form. */
+    fun citronBall(helper: GameTestHelper) {
+        val citron = helper.spawn(PazEntities.CITRON, BlockPos(0, 1, 0))
+        citron.rolling = true
+        val speed = citron.getAttribute(Attributes.MOVEMENT_SPEED)!!
+        helper.assertTrue(speed.hasModifier(Citron.TRANSFORMED_ID), "the rolling Citron did not switch to the ball form")
+        citron.discard()
         helper.succeed()
     }
 }

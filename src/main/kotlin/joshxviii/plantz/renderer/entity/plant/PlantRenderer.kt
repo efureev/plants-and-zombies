@@ -181,6 +181,8 @@ open class PlantRenderer(
                     else -> ""
                 })
                 is KernelPult -> if (entity.hasButterShot) add("butter")
+                // Sprout Squad: dyed Marigolds (MarigoldColors); sleeping textures are named marigold_sleep_<colour>
+                is Marigold -> dev.efureev.sproutsquad.fixes.MarigoldColors.color(entity)?.let { add(if (entity.isAsleep) "sleep_${it.serializedName}" else it.serializedName) }
                 else -> {}
             }
         }

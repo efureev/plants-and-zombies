@@ -21,5 +21,10 @@ object SquadAttachments {
         AttachmentType.builder { -> false }.serialize(Codec.BOOL.fieldOf("value")) { it }.sync(ByteBufCodecs.BOOL).build()
     }
 
+    /** Dye colour of a Marigold (`DyeColor` id), −1 = natural. Saved and synced for the texture. */
+    val MARIGOLD_COLOR: DeferredHolder<AttachmentType<*>, AttachmentType<Int>> = ATTACHMENT_TYPES.register("marigold_color") { ->
+        AttachmentType.builder { -> -1 }.serialize(Codec.INT.fieldOf("value")) { it >= 0 }.sync(ByteBufCodecs.VAR_INT).build()
+    }
+
     fun register(modBus: IEventBus) = ATTACHMENT_TYPES.register(modBus)
 }
