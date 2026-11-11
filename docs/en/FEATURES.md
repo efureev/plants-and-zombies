@@ -28,14 +28,14 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 
 Sun is the plant currency.
 
-| Source | What you get |
-|---|---|
-| [Sunflower](characters/sunflower.md) | 1 sun about every 45 s while the sun is visible; sleeps at night |
-| [Potling](characters/potling.md) | 1 sun about every 60 s while the sun is visible; sleeps at night |
-| [Sun-shroom](characters/sunshroom.md) | 1 sun about every 65 s, 2 once it has grown up; a mushroom, so it works at night and underground |
-| Killing a plant yourself | half of its sun cost |
-| Bottle of Sun | throw it to release 8 sun, or craft it back into 8 sun |
-| Raid rewards | Bottles of Sun in many reward tables |
+| | Source | What you get |
+|---|---|---|
+| <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 1 sun about every 45 s while the sun is visible; sleeps at night |
+| <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 1 sun about every 60 s while the sun is visible; sleeps at night |
+| <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 1 sun about every 65 s, 2 once it has grown up; a mushroom, so it works at night and underground |
+|  | Killing a plant yourself | half of its sun cost |
+|  | Bottle of Sun | throw it to release 8 sun, or craft it back into 8 sun |
+|  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
 - Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling).
@@ -47,41 +47,41 @@ Sun is the plant currency.
 
 Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 
-| Plant | Sun | What it does | Where to get it |
-|---|---|---|---|
-| [Sunflower](characters/sunflower.md) | 5 | Makes sun by day | Plains, flower forests, oak and birch forests; Browncoat drop (1%) |
-| [Marigold](characters/marigold.md) | 5 | Does not fight; when "grown" gives treasure instead of seeds (see below) | Raid rewards of later waves |
-| [Potling](characters/potling.md) | 3 | Sprout Squad's mascot: cheap sun maker | Crafting: flower pot, wheat seeds, 3 sun |
-| [Sun-shroom](characters/sunshroom.md) | 6 | Mushroom that makes sun | Lush caves, dark forests, warped and crimson forests, mushroom fields; rarely plains |
-| [Peashooter](characters/peashooter.md) | 5 | Shoots peas | Plains, flower forests, oak forests; Browncoat drop (1%) |
-| [Repeater](characters/repeater.md) | 7 | Shoots two peas | Peashooter seed mutation; early raid rewards |
-| [Snow Pea](characters/ice_peashooter.md) | 7 | Ice peas that Chill | Snowy and icy biomes; Zombie Yeti drop (6%); Winter Wonderland rewards |
-| [Fire Peashooter](characters/fire_peashooter.md) | 7 | Fire peas | Crimson Forest; Peashooter mutation there |
-| [Electric Peashooter](characters/electric_peashooter.md) | 8 | Electric peas (Electrified) | A Peashooter struck by lightning turns into one; mutation during thunderstorms; late raid rewards |
-| [Cactus](characters/cactus.md) | 6 | Shoots needles | Deserts, badlands |
-| [Cabbage-pult](characters/cabbagepult.md) | 5 | Lobs cabbages over obstacles | Plains, forests; village chests |
-| [Kernel-pult](characters/kernelpult.md) | 6 | Lobs kernels, every fourth shot or so is butter (Buttered) | Plains, savannas; village chests |
-| [Melon-pult](characters/melonpult.md) | 10 | Lobs heavy melons | Jungles |
-| [Winter Melon](characters/winter_melon.md) | 12 | Lobs frozen melons (Chilled) | Melon-pult mutation in cold biomes; Winter Wonderland rewards |
-| [Wall-nut](characters/wallnut.md) | 5 | Blocks zombies, deflects arrows, tridents, wind charges and rockets; can be rolled | Plains, forests; Browncoat drop (1%) |
-| [Explode-o-nut](characters/explode_o_nut.md) | 5 | A Wall-nut that explodes when it rolls into a mob or is killed by a hit | Wall-nut mutation |
-| [Chomper](characters/chomper.md) | 7 | Swallows a mob whole and chews for a while (large mobs are immune) | Swamps, jungles |
-| [Cherry Bomb](characters/cherrybomb.md) | 7 | Explodes | Basalt Deltas; bastion and village chests; Farmer; Digger Zombie drop (8%) |
-| [Potato Mine](characters/potatomine.md) | 3 | Arms after about 10 s and explodes on contact; zombies do not target it | Farmer; village chests; Imp drop (5%); early raid rewards |
-| [Squash](characters/squash.md) | 4 | Leaps onto a zombie within 3 blocks and squashes it, then is gone (single use) | Plains, savannas |
-| [Bonk Choy](characters/bonkchoy.md) | 4 | Punches up close | Bamboo jungles, savannas; early raid rewards |
-| [Lightning Reed](characters/lightning_reed.md) | 8 | Electric zaps (Electrified) | Swamps, rivers |
-| [Tangle Kelp](characters/tanglekelp.md) | 2 | Water plant: grabs a mob and holds it (Tangled); zombies do not target it | Swamps, mangroves |
-| [Puff-shroom](characters/puffshroom.md) | 0 | Short-range spores | Dark forests, taigas, mushroom fields, caves |
-| [Scaredy-shroom](characters/scaredyshroom.md) | 3 | Long-range spores, hides when enemies come close | Same as Puff-shroom |
-| [Fume-shroom](characters/fumeshroom.md) | 6 | A stream of toxic fumes (Toxic) | Same as Puff-shroom; mausoleum chests |
-| [Hypno-shroom](characters/hypnoshroom.md) | 7 | Whoever hits it is Hypnotized; releases a hypnosis cloud when it dies | Lush caves, dark and warped forests, mushroom fields; Disco Zombie drop (4%); early raid rewards |
-| [Ice-shroom](characters/iceshroom.md) | 5 | Freezes everything around it (Frozen) | Snowy taigas, groves, ice spikes, frozen peaks and oceans |
-| [Doom-shroom](characters/doomshroom.md) | 14 | Huge explosion | Basalt Deltas; bastion chests; late raid rewards |
-| [Sea-shroom](characters/seashroom.md) | 0 | Water plant: water spores | Rivers, deep oceans; fishing; Pirate Captain Ghost drop (3%) |
-| [Coffee Bean](characters/coffeebean.md) | 2 | Wakes up a sleeping plant | Jungles; Winter Wonderland rewards |
-| [Grave Buster](characters/grave_buster.md) | 3 | Planted on a gravestone, eats it and leaves grave loot; zombies do not target it | Graveyard, Pale Garden; Grave Digger (10%) and Zombat (3%) drops; raid rewards; mausoleum chests |
-| [Pumpkin](characters/pumpkin.md) | 6 | Armor for another plant | Carving pumpkins (5.5%); Zomboween rewards |
+| | Plant | Sun | What it does | Where to get it |
+|---|---|---|---|---|
+| <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 5 | Makes sun by day | Plains, flower forests, oak and birch forests; Browncoat drop (1%) |
+| <img src="../images/characters/marigold.png" alt="" width="112"> | [Marigold](characters/marigold.md) | 5 | Does not fight; when "grown" gives treasure instead of seeds (see below) | Raid rewards of later waves |
+| <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 3 | Sprout Squad's mascot: cheap sun maker | Crafting: flower pot, wheat seeds, 3 sun |
+| <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 6 | Mushroom that makes sun | Lush caves, dark forests, warped and crimson forests, mushroom fields; rarely plains |
+| <img src="../images/characters/peashooter.png" alt="" width="112"> | [Peashooter](characters/peashooter.md) | 5 | Shoots peas | Plains, flower forests, oak forests; Browncoat drop (1%) |
+| <img src="../images/characters/repeater.png" alt="" width="112"> | [Repeater](characters/repeater.md) | 7 | Shoots two peas | Peashooter seed mutation; early raid rewards |
+| <img src="../images/characters/ice_peashooter.png" alt="" width="112"> | [Snow Pea](characters/ice_peashooter.md) | 7 | Ice peas that Chill | Snowy and icy biomes; Zombie Yeti drop (6%); Winter Wonderland rewards |
+| <img src="../images/characters/fire_peashooter.png" alt="" width="112"> | [Fire Peashooter](characters/fire_peashooter.md) | 7 | Fire peas | Crimson Forest; Peashooter mutation there |
+| <img src="../images/characters/electric_peashooter.png" alt="" width="112"> | [Electric Peashooter](characters/electric_peashooter.md) | 8 | Electric peas (Electrified) | A Peashooter struck by lightning turns into one; mutation during thunderstorms; late raid rewards |
+| <img src="../images/characters/cactus.png" alt="" width="112"> | [Cactus](characters/cactus.md) | 6 | Shoots needles | Deserts, badlands |
+| <img src="../images/characters/cabbagepult.png" alt="" width="112"> | [Cabbage-pult](characters/cabbagepult.md) | 5 | Lobs cabbages over obstacles | Plains, forests; village chests |
+| <img src="../images/characters/kernelpult.png" alt="" width="112"> | [Kernel-pult](characters/kernelpult.md) | 6 | Lobs kernels, every fourth shot or so is butter (Buttered) | Plains, savannas; village chests |
+| <img src="../images/characters/melonpult.png" alt="" width="112"> | [Melon-pult](characters/melonpult.md) | 10 | Lobs heavy melons | Jungles |
+| <img src="../images/characters/winter_melon.png" alt="" width="112"> | [Winter Melon](characters/winter_melon.md) | 12 | Lobs frozen melons (Chilled) | Melon-pult mutation in cold biomes; Winter Wonderland rewards |
+| <img src="../images/characters/wallnut.png" alt="" width="112"> | [Wall-nut](characters/wallnut.md) | 5 | Blocks zombies, deflects arrows, tridents, wind charges and rockets; can be rolled | Plains, forests; Browncoat drop (1%) |
+| <img src="../images/characters/explode_o_nut.png" alt="" width="112"> | [Explode-o-nut](characters/explode_o_nut.md) | 5 | A Wall-nut that explodes when it rolls into a mob or is killed by a hit | Wall-nut mutation |
+| <img src="../images/characters/chomper.png" alt="" width="112"> | [Chomper](characters/chomper.md) | 7 | Swallows a mob whole and chews for a while (large mobs are immune) | Swamps, jungles |
+| <img src="../images/characters/cherrybomb.png" alt="" width="112"> | [Cherry Bomb](characters/cherrybomb.md) | 7 | Explodes | Basalt Deltas; bastion and village chests; Farmer; Digger Zombie drop (8%) |
+| <img src="../images/characters/potatomine.png" alt="" width="112"> | [Potato Mine](characters/potatomine.md) | 3 | Arms after about 10 s and explodes on contact; zombies do not target it | Farmer; village chests; Imp drop (5%); early raid rewards |
+| <img src="../images/characters/squash.png" alt="" width="112"> | [Squash](characters/squash.md) | 4 | Leaps onto a zombie within 3 blocks and squashes it, then is gone (single use) | Plains, savannas |
+| <img src="../images/characters/bonkchoy.png" alt="" width="112"> | [Bonk Choy](characters/bonkchoy.md) | 4 | Punches up close | Bamboo jungles, savannas; early raid rewards |
+| <img src="../images/characters/lightning_reed.png" alt="" width="112"> | [Lightning Reed](characters/lightning_reed.md) | 8 | Electric zaps (Electrified) | Swamps, rivers |
+| <img src="../images/characters/tanglekelp.png" alt="" width="112"> | [Tangle Kelp](characters/tanglekelp.md) | 2 | Water plant: grabs a mob and holds it (Tangled); zombies do not target it | Swamps, mangroves |
+| <img src="../images/characters/puffshroom.png" alt="" width="112"> | [Puff-shroom](characters/puffshroom.md) | 0 | Short-range spores | Dark forests, taigas, mushroom fields, caves |
+| <img src="../images/characters/scaredyshroom.png" alt="" width="112"> | [Scaredy-shroom](characters/scaredyshroom.md) | 3 | Long-range spores, hides when enemies come close | Same as Puff-shroom |
+| <img src="../images/characters/fumeshroom.png" alt="" width="112"> | [Fume-shroom](characters/fumeshroom.md) | 6 | A stream of toxic fumes (Toxic) | Same as Puff-shroom; mausoleum chests |
+| <img src="../images/characters/hypnoshroom.png" alt="" width="112"> | [Hypno-shroom](characters/hypnoshroom.md) | 7 | Whoever hits it is Hypnotized; releases a hypnosis cloud when it dies | Lush caves, dark and warped forests, mushroom fields; Disco Zombie drop (4%); early raid rewards |
+| <img src="../images/characters/iceshroom.png" alt="" width="112"> | [Ice-shroom](characters/iceshroom.md) | 5 | Freezes everything around it (Frozen) | Snowy taigas, groves, ice spikes, frozen peaks and oceans |
+| <img src="../images/characters/doomshroom.png" alt="" width="112"> | [Doom-shroom](characters/doomshroom.md) | 14 | Huge explosion | Basalt Deltas; bastion chests; late raid rewards |
+| <img src="../images/characters/seashroom.png" alt="" width="112"> | [Sea-shroom](characters/seashroom.md) | 0 | Water plant: water spores | Rivers, deep oceans; fishing; Pirate Captain Ghost drop (3%) |
+| <img src="../images/characters/coffeebean.png" alt="" width="112"> | [Coffee Bean](characters/coffeebean.md) | 2 | Wakes up a sleeping plant | Jungles; Winter Wonderland rewards |
+| <img src="../images/characters/grave_buster.png" alt="" width="112"> | [Grave Buster](characters/grave_buster.md) | 3 | Planted on a gravestone, eats it and leaves grave loot; zombies do not target it | Graveyard, Pale Garden; Grave Digger (10%) and Zombat (3%) drops; raid rewards; mausoleum chests |
+| <img src="../images/characters/pumpkin.png" alt="" width="112"> | [Pumpkin](characters/pumpkin.md) | 6 | Armor for another plant | Carving pumpkins (5.5%); Zomboween rewards |
 
 About wild plants:
 
@@ -175,32 +175,32 @@ You can have at most 30 plants of the same kind within 32 blocks (with co-op pla
 
 Zombies spawn in the dark like vanilla monsters, never on Peaceful. In the Graveyard most of them spawn regardless of light. Browncoats and Newspaper Zombies also appear in water (more often in the rain), and a zombie that spawns in water wears a Ducky Tube. "Common biomes" are forests, plains, taigas, jungles, savannas, beaches, swamps, deserts, icy biomes, mountain peaks and the Graveyard (tag `#sproutsquad:zombie/common_spawns`).
 
-| Zombie | Where | Notes |
-|---|---|---|
-| [Browncoat](characters/browncoat.md) | Common biomes, rivers, oceans | The most common zombie; its look depends on the biome |
-| [Newspaper Zombie](characters/newspaper_zombie.md) | Common biomes, water | Gets angry when it loses its newspaper |
-| [Digger Zombie](characters/digger_zombie.md) | Common biomes, underground | Tunnels toward its target, digs through blocks in its way |
-| [Disco Zombie](characters/disco_zombie.md) | Common biomes | Summons Backup Dancers |
-| [All Star](characters/all_star.md) | Common biomes | Charges and tramples |
-| [Grave Digger](characters/grave_digger.md) | Common biomes | Digs up gravestones while chasing you, then retreats |
-| [Imp](characters/imp.md) | Common biomes | Small and quick, its bite can be Toxic |
-| [Zombie Yeti](characters/zombie_yeti.md) | Snowy and cold biomes, icy peaks | Throws powder snow (Chilled) |
-| [Zombat](characters/zombat.md) | Graveyard, even by day | Flies, heals itself when it hurts a mob |
-| [Zombie Goat](characters/zombie_goat.md) | Snowy slopes, peaks, groves, windswept hills, at night | 40% of them carry an Imp rider (Sprout Squad) |
+| | Zombie | Where | Notes |
+|---|---|---|---|
+| <img src="../images/characters/browncoat.png" alt="" width="112"> | [Browncoat](characters/browncoat.md) | Common biomes, rivers, oceans | The most common zombie; its look depends on the biome |
+| <img src="../images/characters/newspaper_zombie.png" alt="" width="112"> | [Newspaper Zombie](characters/newspaper_zombie.md) | Common biomes, water | Gets angry when it loses its newspaper |
+| <img src="../images/characters/digger_zombie.png" alt="" width="112"> | [Digger Zombie](characters/digger_zombie.md) | Common biomes, underground | Tunnels toward its target, digs through blocks in its way |
+| <img src="../images/characters/disco_zombie.png" alt="" width="112"> | [Disco Zombie](characters/disco_zombie.md) | Common biomes | Summons Backup Dancers |
+| <img src="../images/characters/all_star.png" alt="" width="112"> | [All Star](characters/all_star.md) | Common biomes | Charges and tramples |
+| <img src="../images/characters/grave_digger.png" alt="" width="112"> | [Grave Digger](characters/grave_digger.md) | Common biomes | Digs up gravestones while chasing you, then retreats |
+| <img src="../images/characters/imp.png" alt="" width="112"> | [Imp](characters/imp.md) | Common biomes | Small and quick, its bite can be Toxic |
+| <img src="../images/characters/zombie_yeti.png" alt="" width="112"> | [Zombie Yeti](characters/zombie_yeti.md) | Snowy and cold biomes, icy peaks | Throws powder snow (Chilled) |
+| <img src="../images/characters/zombat.png" alt="" width="112"> | [Zombat](characters/zombat.md) | Graveyard, even by day | Flies, heals itself when it hurts a mob |
+| <img src="../images/characters/zombie_goat.png" alt="" width="112"> | [Zombie Goat](characters/zombie_goat.md) | Snowy slopes, peaks, groves, windswept hills, at night | 40% of them carry an Imp rider (Sprout Squad) |
 
 Only in raids (or from spawn eggs):
 
-| Zombie | Notes |
-|---|---|
-| [Backup Dancer](characters/backup_dancer.md) | Summoned by the Disco Zombie |
-| [Engineer Zombie](characters/engineer_zombie.md) | Avoids players and plants and builds hostile machines |
-| [Soldier Zombie](characters/soldier_zombie.md) | Fires a Dye Blaster |
-| [Robo-Zombie](characters/robo_zombie.md) | Transforms, fires missiles |
-| [Pirate Captain](characters/pirate_captain.md) | Fires fireworks; comes back as a [Pirate Captain Ghost](characters/pirate_captain_ghost.md) |
-| [Super Brainz](characters/super_brainz.md) | Energy beams and punches |
-| [Gargantuar](characters/gargantuar.md) | Huge, smashes and throws Imps |
-| [Baron Von Bats](characters/baron_von_bats.md) | Boss: summons Zombats, transforms |
-| [Electric Slide](characters/electric_slide.md) | Roller skater with electric attacks |
+| | Zombie | Notes |
+|---|---|---|
+| <img src="../images/characters/backup_dancer.png" alt="" width="112"> | [Backup Dancer](characters/backup_dancer.md) | Summoned by the Disco Zombie |
+| <img src="../images/characters/engineer_zombie.png" alt="" width="112"> | [Engineer Zombie](characters/engineer_zombie.md) | Avoids players and plants and builds hostile machines |
+| <img src="../images/characters/soldier_zombie.png" alt="" width="112"> | [Soldier Zombie](characters/soldier_zombie.md) | Fires a Dye Blaster |
+| <img src="../images/characters/robo_zombie.png" alt="" width="112"> | [Robo-Zombie](characters/robo_zombie.md) | Transforms, fires missiles |
+| <img src="../images/characters/pirate_captain.png" alt="" width="112"> | [Pirate Captain](characters/pirate_captain.md) | Fires fireworks; comes back as a [Pirate Captain Ghost](characters/pirate_captain_ghost.md) |
+| <img src="../images/characters/super_brainz.png" alt="" width="112"> | [Super Brainz](characters/super_brainz.md) | Energy beams and punches |
+| <img src="../images/characters/gargantuar.png" alt="" width="112"> | [Gargantuar](characters/gargantuar.md) | Huge, smashes and throws Imps |
+| <img src="../images/characters/baron_von_bats.png" alt="" width="112"> | [Baron Von Bats](characters/baron_von_bats.md) | Boss: summons Zombats, transforms |
+| <img src="../images/characters/electric_slide.png" alt="" width="112"> | [Electric Slide](characters/electric_slide.md) | Roller skater with electric attacks |
 
 ### Variants
 
@@ -335,12 +335,12 @@ The Giga-Football Zombie, Electric Boogaloo and Robo-General are enlarged versio
 
 A blueprint builds a machine. Right-click a block with it: the machine appears facing you, and its cost in Brainz Alloy is taken from your inventory. A blueprint lasts 20 builds.
 
-| Machine | Brainz Alloy | What it does |
-|---|---|---|
-| [Zombie Turret](characters/zombie_turret.md) | 12 | Shoots laser bolts |
-| [Electro Turret](characters/electro_turret.md) | 10 | Zaps mobs within about 8 blocks and Electrifies them |
-| [Zombie Drone](characters/zombie_drone.md) | 8 | Flies and attacks |
-| [Lawn Mower](characters/lawn_mower.md) | 14 | The last line of defence: waits until a monster comes right up to its front, then drives up to 40 blocks (or until it hits a wall) and mows down every monster on its way; bosses take 40 damage. Used up after one run, placed with its handle toward you, and only a player can break it |
+| | Machine | Brainz Alloy | What it does |
+|---|---|---|---|
+| <img src="../images/characters/zombie_turret.png" alt="" width="112"> | [Zombie Turret](characters/zombie_turret.md) | 12 | Shoots laser bolts |
+| <img src="../images/characters/electro_turret.png" alt="" width="112"> | [Electro Turret](characters/electro_turret.md) | 10 | Zaps mobs within about 8 blocks and Electrifies them |
+| <img src="../images/characters/zombie_drone.png" alt="" width="112"> | [Zombie Drone](characters/zombie_drone.md) | 8 | Flies and attacks |
+| <img src="../images/characters/lawn_mower.png" alt="" width="112"> | [Lawn Mower](characters/lawn_mower.md) | 14 | The last line of defence: waits until a monster comes right up to its front, then drives up to 40 blocks (or until it hits a wall) and mows down every monster on its way; bosses take 40 damage. Used up after one run, placed with its handle toward you, and only a player can break it |
 
 - Blueprints: Engineer Zombie (8.5%, one of its three machines) and the Robo Army treasure (all four machines, the Lawn Mower is rare). Costs are set by the server option `alloyCosts`.
 - In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.

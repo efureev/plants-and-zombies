@@ -4,6 +4,9 @@
 Usage, from the repository root:
     python3 tools/docs/build_character_index.py
 
+Also adds character thumbnails to the tables of docs/<locale>/FEATURES.md whose rows start
+with a character link (once; safe to run again).
+
 Every card `docs/<locale>/characters/<id>.md` starts with:
     # <Name>
     **<Kind> · <role>** · <origin>
@@ -166,9 +169,43 @@ def build(locale, cfg):
     return len(cards)
 
 
+THUMB = '<img src="../images/characters/{id}.png" alt="" width="112">'
+LINK = re.compile(r"^\s*\[[^\]]+\]\(characters/([\w]+)\.md\)")
+
+
+def thumbnails_in_features(locale):
+    """Adds a thumbnail column to the FEATURES tables whose rows start with a character link (idempotent)."""
+    path = os.path.join("docs", locale, "FEATURES.md")
+    if not os.path.exists(path):
+        return 0
+    lines = open(path, encoding="utf-8").read().split("\n")
+    out, i, count = [], 0, 0
+    while i < len(lines):
+        if not lines[i].startswith("|"):
+            out.append(lines[i]); i += 1
+            continue
+        j = i
+        while j < len(lines) and lines[j].startswith("|"):
+            j += 1
+        table = lines[i:j]
+        cells = [[c for c in row.strip().strip("|").split("|")] for row in table]
+        has_thumbs = any(c and c[0].strip().startswith("<img") for c in cells[2:])
+        if len(table) > 2 and not has_thumbs and any(LINK.match(c[0]) for c in cells[2:] if c):
+            table = ["| " + table[0].lstrip("|").lstrip() if False else "| |" + table[0][1:], "|---" + table[1]] + [
+                "| " + (THUMB.format(id=LINK.match(c[0]).group(1)) if LINK.match(c[0]) and os.path.exists(
+                    os.path.join("docs", "images", "characters", LINK.match(c[0]).group(1) + ".png")) else "") + " " + row
+                for row, c in zip(table[2:], cells[2:])]
+        count += sum(1 for row in table if "images/characters/" in row)
+        out += table
+        i = j
+    with open(path, "w", encoding="utf-8") as f:
+        f.write("\n".join(out))
+    return count
+
+
 def main():
     for locale, cfg in LOCALES.items():
-        print(locale, build(locale, cfg), "cards")
+        print(locale, build(locale, cfg), "cards,", thumbnails_in_features(locale), "thumbnails in FEATURES")
 
 
 if __name__ == "__main__":
