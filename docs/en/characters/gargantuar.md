@@ -33,10 +33,10 @@ A huge zombie that appears only as a raid boss. It smashes the ground, punches, 
 
 ## Variants
 
-| Variant | Difference |
-|---|---|
-| Gargantuar | default |
-| Pirate Gargantuar (`pirate`) | the boss of a Pirate Invasion wave; the Imp it throws is a Pirate Imp with a powder barrel |
+| | Variant | Difference |
+|---|---|---|
+| <img src="../../images/characters/gargantuar.png" alt="" width="112"> | Gargantuar | default |
+| <img src="../../images/characters/gargantuar_pirate.png" alt="" width="112"> | Pirate Gargantuar (`pirate`) | the boss of a Pirate Invasion wave; the Imp it throws is a Pirate Imp with a powder barrel |
 
 ## Interactions
 

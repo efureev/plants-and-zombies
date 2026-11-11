@@ -30,11 +30,11 @@ A small, quick zombie with a toxic bite. The [Gargantuar](gargantuar.md) carries
 
 ## Variants
 
-| Variant | Where and difference |
-|---|---|
-| Imp | default |
-| Yeti Imp (`yeti`) | always in snowy biomes (`#sproutsquad:zombie/has_browncoat_snow`) and in Winter Wonderland; instead of Toxic, a 50 % chance per bite to give Chilled II (7.5 s on Normal, 18 s on Hard, 1 s on Easy); cannot be frozen |
-| Pirate Imp (`pirate`) | Pirate Invasion and the Pirate Gargantuar; carries a powder barrel that explodes (no block damage) when the Imp comes within 1 block of its target or is killed by a direct hit |
+| | Variant | Where and difference |
+|---|---|---|
+| <img src="../../images/characters/imp.png" alt="" width="112"> | Imp | default |
+| <img src="../../images/characters/imp_yeti.png" alt="" width="112"> | Yeti Imp (`yeti`) | always in snowy biomes (`#sproutsquad:zombie/has_browncoat_snow`) and in Winter Wonderland; instead of Toxic, a 50 % chance per bite to give Chilled II (7.5 s on Normal, 18 s on Hard, 1 s on Easy); cannot be frozen |
+| <img src="../../images/characters/imp_pirate.png" alt="" width="112"> | Pirate Imp (`pirate`) | Pirate Invasion and the Pirate Gargantuar; carries a powder barrel that explodes (no block damage) when the Imp comes within 1 block of its target or is killed by a direct hit |
 
 ## Interactions
 

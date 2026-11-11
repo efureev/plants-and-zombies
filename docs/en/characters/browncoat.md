@@ -42,17 +42,20 @@ The other zombie cards refer to this list.
 
 ## Variants
 
-| Variant | Where and when |
-|---|---|
-| Browncoat | default |
-| Balloon Zombie (`balloon`) | a third of plain Browncoats that spawn with balloons; it gets 2 extra balloons |
-| Snowcoat (`snowcoat`) | 75 % in `#sproutsquad:zombie/has_browncoat_snow`; every Browncoat of Winter Wonderland (white boots, 65 % with Frost Walker II; 40 % an iron shovel); cannot be frozen |
-| Desert Zombie (`desert`) | 75 % in deserts and badlands (`#sproutsquad:zombie/has_browncoat_desert`) |
-| Buccaneer (`buccaneer`) | always in shipwrecks, 60 % on beaches; every Browncoat of Pirate Invasion (40 % an iron sword) |
-| Vampire Zombie (`vampire`) | 8 % elsewhere from 17 October to 1 November; every Browncoat of Zomboween; summoned by [Baron Von Bats](baron_von_bats.md) |
+| | Variant | Where and when |
+|---|---|---|
+| <img src="../../images/characters/browncoat.png" alt="" width="112"> | Browncoat | default |
+| <img src="../../images/characters/browncoat_balloon.png" alt="" width="112"> | Balloon Zombie (`balloon`) | a third of plain Browncoats that spawn with balloons; it gets 2 extra balloons |
+| <img src="../../images/characters/browncoat_snowcoat.png" alt="" width="112"> | Snowcoat (`snowcoat`) | 75 % in `#sproutsquad:zombie/has_browncoat_snow`; every Browncoat of Winter Wonderland (white boots, 65 % with Frost Walker II; 40 % an iron shovel); cannot be frozen |
+| <img src="../../images/characters/browncoat_desert.png" alt="" width="112"> | Desert Zombie (`desert`) | 75 % in deserts and badlands (`#sproutsquad:zombie/has_browncoat_desert`) |
+| <img src="../../images/characters/browncoat_buccaneer.png" alt="" width="112"> | Buccaneer (`buccaneer`) | always in shipwrecks, 60 % on beaches; every Browncoat of Pirate Invasion (40 % an iron sword) |
+| <img src="../../images/characters/browncoat_vampire.png" alt="" width="112"> | Vampire Zombie (`vampire`) | 8 % elsewhere from 17 October to 1 November; every Browncoat of Zomboween; summoned by [Baron Von Bats](baron_von_bats.md) |
 
 ## Interactions
 
 - Special waves dress it up: buckets and armour (Bucket Brigade, 20 % with an iron Door Shield), balloons (Half-Time Showdown), party hats (Disco of the Undead), pumpkins (Zomboween).
 - [Hypno Shroom](hypnoshroom.md) turns it to the player's side; [Grave Buster](grave_buster.md) eats the Gravestones it comes out of.
 - A name tag "Tugboat" or "Mustache" gives it a special texture.
+
+<!-- pictures: browncoat_tugboat browncoat_mustache -->
+<p><img src="../../images/characters/browncoat_tugboat.png" alt="Browncoat «Tugboat»" title="Browncoat «Tugboat»" width="112"> <img src="../../images/characters/browncoat_mustache.png" alt="Browncoat «Mustache»" title="Browncoat «Mustache»" width="112"></p>

@@ -31,3 +31,6 @@ A Peashooter from the Nether whose peas set targets on fire.
 - An ordinary pea from a [Peashooter](peashooter.md) or [Repeater](repeater.md) that flies through fire also becomes a fire pea.
 - A wild one is tamed by feeding it sun: about 24% chance per sun.
 - Named `blaze` with a name tag, it gets a different look.
+
+<!-- pictures: fire_peashooter_blaze -->
+<p><img src="../../images/characters/fire_peashooter_blaze.png" alt="Fire Peashooter «Blaze»" title="Fire Peashooter «Blaze»" width="112"></p>

@@ -30,10 +30,10 @@ An armoured football player in a Football Helmet. It keeps charging at its targe
 
 ## Variants
 
-| Variant | Difference |
-|---|---|
-| All Star | default |
-| Giga-Football Zombie (`giga`) | raid boss form: no helmet, +4 armour, scale +0.33, health ×3.25 (about 179), damage ×2.5 (17.5); a spawn egg with this variant gives the boss stats too |
+| | Variant | Difference |
+|---|---|---|
+| <img src="../../images/characters/all_star.png" alt="" width="112"> | All Star | default |
+| <img src="../../images/characters/all_star_giga.png" alt="" width="112"> | Giga-Football Zombie (`giga`) | raid boss form: no helmet, +4 armour, scale +0.33, health ×3.25 (about 179), damage ×2.5 (17.5); a spawn egg with this variant gives the boss stats too |
 
 ## Interactions
 

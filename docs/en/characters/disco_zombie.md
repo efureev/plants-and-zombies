@@ -33,3 +33,6 @@ A dancing zombie that calls a troupe of [Backup Dancers](backup_dancer.md) out o
 - The music disc drops only when a Backup Dancer lands the killing blow — in practice a dancer turned by a [Hypno Shroom](hypnoshroom.md).
 - A name tag "MJ" gives it a special texture.
 - Advancement "The Three Zombieteers": defeat an [All Star](all_star.md), a Disco Zombie and a [Zombie Yeti](zombie_yeti.md).
+
+<!-- pictures: disco_zombie_mj -->
+<p><img src="../../images/characters/disco_zombie_mj.png" alt="Disco Zombie «MJ»" title="Disco Zombie «MJ»" width="112"></p>

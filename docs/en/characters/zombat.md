@@ -32,3 +32,6 @@ A zombie bat that flies and heals itself with every bite. It haunts the Graveyar
 ## Interactions
 
 - [Baron Von Bats](baron_von_bats.md) turns into 6–7 Zombats for up to 10 s. They split his health, bite for 2 damage and their bites heal him too; the bat that carries him bears his name and passes damage on to him. When the swarm ends, the remaining bats vanish.
+
+<!-- pictures: zombat_baron -->
+<p><img src="../../images/characters/zombat_baron.png" alt="Baron's bat" title="Baron's bat" width="112"></p>

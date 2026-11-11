@@ -2,8 +2,11 @@
 """Renders a character of the mod from its real model and texture, for the docs.
 
 Usage (needs Pillow and numpy), from the repository root:
-    python3 tools/docs/render_character.py <id> [--out docs/images/characters/<id>.png]
+    python3 tools/docs/render_character.py <id> [--look <look>] [--out docs/images/characters/<id>.png]
                                                 [--yaw 30] [--pitch 22] [--size 512] [--pose idle]
+
+--look draws a texture variant, <id>_<look>.png (a Snowcoat, a name-tag look), into
+docs/images/characters/<id>_<look>.png; tools/docs/refresh.py renders every one the docs use.
 
 <id> is the entity id without namespace (`sunflower`). The script finds the Blockbench-exported
 model class whose LAYER_LOCATION is pazResource("<id>") (Java or Kotlin), the texture
@@ -248,7 +251,7 @@ def collect_faces(part, parent_matrix, faces):
 
 # ---------------------------------------------------------------- rendering
 
-def render(entity_id, out, yaw, pitch, size, pose_name):
+def render(entity_id, out, yaw=30.0, pitch=22.0, size=512, pose_name="idle", look=None):
     model_path, model_text = find_model(entity_id)
     root, (tex_w, tex_h) = parse_model(model_text)
     pose = parse_pose(find_animation(model_path, model_text), pose_name)
@@ -256,6 +259,10 @@ def render(entity_id, out, yaw, pitch, size, pose_name):
     if "PazZombieModel" in model_text and pose_name != "__none__":
         zombie_arms(root, pose)
     texture_path = find_texture(entity_id)
+    if look:  # the game appends the look to the texture name; its glow layer is <that>_emissive.png
+        texture_path = texture_path.replace(".png", f"_{look}.png")
+        if not os.path.exists(texture_path):
+            sys.exit(f"no texture {texture_path}")
     textures = [(Image.open(texture_path).convert("RGBA"), False)]
     emissive = texture_path.replace(".png", "_emissive.png")
     if os.path.exists(emissive):
@@ -348,14 +355,16 @@ def render(entity_id, out, yaw, pitch, size, pose_name):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("id")
+    ap.add_argument("--look", help="texture variant: <id>_<look>.png")
     ap.add_argument("--out")
     ap.add_argument("--yaw", type=float, default=30.0, help="turn to the viewer's right, degrees")
     ap.add_argument("--pitch", type=float, default=22.0, help="look down, degrees")
     ap.add_argument("--size", type=int, default=512)
     ap.add_argument("--pose", default="idle", help="animation whose first keyframe sets the pose ('none' for the bind pose)")
     args = ap.parse_args()
-    out = args.out or f"docs/images/characters/{args.id}.png"
-    render(args.id, out, args.yaw, args.pitch, args.size, args.pose if args.pose != "none" else "__none__")
+    name = f"{args.id}_{args.look}" if args.look else args.id
+    out = args.out or f"docs/images/characters/{name}.png"
+    render(args.id, out, args.yaw, args.pitch, args.size, args.pose if args.pose != "none" else "__none__", args.look)
 
 
 if __name__ == "__main__":

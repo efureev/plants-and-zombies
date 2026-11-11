@@ -31,10 +31,10 @@ A heavily armoured war robot. It bashes up close, fires missiles from afar and t
 
 ## Variants
 
-| Variant | Difference |
-|---|---|
-| Robo-Zombie | default |
-| Robo-General (`general`) | raid boss form: starts as a tank, scale +0.33, health ×3.25 (416), damage ×2.5 (27.5); a spawn egg with this variant gives the boss stats too |
+| | Variant | Difference |
+|---|---|---|
+| <img src="../../images/characters/robo_zombie.png" alt="" width="112"> | Robo-Zombie | default |
+| <img src="../../images/characters/robo_zombie_general.png" alt="" width="112"> | Robo-General (`general`) | raid boss form: starts as a tank, scale +0.33, health ×3.25 (416), damage ×2.5 (27.5); a spawn egg with this variant gives the boss stats too |
 
 ## Interactions
 

@@ -31,3 +31,6 @@ A carnivorous plant that swallows a nearby zombie in one bite, then spends a lon
 - Best paired with shooters that cover it while it chews, and with a [Wall Nut](wallnut.md) that holds zombies within reach.
 - A wild one is tamed by feeding it sun: about 24% chance per sun.
 - Named `chester` with a name tag, it gets a different look.
+
+<!-- pictures: chomper_chester -->
+<p><img src="../../images/characters/chomper_chester.png" alt="Chomper «Chester»" title="Chomper «Chester»" width="112"></p>

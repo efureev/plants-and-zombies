@@ -121,15 +121,15 @@ The Marigold is special: it needs 32 sun and gives treasure instead of seeds (4�
 
 **Seed mutations.** Rules are checked from top to bottom; the first one that matches decides.
 
-| Plant | What its seeds can turn into |
-|---|---|
-| Peashooter | Electric Peashooter (50%) during a thunderstorm; Fire Peashooter (50%) in a Crimson Forest; otherwise Repeater (10%) |
-| Electric Peashooter | always itself during a thunderstorm; otherwise Peashooter (15%) |
-| Fire Peashooter | always itself in a Crimson Forest; otherwise Peashooter (15%) |
-| Wall-nut | Explode-o-nut (8%) |
-| Explode-o-nut | Wall-nut (20%) |
-| Melon-pult | Winter Melon (33.3%) in snowy and icy biomes |
-| Winter Melon | always itself in those biomes; otherwise Melon-pult (15%) |
+| | Plant | What its seeds can turn into |
+|---|---|---|
+| <img src="../images/characters/peashooter.png" alt="" width="112"> | Peashooter | Electric Peashooter (50%) during a thunderstorm; Fire Peashooter (50%) in a Crimson Forest; otherwise Repeater (10%) |
+| <img src="../images/characters/electric_peashooter.png" alt="" width="112"> | Electric Peashooter | always itself during a thunderstorm; otherwise Peashooter (15%) |
+| <img src="../images/characters/fire_peashooter.png" alt="" width="112"> | Fire Peashooter | always itself in a Crimson Forest; otherwise Peashooter (15%) |
+| <img src="../images/characters/wallnut.png" alt="" width="112"> | Wall-nut | Explode-o-nut (8%) |
+| <img src="../images/characters/explode_o_nut.png" alt="" width="112"> | Explode-o-nut | Wall-nut (20%) |
+| <img src="../images/characters/melonpult.png" alt="" width="112"> | Melon-pult | Winter Melon (33.3%) in snowy and icy biomes |
+| <img src="../images/characters/winter_melon.png" alt="" width="112"> | Winter Melon | always itself in those biomes; otherwise Melon-pult (15%) |
 
 Datapacks can change these rules in `data/<namespace>/seed_mutation/<plant>.json`.
 
@@ -216,20 +216,20 @@ Only in raids (or from spawn eggs):
 
 ### Variants
 
-| Zombie | Variant | When |
-|---|---|---|
-| Browncoat | Snowcoat | snowy biomes (75%), Winter Wonderland |
-| Browncoat | Desert Zombie | deserts and badlands (75%) |
-| Browncoat | Buccaneer | shipwrecks, beaches (60%), Pirate Invasion |
-| Browncoat | Vampire Zombie | the Halloween season (8%), Zomboween |
-| Browncoat | Balloon Zombie | floats on balloons; drops balloons |
-| Imp | Yeti Imp | snowy biomes, Winter Wonderland; its bite Chills |
-| Imp | Pirate Imp | Pirate Invasion; arrives in an explosive barrel |
-| Gargantuar | Pirate Gargantuar | Gargantuar boss of a Pirate Invasion |
-| Super Brainz | Toxic, Electro | League of Awesome; Toxic also in Zomboween |
-| All Star | Giga-Football Zombie | boss |
-| Electric Slide | Electric Boogaloo | boss |
-| Robo-Zombie | Robo-General | boss |
+| | Zombie | Variant | When |
+|---|---|---|---|
+| <img src="../images/characters/browncoat_snowcoat.png" alt="" width="112"> | Browncoat | Snowcoat | snowy biomes (75%), Winter Wonderland |
+| <img src="../images/characters/browncoat_desert.png" alt="" width="112"> | Browncoat | Desert Zombie | deserts and badlands (75%) |
+| <img src="../images/characters/browncoat_buccaneer.png" alt="" width="112"> | Browncoat | Buccaneer | shipwrecks, beaches (60%), Pirate Invasion |
+| <img src="../images/characters/browncoat_vampire.png" alt="" width="112"> | Browncoat | Vampire Zombie | the Halloween season (8%), Zomboween |
+| <img src="../images/characters/browncoat_balloon.png" alt="" width="112"> | Browncoat | Balloon Zombie | floats on balloons; drops balloons |
+| <img src="../images/characters/imp_yeti.png" alt="" width="112"> | Imp | Yeti Imp | snowy biomes, Winter Wonderland; its bite Chills |
+| <img src="../images/characters/imp_pirate.png" alt="" width="112"> | Imp | Pirate Imp | Pirate Invasion; arrives in an explosive barrel |
+| <img src="../images/characters/gargantuar_pirate.png" alt="" width="112"> | Gargantuar | Pirate Gargantuar | Gargantuar boss of a Pirate Invasion |
+| <img src="../images/characters/super_brainz_toxic.png" alt="" width="112"> <img src="../images/characters/super_brainz_electro.png" alt="" width="112"> | Super Brainz | Toxic, Electro | League of Awesome; Toxic also in Zomboween |
+| <img src="../images/characters/all_star_giga.png" alt="" width="112"> | All Star | Giga-Football Zombie | boss |
+| <img src="../images/characters/electric_slide_boogaloo.png" alt="" width="112"> | Electric Slide | Electric Boogaloo | boss |
+| <img src="../images/characters/robo_zombie_general.png" alt="" width="112"> | Robo-Zombie | Robo-General | boss |
 
 The Halloween season is from 14 days before to 1 day after 31 October (by the real date).
 
@@ -311,13 +311,13 @@ After the credits ("The Zombies are coming back stronger...") waves are about 20
 - The **boss chance** is shown on the raid screen between waves and while you hold the player list key (Tab). It grows with every wave without a boss, reaches 100% after five such waves and resets once a boss appears.
 - A boss wave shows a boss bar. If a boss is still alive when the wave time runs out, the raid is lost.
 
-| Boss (`boss_type`) | Waves | Wave types | Notes |
-|---|---|---|---|
-| Giga-Football Zombie (`giga_all_star`) | 1–7 | any | one more for every 3 waves |
-| Baron Von Bats (`baron_von_bats`) | 6–18 | default, Zomboween | drops Baron's Staff (8.5%) |
-| Electric Boogaloo (`electric_boogaloo`) | 6–18 | default, Disco | |
-| Gargantuar (`gargantuar`) | 9–20 | default, Pirate Invasion (as the Pirate Gargantuar) | |
-| Robo-General (`robo_general`) | 10–20 | default, Robo Army | |
+| | Boss (`boss_type`) | Waves | Wave types | Notes |
+|---|---|---|---|---|
+| <img src="../images/characters/all_star_giga.png" alt="" width="112"> | Giga-Football Zombie (`giga_all_star`) | 1–7 | any | one more for every 3 waves |
+| <img src="../images/characters/baron_von_bats.png" alt="" width="112"> | Baron Von Bats (`baron_von_bats`) | 6–18 | default, Zomboween | drops Baron's Staff (8.5%) |
+| <img src="../images/characters/electric_slide_boogaloo.png" alt="" width="112"> | Electric Boogaloo (`electric_boogaloo`) | 6–18 | default, Disco | |
+| <img src="../images/characters/gargantuar.png" alt="" width="112"> | Gargantuar (`gargantuar`) | 9–20 | default, Pirate Invasion (as the Pirate Gargantuar) | |
+| <img src="../images/characters/robo_zombie_general.png" alt="" width="112"> | Robo-General (`robo_general`) | 10–20 | default, Robo Army | |
 
 The Giga-Football Zombie, Electric Boogaloo and Robo-General are enlarged versions with much more health and damage.
 
@@ -385,23 +385,23 @@ Potions are brewed from an Awkward Potion; gunpowder turns them into splash poti
 | <img src="../images/items/potion_buttered.png" alt="" width="112"> | Potion of Buttered | Honeycomb | Buttered, 0:05 |
 | <img src="../images/items/potion_electrified.png" alt="" width="112"> | Potion of Electricity | Lightning Rod (any) | Electrified, 0:10 |
 
-| Effect | What it does | Where it comes from |
-|---|---|---|
-| Hypnotized | The mob turns on its own kind and on other monsters and never attacks plants or players. Gargantuars, Electric Slides, Baron Von Bats, Robo-Zombies, machines, plants and bosses are immune | Hypno-shroom, potion |
-| Buttered | Cannot move, jump or attack | Kernel-pult butter, potion |
-| Electrified | Electric damage jumps to a nearby mob of the same side; standing in water hurts | Lightning Reed, Electric Peashooter, Electro Turret, Electric Slide, Super Brainz, lightning, potion |
-| Toxic | Damage over time, stronger at full health | Fume-shroom, Puff- and Scaredy-shroom spores, Imps |
-| Chilled | Slower, slightly weaker, frost at the screen edge | Snow Pea, Winter Melon, Zombie Yeti, Yeti Imp |
-| Frozen | Frozen in place | Ice-shroom |
-| Tangled | Cannot move or attack | Tangle Kelp |
-| Painted (16 colors) | Paint covers your screen; water washes it off | Dye Blaster, Soldier Zombie |
-| Zombie Omen | A raid starts when it ends | Bad Omen near a Plantz Flag |
-| Hero of the Garden | Raid rewards from a Mailbox | Winning a raid |
+| | Effect | What it does | Where it comes from |
+|---|---|---|---|
+| <img src="../images/effects/hypnotize.png" alt="" width="112"> | Hypnotized | The mob turns on its own kind and on other monsters and never attacks plants or players. Gargantuars, Electric Slides, Baron Von Bats, Robo-Zombies, machines, plants and bosses are immune | Hypno-shroom, potion |
+| <img src="../images/effects/buttered.png" alt="" width="112"> | Buttered | Cannot move, jump or attack | Kernel-pult butter, potion |
+| <img src="../images/effects/electrified.png" alt="" width="112"> | Electrified | Electric damage jumps to a nearby mob of the same side; standing in water hurts | Lightning Reed, Electric Peashooter, Electro Turret, Electric Slide, Super Brainz, lightning, potion |
+| <img src="../images/effects/toxic.png" alt="" width="112"> | Toxic | Damage over time, stronger at full health | Fume-shroom, Puff- and Scaredy-shroom spores, Imps |
+| <img src="../images/effects/chilled.png" alt="" width="112"> | Chilled | Slower, slightly weaker, frost at the screen edge | Snow Pea, Winter Melon, Zombie Yeti, Yeti Imp |
+| <img src="../images/effects/frozen.png" alt="" width="112"> | Frozen | Frozen in place | Ice-shroom |
+| <img src="../images/effects/tangled.png" alt="" width="112"> | Tangled | Cannot move or attack | Tangle Kelp |
+| <img src="../images/effects/painted.png" alt="" width="112"> | Painted (16 colors) | Paint covers your screen; water washes it off | Dye Blaster, Soldier Zombie |
+| <img src="../images/effects/zombie_omen.png" alt="" width="112"> | Zombie Omen | A raid starts when it ends | Bad Omen near a Plantz Flag |
+| <img src="../images/effects/hero_of_the_garden.png" alt="" width="112"> | Hero of the Garden | Raid rewards from a Mailbox | Winning a raid |
 
 ### Balloons
 
-<!-- pictures: white_balloon red_balloon yellow_balloon lime_balloon light_blue_balloon magenta_balloon -->
-<p><img src="../images/items/white_balloon.png" alt="White Balloon" title="White Balloon" width="112"> <img src="../images/items/red_balloon.png" alt="Red Balloon" title="Red Balloon" width="112"> <img src="../images/items/yellow_balloon.png" alt="Yellow Balloon" title="Yellow Balloon" width="112"> <img src="../images/items/lime_balloon.png" alt="Lime Balloon" title="Lime Balloon" width="112"> <img src="../images/items/light_blue_balloon.png" alt="Light Blue Balloon" title="Light Blue Balloon" width="112"> <img src="../images/items/magenta_balloon.png" alt="Magenta Balloon" title="Magenta Balloon" width="112"></p>
+<!-- pictures 64: item:*_balloon -->
+<p><img src="../images/items/white_balloon.png" alt="White Balloon" title="White Balloon" width="64"> <img src="../images/items/orange_balloon.png" alt="Orange Balloon" title="Orange Balloon" width="64"> <img src="../images/items/magenta_balloon.png" alt="Magenta Balloon" title="Magenta Balloon" width="64"> <img src="../images/items/light_blue_balloon.png" alt="Light Blue Balloon" title="Light Blue Balloon" width="64"> <img src="../images/items/yellow_balloon.png" alt="Yellow Balloon" title="Yellow Balloon" width="64"> <img src="../images/items/lime_balloon.png" alt="Lime Balloon" title="Lime Balloon" width="64"> <img src="../images/items/pink_balloon.png" alt="Pink Balloon" title="Pink Balloon" width="64"> <img src="../images/items/gray_balloon.png" alt="Gray Balloon" title="Gray Balloon" width="64"> <img src="../images/items/light_gray_balloon.png" alt="Light Gray Balloon" title="Light Gray Balloon" width="64"> <img src="../images/items/cyan_balloon.png" alt="Cyan Balloon" title="Cyan Balloon" width="64"> <img src="../images/items/purple_balloon.png" alt="Purple Balloon" title="Purple Balloon" width="64"> <img src="../images/items/blue_balloon.png" alt="Blue Balloon" title="Blue Balloon" width="64"> <img src="../images/items/brown_balloon.png" alt="Brown Balloon" title="Brown Balloon" width="64"> <img src="../images/items/green_balloon.png" alt="Green Balloon" title="Green Balloon" width="64"> <img src="../images/items/red_balloon.png" alt="Red Balloon" title="Red Balloon" width="64"> <img src="../images/items/black_balloon.png" alt="Black Balloon" title="Black Balloon" width="64"></p>
 
 - 16 White Balloons from a phantom membrane, a wind charge and string; 8 balloons + a dye give 8 colored ones. Balloon Zombies drop them, and they are in many raid rewards.
 - Right-click a block with a balloon to inflate it, tied to you on a lead; right-click a fence to tie it there. A dispenser releases balloons and ties them to a mob standing in front of it.
@@ -434,6 +434,9 @@ Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a 
 
 <!-- pictures: mailbox mail_collection_box letter -->
 <p><img src="../images/items/mailbox.png" alt="Mailbox" title="Mailbox" width="112"> <img src="../images/items/mail_collection_box.png" alt="Collection Box" title="Collection Box" width="112"> <img src="../images/items/letter.png" alt="Letter" title="Letter" width="112"></p>
+
+<!-- pictures 64: item:*_mailbox -->
+<p><img src="../images/items/orange_mailbox.png" alt="Orange Mailbox" title="Orange Mailbox" width="64"> <img src="../images/items/magenta_mailbox.png" alt="Magenta Mailbox" title="Magenta Mailbox" width="64"> <img src="../images/items/light_blue_mailbox.png" alt="Light Blue Mailbox" title="Light Blue Mailbox" width="64"> <img src="../images/items/yellow_mailbox.png" alt="Yellow Mailbox" title="Yellow Mailbox" width="64"> <img src="../images/items/lime_mailbox.png" alt="Lime Mailbox" title="Lime Mailbox" width="64"> <img src="../images/items/pink_mailbox.png" alt="Pink Mailbox" title="Pink Mailbox" width="64"> <img src="../images/items/gray_mailbox.png" alt="Gray Mailbox" title="Gray Mailbox" width="64"> <img src="../images/items/light_gray_mailbox.png" alt="Light Gray Mailbox" title="Light Gray Mailbox" width="64"> <img src="../images/items/cyan_mailbox.png" alt="Cyan Mailbox" title="Cyan Mailbox" width="64"> <img src="../images/items/purple_mailbox.png" alt="Purple Mailbox" title="Purple Mailbox" width="64"> <img src="../images/items/blue_mailbox.png" alt="Blue Mailbox" title="Blue Mailbox" width="64"> <img src="../images/items/brown_mailbox.png" alt="Brown Mailbox" title="Brown Mailbox" width="64"> <img src="../images/items/green_mailbox.png" alt="Green Mailbox" title="Green Mailbox" width="64"> <img src="../images/items/red_mailbox.png" alt="Red Mailbox" title="Red Mailbox" width="64"> <img src="../images/items/black_mailbox.png" alt="Black Mailbox" title="Black Mailbox" width="64"></p>
 
 - **Mailbox**: 4 iron ingots, an iron trapdoor and a newspaper; any dye recolors it (16 colors). It has 5 slots. From its screen you send the contents to any other mailbox in the same dimension: the list is sorted by distance and can be searched. A mailbox with mail shows a notification icon; right-click it to take the mail out.
 - **Collection Box**: 5 Brainz Alloy, a newspaper, 2 redstone and a mailbox. Choose a target mailbox in it; a redstone pulse sends its contents there.
@@ -547,6 +550,23 @@ The first three can be changed in game with `/pz options`.
 ## Characters
 
 Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md).
+
+### Secret names
+
+A name tag with one of these names gives a character a special look; letter case does not matter.
+
+| | Character | Name |
+|---|---|---|
+| <img src="../images/characters/sunflower_vampire.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | `Vampire` |
+| <img src="../images/characters/marigold_flowey.png" alt="" width="112"> | [Marigold](characters/marigold.md) | `Flowey` |
+| <img src="../images/characters/marigold_rainbow.png" alt="" width="112"> | [Marigold](characters/marigold.md) | `Rainbow` |
+| <img src="../images/characters/chomper_chester.png" alt="" width="112"> | [Chomper](characters/chomper.md) | `Chester` |
+| <img src="../images/characters/fire_peashooter_blaze.png" alt="" width="112"> | [Fire Peashooter](characters/fire_peashooter.md) | `Blaze` |
+| <img src="../images/characters/disco_zombie_mj.png" alt="" width="112"> | [Disco Zombie](characters/disco_zombie.md) | `MJ` |
+| <img src="../images/characters/browncoat_tugboat.png" alt="" width="112"> | [Browncoat](characters/browncoat.md) | `Tugboat` |
+| <img src="../images/characters/browncoat_mustache.png" alt="" width="112"> | [Browncoat](characters/browncoat.md) | `Mustache` |
+
+A Marigold can also be dyed: right-click your own one with any dye (16 colors, see [its card](characters/marigold.md)).
 
 ## Not available in survival
 

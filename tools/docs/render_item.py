@@ -345,6 +345,12 @@ def save(image, out):
     print(out, image.size)
 
 
+def render_effect(effect, out, size=512):
+    """An effect's icon (textures/mob_effect); Painted has one per dye, the red one stands for all."""
+    texture = "sproutsquad:mob_effect/painted/red" if effect == "painted" else f"sproutsquad:mob_effect/{effect}"
+    draw_icon(texture, out, size)
+
+
 def render_gui(item, out, size):
     picks = []
     pick_gui(json.loads(read_asset("sproutsquad", f"items/{item}.json"))["model"], picks)
@@ -363,7 +369,7 @@ def render_gui(item, out, size):
     draw_icon(layers, out, size)
 
 
-def render(item, out, size, yaw=None, pitch=22.0):
+def render(item, out, size=512, yaw=None, pitch=22.0):
     if item in POTIONS:
         rgb = tint_rgb({"value": POTIONS[item]})
         draw_icon([("minecraft:item/potion_overlay", rgb), "minecraft:item/potion"], out, size)

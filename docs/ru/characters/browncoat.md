@@ -42,17 +42,20 @@
 
 ## Варианты
 
-| Вариант | Где и когда |
-|---|---|
-| Обычный Зомби | по умолчанию |
-| Зомби на Шаре (`balloon`) | треть обычных зомби, появившихся с шариками; получает ещё 2 шарика |
-| Снежный Зомби (`snowcoat`) | 75 % в `#sproutsquad:zombie/has_browncoat_snow`; все Обычные Зомби волны «Зимняя Страна Чудес» (белые сапоги, в 65 % случаев с «Ледоходом II»; 40 % — с железной лопатой); не замерзает |
-| Пустынный Зомби (`desert`) | 75 % в пустынях и бесплодных землях (`#sproutsquad:zombie/has_browncoat_desert`) |
-| Буканьер (`buccaneer`) | всегда на затонувших кораблях, 60 % на пляжах; все Обычные Зомби «Пиратского Нашествия» (40 % — с железным мечом) |
-| Зомби-Вампир (`vampire`) | 8 % в остальных местах с 17 октября по 1 ноября; все Обычные Зомби «Зомбиуина»; их призывает [Барон фон Бэтс](baron_von_bats.md) |
+| | Вариант | Где и когда |
+|---|---|---|
+| <img src="../../images/characters/browncoat.png" alt="" width="112"> | Обычный Зомби | по умолчанию |
+| <img src="../../images/characters/browncoat_balloon.png" alt="" width="112"> | Зомби на Шаре (`balloon`) | треть обычных зомби, появившихся с шариками; получает ещё 2 шарика |
+| <img src="../../images/characters/browncoat_snowcoat.png" alt="" width="112"> | Снежный Зомби (`snowcoat`) | 75 % в `#sproutsquad:zombie/has_browncoat_snow`; все Обычные Зомби волны «Зимняя Страна Чудес» (белые сапоги, в 65 % случаев с «Ледоходом II»; 40 % — с железной лопатой); не замерзает |
+| <img src="../../images/characters/browncoat_desert.png" alt="" width="112"> | Пустынный Зомби (`desert`) | 75 % в пустынях и бесплодных землях (`#sproutsquad:zombie/has_browncoat_desert`) |
+| <img src="../../images/characters/browncoat_buccaneer.png" alt="" width="112"> | Буканьер (`buccaneer`) | всегда на затонувших кораблях, 60 % на пляжах; все Обычные Зомби «Пиратского Нашествия» (40 % — с железным мечом) |
+| <img src="../../images/characters/browncoat_vampire.png" alt="" width="112"> | Зомби-Вампир (`vampire`) | 8 % в остальных местах с 17 октября по 1 ноября; все Обычные Зомби «Зомбиуина»; их призывает [Барон фон Бэтс](baron_von_bats.md) |
 
 ## Взаимодействия
 
 - Особые волны наряжают его: вёдра и броня («Ведерная Бригада», 20 % — с железным Щитом-дверью), шарики («Стычка в Перерыве»), праздничные колпаки («Дискотека Нежити»), тыквы («Зомбиуин»).
 - [Гипногриб](hypnoshroom.md) переманивает его на сторону игрока; [Могилоед](grave_buster.md) съедает Могилы, из которых он выходит.
 - Бирка с именем «Tugboat» или «Mustache» даёт ему особую текстуру.
+
+<!-- pictures: browncoat_tugboat browncoat_mustache -->
+<p><img src="../../images/characters/browncoat_tugboat.png" alt="Обычный Зомби «Tugboat»" title="Обычный Зомби «Tugboat»" width="112"> <img src="../../images/characters/browncoat_mustache.png" alt="Обычный Зомби «Mustache»" title="Обычный Зомби «Mustache»" width="112"></p>

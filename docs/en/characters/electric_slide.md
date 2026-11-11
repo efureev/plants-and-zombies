@@ -34,10 +34,10 @@ A disco zombie on roller skates that zaps its targets with electricity. It is fa
 
 ## Variants
 
-| Variant | Difference |
-|---|---|
-| Electric Slide | default, pale blue arcs |
-| Electric Boogaloo (`boogaloo`) | raid boss form: golden, thicker arcs, skates not shown, scale +0.33, health ×3.25 (390), damage ×2.5 (12.5); a spawn egg with this variant gives the boss stats too |
+| | Variant | Difference |
+|---|---|---|
+| <img src="../../images/characters/electric_slide.png" alt="" width="112"> | Electric Slide | default, pale blue arcs |
+| <img src="../../images/characters/electric_slide_boogaloo.png" alt="" width="112"> | Electric Boogaloo (`boogaloo`) | raid boss form: golden, thicker arcs, skates not shown, scale +0.33, health ×3.25 (390), damage ×2.5 (12.5); a spawn egg with this variant gives the boss stats too |
 
 ## Interactions
 

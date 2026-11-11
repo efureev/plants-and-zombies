@@ -31,11 +31,11 @@ A zombie superhero in heavy armour. It punches hard, fires a laser beam that pie
 
 ## Variants
 
-| Variant | Difference |
-|---|---|
-| Super Brainz | default, pink laser |
-| Toxic Super Brainz (`toxic`) | green laser; punches give Poison for about 2 s, the laser for 5 s; every Super Brainz of Zomboween |
-| Electro Super Brainz (`electro`) | electric arc instead of a laser; punches give Electrified for 1.5 s, the arc for 5 s |
+| | Variant | Difference |
+|---|---|---|
+| <img src="../../images/characters/super_brainz.png" alt="" width="112"> | Super Brainz | default, pink laser |
+| <img src="../../images/characters/super_brainz_toxic.png" alt="" width="112"> | Toxic Super Brainz (`toxic`) | green laser; punches give Poison for about 2 s, the laser for 5 s; every Super Brainz of Zomboween |
+| <img src="../../images/characters/super_brainz_electro.png" alt="" width="112"> | Electro Super Brainz (`electro`) | electric arc instead of a laser; punches give Electrified for 1.5 s, the arc for 5 s |
 
 ## Interactions
 
