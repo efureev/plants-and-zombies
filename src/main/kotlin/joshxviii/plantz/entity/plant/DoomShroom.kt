@@ -35,7 +35,7 @@ class DoomShroom(type: EntityType<out ExplosivePlant>, level: Level) : Explosive
         ): Boolean {
             val blockBelow = level.getBlockState(pos.below())
             return checkValidSpawn(level, pos, spawnReason, random)
-                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(Blocks.GRAVEL) || blockBelow.`is`(Blocks.BASALT)) || blockBelow.`is`(Blocks.NETHERRACK)
+                    && (blockBelow.`is`(PLANTABLE) || blockBelow.`is`(Blocks.GRAVEL) || blockBelow.`is`(Blocks.BASALT) || blockBelow.`is`(Blocks.NETHERRACK))
         }
     }
 
@@ -83,6 +83,6 @@ class DoomShroom(type: EntityType<out ExplosivePlant>, level: Level) : Explosive
     }
 
     override fun canSurviveOn(block: BlockState): Boolean {
-        return super.canSurviveOn(block) || block.`is`(Blocks.GRAVEL) || block.`is`(Blocks.BASALT)
+        return super.canSurviveOn(block) || block.`is`(Blocks.GRAVEL) || block.`is`(Blocks.BASALT) || block.`is`(Blocks.NETHERRACK)
     }
 }

@@ -40,8 +40,8 @@ class ZombieYeti(type: EntityType<out ZombieYeti>, level: Level) : PazZombie(typ
             val below = pos.below()
             return level.difficulty != Difficulty.PEACEFUL
                     && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
-                    && checkMobSpawnRules(type, level, spawnReason, pos, random) || level.getBlockState(below).`is`(PazTags.BlockTags.YETI_SPAWNABLE_ON)
-                    && pos.y > level.seaLevel
+                    && (checkMobSpawnRules(type, level, spawnReason, pos, random)
+                        || (level.getBlockState(below).`is`(PazTags.BlockTags.YETI_SPAWNABLE_ON) && pos.y > level.seaLevel))
         }
         val BASH_TIME_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(ZombieYeti::class.java, EntityDataSerializers.INT)
     }

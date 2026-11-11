@@ -191,6 +191,8 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             if (!player.hasInfiniteMaterials() && !ignoreSunRequirement) {
                 player.removeSunFromStorageAndInventory(sunCost)
             }
+            // Sprout Squad: the plantCooldownEnabled option was never applied to planting
+            if (!player.hasInfiniteMaterials()) applyCooldown(itemStack, player)
             entity.playSound(SoundEvents.BIG_DRIPLEAF_PLACE)
             if (entity is TamableAnimal) entity.tame(player)
             level.gameEvent(player, GameEvent.ENTITY_PLACE, spawnPos)

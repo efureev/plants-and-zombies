@@ -94,7 +94,7 @@ abstract class ZombieRobot(type: EntityType<out ZombieRobot>, level: Level) : Pa
         if (owner != null) {
             try { setOwnerReference(owner) } catch (ignored: Throwable) { }
         } else this.entityData.set(DATA_OWNERUUID_ID, Optional.empty())
-        input.getIntOr("actionTime", 0)
+        actionTime = input.getIntOr("actionTime", 0)
     }
 
     override fun getOwnerReference(): EntityReference<LivingEntity>? {

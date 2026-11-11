@@ -612,6 +612,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             }
         }
 
+        if (!level.isClientSide) tickSeedGrowth()
         val needs = testGrowConditions()
         if (tickCount%25==0) {
             when (needs) {
@@ -784,16 +785,23 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         if (!canProduceSeeds()) return PlantGrowNeeds.CANNOT_GROW
         val farmBlock = getBlockBelow()
         if (!farmBlock.`is`(PazTags.BlockTags.FARMABLE) || !isTame) return PlantGrowNeeds.SOIL
-        if (receivedWater <= 0) {
-            if (exposedToRain()) receivedWater+=1
-            return PlantGrowNeeds.WATER
-        }
-        if (seedGrowCooldown > 0) {
-            --seedGrowCooldown
-            if (coffeeBuff>0) coffeeBuff = 0
-            return PlantGrowNeeds.TIME
-        }
+        if (receivedWater <= 0) return PlantGrowNeeds.WATER
+        if (seedGrowCooldown > 0) return PlantGrowNeeds.TIME
         return PlantGrowNeeds.SUN
+    }
+
+    // Sprout Squad: testGrowConditions() is called many times per tick (goals, rendering, the
+    // isGrowingSeeds getter), so its old side effects ran the seed timer several times too fast and
+    // counted rain more than once. The side effects now run here, once per server tick.
+    private fun tickSeedGrowth() {
+        when (testGrowConditions()) {
+            PlantGrowNeeds.WATER -> if (exposedToRain()) receivedWater += 1
+            PlantGrowNeeds.TIME -> {
+                --seedGrowCooldown
+                if (coffeeBuff > 0) coffeeBuff = 0
+            }
+            else -> {}
+        }
     }
 
     fun calculateRollFriction() {

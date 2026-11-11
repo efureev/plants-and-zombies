@@ -1,4 +1,6 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "sproutsquad:farmer/plant_pot_helmet"
+  ]
 }

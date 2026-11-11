@@ -1,5 +1,7 @@
 package joshxviii.plantz.entity.plant
 
+import joshxviii.plantz.PazTags.BlockTags.PLANTABLE
+
 import joshxviii.plantz.*
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
 import net.minecraft.core.BlockPos
@@ -31,6 +33,7 @@ class LightningReed(type: EntityType<out Plant>, level: Level) : Plant(type, lev
 
             return checkValidSpawn(level, pos, spawnReason, random)
                     && isThundering && pos.y > level.seaLevel - 8
+                    && level.getBlockState(pos.below()).`is`(PLANTABLE)
         }
     }
 

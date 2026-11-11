@@ -46,9 +46,9 @@ class DiggerZombie(type: EntityType<out DiggerZombie>, level: Level) : PazZombie
             val isMineshaftSpawn = (level as ServerLevel).structureManager().getStructureWithPieceAt(pos, StructureTags.MINESHAFT).isValid
 
             return level.difficulty != Difficulty.PEACEFUL
-                    && ((EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
+                    && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))
                     && checkMobSpawnRules(type, level, spawnReason, pos, random)
-                    && pos.y < 10) || isMineshaftSpawn
+                    && (pos.y < 10 || isMineshaftSpawn)
         }
         val TUNNEL_COOLDOWN_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(DiggerZombie::class.java, EntityDataSerializers.INT)
         val MINE_TIME_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId<Int>(DiggerZombie::class.java, EntityDataSerializers.INT)
