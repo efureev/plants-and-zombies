@@ -1,5 +1,7 @@
 # Sunflower
 
+<p align="center"><img src="../../images/characters/sunflower.png" alt="Sunflower" width="320"></p>
+
 **Plant · sun producer** · Plants & Zombies (original)
 
 The basic economy plant: it does not fight, but regularly drops sun that pays for planting everything else.
