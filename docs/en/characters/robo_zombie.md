@@ -1,5 +1,7 @@
 # Robo-Zombie
 
+<p align="center"><img src="../../images/characters/robo_zombie.png" alt="Robo-Zombie" width="320"></p>
+
 **Zombie · machine** · Plants & Zombies (original)
 
 A heavily armoured war robot. It bashes up close, fires missiles from afar and turns into a wall-climbing tank when badly damaged.

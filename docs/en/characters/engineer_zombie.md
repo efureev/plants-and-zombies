@@ -1,5 +1,7 @@
 # Engineer Zombie
 
+<p align="center"><img src="../../images/characters/engineer_zombie.png" alt="Engineer Zombie" width="320"></p>
+
 **Zombie · builder** · Plants & Zombies (original)
 
 A zombie with a blueprint instead of a weapon. It does not fight itself, but keeps building hostile battle machines next to it while it has a target.

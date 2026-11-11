@@ -1,5 +1,7 @@
 # Newspaper Zombie
 
+<p align="center"><img src="../../images/characters/newspaper_zombie.png" alt="Newspaper Zombie" width="320"></p>
+
 **Zombie · shielded** · Plants & Zombies (original)
 
 A zombie that hides behind a Newspaper. The paper soaks up hits from the front; once it is torn, the zombie gets angry, faster and harder-hitting.

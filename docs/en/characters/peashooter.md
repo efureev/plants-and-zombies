@@ -1,5 +1,7 @@
 # Peashooter
 
+<p align="center"><img src="../../images/characters/peashooter.png" alt="Peashooter" width="320"></p>
+
 **Plant · shooter** · Plants & Zombies (original)
 
 The basic shooter: fires peas at zombies it can see. Cheap, and the starting point for several stronger plants.

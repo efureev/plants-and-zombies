@@ -1,5 +1,7 @@
 # Pirate Captain
 
+<p align="center"><img src="../../images/characters/pirate_captain.png" alt="Pirate Captain" width="320"></p>
+
 **Zombie · shooter** · Plants & Zombies (original)
 
 The commander of the Pirate Invasion: a sturdy zombie with a crossbow that fires firework rockets. Killing it is only half the job — it comes back as a ghost.

@@ -1,5 +1,7 @@
 # Pumpkin
 
+<p align="center"><img src="../../images/characters/pumpkin.png" alt="Pumpkin" width="320"></p>
+
 **Plant · armor** · Plants & Zombies (original)
 
 A protective shell: put over another plant, it soaks up damage before the plant inside gets hurt.

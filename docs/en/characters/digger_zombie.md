@@ -1,5 +1,7 @@
 # Digger Zombie
 
+<p align="center"><img src="../../images/characters/digger_zombie.png" alt="Digger Zombie" width="320"></p>
+
 **Zombie · tunneller** · Plants & Zombies (original)
 
 A miner with an iron pickaxe that lives deep underground. From a distance it burrows into the ground and pops up close to its target, skipping walls and defences.

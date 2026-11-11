@@ -1,5 +1,7 @@
 # Pirate Captain Ghost
 
+<p align="center"><img src="../../images/characters/pirate_captain_ghost.png" alt="Pirate Captain Ghost" width="320"></p>
+
 **Zombie · ghost** · Plants & Zombies (original)
 
 The second life of the [Pirate Captain](pirate_captain.md): a flying ghost with a sword that passes through walls.

@@ -1,5 +1,7 @@
 # Marigold
 
+<p align="center"><img src="../../images/characters/marigold.png" alt="Marigold" width="320"></p>
+
 **Plant · treasure producer** · Plants & Zombies (original)
 
 A farming plant: instead of a seed packet, its harvest is gold ingots, emeralds and diamonds.

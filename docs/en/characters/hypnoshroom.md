@@ -1,5 +1,7 @@
 # Hypno Shroom
 
+<p align="center"><img src="../../images/characters/hypnoshroom.png" alt="Hypno Shroom" width="320"></p>
+
 **Plant · hypnotist** · Plants & Zombies (original)
 
 A fragile mushroom that turns attackers against their own kind: whoever hits it gets hypnotized.

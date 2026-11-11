@@ -1,5 +1,7 @@
 # Chomper
 
+<p align="center"><img src="../../images/characters/chomper.png" alt="Chomper" width="320"></p>
+
 **Plant · melee** · Plants & Zombies (original)
 
 A carnivorous plant that swallows a nearby zombie in one bite, then spends a long time chewing.

@@ -1,5 +1,7 @@
 # Sea Shroom
 
+<p align="center"><img src="../../images/characters/seashroom.png" alt="Sea Shroom" width="320"></p>
+
 **Plant · aquatic shooter** · Plants & Zombies (original)
 
 A free mushroom that sits on the water and shoots water spores at nearby zombies.

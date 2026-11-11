@@ -1,5 +1,7 @@
 # Zombat
 
+<p align="center"><img src="../../images/characters/zombat.png" alt="Zombat" width="320"></p>
+
 **Zombie · flyer** · Plants & Zombies (original)
 
 A zombie bat that flies and heals itself with every bite. It haunts the Graveyard, fills Zomboween waves and is the form [Baron Von Bats](baron_von_bats.md) takes as a swarm.

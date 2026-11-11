@@ -1,5 +1,7 @@
 # Electric Slide
 
+<p align="center"><img src="../../images/characters/electric_slide.png" alt="Electric Slide" width="320"></p>
+
 **Zombie · electric** · Plants & Zombies (original)
 
 A disco zombie on roller skates that zaps its targets with electricity. It is fast, armoured and immune to electric damage.

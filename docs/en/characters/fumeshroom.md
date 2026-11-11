@@ -1,5 +1,7 @@
 # Fume Shroom
 
+<p align="center"><img src="../../images/characters/fumeshroom.png" alt="Fume Shroom" width="320"></p>
+
 **Plant · fume sprayer** · Plants & Zombies (original)
 
 A mushroom that sprays toxic fumes through every enemy in a line in front of it.

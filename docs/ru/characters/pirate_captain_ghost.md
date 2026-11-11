@@ -1,5 +1,7 @@
 # Призрак Капитана Пиратов
 
+<p align="center"><img src="../../images/characters/pirate_captain_ghost.png" alt="Призрак Капитана Пиратов" width="320"></p>
+
 **Зомби · призрак** · Plants & Zombies (оригинал)
 
 Вторая жизнь [Капитана Пиратов](pirate_captain.md): летающий призрак с мечом, который проходит сквозь стены.

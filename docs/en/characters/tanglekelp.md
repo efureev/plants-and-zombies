@@ -1,5 +1,7 @@
 # Tangle Kelp
 
+<p align="center"><img src="../../images/characters/tanglekelp.png" alt="Tangle Kelp" width="320"></p>
+
 **Plant · aquatic trapper** · Plants & Zombies (original)
 
 A water plant that bites a nearby enemy, roots it in place and drags it towards itself.

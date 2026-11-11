@@ -1,5 +1,7 @@
 # Зомби-Танцор
 
+<p align="center"><img src="../../images/characters/disco_zombie.png" alt="Зомби-Танцор" width="320"></p>
+
 **Зомби · призыватель** · Plants & Zombies (оригинал)
 
 Танцующий зомби, который снова и снова вызывает из-под земли вокруг себя труппу [Подтанцовщиков](backup_dancer.md).

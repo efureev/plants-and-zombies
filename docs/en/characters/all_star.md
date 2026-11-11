@@ -1,5 +1,7 @@
 # All Star
 
+<p align="center"><img src="../../images/characters/all_star.png" alt="All Star" width="320"></p>
+
 **Zombie · charger** · Plants & Zombies (original)
 
 An armoured football player in a Football Helmet. It keeps charging at its target and bowls over everything in its way.

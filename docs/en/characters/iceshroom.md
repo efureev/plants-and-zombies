@@ -1,5 +1,7 @@
 # Ice Shroom
 
+<p align="center"><img src="../../images/characters/iceshroom.png" alt="Ice Shroom" width="320"></p>
+
 **Plant · freezer** · Plants & Zombies (original)
 
 A reusable frost bomb: when an enemy comes close, it bursts with cold and freezes everything around it in place.

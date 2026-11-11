@@ -1,5 +1,7 @@
 # Zombie Yeti
 
+<p align="center"><img src="../../images/characters/zombie_yeti.png" alt="Zombie Yeti" width="320"></p>
+
 **Zombie · heavy** · Plants & Zombies (original)
 
 A big furry zombie of the snowy lands. It hits very hard, chills its victims and throws chunks of powder snow at targets it cannot reach.

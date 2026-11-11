@@ -43,7 +43,7 @@ For a first go, a variant is easier — a new texture for an existing mob: done 
 6. **Data.** Name in en/ru, a recipe with the `minecraft:entity_data` component, a line in `squad_plants.json`.
 7. **Check.** `./gradlew runGameTestServer` — the `sproutsquad:squad_plants` test goes through the checklist and names what is missing: class, health, cost, tag, recipe, textures, icon, names. The `/pz gallery` gallery picks up the new character by itself.
 8. **In game.** `./gradlew runClient`: plant it, watch the animations by day and at night, compare it with its neighbors in the gallery.
-9. **Card.** `docs/en/characters/<id>.md` (and the Russian one): status, stats, screenshot; the index `characters/README.md` is rebuilt with `python3 tools/docs/build_character_index.py`.
+9. **Card.** `docs/en/characters/<id>.md` (and the Russian one): status, stats, a picture rendered from the model and texture with `python3 tools/docs/render_character.py <id>` (needs Pillow and numpy; saved to `docs/images/characters/<id>.png`); the index `characters/README.md` is rebuilt with `python3 tools/docs/build_character_index.py`.
 
 ## Character checklist
 

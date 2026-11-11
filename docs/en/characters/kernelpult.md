@@ -1,5 +1,7 @@
 # Kernel Pult
 
+<p align="center"><img src="../../images/characters/kernelpult.png" alt="Kernel Pult" width="320"></p>
+
 **Plant · catapult** · Plants & Zombies (original)
 
 A catapult that lobs corn kernels and, now and then, a pat of butter that sticks the target in place.

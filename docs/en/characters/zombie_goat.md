@@ -1,5 +1,7 @@
 # Zombie Goat
 
+<p align="center"><img src="../../images/characters/zombie_goat.png" alt="Zombie Goat" width="320"></p>
+
 **Zombie · mount** · Plants & Zombies (original); Sprout Squad added natural spawns and the Imp rider
 
 A small undead mountain goat. Weak on its own, it often carries an [Imp](imp.md) on its back.

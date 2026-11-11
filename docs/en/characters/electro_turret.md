@@ -1,5 +1,7 @@
 # Electro Turret
 
+<p align="center"><img src="../../images/characters/electro_turret.png" alt="Electro Turret" width="320"></p>
+
 **Machine · electric** · Plants & Zombies (original); Sprout Squad made player-built turrets fight for the player
 
 A stationary turret that strikes nearby targets with an electric arc and leaves them Electrified. Engineer zombies build it against players and plants; a player can build one from a blueprint as a short-range guard.

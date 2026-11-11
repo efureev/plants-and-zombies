@@ -1,5 +1,7 @@
 # Explode-O-Nut
 
+<p align="center"><img src="../../images/characters/explode_o_nut.png" alt="Explode-O-Nut" width="320"></p>
+
 **Plant · explosive wall** · Plants & Zombies (original)
 
 A Wall Nut with a surprise: it holds the line like an ordinary one, but explodes when an enemy finishes it off.

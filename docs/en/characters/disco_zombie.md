@@ -1,5 +1,7 @@
 # Disco Zombie
 
+<p align="center"><img src="../../images/characters/disco_zombie.png" alt="Disco Zombie" width="320"></p>
+
 **Zombie · summoner** · Plants & Zombies (original)
 
 A dancing zombie that calls a troupe of [Backup Dancers](backup_dancer.md) out of the ground around itself, again and again.

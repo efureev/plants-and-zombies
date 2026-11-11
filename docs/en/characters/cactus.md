@@ -1,5 +1,7 @@
 # Cactus
 
+<p align="center"><img src="../../images/characters/cactus.png" alt="Cactus" width="320"></p>
+
 **Plant · long-range shooter** · Plants & Zombies (original)
 
 A desert sniper: it shoots piercing needles at the farthest enemy it can see and pops balloons.

@@ -1,5 +1,7 @@
 # Royal Sunflower
 
+<p align="center"><img src="../../images/characters/royal_sunflower.png" alt="Royal Sunflower" width="320"></p>
+
 **Plant · walking laser** · Plants & Zombies (original), experimental
 
 A giant walking sunflower that burns enemies with a long sun beam. It is experimental and hidden unless experimental features are switched on.

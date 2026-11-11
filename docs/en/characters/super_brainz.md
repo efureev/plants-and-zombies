@@ -1,5 +1,7 @@
 # Super Brainz
 
+<p align="center"><img src="../../images/characters/super_brainz.png" alt="Super Brainz" width="320"></p>
+
 **Zombie · superhero** · Plants & Zombies (original)
 
 A zombie superhero in heavy armour. It punches hard, fires a laser beam that pierces everything in a line and flies up to reach targets above it.

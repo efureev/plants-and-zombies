@@ -1,5 +1,7 @@
 # Подтанцовщик
 
+<p align="center"><img src="../../images/characters/backup_dancer.png" alt="Подтанцовщик" width="320"></p>
+
 **Зомби · прислужник** · Plants & Zombies (оригинал)
 
 Быстрый и хрупкий танцор, которого [Зомби-Танцор](disco_zombie.md) призывает группами до трёх.

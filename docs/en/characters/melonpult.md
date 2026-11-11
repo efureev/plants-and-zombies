@@ -1,5 +1,7 @@
 # Melon Pult
 
+<p align="center"><img src="../../images/characters/melonpult.png" alt="Melon Pult" width="320"></p>
+
 **Plant · catapult** · Plants & Zombies (original)
 
 The heaviest catapult: slow, but every melon hits hard and damages everything around the impact.
