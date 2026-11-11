@@ -51,3 +51,5 @@ replay_*.log
 
 # Working docs (specification, roadmap): Russian only, kept locally, not in git
 /plan/
+__pycache__/
+*.pyc
