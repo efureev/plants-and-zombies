@@ -480,6 +480,8 @@ The era dimension (`sproutsquad:time_space`) holds the four era biomes and is re
 
 ### Structures
 
+Planned structures, with sketches, and how a structure is made: [STRUCTURES](STRUCTURES.md).
+
 <!-- pictures 240: structure:graveyard_mausoleum -->
 <p><img src="../images/structures/graveyard_mausoleum.png" alt="Mausoleum" title="Mausoleum" width="240"></p>
 

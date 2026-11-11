@@ -64,6 +64,7 @@ English is the main version; the same documents are available [in Russian](docs/
 | Full guide: what the mod lets you do | [FEATURES](docs/en/FEATURES.md) | [FEATURES](docs/ru/FEATURES.md) |
 | Characters: a card for every plant, zombie and machine | [characters](docs/en/characters/README.md) | [characters](docs/ru/characters/README.md) |
 | How to add a character, style guide | [WORKSHOP](docs/en/WORKSHOP.md) | [WORKSHOP](docs/ru/WORKSHOP.md) |
+| Structures: what is in the world, planned ones with sketches, how to make one | [STRUCTURES](docs/en/STRUCTURES.md) | [STRUCTURES](docs/ru/STRUCTURES.md) |
 | Upstream changes and fixes to the original | [UPSTREAM](docs/en/UPSTREAM.md) | [UPSTREAM](docs/ru/UPSTREAM.md) |
 
 ## License and credits

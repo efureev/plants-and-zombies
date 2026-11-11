@@ -480,6 +480,8 @@ Sprout Squad — мод для Minecraft 26.3 на NeoForge, который пр
 
 ### Постройки
 
+Задуманные постройки с эскизами и то, как делается постройка: [STRUCTURES](STRUCTURES.md).
+
 <!-- pictures 240: structure:graveyard_mausoleum -->
 <p><img src="../images/structures/graveyard_mausoleum.png" alt="Мавзолей" title="Мавзолей" width="240"></p>
 

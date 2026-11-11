@@ -234,7 +234,7 @@ def pictures_in(path, locale, collect=None, write=True):
 def docs_with_pictures(locale):
     folder = os.path.join("docs", locale, "characters")
     cards = sorted(os.path.join(folder, f) for f in os.listdir(folder) if f.endswith(".md") and f != "README.md")
-    return [os.path.join("docs", locale, "FEATURES.md")] + cards
+    return [os.path.join("docs", locale, f) for f in ("FEATURES.md", "STRUCTURES.md")] + cards
 
 
 def main():
