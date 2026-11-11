@@ -157,7 +157,7 @@ def build(locale, cfg):
         for c in group:
             third = c["status"] if key == "own" else c["health"]
             image = os.path.join("docs", "images", "characters", c["id"] + ".png")
-            thumb = f'<img src="../../images/characters/{c["id"]}.png" alt="" width="56">' if os.path.exists(image) else ""
+            thumb = f'<img src="../../images/characters/{c["id"]}.png" alt="" width="112">' if os.path.exists(image) else ""
             out.append(f"| {thumb} | [{c['title']}]({c['id']}.md) | {c['role']} | {third} | {first_sentence(c['summary'])} |")
         out.append("")
     out += [f"## {cfg['template_title']}", "", cfg["template_intro"], "", "```markdown", cfg["template"], "```", ""]
