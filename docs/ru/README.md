@@ -38,6 +38,10 @@
 | Зависимости | Kotlin for Forge; опционально TerraBlender, Iris |
 | Java | 25 |
 
+## Установка
+
+Скачайте `sprout-squad-<версия>.jar` со страницы [Releases](https://github.com/efureev/plants-and-zombies/releases) и положите в папку `mods` установки NeoForge 26.3 вместе с [Kotlin for Forge](https://modrinth.com/mod/kotlin-for-forge). По шагам — для официального лаунчера, Prism Launcher и сервера: [INSTALL](INSTALL.md).
+
 ## Сборка
 
 ```bash
@@ -61,6 +65,7 @@
 
 Основная версия документации — английская ([English](../../README.md#documentation)); здесь — русская.
 
+- [INSTALL](INSTALL.md) — как установить мод, играть на сервере, обновлять
 - [FEATURES](FEATURES.md) — полное описание: что позволяет мод
 - [Персонажи](characters/README.md) — карточка каждого растения, зомби и машины
 - [WORKSHOP](WORKSHOP.md) — как добавить персонажа, гайд по стилю

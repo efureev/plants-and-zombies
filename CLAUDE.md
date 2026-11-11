@@ -3,7 +3,7 @@
 NeoForge-форк мода [Plants & Zombies](https://github.com/joshxviii/plants-and-zombies) (joshxviii, MPL-2.0) для Minecraft 26.3.
 Цели: порт с Fabric на NeoForge → свой mod id → свои персонажи.
 
-Публичная документация — в `docs/<locale>/`: **`docs/en/` — основная**, `docs/ru/` — русская версия тех же файлов (README, FEATURES, WORKSHOP, STRUCTURES, UPSTREAM, `characters/`). Картинки общие — `docs/images/`. Любую правку публичной документации вноси в **обе** версии в одном коммите. Корневой `README.md` — английский, русский — `docs/ru/README.md`.
+Публичная документация — в `docs/<locale>/`: **`docs/en/` — основная**, `docs/ru/` — русская версия тех же файлов (README, INSTALL, FEATURES, WORKSHOP, STRUCTURES, UPSTREAM, `characters/`). Картинки общие — `docs/images/`. Любую правку публичной документации вноси в **обе** версии в одном коммите. Корневой `README.md` — английский, русский — `docs/ru/README.md`.
 
 Рабочие документы — **только на русском и только локально**, не в гите (`/plan/` в `.gitignore`): ТЗ `plan/SPEC.md` и план развития `plan/ROADMAP.md`. Не добавляй их в коммиты и не ссылайся на них из публичных файлов и кода.
 

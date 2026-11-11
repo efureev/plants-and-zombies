@@ -37,6 +37,10 @@ What the fork adds on top of the original:
 | Dependencies | Kotlin for Forge; optional TerraBlender, Iris |
 | Java | 25 |
 
+## Installing
+
+Download `sprout-squad-<version>.jar` from [Releases](https://github.com/efureev/plants-and-zombies/releases) and put it into the `mods` folder of a NeoForge 26.3 installation together with [Kotlin for Forge](https://modrinth.com/mod/kotlin-for-forge). Step by step, for the official launcher, Prism Launcher and a server: [INSTALL](docs/en/INSTALL.md).
+
 ## Building
 
 ```bash
@@ -62,6 +66,7 @@ English is the main version; the same documents are available [in Russian](docs/
 
 | Document | English | Русский |
 |---|---|---|
+| How to install the mod, play on a server, update | [INSTALL](docs/en/INSTALL.md) | [INSTALL](docs/ru/INSTALL.md) |
 | Full guide: what the mod lets you do | [FEATURES](docs/en/FEATURES.md) | [FEATURES](docs/ru/FEATURES.md) |
 | Characters: a card for every plant, zombie and machine | [characters](docs/en/characters/README.md) | [characters](docs/ru/characters/README.md) |
 | How to add a character, style guide | [WORKSHOP](docs/en/WORKSHOP.md) | [WORKSHOP](docs/ru/WORKSHOP.md) |
