@@ -23,7 +23,7 @@ object SproutSquad {
         SquadEntities.register(modBus)
         SquadAttachments.register(modBus)
         PlayerMachines.register()
-        MachineReinforcements.register()
+        MachineReinforcements.register(modBus)
         ZombieGoatSpawns.register(modBus)
         StructureSpawns.register(modBus)
         BalloonFlight.register()

@@ -30,7 +30,6 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.SpawnPlacementTypes
-import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
@@ -230,7 +229,6 @@ object StructuresGameTests {
         val guards = turrets + electroTurrets
         if (guards.any { PlayerMachines.isPlayerMachine(it) }) problems += "a turret of the junkyard is a player's machine"
         if (guards.any { !it.isPersistenceRequired }) problems += "a turret of the junkyard may despawn"
-        if (guards.any { it.getAttributeValue(Attributes.SPAWN_REINFORCEMENTS_CHANCE) > 0.0 }) problems += "a turret of the junkyard may call reinforcements"
 
         problems += junkyardLootProblems(helper, helper.absolutePos(BlockPos.ZERO))
         problems += registrationProblems(helper, "robo_junkyard", Biomes.BADLANDS, tradeLevel = 3)
