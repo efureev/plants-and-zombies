@@ -352,7 +352,7 @@ def garden_shack():
     s.sprite("peashooter", 12, 1, 9, 1.1, entity="sproutsquad:peashooter")
     s.sprite("wallnut", 15, 1, 9, 1.1, entity="sproutsquad:wallnut")
     s.sprite("potling", 12, 1, 14, 0.9, entity="sproutsquad:potling")
-    s.sprite("browncoat", 19, 1, 15, 2.0)
+    # Browncoats come at night: spawn_overrides of worldgen/structure/garden_shack.json
     return s
 
 
@@ -466,8 +466,7 @@ def junkyard():
     # the guards: a turret on top of the scrap pile, an electro turret by the workshop door
     s.sprite("zombie_turret", 12, 4, 9, 1.4, entity="sproutsquad:zombie_turret")
     s.sprite("electro_turret", 17, 1, 22, 1.3, entity="sproutsquad:electro_turret")
-    s.sprite("engineer_zombie", 13, 1, 17, 2.0)
-    s.sprite("robo_zombie", 4, 1, 12, 2.2)
+    # Engineers, Soldiers and Robo-Zombies come at night: spawn_overrides of worldgen/structure/robo_junkyard.json
     return s
 
 

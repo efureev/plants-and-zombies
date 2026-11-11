@@ -25,10 +25,15 @@ import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.core.component.DataComponents
 import net.minecraft.tags.TagKey
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.biome.Biome
+import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -172,15 +177,22 @@ object StructuresGameTests {
     private val JUNKYARD_CHEST = BlockPos(20, 1, 15)
     private val JUNKYARD_BARRELS = listOf(BlockPos(20, 1, 17), BlockPos(10, 1, 3), BlockPos(23, 1, 12))
     private val JUNKYARD_ELECTRO_TURRET = BlockPos(17, 1, 22)
+    /** On the floor of the workshop, four blocks below the lantern. */
+    private val JUNKYARD_WORKSHOP_FLOOR = BlockPos(17, 1, 17)
     private const val LOOT_ROLLS = 50
+
+    /** The loot table path of the container at [pos] relative to [origin], or null. */
+    private fun lootTable(level: ServerLevel, origin: BlockPos, pos: BlockPos): String? =
+        (level.getBlockEntity(origin.offset(pos)) as? RandomizableContainerBlockEntity)?.lootTable?.identifier()?.path
 
     /**
      * The Robo Junkyard: placed as the world generation places it, it has its loot tables and two
      * hostile turrets that never despawn; the workshop chest always holds a blueprint of a machine
-     * and Brainz Alloy; the zombies it brings at night have spawn rules; the structure, its biomes,
-     * the cartographer's map trade and the advancement are registered. Then a plant is put next to
-     * the electro turret by the door, and the turret must take it as its target: the turrets of the
-     * template are awake.
+     * and Brainz Alloy; the structure, its biomes, the cartographer's map trade and the advancement
+     * are registered. Then a plant is put next to the electro turret by the door, and the turret
+     * must take it as its target: the turrets of the template are awake. Last, the zombies it brings
+     * at night have spawn rules on the ground, and those rules keep them out of the workshop, which
+     * its lantern lights.
      */
     fun roboJunkyard(helper: GameTestHelper) {
         val level = helper.level
@@ -193,10 +205,11 @@ object StructuresGameTests {
         level.getEntitiesOfClass(ZombieRobot::class.java, box).forEach { it.discard() }
         template.placeInWorld(level, origin, origin, StructurePlaceSettings().setFinalizeEntities(true), level.random, Block.UPDATE_CLIENTS)
 
-        fun lootTable(pos: BlockPos) = (level.getBlockEntity(origin.offset(pos)) as? RandomizableContainerBlockEntity)?.lootTable?.identifier()?.path
-        if (lootTable(JUNKYARD_CHEST) != "chests/robo_junkyard/workshop") problems += "the workshop chest has loot ${lootTable(JUNKYARD_CHEST)}"
+        val chestLoot = lootTable(level, origin, JUNKYARD_CHEST)
+        if (chestLoot != "chests/robo_junkyard/workshop") problems += "the workshop chest has loot $chestLoot"
         for (pos in JUNKYARD_BARRELS) {
-            if (lootTable(pos) != "chests/robo_junkyard/scrap") problems += "the barrel at ${pos.toShortString()} has loot ${lootTable(pos)}"
+            val barrelLoot = lootTable(level, origin, pos)
+            if (barrelLoot != "chests/robo_junkyard/scrap") problems += "the barrel at ${pos.toShortString()} has loot $barrelLoot"
         }
 
         val turrets = level.getEntitiesOfClass(ZombieTurret::class.java, box)
@@ -207,18 +220,28 @@ object StructuresGameTests {
         if (guards.any { !it.isPersistenceRequired }) problems += "a turret of the junkyard may despawn"
 
         problems += junkyardLootProblems(helper, origin)
-        for (type in listOf(PazEntities.ENGINEER_ZOMBIE, PazEntities.SOLDIER_ZOMBIE, PazEntities.ROBO_ZOMBIE)) {
-            if (SpawnPlacements.getPlacementType(type) != SpawnPlacementTypes.ON_GROUND) problems += "${type.toShortString()} has no spawn rules"
-        }
         problems += registrationProblems(helper, "robo_junkyard", Biomes.BADLANDS, tradeLevel = 3)
         if (problems.isNotEmpty()) return helper.fail(problems.joinToString("; "))
 
         val electro = electroTurrets.single()
         val plant = helper.spawn(PazEntities.WALL_NUT, JUNKYARD_ELECTRO_TURRET.south(2))
+        val floor = origin.offset(JUNKYARD_WORKSHOP_FLOOR)
         helper.startSequence()
             .thenWaitUntil {
                 helper.assertTrue(level.isPositionEntityTicking(electro.blockPosition()), "the junkyard does not tick entities yet")
                 helper.assertTrue(electro.target == plant, "the electro turret targets ${electro.target?.type?.toShortString()} instead of the plant")
+            }
+            // light is computed after the template is placed
+            .thenWaitUntil { helper.assertTrue(level.getBrightness(LightLayer.BLOCK, floor) > 0, "the workshop is not lit yet") }
+            .thenExecute {
+                // the rule itself, not only its placement: a rule that let them spawn anywhere would pass the first check
+                fun <T : Entity> rules(type: EntityType<T>): String? = when {
+                    SpawnPlacements.getPlacementType(type) != SpawnPlacementTypes.ON_GROUND -> "${type.toShortString()} has no spawn rules on the ground"
+                    SpawnPlacements.checkSpawnRules(type, level, EntitySpawnReason.NATURAL, floor, level.random) -> "${type.toShortString()} may spawn in the lit workshop"
+                    else -> null
+                }
+                val wrong = listOfNotNull(rules(PazEntities.ENGINEER_ZOMBIE), rules(PazEntities.SOLDIER_ZOMBIE), rules(PazEntities.ROBO_ZOMBIE))
+                helper.assertTrue(wrong.isEmpty(), wrong.joinToString("; "))
             }
             .thenExecute {
                 plant.discard()
@@ -233,25 +256,27 @@ object StructuresGameTests {
         val problems = mutableListOf<String>()
         val tables = level.server.reloadableRegistries()
         fun table(path: String) = tables.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, id(path)))
+        val workshopTable = table("chests/robo_junkyard/workshop")
+        val scrapTable = table("chests/robo_junkyard/scrap")
         val chest = LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(origin)).create(LootContextParamSets.CHEST)
         val machines = setOf(PazEntities.ZOMBIE_TURRET, PazEntities.ELECTRO_TURRET, PazEntities.ZOMBIE_DRONE, PazEntities.LAWN_MOWER)
-        val workshop = (1..LOOT_ROLLS).map { table("chests/robo_junkyard/workshop").getRandomItems(chest) }
+        val workshop = (1..LOOT_ROLLS).map { workshopTable.getRandomItems(chest) }
         if (workshop.any { items -> items.count { it.`is`(PazItems.BLUEPRINT) } != 1 }) problems += "a workshop chest has no blueprint or more than one"
         val built = workshop.flatten().filter { it.`is`(PazItems.BLUEPRINT) }.map { it.get(DataComponents.ENTITY_DATA)?.type() }
         if (built.any { it !in machines }) problems += "a workshop blueprint builds ${built.firstOrNull { it !in machines }}"
         if (workshop.any { items -> items.none { it.`is`(PazItems.BRAINZ_ALLOY) } }) problems += "a workshop chest has no Brainz Alloy"
-        if ((1..LOOT_ROLLS).all { table("chests/robo_junkyard/scrap").getRandomItems(chest).isEmpty() }) problems += "the scrap barrels give nothing"
+        if ((1..LOOT_ROLLS).all { scrapTable.getRandomItems(chest).isEmpty() }) problems += "the scrap barrels give nothing"
         return problems
     }
 
     private fun shackProblems(helper: GameTestHelper, wood: String, origin: BlockPos, box: AABB): List<String> {
         val level = helper.level
         val problems = mutableListOf<String>()
-        fun lootTable(pos: BlockPos) = (level.getBlockEntity(origin.offset(pos)) as? RandomizableContainerBlockEntity)?.lootTable?.identifier()?.path
-
-        if (lootTable(BlockPos(3, 1, 3)) != "chests/garden_shack/shed") problems += "$wood: the shed chest has loot ${lootTable(BlockPos(3, 1, 3))}"
+        val shedLoot = lootTable(level, origin, BlockPos(3, 1, 3))
+        if (shedLoot != "chests/garden_shack/shed") problems += "$wood: the shed chest has loot $shedLoot"
         for (y in 1..2) {
-            if (lootTable(BlockPos(7, y, 5)) != "chests/garden_shack/barrel") problems += "$wood: barrel $y has loot ${lootTable(BlockPos(7, y, 5))}"
+            val barrelLoot = lootTable(level, origin, BlockPos(7, y, 5))
+            if (barrelLoot != "chests/garden_shack/barrel") problems += "$wood: barrel $y has loot $barrelLoot"
         }
         if (!level.getBlockState(origin.offset(10, 0, 8)).`is`(Blocks.WATER)) problems += "$wood: no water between the beds"
 

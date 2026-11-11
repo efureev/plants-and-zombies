@@ -366,7 +366,7 @@ A blueprint builds a machine. Right-click a block with it: the machine appears f
 <!-- pictures: brainz_alloy -->
 <p><img src="../images/items/brainz_alloy.png" alt="Brainz Alloy" title="Brainz Alloy" width="112"></p>
 
-**Brainz Alloy** comes from zombies: a Gargantuar always drops 18–25, a Robo-Zombie 2–5 (90%), Super Brainz 1–3 (70%), an Engineer 1–2 (30%). It is also found in grave loot, mausoleum chests and raid rewards, and 1 Brainzium + 4 copper ingots + 4 iron ingots make 16. It builds machines, repairs the Dye Blaster and is used for Brainz Alloy blocks (block, stairs, slab, smooth, treaded, reinforced, fence, door, trapdoor), the Solar Battery, the Collection Box and the Time Machine.
+**Brainz Alloy** comes from zombies: a Gargantuar always drops 18–25, a Robo-Zombie 2–5 (90%), Super Brainz 1–3 (70%), an Engineer 1–2 (30%). It is also found in grave loot, mausoleum chests, Robo Junkyard chests and barrels and raid rewards, and 1 Brainzium + 4 copper ingots + 4 iron ingots make 16. It builds machines, repairs the Dye Blaster and is used for Brainz Alloy blocks (block, stairs, slab, smooth, treaded, reinforced, fence, door, trapdoor), the Solar Battery, the Collection Box and the Time Machine.
 
 <!-- pictures: brainzium -->
 <p><img src="../images/items/brainzium.png" alt="Brainzium" title="Brainzium" width="112"></p>

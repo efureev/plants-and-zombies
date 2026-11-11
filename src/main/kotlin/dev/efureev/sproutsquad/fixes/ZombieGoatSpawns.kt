@@ -1,18 +1,16 @@
 package dev.efureev.sproutsquad.fixes
 
+import dev.efureev.sproutsquad.registry.SquadSpawnPlacements
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.PazSpawnPlacements
-import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.entity.zombie.ZombieGoat
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.Identifier
 import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.MobCategory
-import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.level.biome.Biome
-import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.bus.api.EventPriority
 import net.neoforged.neoforge.common.NeoForge
@@ -38,9 +36,7 @@ object ZombieGoatSpawns {
 
     fun register(modBus: IEventBus) {
         modBus.addListener(RegisterSpawnPlacementsEvent::class.java) { event ->
-            // the same placement the original gives its zombies (PazSpawnPlacements.registerSpawnPlacement defaults)
-            event.register(PazEntities.ZOMBIE_GOAT, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                PazZombie::checkPazZombieSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE)
+            SquadSpawnPlacements.likeOriginalZombies(event, PazEntities.ZOMBIE_GOAT)
             // biome spawn list, read later by PazSpawnsBiomeModifier when a server starts
             PazSpawnPlacements.addBiomeSpawn(HAS_ZOMBIE_GOAT, PazEntities.ZOMBIE_GOAT, category = MobCategory.MONSTER,
                 weight = WEIGHT, minGroupSize = 1, maxGroupSize = 2)

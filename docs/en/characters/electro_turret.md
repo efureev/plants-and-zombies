@@ -16,8 +16,8 @@ A stationary turret that strikes nearby targets with an electric arc and leaves 
 | Attack | an electric zap about every 1.5 s, reach about 8 blocks, 2 damage + Electrified for 9 s |
 | Knockback resistance | 0.2 |
 | Blueprint cost | 10 Brainz Alloy |
-| Spawns | built by an [Engineer Zombie](engineer_zombie.md); never spawns on its own |
-| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave |
+| Spawns | built by an [Engineer Zombie](engineer_zombie.md); one stands at every [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (by the workshop door), hostile, and never despawns there |
+| How to get a blueprint | [Engineer Zombie](engineer_zombie.md) drop (8.5 %, killed by a player or a plant); treasure in the hero mail for a Robo Army raid wave; the workshop chest of the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (3 chests in 10) |
 
 ## Abilities
 

@@ -14,7 +14,7 @@ A one-shot last line of defence, as in the original game. It waits until a monst
 | Run | 0.4 blocks per tick (8 blocks/s), at most 40 blocks or 10 s |
 | Damage | 1000 to every monster it touches (40 to bosses) |
 | Blueprint cost | 14 Brainz Alloy |
-| How to get a blueprint | only from the treasure in the hero mail for a Robo Army raid wave; Engineers never build or drop it, and there is no spawn egg |
+| How to get a blueprint | the treasure in the hero mail for a Robo Army raid wave and the workshop chest of the [Robo Junkyard](../STRUCTURES.md#robo-junkyard) (1 chest in 10); Engineers never build or drop it, and there is no spawn egg |
 
 ## Abilities
 
