@@ -72,6 +72,10 @@ The server's options are in `config/sproutsquad/server.json` (described in [FEAT
 | A screen that the mod needs another Minecraft or NeoForge version | The mod is for Minecraft 26.3 and NeoForge 26.3.0.102 or newer: check the installation's version in the launcher |
 | "Duplicate mods" or two Sprout Squads | Leave one `sprout-squad-*.jar` in `mods` and delete the others |
 | Cannot join a server: mods do not match | Install the same versions of Sprout Squad and Kotlin for Forge as on the server |
+| macOS: the red NeoForge loading screen stops at "Discovering mods..." and the CPU stays at 0% | A NeoForge 26.3 problem on macOS, not a mod's: its loading screen hangs while drawing. Close the game and set `earlyWindowControl = false` in `config/fml.toml` in the game folder: the game then starts without that screen, with Minecraft's own loading bar |
+| macOS: the game seems frozen, but the log shows `ERROR` lines | NeoForge found a problem and tried to show it in a window that does not appear on macOS. Read the error at the end of `logs/latest.log` |
+| A crash naming Sodium: `LevelExtractorMixin`, `extractVisibleBlockEntities` | Sodium 0.9.2 was built for an older NeoForge 26.3 build. Install Sodium 0.9.3-beta.4 or newer |
+| `Mod 'sodium' is incompatible with 'iris'` | Sodium 0.9.3 needs Iris 1.11.8 or newer; until it is released for 26.3, take Iris out of `mods` (the game runs without shaders) |
 | The game crashes | The details are in `logs/latest.log` and `crash-reports/` in the game folder. Open an [issue](https://github.com/efureev/plants-and-zombies/issues) and attach the log |
 
 What the mod lets you do once it is in the game: [FEATURES](FEATURES.md).

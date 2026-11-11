@@ -72,6 +72,10 @@
 | Экран о том, что моду нужна другая версия Minecraft или NeoForge | Мод — для Minecraft 26.3 и NeoForge 26.3.0.102 или новее: проверьте версию установки в лаунчере |
 | «Повторяющиеся моды» или два Sprout Squad | Оставьте в `mods` один `sprout-squad-*.jar`, остальные удалите |
 | Не пускает на сервер: моды не совпадают | Поставьте те же версии Sprout Squad и Kotlin for Forge, что и на сервере |
+| macOS: красный экран загрузки NeoForge останавливается на «Discovering mods...», процессор — 0 % | Это ошибка NeoForge 26.3 на macOS, а не мода: его экран загрузки зависает при отрисовке. Закройте игру и поставьте `earlyWindowControl = false` в файле `config/fml.toml` в папке игры: игра запустится без этого экрана, с обычной полосой загрузки Minecraft |
+| macOS: игра будто зависла, а в логе есть строки `ERROR` | NeoForge нашёл ошибку и пытался показать её в окне, которое на macOS не появляется. Прочитайте ошибку в конце `logs/latest.log` |
+| Вылет с упоминанием Sodium: `LevelExtractorMixin`, `extractVisibleBlockEntities` | Sodium 0.9.2 собран под более раннюю сборку NeoForge 26.3. Поставьте Sodium 0.9.3-beta.4 или новее |
+| `Mod 'sodium' is incompatible with 'iris'` | Sodium 0.9.3 требует Iris 1.11.8 или новее; пока для 26.3 его нет, уберите Iris из `mods` (игра пойдёт без шейдеров) |
 | Игра вылетает | Подробности — в `logs/latest.log` и `crash-reports/` в папке игры. Откройте [issue](https://github.com/efureev/plants-and-zombies/issues) и приложите лог |
 
 Что мод умеет, когда он уже в игре: [FEATURES](FEATURES.md).
