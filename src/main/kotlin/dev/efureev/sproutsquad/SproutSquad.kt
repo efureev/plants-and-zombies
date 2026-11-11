@@ -2,6 +2,8 @@ package dev.efureev.sproutsquad
 
 import dev.efureev.sproutsquad.debug.GalleryCommand
 import dev.efureev.sproutsquad.debug.SquadGameTests
+import dev.efureev.sproutsquad.machines.PlayerMachines
+import dev.efureev.sproutsquad.registry.SquadAttachments
 import dev.efureev.sproutsquad.registry.SquadEntities
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.common.NeoForge
@@ -14,6 +16,8 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent
 object SproutSquad {
     fun init(modBus: IEventBus) {
         SquadEntities.register(modBus)
+        SquadAttachments.register(modBus)
+        PlayerMachines.register()
 
         NeoForge.EVENT_BUS.addListener(RegisterCommandsEvent::class.java) { GalleryCommand.register(it.dispatcher) }
 

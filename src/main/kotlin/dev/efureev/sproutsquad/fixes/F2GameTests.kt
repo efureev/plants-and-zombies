@@ -36,6 +36,7 @@ import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -97,6 +98,9 @@ object F2GameTests {
         if (rollMob("entities/backup_dancer", null).isNotEmpty()) problems += "backup dancer drops loot without a player or plant kill"
         expect(problems, "entities/backup_dancer", rollMob("entities/backup_dancer", plant), "party hat") { it.isOf(PazItems.PARTY_HAT) }
         expect(problems, "entities/grave_digger", rollMob("entities/grave_digger", plant), "brainz flag") { it.isId("brainz_flag") }
+        val blueprints = rollMob("entities/engineer_zombie", plant).filter { it.isOf(PazItems.BLUEPRINT) }
+        if (blueprints.isEmpty()) problems += "entities/engineer_zombie never dropped a blueprint in $ROLLS rolls"
+        if (blueprints.any { it.isDamaged || it.get(DataComponents.ENTITY_DATA) == null }) problems += "an engineer blueprint is worn or has no machine"
         expect(problems, "entities/imp", rollMob("entities/imp", plant), "seed packet") { it.isOf(PazItems.SEED_PACKET) }
         expect(problems, "entities/pirate_captain_ghost", rollMob("entities/pirate_captain_ghost", plant), "phantom membrane") { it.isOf(Items.PHANTOM_MEMBRANE) }
         expect(problems, "entities/zombat", rollMob("entities/zombat", plant), "leather") { it.isOf(Items.LEATHER) }
@@ -159,6 +163,9 @@ object F2GameTests {
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
             .thenExecute {
+                // all batches run at the same spot: remove mobs other tests left on the arena
+                helper.level.getEntities(null as Entity?, AABB.encapsulatingFullBlocks(arena.first(), arena.last()).inflate(3.0)) { it !is net.minecraft.world.entity.player.Player }
+                    .forEach { it.discard() }
                 for (x in 0..2) helper.setBlock(BlockPos(dx + x, -1, dz), Blocks.STONE)
                 squash = helper.spawn(PazEntities.SQUASH, BlockPos(dx, 0, dz))
                 zombie = helper.spawnWithNoFreeWill(EntityTypes.ZOMBIE, BlockPos(dx + 2, 0, dz))

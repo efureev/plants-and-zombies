@@ -1,5 +1,6 @@
 package joshxviii.plantz.item
 
+import dev.efureev.sproutsquad.machines.PlayerMachines
 import joshxviii.plantz.PazComponents
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.getItemCount
@@ -107,6 +108,7 @@ class BlueprintItem(properties: Properties) : Item(properties) {
             }
         }
 
+        PlayerMachines.onBuilt(entity, player)
         if (!level.addFreshEntity(entity)) {
             entity.discard()
             return InteractionResult.FAIL
@@ -121,7 +123,6 @@ class BlueprintItem(properties: Properties) : Item(properties) {
             ParticleTypes.CAMPFIRE_COSY_SMOKE, entity.x, entity.y, entity.z,
             6, 0.2, 0.2, 0.2, 0.01
         )
-        //if (entity is ZombieRobot) entity.owner = player
         level.gameEvent(player, GameEvent.ENTITY_PLACE, spawnPos)
 
         return InteractionResult.SUCCESS
