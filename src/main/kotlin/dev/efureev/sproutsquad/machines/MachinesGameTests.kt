@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -97,6 +98,9 @@ object MachinesGameTests {
         helper.assertTrue(turret.getData(SquadAttachments.PLAYER_MACHINE), "turret is not marked as a player machine")
         helper.assertTrue(turret.owner === player, "turret owner is not the builder")
         helper.assertTrue(turret.ignoresFlag(), "turret would go for the raid flag")
+        // MachineReinforcements: on Hard a hit machine would call a hostile copy of itself
+        helper.assertTrue(turret.getAttributeValue(Attributes.SPAWN_REINFORCEMENTS_CHANCE) <= 0.0,
+            "turret may call reinforcements: ${turret.getAttributeValue(Attributes.SPAWN_REINFORCEMENTS_CHANCE)}")
         helper.assertTrue(player.inventory.countItem(PazItems.BRAINZ_ALLOY) == 3, "alloy not spent: ${player.inventory.countItem(PazItems.BRAINZ_ALLOY)} left")
 
         helper.assertTrue(mower != null, "no lawn mower was built")

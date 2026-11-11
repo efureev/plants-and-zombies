@@ -361,7 +361,7 @@ A blueprint builds a machine. Right-click a block with it: the machine appears f
 | <img src="../images/characters/lawn_mower.png" alt="" width="112"> | [Lawn Mower](characters/lawn_mower.md) | 14 | The last line of defence: waits until a monster comes right up to its front, then drives up to 40 blocks (or until it hits a wall) and mows down every monster on its way; bosses take 40 damage. Used up after one run, placed with its handle toward you, and only a player can break it |
 
 - Blueprints: Engineer Zombie (8.5%, one of its three machines), the Robo Army treasure (all four machines, the Lawn Mower is rare) and the workshop chest of the [Robo Junkyard](STRUCTURES.md#robo-junkyard) (always one, the Lawn Mower is rare). Costs are set by the server option `alloyCosts`.
-- In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.
+- In Sprout Squad a machine you build is **yours**: it attacks only hostile mobs (not creepers, not neutral mobs such as endermen), never hurts players, plants or other players' machines, ignores the raid flag and never despawns, even on Peaceful. No machine calls reinforcements when it is hit. A one-shot attack deals 40 damage to bosses instead of killing them. Machines built by Engineer Zombies stay hostile.
 
 <!-- pictures: brainz_alloy -->
 <p><img src="../images/items/brainz_alloy.png" alt="Brainz Alloy" title="Brainz Alloy" width="112"></p>
