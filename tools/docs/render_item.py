@@ -151,9 +151,12 @@ def tinted(image, rgb):
 
 
 def resolve(textures, ref):
+    """A face's texture id; 26.x writes some texture entries as {"sprite": ..., "force_translucent": ...}."""
     seen = 0
+    ref = ref.get("sprite", "") if isinstance(ref, dict) else ref
     while ref.startswith("#") and seen < 8:
         ref = textures.get(ref[1:], "")
+        ref = ref.get("sprite", "") if isinstance(ref, dict) else ref
         seen += 1
     return ref
 
