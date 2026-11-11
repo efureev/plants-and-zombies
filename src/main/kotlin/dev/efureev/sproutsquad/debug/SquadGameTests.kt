@@ -14,7 +14,8 @@ import net.minecraft.gametest.framework.GameTestServer
 import net.minecraft.gametest.framework.TestData
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
-import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.phys.AABB
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.event.RegisterGameTestsEvent
@@ -72,21 +73,24 @@ object SquadGameTests {
         }
     }
 
-    /** How far from a test's position the mobs that earlier tests left are removed. */
+    /** How far from a test's position what earlier tests left behind is removed. */
     private const val STRAY_RADIUS = 48.0
 
     /**
-     * All batches run at the same spot, and the runner clears only what is inside a test's
-     * structure: mobs that earlier tests left around it (diggers tunnelling off, zombies knocked
-     * aside) walked into later tests and were targeted instead of the test's own mobs. On the
-     * GameTest server (`runGameTestServer`) each test starts with them removed; the tests with a
-     * template as their arena place it again themselves. A test started with `/test` in a normal
-     * world leaves the mobs around it alone: they may be someone's villagers or pets.
+     * The GameTest server lays the tests out side by side, eight in a row, without clearing between
+     * batches, and the runner clears only what is inside a test's structure. Many tests work on a strip
+     * of ground beside their 1x1x1 "empty" structure, so what they left there (diggers tunnelling off,
+     * zombies knocked aside, a lawn mower) walked or drove into the next tests and was targeted
+     * instead of their own mobs. On the GameTest server (`runGameTestServer`) each test starts with
+     * every entity but players within [STRAY_RADIUS] removed, except inside its own structure: the
+     * runner has just cleared that area and placed the structure's own entities there. A test started
+     * with `/test` in a normal world leaves everything around it alone: it may be someone's base.
      */
     private fun clearStrays(helper: GameTestHelper) {
         if (helper.level.server !is GameTestServer) return
+        val arena = helper.bounds
         val area = AABB(helper.absolutePos(BlockPos.ZERO)).inflate(STRAY_RADIUS)
-        helper.level.getEntitiesOfClass(Mob::class.java, area).forEach { it.discard() }
+        helper.level.getEntities(null as Entity?, area) { it !is Player && !arena.intersects(it.boundingBox) }.forEach { it.discard() }
     }
 
     private fun id(path: String): Identifier = Identifier.fromNamespaceAndPath(PazMain.MODID, path)

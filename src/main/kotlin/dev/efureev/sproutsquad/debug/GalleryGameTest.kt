@@ -41,15 +41,18 @@ object GalleryGameTest {
         val commands = level.server.commands
 
         commands.performPrefixedCommand(source, "pz gallery")
-        val exhibits = level.allEntities.filter { GalleryCommand.TAG in it.entityTags() }.toList()
-        if (exhibits.size < MIN_EXHIBITS) helper.fail("gallery spawned only ${exhibits.size} exhibits, expected at least $MIN_EXHIBITS")
-        val outside = exhibits.filter { !helper.bounds.contains(it.position()) }
-        if (outside.isNotEmpty()) helper.fail("the gallery outgrew gametest/gallery_area (${outside.size} exhibits outside it): enlarge the template")
-        val unfrozen = exhibits.filter { it is net.minecraft.world.entity.Mob && !it.isNoAi }
-        if (unfrozen.isNotEmpty()) helper.fail("exhibits with AI enabled: ${unfrozen.joinToString { it.type.toShortString() }}")
-        PazMain.LOGGER.info("Gallery GameTest: {} exhibits", exhibits.size)
-
-        commands.performPrefixedCommand(source, "pz gallery clear")
+        try {
+            val exhibits = level.allEntities.filter { GalleryCommand.TAG in it.entityTags() }.toList()
+            if (exhibits.size < MIN_EXHIBITS) helper.fail("gallery spawned only ${exhibits.size} exhibits, expected at least $MIN_EXHIBITS")
+            val outside = exhibits.filter { !helper.bounds.contains(it.position()) }
+            if (outside.isNotEmpty()) helper.fail("the gallery outgrew gametest/gallery_area (${outside.size} exhibits outside it): enlarge the template")
+            val unfrozen = exhibits.filter { it is net.minecraft.world.entity.Mob && !it.isNoAi }
+            if (unfrozen.isNotEmpty()) helper.fail("exhibits with AI enabled: ${unfrozen.joinToString { it.type.toShortString() }}")
+            PazMain.LOGGER.info("Gallery GameTest: {} exhibits", exhibits.size)
+        } finally {
+            // also when a check fails: the frozen exhibits would stay in the world, next to later tests
+            commands.performPrefixedCommand(source, "pz gallery clear")
+        }
         val left = level.allEntities.count { GalleryCommand.TAG in it.entityTags() && !it.isRemoved }
         if (left != 0) helper.fail("gallery clear left $left exhibits")
         helper.succeed()

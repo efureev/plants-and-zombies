@@ -91,7 +91,7 @@ object OriginalGapsGameTests {
         }
         val browncoats = babies(PazEntities.BROWN_COAT)
         val newspaper = babies(PazEntities.NEWSPAPER_ZOMBIE)
-        // leaders bring followers into the level: remove them, all tests run at the same spot
+        // leaders bring followers into the level: remove them, the tests stand side by side
         level.getEntities(null as Entity?, AABB(BlockPos.containing(pos)).inflate(32.0)) { it !is Player }.forEach { it.discard() }
         helper.assertTrue(browncoats in 1..40, "$browncoats of 200 Browncoats spawned as babies, expected a few")
         helper.assertTrue(newspaper == 0, "$newspaper Newspaper Zombies spawned as babies")

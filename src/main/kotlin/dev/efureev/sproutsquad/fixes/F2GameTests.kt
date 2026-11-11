@@ -158,7 +158,7 @@ object F2GameTests {
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(arena.all { helper.level.isPositionEntityTicking(it) }, "arena is not ticking yet") }
             .thenExecute {
-                // all batches run at the same spot: remove mobs other tests left on the arena
+                // tests stand side by side: remove mobs other tests left on the arena since the test started
                 helper.level.getEntities(null as Entity?, AABB.encapsulatingFullBlocks(arena.first(), arena.last()).inflate(3.0)) { it !is net.minecraft.world.entity.player.Player }
                     .forEach { it.discard() }
                 for (x in 0..2) helper.setBlock(BlockPos(dx + x, -1, dz), Blocks.STONE)
