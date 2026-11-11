@@ -37,6 +37,9 @@ def render(picture):
     elif picture.kind == "items":
         import render_item
         render_item.render(picture.id, out)
+    elif picture.kind == "structures":
+        import render_structure
+        render_structure.render(picture.base, out)
     else:
         import render_item
         render_item.render_effect(picture.id, out)
@@ -46,10 +49,12 @@ def report(need):
     shown = {key for key in need}
     items = sorted(i for i in P.item_names("en") if ("items", i) not in shown and not i.startswith("potion_"))
     looks = sorted(f"{cid}_{look}" for cid in P.cards("en") for look in P.looks(cid) if ("characters", f"{cid}_{look}") not in shown)
+    structures = sorted(p.id for p in P.structures("en") if ("structures", p.id) not in shown)
     entities = sorted(k.split(".")[-1] for k in P.lang("en") if k.count(".") == 2 and k.startswith("entity.sproutsquad.")
                       and k.split(".")[-1] not in P.cards("en"))
     for title, names in (("items without a picture in the docs", items),
                          ("looks without a picture in the docs", looks),
+                         ("structures without a picture in the docs", structures),
                          ("entities without a card (projectiles and the like)", entities)):
         print(f"{title} ({len(names)}): {' '.join(names) if names else '-'}")
 

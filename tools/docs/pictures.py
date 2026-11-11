@@ -12,13 +12,16 @@ How a doc asks for pictures:
   a looks table in a card names them as "Snowcoat (`snowcoat`)";
 - a line <!-- pictures: id id ... --> (or <!-- pictures 64: ... --> for a size): a row of pictures
   after it. An id is an item, a character, a look (<character>_<look>) or an effect; it may be a
-  pattern (*_balloon, marigold_*) and may say its kind (item:, character:, effect:).
+  pattern (*_balloon, marigold_*) and may say its kind (item:, character:, effect:, structure:).
+  A structure's id is its path under data/sproutsquad/structure with / as _ (graveyard_mausoleum).
 """
 import fnmatch
 import functools
+import gzip
 import json
 import os
 import re
+import struct
 from collections import namedtuple
 
 ASSETS = "src/main/resources/assets/sproutsquad"
@@ -38,6 +41,9 @@ NOT_A_LOOK = {"sleep", "damage", "glow", "baby", "angry", "butter", "barrel", "i
 # names the docs use for things that have no name of their own in the mod's lang files
 VANILLA_ITEMS = {"bucket": {"en": "Bucket", "ru": "Ведро"}}
 EFFECT_ALIASES = {"painted": {"en": "Painted", "ru": "Покрашен"}}
+STRUCTURES = "src/main/resources/data/sproutsquad/structure"
+STRUCTURE_NAMES = {"graveyard/mausoleum": {"en": "Mausoleum", "ru": "Мавзолей"},
+                   "graveyard/fence*": {"en": "Graveyard fence", "ru": "Ограда кладбища"}}
 LOOK_TITLES = {"zombat_baron": {"en": "Baron's bat", "ru": "Зомбимышь Барона"}}
 
 Picture = namedtuple("Picture", "kind id name base look", defaults=(None, None))
@@ -205,6 +211,62 @@ def resolve_row(cells, locale):
     return [first] if first else []
 
 
+def read_nbt(path):
+    """A gzipped NBT file as Python values (compounds as dicts, lists as lists)."""
+    f = gzip.open(path)
+
+    def unpack(fmt):
+        return struct.unpack(">" + fmt, f.read(struct.calcsize(">" + fmt)))[0]
+
+    def string():
+        return f.read(unpack("H")).decode("utf-8", "replace")
+
+    def payload(tag):
+        if tag in (1, 2, 3, 4, 5, 6):
+            return unpack("bhiqfd"[tag - 1])
+        if tag == 7:
+            return f.read(unpack("i"))
+        if tag == 8:
+            return string()
+        if tag == 9:
+            item, count = unpack("b"), unpack("i")
+            return [payload(item) for _ in range(count)]
+        if tag == 10:
+            compound = {}
+            while (child := unpack("b")) != 0:
+                name = string()
+                compound[name] = payload(child)
+            return compound
+        if tag in (11, 12):
+            count = unpack("i")
+            return [unpack("iq"[tag - 11]) for _ in range(count)]
+        raise ValueError(f"unknown NBT tag {tag}")
+
+    tag = unpack("b")
+    string()
+    return payload(tag)
+
+
+def block_count(path):
+    """Blocks of a structure that are drawn (not air, jigsaw or structure blocks)."""
+    data = read_nbt(path)
+    palette = [(e.get("Name") or e.get("id") or "").split(":")[-1] for e in (data.get("palette") or data["palettes"][0])]
+    return sum(1 for b in data["blocks"] if palette[b["state"]] not in ("air", "jigsaw", "structure_void", "structure_block"))
+
+
+@functools.lru_cache(None)
+def structures(locale):
+    """Structures of the mod worth a picture (not the one-block decoration pieces)."""
+    found = []
+    for root, _, files in os.walk(STRUCTURES):
+        for f in sorted(files):
+            if f.endswith(".nbt") and block_count(os.path.join(root, f)) >= 4:
+                rel = os.path.relpath(os.path.join(root, f), STRUCTURES)[:-4]
+                name = next((n[locale] for pattern, n in STRUCTURE_NAMES.items() if fnmatch.fnmatchcase(rel, pattern)), rel)
+                found.append(Picture("structures", rel.replace("/", "_"), name, rel))
+    return found
+
+
 def everything(locale, kind=None):
     pool = []
     if kind in (None, "item"):
@@ -215,6 +277,8 @@ def everything(locale, kind=None):
             pool += [character(cid, locale, look) for look in looks(cid)]
     if kind in (None, "effect"):
         pool += [Picture("effects", e, n) for e, n in effect_names(locale).items()]
+    if kind in (None, "structure"):
+        pool += structures(locale)
     return pool
 
 

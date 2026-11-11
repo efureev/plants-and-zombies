@@ -176,7 +176,7 @@ GALLERY = re.compile(r"^<!-- pictures(?: (\d+))?: ([\w*?:\[\] ]+) -->$")
 def pictures_in(path, locale, collect=None, write=True):
     """Puts pictures into a doc (FEATURES.md or a card; see tools/docs/pictures.py for what asks
     for them): a thumbnail column in tables whose rows name a character, a look, an item or an
-    effect, and a row of pictures after each <!-- pictures: ... --> line. Only pictures that exist
+    effect (a structure only in a <!-- pictures --> line), and a row of pictures after each <!-- pictures: ... --> line. Only pictures that exist
     are shown; every picture asked for is added to `collect`; write=False only collects.
     Safe to run again."""
     import pictures as P

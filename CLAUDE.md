@@ -55,7 +55,7 @@ JDK 25: `export JAVA_HOME=/opt/homebrew/opt/openjdk@25`.
 
 ## Контент
 - Любой новый текст — минимум в `en_us.json` и `ru_ru.json`.
-- Персонажи: по файлу на каждого в `docs/<locale>/characters/<id>.md` (растения, зомби, машины — и оригинала, и свои), оглавление `characters/README.md` собирает `python3 tools/docs/build_character_index.py`; картинки для документации (персонажи, их облики, предметы, эффекты) рисует и расставляет `python3 tools/docs/refresh.py` (нужны Pillow и numpy; `--check` — только проверка). Исходники Blockbench и эскизы — в `art/<name>/`, чек-лист — в `WORKSHOP.md`. Полное описание возможностей мода — `docs/<locale>/FEATURES.md`, краткое — в README.
+- Персонажи: по файлу на каждого в `docs/<locale>/characters/<id>.md` (растения, зомби, машины — и оригинала, и свои), оглавление `characters/README.md` собирает `python3 tools/docs/build_character_index.py`; картинки для документации (персонажи, их облики, предметы, эффекты, постройки) рисует и расставляет `python3 tools/docs/refresh.py` (нужны Pillow и numpy; `--check` — только проверка). Исходники Blockbench и эскизы — в `art/<name>/`, чек-лист — в `WORKSHOP.md`. Полное описание возможностей мода — `docs/<locale>/FEATURES.md`, краткое — в README.
 - Как добавить растение (файлы, шаги, образец Potling / «Горшочек») — `docs/<locale>/WORKSHOP.md`. Тест `sproutsquad:squad_plants` проверяет чек-лист для всех своих растений.
 - GameTest-ы регистрируются в `dev/efureev/sproutsquad/debug/SquadGameTests.kt`; у каждого своё окружение (id окружения регистрируется только один раз).
 - После M8 запрещено менять id существующих блоков/предметов/сущностей без миграции — это ломает миры.

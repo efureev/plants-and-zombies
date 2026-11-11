@@ -17,6 +17,7 @@ assets or, for minecraft:* ids, from the game jar that ModDevGradle unpacks into
 build/moddev/artifacts. Faces are drawn in an orthographic 3/4 view with simple shading.
 """
 import argparse
+import functools
 import glob
 import io
 import json
@@ -60,23 +61,32 @@ def split_id(resource, default_ns="minecraft"):
     return ns, path
 
 
+@functools.lru_cache(None)
+def game_jar():
+    if not JAR:
+        return None, set()
+    jar = zipfile.ZipFile(JAR)
+    return jar, set(jar.namelist())
+
+
+@functools.lru_cache(None)
 def read_asset(ns, path):
     local = os.path.join(ASSETS, ns, path)
     if os.path.exists(local):
         return open(local, "rb").read()
-    if JAR:
-        with zipfile.ZipFile(JAR) as z:
-            name = f"assets/{ns}/{path}"
-            if name in z.namelist():
-                return z.read(name)
+    jar, names = game_jar()
+    if f"assets/{ns}/{path}" in names:
+        return jar.read(f"assets/{ns}/{path}")
     sys.exit(f"missing asset {ns}:{path}")
 
 
+@functools.lru_cache(None)
 def load_texture(texture_id):
     ns, path = split_id(texture_id)
     return Image.open(io.BytesIO(read_asset(ns, f"textures/{path}.png"))).convert("RGBA")
 
 
+@functools.lru_cache(None)
 def load_model(model_id):
     """A model with its parents merged: textures, display transforms and the nearest elements.
     "generated" marks an item/generated icon (the parent chain ends at builtin/generated)."""
@@ -244,7 +254,7 @@ def gui_view(model):
     return rot_x(math.radians(rx)) @ rot_y(math.radians(ry)) @ rot_z(math.radians(rz))
 
 
-def draw(faces, out, size, view):
+def draw(faces, out, size, view, shadow=True):
     light = np.array([-0.35, 1.0, 0.6])
     light /= np.linalg.norm(light)
     items = []
@@ -272,10 +282,11 @@ def draw(faces, out, size, view):
         return np.array([(p[0] - (min_x + max_x) / 2) * scale + px / 2, -(p[1] - (min_y + max_y) / 2) * scale + px / 2])
 
     canvas = Image.new("RGBA", (px, px), (0, 0, 0, 0))
-    ground = max(screen(f[1] + v)[1] for f in items for v in (np.zeros(3), f[2], f[3], f[2] + f[3]))
-    shadow = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).ellipse([px * 0.26, ground - px * 0.03, px * 0.74, ground + px * 0.03], fill=(0, 0, 0, 60))
-    canvas.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(px * 0.012)))
+    if shadow:
+        ground = max(screen(f[1] + v)[1] for f in items for v in (np.zeros(3), f[2], f[3], f[2] + f[3]))
+        blob = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+        ImageDraw.Draw(blob).ellipse([px * 0.26, ground - px * 0.03, px * 0.74, ground + px * 0.03], fill=(0, 0, 0, 60))
+        canvas.alpha_composite(blob.filter(ImageFilter.GaussianBlur(px * 0.012)))
 
     for depth, o, a, b, image, (u1, v1, u2, v2), shade in items:
         so = screen(o)
@@ -292,15 +303,24 @@ def draw(faces, out, size, view):
         inv = np.array([[sb[1], -sb[0]], [-sa[1], sa[0]]]) / det
         a11, a12 = inv[0] * (tu2 - tu1)
         a21, a22 = inv[1] * (tv2 - tv1)
-        c1 = tu1 - (a11 * so[0] + a12 * so[1])
-        c2 = tv1 - (a21 * so[0] + a22 * so[1])
-        warped = image.transform(canvas.size, Image.AFFINE, (a11, a12, c1, a21, a22, c2), resample=Image.NEAREST)
-        mask = Image.new("L", canvas.size, 0)
-        ImageDraw.Draw(mask).polygon([tuple(so), tuple(so + sa), tuple(so + sa + sb), tuple(so + sb)], fill=255)
+        # work only inside the face's bounding box: a structure has thousands of faces
+        quad = [so, so + sa, so + sa + sb, so + sb]
+        x0 = max(0, int(math.floor(min(q[0] for q in quad))) - 1)
+        y0 = max(0, int(math.floor(min(q[1] for q in quad))) - 1)
+        x1 = min(px, int(math.ceil(max(q[0] for q in quad))) + 1)
+        y1 = min(px, int(math.ceil(max(q[1] for q in quad))) + 1)
+        if x1 <= x0 or y1 <= y0:
+            continue
+        c1 = tu1 - (a11 * (so[0] - x0) + a12 * (so[1] - y0))
+        c2 = tv1 - (a21 * (so[0] - x0) + a22 * (so[1] - y0))
+        box = (x1 - x0, y1 - y0)
+        warped = image.transform(box, Image.AFFINE, (a11, a12, c1, a21, a22, c2), resample=Image.NEAREST)
+        mask = Image.new("L", box, 0)
+        ImageDraw.Draw(mask).polygon([(q[0] - x0, q[1] - y0) for q in quad], fill=255)
         r, g, bl, al = warped.split()
         r, g, bl = (ch.point(lambda x: int(x * shade)) for ch in (r, g, bl))
-        alpha = Image.composite(al, Image.new("L", canvas.size, 0), mask)
-        canvas.alpha_composite(Image.merge("RGBA", (r, g, bl, alpha)))
+        alpha = Image.composite(al, Image.new("L", box, 0), mask)
+        canvas.alpha_composite(Image.merge("RGBA", (r, g, bl, alpha)), dest=(x0, y0))
     save(canvas.resize((size, size), Image.LANCZOS), out)
 
 

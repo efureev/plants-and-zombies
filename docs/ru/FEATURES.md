@@ -480,6 +480,12 @@ Sprout Squad — мод для Minecraft 26.3 на NeoForge, который пр
 
 ### Постройки
 
+<!-- pictures 240: structure:graveyard_mausoleum -->
+<p><img src="../images/structures/graveyard_mausoleum.png" alt="Мавзолей" title="Мавзолей" width="240"></p>
+
+<!-- pictures 160: structure:graveyard_fence* -->
+<p><img src="../images/structures/graveyard_fence1.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"> <img src="../images/structures/graveyard_fence2.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"> <img src="../images/structures/graveyard_fence3.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"> <img src="../images/structures/graveyard_fence4.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"> <img src="../images/structures/graveyard_fence5.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"> <img src="../images/structures/graveyard_fence6.png" alt="Ограда кладбища" title="Ограда кладбища" width="160"></p>
+
 - **Мавзолей** (Кладбище). В сундуке с сокровищами всегда лежит «Флаг мозгоф», а также гробы, лопаты, зловещие бутылочки, кости, семена Могилоеда и Дымогриба и сплав мозгания; в горшках — кости, гнилая плоть, свёкла, стрелы и изумруды.
 - **Ограды кладбища**: небольшие постройки из заборов на Кладбище.
 

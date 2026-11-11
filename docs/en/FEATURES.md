@@ -480,6 +480,12 @@ The era dimension (`sproutsquad:time_space`) holds the four era biomes and is re
 
 ### Structures
 
+<!-- pictures 240: structure:graveyard_mausoleum -->
+<p><img src="../images/structures/graveyard_mausoleum.png" alt="Mausoleum" title="Mausoleum" width="240"></p>
+
+<!-- pictures 160: structure:graveyard_fence* -->
+<p><img src="../images/structures/graveyard_fence1.png" alt="Graveyard fence" title="Graveyard fence" width="160"> <img src="../images/structures/graveyard_fence2.png" alt="Graveyard fence" title="Graveyard fence" width="160"> <img src="../images/structures/graveyard_fence3.png" alt="Graveyard fence" title="Graveyard fence" width="160"> <img src="../images/structures/graveyard_fence4.png" alt="Graveyard fence" title="Graveyard fence" width="160"> <img src="../images/structures/graveyard_fence5.png" alt="Graveyard fence" title="Graveyard fence" width="160"> <img src="../images/structures/graveyard_fence6.png" alt="Graveyard fence" title="Graveyard fence" width="160"></p>
+
 - **Mausoleum** (Graveyard). The treasure chest always holds a Brainz Flag, plus coffins, shovels, Ominous Bottles, bones, Grave Buster and Fume-shroom seeds and Brainz Alloy; pots hold bones, rotten flesh, beetroots, arrows and emeralds.
 - **Graveyard fences**: small fence structures in the Graveyard.
 
