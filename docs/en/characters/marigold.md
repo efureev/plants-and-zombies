@@ -24,6 +24,7 @@ A farming plant: instead of a seed packet, its harvest is gold ingots, emeralds 
 
 ## Interactions
 
+- Right-click your own (tamed) Marigold with any dye to recolour its flowers (16 colours; with `coopPlanting`, any player's tamed one). Name it "Rainbow" with a name tag for the rainbow look. Added by Sprout Squad: the textures were in the original, unused.
 - A large water source (a water bucket, a watering can) halves the sun other plants need for seeds, but not the Marigold's: its 32 sun are fixed.
 - Sun comes from [Sunflowers](sunflower.md) and other sun producers.
 - Named `flowey` with a name tag, it gets a different look.

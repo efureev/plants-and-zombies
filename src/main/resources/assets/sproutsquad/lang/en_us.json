@@ -52,6 +52,7 @@
   "message.sproutsquad.cannot_survive": "%s cannot survive here!",
   "message.sproutsquad.cannot_place": "%s cannot be placed here!",
   "message.sproutsquad.not_yours": "You do not own this plant!",
+  "message.sproutsquad.plant_recharging": "%s is still recharging",
   "message.sproutsquad.not_enough_item": "Not enough %s (%s/%s)",
   "message.sproutsquad.entity_limit": "You've planted too many %s's nearby!",
   "message.sproutsquad.growing": "%s is growing seeds!",

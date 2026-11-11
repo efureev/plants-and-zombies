@@ -568,6 +568,8 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun onClimbable(): Boolean { return if (canClimbWalls() && !level().isClientSide) this.horizontalCollision else super.onClimbable() }
     override fun populateDefaultEquipmentSlots(random: RandomSource, difficulty: DifficultyInstance) {}
     fun isBabyZombie() = super.isBaby()
+    /** Only zombies with baby models and textures (Browncoat) spawn as babies. */
+    protected open fun canSpawnAsBaby(): Boolean = false
     fun randomEquip(random: RandomSource, difficulty: DifficultyInstance) {
         super.populateDefaultEquipmentSlots(random, difficulty)
     }
@@ -582,7 +584,8 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
             isRaider = (groupData as? PazZombieGroupData)?.isRaider ?: false,
             isCountedTowardRaidHealth = (groupData as? PazZombieGroupData)?.isCountedTowardRaidHealth ?: false,
             ignoreFlag = (groupData as? PazZombieGroupData)?.ignoreFlag ?: false,
-            isBaby = isBaby && (groupData as? ZombieGroupData)?.isBaby ?: false
+            // Sprout Squad: isBaby was read before it is set, so no zombie ever spawned as a baby
+            isBaby = canSpawnAsBaby() && ((groupData as? ZombieGroupData)?.isBaby ?: Zombie.getSpawnAsBabyOdds(level.random))
         )
         val level = level() as ServerLevel
         if (newData.isRaider) {

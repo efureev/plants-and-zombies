@@ -1,6 +1,7 @@
 package joshxviii.plantz.entity.plant
 
 import joshxviii.plantz.*
+import joshxviii.plantz.PazTags.BlockTags.PLANTABLE
 import joshxviii.plantz.ai.goal.MeleeAttackActionGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -31,6 +32,8 @@ class LightningReed(type: EntityType<out Plant>, level: Level) : Plant(type, lev
 
             return checkValidSpawn(level, pos, spawnReason, random)
                     && isThundering && pos.y > level.seaLevel - 8
+                    // Sprout Squad: natural reeds only where they can live (spawners keep their bypass)
+                    && (EntitySpawnReason.isSpawner(spawnReason) || level.getBlockState(pos.below()).`is`(PLANTABLE))
         }
     }
 

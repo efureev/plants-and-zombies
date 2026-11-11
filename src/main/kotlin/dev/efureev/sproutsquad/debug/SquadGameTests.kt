@@ -2,6 +2,7 @@ package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
+import dev.efureev.sproutsquad.fixes.OriginalGapsGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
 import joshxviii.plantz.PazMain
 import net.minecraft.core.registries.Registries
@@ -31,6 +32,14 @@ object SquadGameTests {
         Test("f2_squash", F2GameTests::squash, maxTicks = 600),
         Test("f2_zombie_goat", F2WorldGameTests::zombieGoat),
         Test("f2_balloon_flight", F2WorldGameTests::balloonFlight),
+        Test("gaps_seed_timer", OriginalGapsGameTests::seedTimer, maxTicks = 400),
+        Test("gaps_baby_zombies", OriginalGapsGameTests::babyZombies),
+        Test("gaps_flint_and_steel", OriginalGapsGameTests::flintAndSteel),
+        Test("gaps_plant_cooldown", OriginalGapsGameTests::plantCooldown),
+        Test("gaps_digger_mines", OriginalGapsGameTests::diggerMines, maxTicks = 600),
+        Test("gaps_digger_walks_around", OriginalGapsGameTests::diggerWalksAround, maxTicks = 400),
+        Test("gaps_marigold_dye", OriginalGapsGameTests::marigoldDye),
+        Test("gaps_citron_ball", OriginalGapsGameTests::citronBall),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),

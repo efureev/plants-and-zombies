@@ -44,6 +44,7 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
     }
 
     override fun isBaby(): Boolean = isBabyZombie()
+    override fun canSpawnAsBaby(): Boolean = true
     override fun populateDefaultEquipmentSlots(random: RandomSource, difficulty: DifficultyInstance) {
         randomEquip(random, difficulty)
     }

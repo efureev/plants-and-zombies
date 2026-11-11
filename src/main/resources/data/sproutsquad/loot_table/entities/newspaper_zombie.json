@@ -28,5 +28,5 @@
       }
     }
   ],
-  "random_sequence": "minecraft:entities/baron_von_bats"
+  "random_sequence": "sproutsquad:entities/newspaper_zombie"
 }

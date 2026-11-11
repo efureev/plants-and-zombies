@@ -21,6 +21,7 @@ The most common zombie of the mod and the backbone of every raid. On its own it 
 
 ## Abilities
 
+- About 5% spawn as babies: smaller and faster, with their own textures (Sprout Squad fixed this; babies never spawned in the original).
 - Fights like a vanilla zombie: melee hits, breaks doors, may get random vanilla armour and weapons and pick up items.
 - Mod equipment, with a chance that grows with regional difficulty (and with raid progress): a Cone or a bucket on the head, a Door Shield in the off hand (blocks hits from the front), a Coffin on the chest. Spawn eggs with these items are named Conehead, Buckethead, Screen Door, Coffin and Fully Armored Zombie.
 - 2 % of naturally spawned Browncoats above sea level come tied to 2–3 balloons and fly.

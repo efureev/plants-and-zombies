@@ -91,13 +91,16 @@ abstract class ExplosivePlant(type: EntityType<out ExplosivePlant>, level: Level
         if (level is ServerLevel) {
             // flint and steel interaction
             if (itemStack.`is`(Items.FLINT_AND_STEEL)) {
-                if (cooldown<0) {
+                if (cooldown<=0) {// Sprout Squad: was cooldown<0, which only happens during an action
+                    // Sprout Squad: lighting now works, so someone else's tamed plant needs the usual ownership rules
+                    if (isTame && !verifyOwner(player)) return InteractionResult.FAIL
                     if (isAsleep) {
                         player.sendOverlayMessage(Component.translatable("message.sproutsquad.sleeping", name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
                         return InteractionResult.FAIL
                     }
                     swellDir=2
                     playSound(SoundEvents.FLINTANDSTEEL_USE)
+                    itemStack.hurtAndBreak(1, player, hand) // Sprout Squad: the lighter wears like on blocks
                     return InteractionResult.SUCCESS_SERVER
                 }
             }
