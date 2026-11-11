@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "sproutsquad:brainz_alloy"
+    },
+    "title": {
+      "translate": "advancements.sproutsquad.find_robo_junkyard"
+    },
+    "description": {
+      "translate": "advancements.sproutsquad.find_robo_junkyard.description"
+    }
+  },
+  "parent": "sproutsquad:root",
+  "criteria": {
+    "robo_junkyard": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "sproutsquad:robo_junkyard"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sends_telemetry_event": false
+}

@@ -28,7 +28,7 @@ What the fork adds on top of the original:
 
 - **Fixes for content you could not get or use**: battle machines built from blueprints fight for the player, the lawn mower works as the last line of defence, Squash attacks, brewable potions, loot for raids and mobs, Zombie Goat spawns, no kicks for flying on balloons ([full list](docs/en/UPSTREAM.md)).
 - **Its own characters**, starting with the mascot plant [Potling](docs/en/characters/potling.md).
-- **New structures**, starting with the [Garden Shack](docs/en/STRUCTURES.md#garden-shack): an abandoned garden with wild plants to tame.
+- **New structures**: the [Garden Shack](docs/en/STRUCTURES.md#garden-shack), an abandoned garden with wild plants to tame, and the [Robo Junkyard](docs/en/STRUCTURES.md#robo-junkyard), a scrap yard guarded by turrets, with blueprints in its workshop.
 
 | | |
 |---|---|

@@ -1,0 +1,143 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:zombie_turret"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:electro_turret"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:zombie_drone"
+              }
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 1,
+          "modifier": {
+            "type": "minecraft:set_components",
+            "components": {
+              "minecraft:entity_data": {
+                "id": "sproutsquad:lawn_mower"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:brainz_alloy",
+          "weight": 1,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 4,
+              "max": 10
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 2,
+        "max": 4
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 4
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 6
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:redstone",
+          "weight": 2,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:brainzium",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 95
+        }
+      ]
+    }
+  ],
+  "random_sequence": "sproutsquad:chests/robo_junkyard/workshop"
+}

@@ -50,6 +50,7 @@ object SquadGameTests {
         Test("machines_mower", MachinesGameTests::mower, maxTicks = 400),
         Test("structures_templates", StructuresGameTests::templates),
         Test("structures_garden_shack", StructuresGameTests::gardenShack, structure = id("garden_shack/oak")),
+        Test("structures_robo_junkyard", StructuresGameTests::roboJunkyard, maxTicks = 400, structure = id("robo_junkyard/yard")),
     )
 
     fun register(modBus: IEventBus) {

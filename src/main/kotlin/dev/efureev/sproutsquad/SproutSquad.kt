@@ -8,6 +8,7 @@ import dev.efureev.sproutsquad.fixes.ZombieGoatSpawns
 import dev.efureev.sproutsquad.machines.PlayerMachines
 import dev.efureev.sproutsquad.registry.SquadAttachments
 import dev.efureev.sproutsquad.registry.SquadEntities
+import dev.efureev.sproutsquad.structures.StructureSpawns
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.RegisterCommandsEvent
@@ -22,6 +23,7 @@ object SproutSquad {
         SquadAttachments.register(modBus)
         PlayerMachines.register()
         ZombieGoatSpawns.register(modBus)
+        StructureSpawns.register(modBus)
         BalloonFlight.register()
         MarigoldColors.register()
 

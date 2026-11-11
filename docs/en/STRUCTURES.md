@@ -8,7 +8,7 @@ What you can find in the world of Sprout Squad, which structures are planned and
 
 ## In the mod now
 
-The Mausoleum and the fences come from the original mod and appear only in the Graveyard biome; the Garden Shack is the fork's own. What is inside them is also described in [FEATURES](FEATURES.md#structures).
+The Mausoleum and the fences come from the original mod and appear only in the Graveyard biome; the Garden Shack and the Robo Junkyard are the fork's own. What is inside them is also described in [FEATURES](FEATURES.md#structures).
 
 <!-- pictures 240: structure:graveyard_mausoleum -->
 <p><img src="../images/structures/graveyard_mausoleum.png" alt="Mausoleum" title="Mausoleum" width="240"></p>
@@ -34,6 +34,22 @@ An abandoned vegetable garden with a shed: someone grew fighting plants here and
 - **Inside:** the shed chest has 2–3 seed packets, 8–16 sun, plant pots, bone meal or seeds, sometimes a Watering Can (20%) or a Gardening Glove (5%); the barrels hold potatoes, carrots, beetroots and seeds. The Mailbox holds the Gardener's Letter, a book with a tip on taming plants: right-click the mailbox and it pops out.
 - **Finding it:** a Cartographer at level 1 may sell a Garden Shack Map (6 emeralds and a compass); the first visit gives the advancement "Someone Else's Garden".
 
+### Robo Junkyard
+
+`sproutsquad:robo_junkyard`
+
+<!-- pictures 240: structure:robo_junkyard_yard -->
+<p><img src="../images/structures/robo_junkyard_yard.png" alt="Robo Junkyard" title="Robo Junkyard" width="240"></p>
+
+A yard where Engineer Zombies build their machines: piles of scrap, a broken lawn mower and a workshop guarded by turrets. A way to get blueprints and Brainz Alloy without hunting the rare Engineer.
+
+- **Where:** badlands, eroded badlands, wooded badlands, savannas and savanna plateaus; about half as common as villages and never right next to one.
+- **Look:** 26×26 blocks. A fence of iron bars and Brainz Alloy posts, open on one side; scrap piles of Brainz Alloy blocks, iron and weathered copper with an anvil and a chain on top; a broken lawn mower; a 7×7 workshop of Brainz Alloy with a door, barred windows and a lantern. Inside: a crafting table, a smithing table, an anvil, the chest and a barrel.
+- **Inhabitants:** a hostile Zombie Turret on top of a scrap pile and an Electro Turret by the workshop door. They stay where they are and never despawn (except on Peaceful, like every monster). At night Engineer Zombies, Soldier Zombies and, rarely, a Robo-Zombie come, and an Engineer may build more machines.
+- **Highlight:** the turrets shoot and zap players and plants that come close: put plants up against them or break them.
+- **Inside:** the workshop chest always has one blueprint (Zombie Turret, Electro Turret or Zombie Drone; the Lawn Mower in one chest of ten), 4–10 Brainz Alloy, iron and copper ingots and redstone, and Brainzium in one chest of twenty. Three barrels of scrap hold iron nuggets, raw copper, copper ingots, iron chains and sometimes 1–3 Brainz Alloy.
+- **Finding it:** a Cartographer at level 3 may sell a Robo Junkyard Map (12 emeralds and a compass); the first visit gives the advancement "Spare Parts".
+
 ## Planned structures
 
 > **Concept, not a finished structure.** The pictures are sketches built from real game blocks (see [how they are made](#pictures)). Sizes, rooms, inhabitants and loot will change as the structures are built. Mobs and items marked *(planned)* do not exist yet; on the sketches, similar existing characters stand in for them. Underground structures are shown cut open.
@@ -43,7 +59,6 @@ An abandoned vegetable garden with a shed: someone grew fighting plants here and
 | Structure | Where | Highlight | Main rewards |
 |---|---|---|---|
 | [Crypt](#crypt) | Graveyard, underground | A trial that gives the Crypt Key, and a vault | The disc "The Great Pumpkin", Brainz Flag, crypt blocks, seeds |
-| [Robo Junkyard](#robo-junkyard) | Overworld: badlands, savannas, rarely plains | An Engineer's workshop guarded by hostile turrets | Blueprints, Brainz Alloy, rarely Brainzium |
 | [Dig Site](#dig-site) | Jurassic Period | A Rex skeleton in the ground, suspicious gravel for the brush | Amber, seeds of the era |
 | [Pharaoh's Tomb](#pharaohs-tomb) | Ancient Egypt | The Sphinx's riddle: turn three frames as the hieroglyphs show | Stone Lid shield, gold, hieroglyph tiles |
 | [Watchtower](#watchtower) | Dark Ages | "Siege": Tin-Can Knights rise in the courtyard | Old coins, armour, seeds of the era |
@@ -74,20 +89,6 @@ A dungeon under the Graveyard: candle-lit corridors, a hall of gravestones, a tr
 - **Inhabitants:** the mod's Gravestones in the hall raise Browncoats, Imps and Zombats; the trial spawner releases Bedsheet Ghosts *(planned)* and Zombats; Lantern Keepers *(planned)* walk the corridors.
 - **Highlight:** beat the trial, get the Crypt Key *(planned)*, open the vault: every player gets their own reward.
 - **Rewards:** in the vault, the disc "The Great Pumpkin" *(planned)*, a Brainz Flag, seeds of Eyeblossom Watcher, Firefly Buddy *(both planned)* or Grave Buster, a coffin, crypt blocks, rarely Brainzium. Corridor chests: candles, bones, cones, Ominous Bottles, a Potion of Hypnosis, sun.
-
-### Robo Junkyard
-
-`sproutsquad:robo_junkyard` (planned id)
-
-<p align="center"><img src="../images/sketches/structures/robo_junkyard.png" alt="Robo Junkyard" width="480"></p>
-
-A yard where Engineer Zombies build their machines: piles of scrap, a workshop, half-built turrets. A way to get blueprints and Brainz Alloy without hunting the rare Engineer.
-
-- **Where:** badlands and savannas, rarely plains; a rare structure.
-- **Look:** about 24×24 blocks. A fence of Brainz Alloy and iron bars, scrap piles (Brainz Alloy blocks, iron, weathered copper, anvils), a broken lawn mower, a 7×7 workshop with a crafting table, an anvil and a chest.
-- **Inhabitants:** 1–2 hostile Zombie Turrets and Electro Turrets placed with the structure; Engineer Zombies, Soldier Zombies and, rarely, Robo-Zombies spawn around.
-- **Highlight:** the turrets guard the workshop: disable them with plants or break them.
-- **Rewards:** the workshop chest has a blueprint (one of the machines, the Lawn Mower rarely), Brainz Alloy, iron, copper, redstone, rarely Brainzium; barrels of scrap hold iron nuggets, copper and a little alloy.
 
 ### Dig Site
 
@@ -178,7 +179,7 @@ A pirate brig washed up on a beach. In the original the Pirate Captain appears o
 8. **Check.** `/place structure sproutsquad:<id>`, `/locate structure sproutsquad:<id>`, a look at 5–10 of them; `./gradlew runServer`. A GameTest that loads every template and checks its loot tables, vault keys and trial spawner configs is planned.
 9. **Docs.** A paragraph here and in [FEATURES](FEATURES.md#structures) (both languages), a `<!-- pictures: structure:<id>_<piece> -->` line and the name in `STRUCTURE_NAMES` (`tools/docs/pictures.py`), then `python3 tools/docs/refresh.py`.
 
-**Or from a scene.** A structure can also start as a scene of blocks in `tools/docs/sketch_structures.py`: `python3 tools/docs/sketch_structures.py --export <id>` writes its templates, with loot tables, block entities and the characters marked as entities. The Garden Shack was made this way. Once a template is reworked in the game with a structure block, the `.nbt` is the source.
+**Or from a scene.** A structure can also start as a scene of blocks in `tools/docs/sketch_structures.py`: `python3 tools/docs/sketch_structures.py --export <id>` writes its templates, with loot tables, block entities and the characters marked as entities. The Garden Shack and the Robo Junkyard were made this way. Once a template is reworked in the game with a structure block, the `.nbt` is the source.
 
 Files of one structure:
 

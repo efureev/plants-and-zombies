@@ -1,0 +1,41 @@
+{
+  "additional_wants": {
+    "id": "minecraft:compass"
+  },
+  "given_item_modifier": [
+    {
+      "type": "minecraft:exploration_map",
+      "decoration": "minecraft:target_x",
+      "destination": "#sproutsquad:on_robo_junkyard_maps",
+      "search_radius": 100
+    },
+    {
+      "type": "minecraft:set_name",
+      "name": {
+        "translate": "filled_map.sproutsquad.robo_junkyard"
+      },
+      "target": "item_name"
+    },
+    {
+      "type": "minecraft:filtered",
+      "item_filter": {
+        "predicates": {
+          "minecraft:map_id": {}
+        }
+      },
+      "on_fail": {
+        "type": "minecraft:discard"
+      }
+    }
+  ],
+  "gives": {
+    "id": "minecraft:filled_map"
+  },
+  "max_uses": 12,
+  "reputation_discount": 0.2,
+  "wants": {
+    "count": 12,
+    "id": "minecraft:emerald"
+  },
+  "xp": 10
+}
