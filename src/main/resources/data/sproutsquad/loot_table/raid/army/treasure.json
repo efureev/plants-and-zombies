@@ -72,6 +72,66 @@
           "type": "minecraft:item",
           "name": "sproutsquad:dye_blaster",
           "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 3,
+          "modifier": [
+            {
+              "type": "minecraft:set_components",
+              "components": {
+                "minecraft:entity_data": {
+                  "id": "sproutsquad:zombie_turret"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 3,
+          "modifier": [
+            {
+              "type": "minecraft:set_components",
+              "components": {
+                "minecraft:entity_data": {
+                  "id": "sproutsquad:electro_turret"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 2,
+          "modifier": [
+            {
+              "type": "minecraft:set_components",
+              "components": {
+                "minecraft:entity_data": {
+                  "id": "sproutsquad:zombie_drone"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "sproutsquad:blueprint",
+          "weight": 2,
+          "modifier": [
+            {
+              "type": "minecraft:set_components",
+              "components": {
+                "minecraft:entity_data": {
+                  "id": "sproutsquad:lawn_mower"
+                }
+              }
+            }
+          ]
         }
       ]
     }

@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.zombie
 
+import dev.efureev.sproutsquad.machines.PlayerMachines
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSounds
@@ -132,7 +133,8 @@ class EngineerZombie(type: EntityType<out EngineerZombie>, level: Level) : PazZo
 
         override fun canUse(): Boolean {
             if (engineerZombie.buildingTime>0) return true
-            val nearbyBots: Int = getServerLevel(engineerZombie.level()).getNearbyEntities(ZombieRobot::class.java, botTargeting, engineerZombie, engineerZombie.boundingBox.inflate(28.0)).size
+            val nearbyBots: Int = getServerLevel(engineerZombie.level()).getNearbyEntities(ZombieRobot::class.java, botTargeting, engineerZombie, engineerZombie.boundingBox.inflate(28.0))
+                .count { !PlayerMachines.isPlayerMachine(it) } // players' machines are not his
             return engineerZombie.target != null && !engineerZombie.isDeadOrDying && (engineerZombie.target?.isAlive == true) && nearbyBots < 2
         }
 

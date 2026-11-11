@@ -1,5 +1,6 @@
 package joshxviii.plantz.entity.projectile
 
+import dev.efureev.sproutsquad.machines.PlayerMachines
 import joshxviii.plantz.*
 import joshxviii.plantz.PazTags.EntityTypes.IGNORE_PAZ_PROJECTILES
 import joshxviii.plantz.entity.Balloon
@@ -379,8 +380,9 @@ abstract class PazProjectile(
         if (entity.`is`(IGNORE_PAZ_PROJECTILES)) return false
         if (piercingIgnoreEntityIds.contains(entity.id)) return false
         val owner = entityOwner ?: return super.canHitEntity(entity)
+        if (PlayerMachines.blocksHit(owner, entity)) return false
         if (entity is Balloon && ((owner is Plant && entity.getLeashHolder() is Plant) || (owner is Enemy && entity.getLeashHolder() is Enemy))) return false
-        if ((entity is Plant && owner is Plant && entity.owner !is Enemy) || (entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS) && owner.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS) && !owner.isHypnotized() && extractRootOwner(owner) !is Player)) return false
+        if ((entity is Plant && owner is Plant && entity.owner !is Enemy) || (entity.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS) && owner.`is`(PazTags.EntityTypes.ZOMBIE_RAIDERS) && !owner.isHypnotized() && extractRootOwner(owner) !is Player && !PlayerMachines.isPlayerMachine(owner))) return false
         if (owner.hasSameRootOwner(entity)) return false
         return super.canHitEntity(entity)
     }

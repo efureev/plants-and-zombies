@@ -2,6 +2,7 @@ package joshxviii.plantz.renderer.entity
 
 import com.mojang.blaze3d.vertex.PoseStack
 import joshxviii.plantz.entity.zombie.ZombieRobot
+import joshxviii.plantz.entity.blueprint_machines.LawnMower
 import joshxviii.plantz.model.blueprint_machines.ZombieTurretModel
 import joshxviii.plantz.renderer.getEmissiveTextureLocation
 import joshxviii.plantz.renderer.getTextureLocation
@@ -51,6 +52,7 @@ class BlueprintMachineRenderer(
             state.idleAnimationState.copyFrom(entity.idleAnimation)
             state.actionAnimationState.copyFrom(entity.actionAnimation)
         }
+        if (entity is LawnMower) state.actionAnimationState.copyFrom(entity.mowAnimation)
     }
 
     override fun createRenderState(): BlueprintMachineRenderState {

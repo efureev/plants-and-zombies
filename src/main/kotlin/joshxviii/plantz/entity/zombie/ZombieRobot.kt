@@ -1,9 +1,9 @@
 package joshxviii.plantz.entity.zombie
 
+import dev.efureev.sproutsquad.machines.PlayerMachines
 import joshxviii.plantz.PazOwnableZombie
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.entity.plant.Plant
-import joshxviii.plantz.hasSameRootOwner
 import joshxviii.plantz.item.BlueprintItem
 import net.minecraft.network.syncher.EntityDataAccessor
 import net.minecraft.network.syncher.EntityDataSerializers
@@ -19,7 +19,6 @@ import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
-import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
@@ -133,21 +132,19 @@ abstract class ZombieRobot(type: EntityType<out ZombieRobot>, level: Level) : Pa
         // attack owner's target goal
         this.targetSelector.addGoal(2, NearestAttackableTargetGoal(this, LivingEntity::class.java, true
         ) { entity, level ->
-            return@NearestAttackableTargetGoal entity is Player || entity is Plant
-            if (this.owner is Player) (
-                entity !is Plant &&
-                entity !is Creeper &&
-                !entity.hasSameRootOwner(this.owner) &&
-                (entity is Zombie || (entity is Enemy))
-            )
-            else (
-                entity is Player || entity is Plant
-            )
+            // built by a player from a blueprint: fight the players' enemies (see PlayerMachines)
+            if (PlayerMachines.isPlayerMachine(this)) PlayerMachines.isEnemyOfPlayers(entity)
+            else (entity is Player || entity is Plant)
         })
     }
 
+    // PazZombie never attacks other zombies; a player's machine attacks exactly the players' enemies
+    override fun canAttack(target: LivingEntity): Boolean =
+        if (PlayerMachines.isPlayerMachine(this)) PlayerMachines.canBeAttackedByMachine(target)
+        else super.canAttack(target)
+
     override fun ignoreZombieDamage(): Boolean {
-        return this.owner !is Player
+        return !PlayerMachines.isPlayerMachine(this)
     }
 
     override fun finalizeSpawn(

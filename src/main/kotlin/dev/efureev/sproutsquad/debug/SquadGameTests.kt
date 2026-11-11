@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.fixes.F2GameTests
+import dev.efureev.sproutsquad.machines.MachinesGameTests
 import joshxviii.plantz.PazMain
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.FunctionGameTestInstance
@@ -27,6 +28,11 @@ object SquadGameTests {
         Test("squad_plants", SquadPlantsGameTest::run),
         Test("f2_data", F2GameTests::data),
         Test("f2_squash", F2GameTests::squash, maxTicks = 600),
+        Test("machines_build", MachinesGameTests::build),
+        Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
+        Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),
+        Test("machines_electro_turret", MachinesGameTests::electroTurret, maxTicks = 1200),
+        Test("machines_mower", MachinesGameTests::mower, maxTicks = 400),
     )
 
     fun register(modBus: IEventBus) {
