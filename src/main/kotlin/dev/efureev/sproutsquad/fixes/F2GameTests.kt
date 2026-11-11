@@ -15,7 +15,6 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.server.MinecraftServer
-import net.minecraft.world.attribute.EnvironmentAttributes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.EquipmentSlot
@@ -30,7 +29,6 @@ import net.minecraft.world.item.alchemy.PotionContents
 import net.minecraft.world.item.alchemy.Potions
 import net.minecraft.world.item.crafting.BrewingInput
 import net.minecraft.world.item.crafting.RecipeType
-import net.minecraft.world.level.biome.MobSpawnSettings
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.storage.loot.LootParams
 import net.minecraft.world.level.storage.loot.LootTable
@@ -134,13 +132,9 @@ object F2GameTests {
         }
 
         // Jurassic Period spawns use the 26.x attribute format (legacy "spawners" is ignored by the codec).
-        val jurassic = server.registryAccess().lookupOrThrow(Registries.BIOME).getValue(id("jurassic_period"))
-        val spawns = jurassic?.attributes?.applyModifier(EnvironmentAttributes.NATURAL_MOB_SPAWNS, MobSpawnSettings.EMPTY)
-        if (spawns == null || spawns.getMobsToSpawn(MobCategory.CREATURE).isEmpty) {
-            problems += "jurassic_period has no creature spawns"
-        } else if (spawns.getMobsToSpawn(MobCategory.MONSTER).isEmpty) {
-            problems += "jurassic_period has no monster spawns"
-        }
+        val jurassic = ResourceKey.create(Registries.BIOME, id("jurassic_period"))
+        if (F2WorldGameTests.biomeSpawns(server, jurassic, MobCategory.CREATURE).isEmpty()) problems += "jurassic_period has no creature spawns"
+        if (F2WorldGameTests.biomeSpawns(server, jurassic, MobCategory.MONSTER).isEmpty()) problems += "jurassic_period has no monster spawns"
 
         if (problems.isNotEmpty()) {
             helper.fail(problems.joinToString("; "))
