@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.ai.goal.Goal
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.phys.Vec3
 import net.neoforged.neoforge.event.EventHooks
 import java.util.EnumSet
@@ -14,8 +15,9 @@ import java.util.EnumSet
  * The Digger Zombie digs through blocks in its way to the target (blocks in
  * `#sproutsquad:digger_breakable`: dirt, sand, stone bricks, glass, plant pots…). The original
  * had the tag, the mining animation and a path evaluator for it, but nothing that mined.
- * It digs when it walks into a wall or cannot find a path to the target at all. Respects the
- * `mobGriefing` game rule; the broken block drops as if mined.
+ * It digs when it walks into a wall or cannot find a path to a target at about its own height; it
+ * does not dig a 1-block step it can jump. Respects `mobGriefing` and NeoForge's block-break event
+ * (claim protection); the block drops as if mined with the Digger's pickaxe.
  */
 class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
     companion object {
@@ -42,6 +44,8 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         val blocked = digger.horizontalCollision || digger.navigation.isDone || digger.navigation.isStuck
         val distanceSqr = digger.distanceToSqr(target)
         if (!blocked || distanceSqr < 2.25 || distanceSqr > MAX_TARGET_DISTANCE * MAX_TARGET_DISTANCE) return false
+        // a target far above or below is not reached by digging sideways (tunnelling handles that)
+        if (kotlin.math.abs(target.y - digger.y) > 2.0 || horizontalDistanceSqr(target) < 1.0) return false
         val level = digger.level() as? ServerLevel ?: return false
         if (!EventHooks.canEntityGrief(level, digger)) return false
         pos = blockInTheWay(level)
@@ -71,7 +75,9 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         level.destroyBlockProgress(digger.id, current, ticks * 10 / MINE_TICKS)
         if (ticks >= MINE_TICKS) {
             level.destroyBlockProgress(digger.id, current, -1)
-            level.destroyBlock(current, true, digger)
+            val state = level.getBlockState(current)
+            Block.dropResources(state, level, current, level.getBlockEntity(current), digger, digger.mainHandItem)
+            level.destroyBlock(current, false, digger)
             pos = null
         }
     }
@@ -81,16 +87,28 @@ class DiggerMineGoal(private val digger: DiggerZombie) : Goal() {
         pos = null
     }
 
-    /** The block in front of the digger at foot or head height, towards the target. */
+    private fun horizontalDistanceSqr(target: net.minecraft.world.entity.Entity): Double {
+        val dx = target.x - digger.x
+        val dz = target.z - digger.z
+        return dx * dx + dz * dz
+    }
+
+    /** The block in front of the digger at foot or head height, towards the target; not a jumpable step. */
     private fun blockInTheWay(level: ServerLevel): BlockPos? {
         val target = digger.target ?: return null
         val facing = Direction.getApproximateNearest(target.x - digger.x, 0.0, target.z - digger.z)
         val front = digger.blockPosition().relative(facing)
-        return listOf(front, front.above()).firstOrNull { breakable(level, it) }
+        val head = front.above()
+        val headFree = level.getBlockState(head).getCollisionShape(level, head).isEmpty
+        val roomToJump = level.getBlockState(head.above()).getCollisionShape(level, head.above()).isEmpty &&
+            level.getBlockState(digger.blockPosition().above(2)).getCollisionShape(level, digger.blockPosition().above(2)).isEmpty
+        if (headFree && roomToJump) return null // a 1-block step: jump it, do not flatten the terrain
+        return listOf(front, head).firstOrNull { breakable(level, it) }
     }
 
     private fun breakable(level: ServerLevel, pos: BlockPos): Boolean {
         val state = level.getBlockState(pos)
-        return !state.isAir && state.`is`(PazTags.BlockTags.DIGGER_BREAKABLE) && state.getDestroySpeed(level, pos) >= 0
+        return !state.isAir && state.`is`(PazTags.BlockTags.DIGGER_BREAKABLE) && state.getDestroySpeed(level, pos) >= 0 &&
+            EventHooks.onEntityDestroyBlock(digger, pos, state)
     }
 }

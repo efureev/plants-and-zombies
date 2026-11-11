@@ -122,6 +122,16 @@ object OriginalGapsGameTests {
         val config = PazConfig.server
         val wasEnabled = config.plantCooldownEnabled
         try {
+            // option off (the default): planting leaves the rest of the stack untouched, so it still stacks
+            config.plantCooldownEnabled = false
+            val first = helper.makeMockPlayer(GameType.SURVIVAL)
+            first.inventory.add(ItemStack(PazItems.SUN, 32))
+            val stack = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER).copyWithCount(2)
+            SeedPacketItem.tryPlant(helper.level, first, stack, helper.absolutePos(pos.below()), Direction.UP, Direction.NORTH)
+            helper.assertTrue(stack.count == 1 && ItemStack.isSameItemSameComponents(stack, SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER)),
+                "planting changed the remaining packets: ${stack.componentsPatch}")
+            clear(helper, pos)
+
             config.plantCooldownEnabled = true
             val player = helper.makeMockPlayer(GameType.SURVIVAL)
             player.inventory.add(ItemStack(PazItems.SUN, 32))
@@ -170,11 +180,15 @@ object OriginalGapsGameTests {
             .thenSucceed()
     }
 
-    /** A dye recolours a Marigold and is used up. */
+    /** A dye recolours the player's own Marigold and is used up; a wild one stays as it is. */
     fun marigoldDye(helper: GameTestHelper) {
         val marigold = helper.spawn(PazEntities.MARIGOLD, BlockPos(0, 1, 0))
         val player = helper.makeMockPlayer(GameType.SURVIVAL)
         player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.DYE.red(), 2))
+        // a wild Marigold is not dyed (same ownership rules as the other plant interactions)
+        player.interactOn(marigold, InteractionHand.MAIN_HAND, marigold.position())
+        helper.assertTrue(MarigoldColors.color(marigold) == null, "a wild Marigold was dyed")
+        marigold.tame(player)
         player.interactOn(marigold, InteractionHand.MAIN_HAND, marigold.position())
         helper.assertTrue(MarigoldColors.color(marigold) == DyeColor.RED, "the Marigold is ${MarigoldColors.color(marigold)}, not red")
         helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).count == 1, "the dye was not used up")

@@ -124,10 +124,8 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
             getAttribute(Attributes.MOVEMENT_SPEED)!!.let { if (!it.hasModifier(TRANSFORMED_ID)) it.addTransientModifier(
                 SPEED_MODIFIER
             ) }
-            // Sprout Squad: rolling already raises the step height (ROLLING_ID); stacking both let it climb 2-block walls
-            getAttribute(Attributes.STEP_HEIGHT)!!.let { if (!it.hasModifier(TRANSFORMED_ID) && !it.hasModifier(ROLLING_ID)) it.addTransientModifier(
-                STEP_HEIGHT_MODIFIER
-            ) }
+            // Sprout Squad: the ball form now always comes with rolling, which already raises the step height
+            // (ROLLING_ID); adding STEP_HEIGHT_MODIFIER on top let it climb 2-block walls.
 
             goalSelector.addGoal(3, ballGoal)
         }

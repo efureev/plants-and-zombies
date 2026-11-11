@@ -52,6 +52,7 @@
   "message.sproutsquad.cannot_survive": "%s здесь не выживет!",
   "message.sproutsquad.cannot_place": "%s нельзя посадить сюда!",
   "message.sproutsquad.not_yours": "Вы не владеете этим растением!",
+  "message.sproutsquad.plant_recharging": "%s ещё перезаряжается",
   "message.sproutsquad.not_enough_item": "Недостаточно: %s (%s/%s)",
   "message.sproutsquad.entity_limit": "Рядом посажено слишком много: (%s)!",
   "message.sproutsquad.growing": "%s выращивает семена!",

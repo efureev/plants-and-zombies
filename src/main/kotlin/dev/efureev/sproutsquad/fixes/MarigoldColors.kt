@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.fixes
 
 import dev.efureev.sproutsquad.registry.SquadAttachments
+import joshxviii.plantz.PazConfig
 import joshxviii.plantz.entity.plant.Marigold
 import net.minecraft.core.component.DataComponents
 import net.minecraft.sounds.SoundEvents
@@ -10,7 +11,8 @@ import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent
 
 /**
- * Marigolds can be dyed: right-click one with any dye (owner only, if tamed). The original has a
+ * Marigolds can be dyed: right-click your own (tamed) Marigold with any dye; with `coopPlanting`
+ * any player may dye tamed ones, as for the other plant interactions. The original has a
  * texture for every dye colour (`marigold_<colour>.png`, `marigold_sleep_<colour>.png`) that no
  * code ever picked. A Marigold named "Rainbow" uses the rainbow texture (a magic name, like
  * "Flowey").
@@ -27,7 +29,10 @@ object MarigoldColors {
         val marigold = event.target as? Marigold ?: return
         val dye = event.itemStack.get(DataComponents.DYE) ?: return
         val player = event.entity
-        if (marigold.isTame && !marigold.isOwnedBy(player)) return
+        if (!marigold.isTame || (!marigold.isOwnedBy(player) && !PazConfig.COOP_PLANTING)) {
+            if (!marigold.level().isClientSide) marigold.verifyOwner(player) // tells the player why
+            return
+        }
         if (color(marigold) == dye) return
         if (!marigold.level().isClientSide) {
             marigold.setData(SquadAttachments.MARIGOLD_COLOR, dye.id)
