@@ -89,7 +89,8 @@ class SunBatteryItem(properties: Properties) : BlockItem(PazBlocks.SUN_BATTERY_B
             slot = slot,
             clickAction = clickAction,
             player = player,
-            destinationSetter = slot::set
+            destinationSetter = slot::set,
+            destinationSlot = slot
         ) ?: super.overrideStackedOnOther(self, slot, clickAction, player)
     }
 
@@ -99,7 +100,8 @@ class SunBatteryItem(properties: Properties) : BlockItem(PazBlocks.SUN_BATTERY_B
         slot: Slot,
         clickAction: ClickAction,
         player: Player,
-        destinationSetter: (ItemStack) -> Unit
+        destinationSetter: (ItemStack) -> Unit,
+        destinationSlot: Slot? = null
     ): Boolean? {
         val sunStorage = targetStack.get(PazComponents.STORED_SUN) ?: return false
         return when (clickAction) {
@@ -108,7 +110,7 @@ class SunBatteryItem(properties: Properties) : BlockItem(PazBlocks.SUN_BATTERY_B
                 true
             }
             ClickAction.SECONDARY if sourceStack.isEmpty -> {
-                if (slot.allowModification(player)) tryRemoveSunFromStorage(targetStack, sunStorage, destinationSetter)
+                if (slot.allowModification(player)) tryRemoveSunFromStorage(targetStack, sunStorage, destinationSetter, destinationSlot)
                 true
             }
             else -> null
@@ -132,12 +134,17 @@ class SunBatteryItem(properties: Properties) : BlockItem(PazBlocks.SUN_BATTERY_B
     private fun tryRemoveSunFromStorage(
         targetStack: ItemStack,
         sunStorage: StoredSun,
-        destinationSetter: (ItemStack) -> Unit
+        destinationSetter: (ItemStack) -> Unit,
+        destinationSlot: Slot? = null
     ) {
         if (!sunStorage.hasSun()) return
 
         val sunItem = PazItems.SUN.defaultInstance
-        val amountToRemove = sunItem.maxStackSize.coerceAtMost(sunStorage.storedSun)
+        // Sprout Squad: into a slot only what it takes (64 sun went into the Letter's 1-item attachment slot)
+        if (destinationSlot != null && !destinationSlot.mayPlace(sunItem)) return
+        val limit = destinationSlot?.getMaxStackSize(sunItem) ?: sunItem.maxStackSize
+        val amountToRemove = limit.coerceAtMost(sunStorage.storedSun)
+        if (amountToRemove <= 0) return
 
         targetStack.set(PazComponents.STORED_SUN, sunStorage.removeSun(amountToRemove))
         destinationSetter(sunItem.copyWithCount(amountToRemove))

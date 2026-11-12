@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.fixes
 
+import dev.efureev.sproutsquad.machines.PlayerMachines
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.entity.plant.Plant
@@ -30,7 +31,7 @@ import kotlin.math.sin
  *
  * The timing follows `SquashAnimation.action` (4 s): wind-up until ~2 s, stretch at 3.52 s, flatten at 3.64 s.
  * Only zombies (and, for a tame squash, other monsters) are squashed: never players, plants,
- * villagers or pets standing next to the target. Bosses take [BOSS_DAMAGE] instead of a one-shot.
+ * villagers, pets or players' machines standing next to the target. Bosses take [BOSS_DAMAGE] instead of a one-shot.
  * If the target dies or walks away during the wind-up, the squash stays and waits for the next one.
  * Nothing about the leap is saved: a squash unloaded mid-air falls back down on reload.
  */
@@ -48,9 +49,10 @@ class SquashAttackGoal(private val squash: Squash) : Goal() {
         const val DAMAGE = 1000f
         const val BOSS_DAMAGE = 40f
 
-        /** Who a squash targets and squashes; shared with the target goal in [Squash]. */
+        /** Who a squash targets and squashes; shared with the target goal in [Squash]. Players' machines are zombies too, but allies. */
         fun isSquashTarget(squash: Squash, entity: LivingEntity): Boolean =
-            entity !is Plant && entity !is Player && (entity is Zombie || (entity is Enemy && squash.isTame))
+            entity !is Plant && entity !is Player && !PlayerMachines.isPlayerMachine(entity) &&
+                (entity is Zombie || (entity is Enemy && squash.isTame))
     }
 
     private var ticks = 0

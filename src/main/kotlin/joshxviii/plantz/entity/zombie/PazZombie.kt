@@ -521,7 +521,8 @@ abstract class PazZombie(type: EntityType<out PazZombie>, level: Level) : Zombie
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
         isFlying = input.getBooleanOr("sproutsquad:IsFlying", false)
-        state = ZombieState.entries[input.getInt("sproutsquad:State").getOrElse { 0 }]
+        // Sprout Squad: an unknown state number (edited NBT, a newer version) loads idle instead of crashing the chunk
+        state = ZombieState.entries.getOrNull(input.getInt("sproutsquad:State").getOrElse { 0 }) ?: ZombieState.IDLE
     }
 
     override fun hurtServer(level: ServerLevel, source: DamageSource, damage: Float): Boolean {

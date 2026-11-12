@@ -59,7 +59,7 @@ fun Plant.processSunItem(player: Player, item: ItemStack, hand: InteractionHand,
             SoundEvents.BUBBLE_POP, 1.0f,
             receivedSun.toFloat()/sunRequiredForSeeds() + 0.9f
         )
-        if (receivedSun++ >= sunRequiredForSeeds()) awardSeedPacket(player)
+        if (++receivedSun >= sunRequiredForSeeds()) awardSeedPacket(player) // Sprout Squad: was receivedSun++, one sun too many
         funnyBounce()
         success = true
     }
@@ -91,8 +91,11 @@ fun Plant.processWateringItem(player: Player, item: ItemStack, hand: Interaction
         }
         (hasStoredWater) -> {
             this.playSound(PazSounds.WATERING_CAN)
-            if (!infiniteWater) item.set(PazComponents.STORED_WATER, item.get(PazComponents.STORED_WATER)?.removeWater(2))
-            2
+            // Sprout Squad: the can gives what it has (1 water left gave 2)
+            val stored = item.get(PazComponents.STORED_WATER)!!
+            val given = if (infiniteWater) 2 else minOf(2, stored.storedWater)
+            if (!infiniteWater) item.set(PazComponents.STORED_WATER, stored.removeWater(given))
+            given
         }
         else -> 0
     }
@@ -184,7 +187,8 @@ fun Plant.processSeedPacketInteraction(player: Player, itemStack: ItemStack, han
         PacketInteractionResult.SUCCESS -> {
             if (!player.hasInfiniteMaterials()) {// remove used sun
                 player.removeSunFromStorageAndInventory(sunCost)
-                if (!itemStack.`is`(PazItems.SEED_PACKET)) SeedPacketItem.applyCooldown(itemStack, player)
+                // Sprout Squad: no SeedPacketItem.applyCooldown on a glove: it stuck the moved plant's cooldown group
+                // on the glove for good, and a glove move is not planting (fixes/PlantingCooldown.kt)
             }
         }
         PacketInteractionResult.NO_INTERACTION -> {
@@ -202,6 +206,8 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
     if (this.hasPumpkinArmor()) return PacketInteractionResult.NO_INTERACTION
     if (this !is Pumpkin) {
         if (this.`is`(PazTags.EntityTypes.CANNOT_PUMPKIN)) return PacketInteractionResult.NO_INTERACTION
+        // Sprout Squad: the armor costs sun like planting does; without this check it was free
+        if (cantAfford) return PacketInteractionResult.CANT_AFFORD
         val pumpkinType = itemStack.get(DataComponents.ENTITY_DATA)?.type()
         if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, pumpkinType)) return PacketInteractionResult.NO_INTERACTION
         applyPumpkinArmor(pumpkinData = itemStack.get(DataComponents.ENTITY_DATA))
@@ -215,9 +221,17 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
     // Sprout Squad: planting into a Pumpkin is planting too (plantCooldownEnabled)
     if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, seedType)) return PacketInteractionResult.NO_INTERACTION
     (level() as? ServerLevel)?.let { level ->
+        // Sprout Squad: the plant limit applies as on the ground, and only a plant that was really planted is a success
+        // (a failed spawn used to cost the sun and the packet)
+        var planted = false
         seedType.create(
             level, EntityType.createDefaultStackConfig(level, itemStack, null), blockPosition(), EntitySpawnReason.SPAWN_ITEM_USE, true, true
         )?.let {
+            if (it is Plant && PazConfig.getEntityLimit(seedType) > -1 && !player.hasInfiniteMaterials() && it.isOverEntityLimit()) {
+                player.sendOverlayMessage(Component.translatable("message.sproutsquad.entity_limit", seedType.description.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
+                it.discard()
+                return PacketInteractionResult.FAIL
+            }
             val pumpkinData = this.saveAsCompoundTag()
 
             val filteredData = pumpkinData.copy().apply {
@@ -225,6 +239,8 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
                 remove("CustomName")
                 remove("sproutsquad:State")
                 remove("sproutsquad:Cooldown")
+                // Sprout Squad: the new plant keeps its own attributes (it got the Pumpkin's: speed 0, its damage, its range)
+                remove("attributes")
             }
             val mergedData = TypedEntityData.of(seedType, seedData.copyTagWithoutId().merge(filteredData))
             mergedData.loadInto(it)
@@ -234,9 +250,10 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
             if (level.addFreshEntity(it)) {
                 discard()
                 dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, seedType, SunCost.getSunCost(itemStack))
+                planted = true
             }
         }
-        return PacketInteractionResult.SUCCESS
+        return if (planted) PacketInteractionResult.SUCCESS else PacketInteractionResult.NO_INTERACTION
     }
     return PacketInteractionResult.SUCCESS
 }

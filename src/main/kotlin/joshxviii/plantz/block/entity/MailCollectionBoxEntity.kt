@@ -7,6 +7,7 @@ import joshxviii.plantz.block.MailCollectionBoxBlock.Companion.STATE
 import joshxviii.plantz.block.MailboxState
 import joshxviii.plantz.inventory.MailCollectionBoxMenu
 import joshxviii.plantz.networking.MailboxSendResult
+import joshxviii.plantz.networking.SendMailRequestPayload.Companion.loadedMailbox
 import joshxviii.plantz.networking.SendMailRequestPayload.Companion.trySendStack
 import joshxviii.plantz.neoforge.ExtendedMenuProvider
 import net.minecraft.core.BlockPos
@@ -104,11 +105,12 @@ class MailCollectionBoxEntity(
         }
         if (slotIndex == -1 || stack.isEmpty) return
 
-        val targetBE = level.getBlockEntity(targetPos) as? MailboxBlockEntity
+        val targetBE = loadedMailbox(level, targetPos)
         val result = trySendStack(level, stack, targetPos)
 
         when (result) {
-            MailboxSendResult.SUCCESS -> {
+            // Sprout Squad: queued mail leaves the box too; left in it, every redstone pulse would queue another copy
+            MailboxSendResult.SUCCESS, MailboxSendResult.QUEUED -> {
                 setItem(slotIndex, ItemStack.EMPTY)
                 setChanged()
                 targetBE?.setChanged()
@@ -122,7 +124,7 @@ class MailCollectionBoxEntity(
             else -> {}
         }
 
-        if (result != MailboxSendResult.SUCCESS) playSound(SoundEvents.BARREL_CLOSE, 0.3f, 1.2f)
+        if (!result.isSent()) playSound(SoundEvents.BARREL_CLOSE, 0.3f, 1.2f)
     }
 
     fun updateCollectionBoxState(newState: CollectionBoxState) {

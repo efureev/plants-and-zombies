@@ -66,33 +66,36 @@ abstract public class LivingEntityRendererMixin<T extends LivingEntity, S extend
             entityRenderState.setRenderData(IS_SKATING, RollerSkatesItem.Companion.isSkating(living));
         }
 
+        // Sprout Squad: the pose is kept per entity. It was kept per renderer, i.e. per entity type, so every
+        // frozen zombie of a type took the pose and the facing of the last one of that type drawn unfrozen.
         if (entityRenderState instanceof LivingEntityRenderState state) {
-            if (hasFrozen && plantz$hasPreviousState) {
-                state.ageInTicks = plantz$ageInTicks;
-                state.walkAnimationPos = plantz$walkAnimationPos;
-                state.walkAnimationSpeed = plantz$walkAnimationSpeed;
-                state.bodyRot = plantz$bodyRot;
-                state.yRot = plantz$yRot;
-                state.xRot = plantz$xRot;
+            if (hasFrozen) {
+                float[] pose = plantz$frozenPoses.get(entity);
+                if (pose == null) {
+                    plantz$frozenPoses.put(entity, new float[] {
+                        state.ageInTicks, state.walkAnimationPos, state.walkAnimationSpeed, state.bodyRot, state.yRot, state.xRot
+                    });
+                } else {
+                    state.ageInTicks = pose[0];
+                    state.walkAnimationPos = pose[1];
+                    state.walkAnimationSpeed = pose[2];
+                    state.bodyRot = pose[3];
+                    state.yRot = pose[4];
+                    state.xRot = pose[5];
+                }
             } else {
-                plantz$ageInTicks = state.ageInTicks;
-                plantz$walkAnimationPos = state.walkAnimationPos;
-                plantz$walkAnimationSpeed = state.walkAnimationSpeed;
-                plantz$bodyRot = state.bodyRot;
-                plantz$yRot = state.yRot;
-                plantz$xRot = state.xRot;
+                plantz$frozenPoses.remove(entity);
             }
-            plantz$hasPreviousState = true;
         }
     }
 
-    @Unique private boolean plantz$hasPreviousState;
-    @Unique private float plantz$ageInTicks;
-    @Unique private float plantz$walkAnimationPos;
-    @Unique private float plantz$walkAnimationSpeed;
-    @Unique private float plantz$bodyRot;
-    @Unique private float plantz$yRot;
-    @Unique private float plantz$xRot;
+    /**
+     * Pose each frozen entity had when it froze; render thread only, weak keys drop unloaded entities. Keys are
+     * compared by identity: Entity.equals compares ids, and a new entity with a reused id (another world) took the
+     * stale pose of the old one.
+     */
+    @Unique
+    private static final Map<Entity, float[]> plantz$frozenPoses = new com.google.common.collect.MapMaker().weakKeys().makeMap();
 
     @Unique
     private static final int PLANTZ_HYPNO_TINT = ARGB.opaque(0xD036FF);

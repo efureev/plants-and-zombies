@@ -37,6 +37,7 @@ object PazMain {
 		// clear client raid cache + load config
 		NeoForge.EVENT_BUS.addListener(ServerStartingEvent::class.java) {
 			ZombieRaids.clearActiveRaidCenters()
+			MailboxManager.clearMailboxes() // Sprout Squad: the previous world's mailboxes stayed listed
 			PazConfig.load()
 		}
 		// config sync

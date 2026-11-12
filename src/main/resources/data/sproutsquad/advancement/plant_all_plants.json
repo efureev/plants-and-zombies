@@ -401,6 +401,18 @@
           }
         }
       }
+    },
+    "sproutsquad:potling": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:potling"
+          }
+        }
+      }
     }
   },
   "sends_telemetry_event": false

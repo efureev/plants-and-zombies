@@ -6,6 +6,7 @@ import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.NavigateToTargetGoal
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.raid.PazZombieGroupData
+import joshxviii.plantz.raid.ZombieRaider
 import joshxviii.plantz.raid.isActiveInRaid
 import net.minecraft.core.component.DataComponents
 import net.minecraft.network.syncher.EntityDataAccessor
@@ -152,7 +153,9 @@ class PirateCaptain(type: EntityType<out PirateCaptain>, level: Level) : PazZomb
             it.playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
             (level() as? ServerLevel)?.let { level ->
                 it.finalizeSpawn(level, level.getCurrentDifficultyAt(blockPosition()), EntitySpawnReason.CONVERSION,
-                    PazZombieGroupData(isRaider = this.isActiveInRaid())
+                    // Sprout Squad: not isActiveInRaid(), which needs isAlive and is always false in die(): the ghost
+                    // never joined the raid, and the wave could be won while it was still around
+                    PazZombieGroupData(isRaider = (this as ZombieRaider).`plantz$getIsFromRaid`())
                 )
             }
         }

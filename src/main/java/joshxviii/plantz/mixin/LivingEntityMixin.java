@@ -63,7 +63,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
     private CompoundTag plantData = new CompoundTag();
 
     @Unique
-    private List<CompletedWave> completedRaidWaveList = List.of();
+    private List<CompletedWave> completedRaidWaveList = new ArrayList<>();
     @Unique
     private @Nullable Plant plantEntity = null;
 
@@ -105,7 +105,9 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
 
     @Override
     public void plantz$setWaveList(@NotNull List<CompletedWave> value) {
-        completedRaidWaveList = value;
+        // Sprout Squad: a mutable copy. Loaded from a save it was the codec's immutable list, and the Mailbox crashed
+        // the server clearing it after ejecting the rewards
+        completedRaidWaveList = new ArrayList<>(value);
     }
 
     @Override
@@ -137,14 +139,19 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
     @Inject(method = "onEquipItem", at = @At("TAIL"))
     private void plantz$checkFloatTag(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
         if ((LivingEntity) (Object) this instanceof PathfinderMob mob) {
-            if (stack.is(PazItems.DUCKY_TUBE) && slot == EquipmentSlot.LEGS) {
+            boolean wasTube = oldStack.is(PazItems.DUCKY_TUBE);
+            boolean isTube = stack.is(PazItems.DUCKY_TUBE);
+            if (slot != EquipmentSlot.LEGS || wasTube == isTube) return;
+            if (isTube) {
                 prevFloatTag = mob.getNavigation().canFloat();
                 prevWaterMalus = mob.getPathfindingMalus(PathType.WATER);
                 mob.getNavigation().setCanFloat(true);
-            }
-            else if (oldStack.is(PazItems.DUCKY_TUBE) && slot == EquipmentSlot.LEGS) {
-                mob.getNavigation().setCanFloat(prevFloatTag);
                 mob.setPathfindingMalus(PathType.WATER, 0.0F);
+            }
+            else {
+                // restore what the mob had before the tube (it used to be left at 0: mobs kept walking into water)
+                mob.getNavigation().setCanFloat(prevFloatTag);
+                mob.setPathfindingMalus(PathType.WATER, prevWaterMalus);
             }
         }
     }
@@ -162,6 +169,9 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         output.putBoolean("sproutsquad:IsFrozen", PazSyncedData.FROZEN.get(self));
         output.putBoolean("sproutsquad:IsButtered", PazSyncedData.BUTTERED.get(self));
         output.store("sproutsquad:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), PazSyncedData.PAINTED_COLORS.get(self));
+        // Sprout Squad: the copy of the worn plant follows the live plant; it stayed as it was when put on, so a relog
+        // brought back its health, its sun and a broken pumpkin armor
+        if (this.plantz$hasPlantOnHead() && plantEntity != null) plantData = plantEntity.wearerSnapshot();
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("sproutsquad:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }
@@ -218,7 +228,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         if (newEffect.is(PazEffects.CHILLED) || newEffect.is(PazEffects.FROZEN)) {
             cir.setReturnValue(entity.canFreeze());
         }
-        updateEffects();
+        // Sprout Squad: no updateEffects() here: this is only a check, asked before the effect exists and on every
+        // potion cloud tick; adding, updating, removing and loading effects already sync the flags
     }
 
     @Inject(method = "canAttack", at = @At(value = "RETURN"), cancellable = true)
@@ -324,9 +335,16 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         if (!blocked || damage > 0.0F) original.call(entity, source);
     }
 
+    // Sprout Squad: only for the mod's own blockers (the Newspaper's partial block); a block with any other item
+    // keeps its vanilla knockback
     @Inject(method = "blockedByItem", at = @At("HEAD"), cancellable = true)
     private void plantz$preventKnockbackWhileBlocking(LivingEntity defender, DamageSource source, float damage, boolean fullyBlocked, CallbackInfo ci) {
-        ci.cancel();
+        ItemStack blocker = defender.getItemBlockingWith();
+        if (blocker == null) {
+            ItemStack chest = defender.getItemBySlot(EquipmentSlot.CHEST);
+            if (chest.has(PazComponents.WORN_BODY_BLOCKER)) blocker = chest;
+        }
+        if (blocker != null && net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(blocker.getItem()).getNamespace().equals(PazMain.MODID)) ci.cancel();
     }
 
 }

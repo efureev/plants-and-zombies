@@ -43,7 +43,7 @@ class DiggerZombie(type: EntityType<out DiggerZombie>, level: Level) : PazZombie
             random: RandomSource
         ): Boolean {
             val below = pos.below()
-            val isMineshaftSpawn = (level as ServerLevel).structureManager().getStructureWithPieceAt(pos, StructureTags.MINESHAFT).isValid
+            val isMineshaftSpawn = level.level.structureManager().getStructureWithPieceAt(pos, StructureTags.MINESHAFT).isValid
 
             return level.difficulty != Difficulty.PEACEFUL
                     && (EntitySpawnReason.ignoresLightRequirements(spawnReason) || isDarkEnoughToSpawn(level, pos, random))

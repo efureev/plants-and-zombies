@@ -98,8 +98,10 @@ class BrownCoat(type: EntityType<out BrownCoat>, level: Level) : PazZombie(type,
         val data = super.finalizeSpawn(level, difficulty, spawnReason, groupData)
         val random = level.random
         setCanBreakDoors(true)
-        val structureManager = (level as ServerLevel).structureManager()
-        val isShipwreckSpawn = structureManager.getStructureWithPieceAt(blockPosition(), StructureTags.SHIPWRECK).isValid
+        // Sprout Squad: the given level is the generation region when a structure template places the zombie during
+        // world generation; the ServerLevel cast threw there and crashed the generation
+        val isShipwreckSpawn = (level as? ServerLevel)?.structureManager()
+            ?.getStructureWithPieceAt(blockPosition(), StructureTags.SHIPWRECK)?.isValid == true
 
         if (spawnReason != EntitySpawnReason.EVENT) equipZombieEquipment(random, difficulty.specialMultiplier + 0.1f)
 

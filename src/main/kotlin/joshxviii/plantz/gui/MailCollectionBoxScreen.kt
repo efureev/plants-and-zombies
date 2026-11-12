@@ -223,7 +223,8 @@ class MailCollectionBoxScreen(
 
     private fun isScrollBarActive(): Boolean = menu.filteredMailboxes.size > MAX_VISIBLE_ROWS
 
-    private fun getOffscreenRows(): Int = (menu.filteredMailboxes.size - 1).coerceAtLeast(0)
+    // Sprout Squad: the rows below the ones shown (it was size - 1: the list scrolled until one address was left)
+    private fun getOffscreenRows(): Int = (menu.filteredMailboxes.size - MAX_VISIBLE_ROWS).coerceAtLeast(0)
 
     private fun containerChanged() {
         scrollToIndex()

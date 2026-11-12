@@ -21,8 +21,12 @@ class LetterMenu(
 ) : AbstractContainerMenu(PazMenus.LETTER_MENU, containerId) {
     val hand: InteractionHand = if (handIndex == 0) InteractionHand.MAIN_HAND else InteractionHand.OFF_HAND
     private val heldInventorySlot = if (hand == InteractionHand.MAIN_HAND) inventory.selectedSlot else 40
+    // Sprout Squad: the letter the menu was opened on. The hand used to be read anew each time, so a letter switched
+    // into it with the screen open (a modified client can) got this letter's attachment: the attachment was duplicated
+    private val openedLetter: ItemStack = inventory.player.getItemInHand(hand)
     val letterStack: ItemStack
-        get() = inventory.player.getItemInHand(hand).takeIf { it.`is`(PazItems.LETTER) } ?: ItemStack.EMPTY
+        get() = inventory.player.getItemInHand(hand)
+            .takeIf { it.`is`(PazItems.LETTER) && (inventory.player.level().isClientSide || it === openedLetter) } ?: ItemStack.EMPTY
     val letterData: LetterDataComponent
         get() = letterStack.get(PazComponents.LETTER_DATA) ?: LetterDataComponent()
     val editable: Boolean
@@ -71,7 +75,7 @@ class LetterMenu(
     }
 
     override fun stillValid(player: Player): Boolean {
-        return player.getItemInHand(hand).`is`(PazItems.LETTER)
+        return !letterStack.isEmpty
     }
 
     override fun slotsChanged(container: Container) {

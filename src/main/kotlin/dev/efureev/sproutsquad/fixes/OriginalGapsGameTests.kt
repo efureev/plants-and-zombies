@@ -1,21 +1,33 @@
 package dev.efureev.sproutsquad.fixes
 
+import dev.efureev.sproutsquad.registry.SquadEntities
+import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
+import joshxviii.plantz.block.entity.MailCollectionBoxEntity
+import joshxviii.plantz.block.entity.getMailboxMailQueue
 import joshxviii.plantz.entity.plant.Citron
 import joshxviii.plantz.entity.plant.ExplosivePlant
+import joshxviii.plantz.entity.plant.PacketInteractionResult
 import joshxviii.plantz.entity.plant.Plant
+import joshxviii.plantz.entity.plant.processSeedPacketInteraction
 import joshxviii.plantz.entity.zombie.DiggerZombie
+import joshxviii.plantz.getTotalSun
 import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.item.component.SunCost
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.Attributes
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -225,6 +237,110 @@ object OriginalGapsGameTests {
         helper.assertTrue(MarigoldColors.color(marigold) == DyeColor.RED, "the Marigold is ${MarigoldColors.color(marigold)}, not red")
         helper.assertTrue(player.getItemInHand(InteractionHand.MAIN_HAND).count == 1, "the dye was not used up")
         marigold.discard()
+        helper.succeed()
+    }
+
+    /** A mob wearing a plant on its head ticks once per game tick (the plant used to tick it a second time). */
+    fun headPlantTicks(helper: GameTestHelper) {
+        val pos = spot(helper)
+        clear(helper, pos)
+        helper.setBlock(pos.below(), Blocks.STONE)
+        for (dy in 0..2) helper.setBlock(pos.above(dy), Blocks.AIR)
+        lateinit var wearer: Zombie
+        lateinit var plant: Plant
+        var start = 0
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(helper.level.isPositionEntityTicking(helper.absolutePos(pos)), "spot is not ticking yet") }
+            .thenExecute {
+                wearer = helper.spawn(EntityTypes.ZOMBIE, pos)
+                wearer.isNoAi = true
+                wearer.setItemSlot(EquipmentSlot.HEAD, ItemStack(PazItems.PLANT_POT_HELMET))
+                plant = helper.spawn(PazEntities.SUNFLOWER, pos)
+                helper.assertTrue(plant.attachToEntity(wearer), "the Sunflower did not attach to the zombie's plant pot")
+                start = wearer.tickCount
+            }
+            .thenIdle(20)
+            .thenExecute {
+                val ticks = wearer.tickCount - start
+                helper.assertTrue(ticks in 18..22, "the wearer ticked $ticks times in 20 game ticks")
+                helper.assertTrue(plant.isAttached(), "the plant fell off the wearer")
+                helper.assertTrue(plant.position().distanceTo(wearer.position()) < wearer.bbHeight + 1.0, "the plant is not on the wearer's head")
+                clear(helper, pos)
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * Mail for a mailbox in an unloaded chunk is queued without loading that chunk (sending used to load
+     * it on the spot), and it leaves the sender: left in the slot it would be queued again on every send.
+     */
+    fun queuedMailLeaves(helper: GameTestHelper) {
+        val pos = BlockPos(0, 1, 0)
+        helper.setBlock(pos, PazBlocks.MAIL_COLLECTION_BOX)
+        val box = helper.getBlockEntity(pos, MailCollectionBoxEntity::class.java)
+        // far away, so its chunk is not loaded: the mail is queued
+        val target = helper.absolutePos(pos).offset(1_000_000, 0, 0)
+        helper.assertTrue(!helper.level.isLoaded(target), "the target mailbox chunk is loaded")
+        try {
+            box.selectedMailbox = target
+            box.setItem(0, ItemStack(Items.DIAMOND))
+            box.trySendMail()
+            helper.assertTrue(!helper.level.isLoaded(target), "sending loaded the target mailbox's chunk")
+            helper.assertTrue(box.getItem(0).isEmpty, "the queued mail stayed in the collection box")
+            helper.assertTrue(helper.level.getMailboxMailQueue().discardFor(target), "the mail was not queued")
+        } finally {
+            helper.level.getMailboxMailQueue().discardFor(target)
+            box.clearContent()
+            helper.setBlock(pos, Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** A Pumpkin seed packet used as armor costs sun: without enough sun it does nothing. */
+    fun pumpkinArmorCost(helper: GameTestHelper) {
+        val plant = helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(0, 1, 0))
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        plant.tame(player)
+        val packet = SeedPacketItem.stackFor(PazEntities.PUMPKIN)
+        val cost = SunCost.getSunCost(packet)
+        try {
+            helper.assertTrue(cost > 0, "the Pumpkin costs no sun ($cost)")
+            val broke = plant.processSeedPacketInteraction(player, packet, InteractionHand.MAIN_HAND)
+            helper.assertTrue(broke == PacketInteractionResult.CANT_AFFORD && !plant.hasPumpkinArmor(),
+                "a player without sun put pumpkin armor on a plant ($broke)")
+            player.inventory.add(ItemStack(PazItems.SUN, cost))
+            val paid = plant.processSeedPacketInteraction(player, packet, InteractionHand.MAIN_HAND)
+            helper.assertTrue(paid == PacketInteractionResult.SUCCESS && plant.hasPumpkinArmor(), "the paid pumpkin armor was not applied ($paid)")
+            helper.assertTrue(player.getTotalSun() == 0, "the pumpkin armor took ${cost - player.getTotalSun()} of $cost sun")
+        } finally {
+            plant.discard()
+        }
+        helper.succeed()
+    }
+
+    /**
+     * A sun cost looked up off the server thread (a tooltip on the client) does not write the default
+     * into server.json: on a client connected to a dedicated server that file is the client's own, and
+     * the config it holds is the server's.
+     */
+    fun configOffServerThread(helper: GameTestHelper) {
+        val type = SquadEntities.POTLING.get()
+        val key = BuiltInRegistries.ENTITY_TYPE.getKey(type).toString()
+        val costs = PazConfig.server.sunCosts
+        val saved = costs.remove(key)
+        try {
+            var cost = -2
+            val lookup = Thread { cost = PazConfig.getSunCost(type) }
+            lookup.start()
+            lookup.join()
+            helper.assertTrue(cost >= 0, "no default sun cost off the server thread ($cost)")
+            helper.assertTrue(key !in costs, "a lookup off the server thread wrote the default into the server config")
+            PazConfig.getSunCost(type)
+            helper.assertTrue(key in costs, "a lookup on the server thread did not store the default")
+        } finally {
+            if (saved != null) costs[key] = saved
+            PazConfig.saveServer()
+        }
         helper.succeed()
     }
 

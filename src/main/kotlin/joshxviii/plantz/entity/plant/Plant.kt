@@ -83,6 +83,8 @@ import kotlin.jvm.optionals.getOrNull
  */
 abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(type, level) {
     companion object {
+        /** How long a worn plant waits for its wearer to show up before it drops (Sprout Squad). */
+        const val WEARER_MISSING_TICKS = 40
         val LOGGER: Logger = LoggerFactory.getLogger(Plant::class.java)
         private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
 
@@ -120,8 +122,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason, random: RandomSource): Boolean {
             val blockAtPos = level.getBlockState(pos)
             if (level.isNearRaid(pos)) return false
-            return (level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(42.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) || EntitySpawnReason.isSpawner(spawnReason) && random.nextFloat() < 0.6f
+            // Sprout Squad: grouped as the doc says. `A && B || C && D` left natural spawns without the 60% roll; the
+            // collision shape is the one at pos (it was asked with pos.above()). Spawners still skip the spacing.
+            val spreadOut = level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(42.0)) { it.tickCount > 0 }.isEmpty()
+                    && blockAtPos.getCollisionShape(level, pos).isEmpty
+            return (spreadOut || EntitySpawnReason.isSpawner(spawnReason)) && random.nextFloat() < 0.6f
         }
 
         fun checkWaterSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason, random: RandomSource): Boolean {
@@ -183,6 +188,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     var clientOldAttachPosition: BlockPos? = null
     var rollRotation: Quaternionf = Quaternionf()
+    /** Client only: tickCount + partial tick of the last roll update (PlantRenderer). */
+    var lastRollTime: Float = 0f
     private var nutrientSupply = NUTRIENT_SUPPLY_MAX
     private var loadedFromSave = false
 
@@ -258,6 +265,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         getAttribute(Attributes.SCALE)?.removeModifier(LEGACY_ON_HEAD_SCALE)
         noPhysics = true
     }
+
+    /** Ticks the wearer of this plant has not been found (see [tick]). */
+    private var wearerMissingTicks = 0
 
     fun removeOnHeadEffects() {
         getAttribute(Attributes.SCALE)?.removeModifier(LEGACY_ON_HEAD_SCALE)
@@ -363,7 +373,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         pumpkinArmor = input.getFloatOr("sproutsquad:PumpkinArmor", 0f)
         pumpkinEntityData = input.read("sproutsquad:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC)).orElse(null)
         cooldown = input.getInt("sproutsquad:Cooldown").getOrElse { this.entityData.get(COOLDOWN) }.coerceAtLeast(0)
-        state = PlantState.entries[input.getInt("sproutsquad:State").getOrElse { 1 }].takeIf { it != PlantState.ACTION }?: PlantState.IDLE
+        state = PlantState.entries.getOrNull(input.getInt("sproutsquad:State").getOrElse { 1 })?.takeIf { it != PlantState.ACTION }?: PlantState.IDLE // Sprout Squad: no crash on an unknown state number
         isAsleep = input.getBooleanOr("sproutsquad:IsAsleep", false)
         poweredUp = input.getBooleanOr("sproutsquad:IsPoweredUp", false)
         rolling = input.getBooleanOr("sproutsquad:IsRolling", false)
@@ -480,10 +490,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         plantType: EntityType<T>,
         afterConversion: (plantEntity: Plant) -> Unit = {}) {
         convertTo(plantType, ConversionParams.single(this, true, true)) { newPlant ->
-            owner?.let {
-                if (it is Player) newPlant.tame(it)
-                else newPlant.owner = it
-            }
+            // Sprout Squad: by reference, so an owner who is not online is kept (`owner` resolves only a loaded entity)
+            if (isTame) newPlant.setTame(true, true)
+            ownerReference?.let { newPlant.setOwnerReference(it) }
+            // Sprout Squad: the conversion copies only vanilla data; the pumpkin armor (and the Pumpkin in it) was lost
+            if (hasPumpkinArmor()) newPlant.applyPumpkinArmor(pumpkinArmor, pumpkinEntityData)
             // TODO custom sounds
             playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
             afterConversion(newPlant)
@@ -539,12 +550,24 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         return result
     }
 
-    override fun getDefaultGravity(): Double = if (isAttached()) 0.0 else super.getDefaultGravity()
+    // Sprout Squad: also while it waits for a missing wearer (see tick), so it does not fall away meanwhile
+    override fun getDefaultGravity(): Double = if (attachedPlayerReference != null) 0.0 else super.getDefaultGravity()
     override fun doPush(entity: Entity) { if (!clampToGrid()) super.doPush(entity) }
     override fun isAffectedByBlocks(): Boolean = if (isAttached()) !isRemoved else super.isAffectedByBlocks()
 
     override fun tick() {
         super.tick()
+        // Sprout Squad: a plant whose wearer is gone without taking it along (a portal, a conversion, a despawn) kept
+        // the on-head state: no collisions, but gravity again, so it fell through the world. After a short wait (the
+        // wearer may be in a chunk that is still loading) it drops as its seed packet, as when the helmet comes off.
+        if (!level().isClientSide && attachedPlayerReference != null && attachedEntity == null) {
+            if (++wearerMissingTicks >= WEARER_MISSING_TICKS) {
+                attachedPlayerReference = null
+                removeOnHeadEffects()
+                if (dropAsSeedPacketItem(force = true, dropPumpkin = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)
+                return
+            }
+        } else wearerMissingTicks = 0
         attachedEntity?.positionPlant(this)
         if (attachedEntity?.canWearPlant() == false) {
             if(dropAsSeedPacketItem(force = true, dropPumpkin = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)
@@ -903,7 +926,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     private fun isOverlappingWithOther(pos: BlockPos): Boolean {
         val otherPlantsAtPos = level().getEntitiesOfClass(Plant::class.java, AABB(pos)) { it != this }
         otherPlantsAtPos.forEach {
-            if (!it.isAlive || it.isDeadOrDying) return false
+            if (!it.isAlive || it.isDeadOrDying) return@forEach // Sprout Squad: was return false, which skipped the other plants
             if(boundingBox.intersects(it.boundingBox)) return true
         }
         return false
@@ -970,7 +993,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             }
             if (itemStack.`is`(Items.SHEARS)) {
                 if (hasPumpkinArmor()) {
+                    // Sprout Squad: the same ownership rules as the shovel and the glove, and the shears wear as on sheep
+                    if (!verifyOwner(player)) return InteractionResult.FAIL
                     removePumpkinArmor()
+                    itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot())
                     return InteractionResult.SUCCESS
                 }
             }
@@ -1013,18 +1039,27 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun attachToEntity(entity: LivingEntity): Boolean {
         if (level().isClientSide) return false
+        if (entity.tryToSetPlantOnHead(wearerSnapshot())) {
+            (entity as PlantHeadAttachment).`plantz$setPlant`(this)
+            attachedEntity = entity
+            return true
+        }
+        return false
+    }
+
+    /** The plant as its wearer saves it (`sproutsquad:AttachedPlant`), respawned with the player (ServerPlayerMixin). */
+    fun wearerSnapshot(): CompoundTag {
         ScopedCollector(this.problemPath(), LOGGER).use { reporter ->
             val output = TagValueOutput.createWithContext(reporter, this.registryAccess())
             this.saveWithoutId(output)
             output.putString("id", this.encodeId!!)
-            if (entity.tryToSetPlantOnHead(output.buildResult())) {
-                (entity as PlantHeadAttachment).`plantz$setPlant`(this)
-                attachedEntity = entity
-                return true
-            }
+            return output.buildResult()
         }
-        return false
     }
+
+    // Sprout Squad: a plant on a player's head lives in the player's data; saved in the chunk too, it came back twice
+    // after a crash (from the chunk and with the player)
+    override fun shouldBeSaved(): Boolean = super.shouldBeSaved() && attachedEntity !is Player
 
     fun detachFromEntity() {
         if (attachedEntity!=null) {

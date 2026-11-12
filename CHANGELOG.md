@@ -1,3 +1,77 @@
+# Sprout Squad — Unreleased
+Changes since Sprout Squad 0.2.0. Everything after this section is the changelog of the original Plants & Zombies mod.
+
+### Fixes
+#### Plants
+- A Chomper no longer removes the players and bosses it kills; only the mobs it swallows vanish.
+- A plant on a Plant Pot Helmet no longer makes its wearer tick twice per game tick.
+- A plant planted into a Pumpkin keeps its own attributes (a Citron could not walk).
+- A plant converted by lightning keeps its pumpkin armor.
+- Pumpkin armor from a seed packet costs sun; shears follow the ownership rules and wear when they take it off.
+- Planting into a Minecart with Plant Pot costs sun and follows the entity limit and the planting cooldown.
+- Seeds come after exactly the sun a plant needs (it took one more).
+- A new Citron goes after its target right away.
+- A Coffee Bean is not used up when there is nobody to wake. A Grave Buster checks its gravestone before vanishing. Both leave their pumpkin armor behind.
+- Explosive plants explode only on the server (a Potatomine could vanish from the screen while still armed).
+- A Squash never squashes players' machines.
+- Sprout Squad's own plants (the Potling) have ground spawn rules.
+- Natural plant spawns roll their 60% chance; plants count against the ambient mob cap instead of the animals'.
+- A plant worn on a player's head is saved as it is now (a relog restored its health and broken pumpkin armor) and no longer comes back twice after a crash.
+- A plant converted by lightning keeps an owner who is offline.
+- Planting into a Pumpkin follows the plant limit, and a failed planting costs nothing.
+- The Potling counts for the "plant one of each plant" advancement.
+- A Watering Can with 1 water left gives 1.
+- A dispenser plants only when a player is within 64 blocks to own the plant, into a free spot and within the owner's plant limit.
+- A mob's worn plant drops as its seed packet when the mob is gone without it (it fell through the world); plants on riding wearers keep up with them.
+#### Zombies and raids
+- The Newspaper Zombie really gets angry when its paper tears, and stays angry after a reload.
+- The Zombie Goat counts as a monster for the mob cap.
+- A Gravestone forgets zombies that vanished without dying and keeps spawning.
+- The raid's panic teleport fires as intended.
+- When a player leaves a raid, only that player loses the raid HUD and music.
+- Unloaded machines and raiders that never made it into the world no longer keep a wave from being won.
+- Zombies heading for the Flag pause for 40 ticks after being hurt, as intended (it was 100).
+- A Browncoat placed by a structure no longer crashes world generation.
+- An unknown state number in a zombie's or a plant's saved data no longer crashes chunk loading.
+- Without the `boss_slayer` advancement a boss kill no longer throws.
+- A Pirate Captain's ghost joins the raid.
+- Using a Mailbox with Hero of the Garden after a relog no longer crashes the server; a second hero has to wait until the first one's rewards are out, and rewards still being ejected are saved.
+- Hero of the Garden rewards survive leaving the End after the credits.
+- Zombies look for plants they walk into only at their own hitbox (they searched their whole follow range every other tick).
+- Villagers do not flee hypnotized zombies or players' machines.
+- Zombie villagers, zombified piglins and other mods' zombies keep vanilla's leader bonus.
+- Every damaged flag shows its cracks (only one did at a time).
+#### Items and blocks
+- Roller Skates and the Football Helmet take their speed and friction modifiers with them when they break.
+- Head protection wears and plays its sound only on the hits it blocks; head protection and shields without a break chance wear on mobs too.
+- The Dye Blaster wears by 1 per shot (it was 2).
+- The Solar Battery and the Flag save every change.
+- The Football Helmet and Roller Skates tooltips are shown.
+- 19 blocks got their names.
+- A Gardening Glove that breaks from mining drops the plant it held; gloves get no planting cooldown.
+- Blocking items let piercing arrows and peas through, and send back only shots: fireballs, potions and wind charges hit the blocker.
+- Only the mod's own blockers cancel the knockback of a partly blocked hit.
+- A Solar Battery puts into a slot only what the slot takes.
+- A Letter's author is limited to 64 characters, as the network allows.
+#### Mail
+- Mail for a mailbox in an unloaded area is queued without loading it, and leaves the sender.
+- The mailbox list loads no chunks and is cleared between worlds.
+- A Collection Box takes a new target only from its own menu and only a listed mailbox.
+- The Letter menu stays on the letter it was opened on.
+- The Mailbox menu closes when the player is out of reach.
+- A mailbox removed by anything (an explosion, a zombie, a command) leaves the list, and a renamed or dyed mailbox is listed as it is now.
+- The address lists stop at a full last page.
+#### Client and multiplayer
+- A client connected to a server no longer writes that server's config into its own `server.json`.
+- The client clears its raid data on logout.
+- Frozen mobs keep their own pose; rolling plants spin at the same speed at any frame rate; Hero of the Garden particles show on every mailbox.
+#### World
+- Gnome Space has low gravity (a quarter of the usual): jumps go higher, projectiles and items fly farther.
+
+### Technical
+- `tools/upstream/nbt_rename.py` renames NBT keys too; the Mausoleum template no longer carries `plantz:` keys.
+- GameTests for all of the above (`sproutsquad:gaps_*`, `sproutsquad:bugs_*`).
+
 # Changelog 1.6
 ### Additions
 #### General:

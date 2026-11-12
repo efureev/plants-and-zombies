@@ -20,7 +20,8 @@ class Pea(
     override fun isOnFire(): Boolean {
         val onFire = super.isOnFire()
         if (onFire) {
-            val level = level() as ServerLevel
+            // Sprout Squad: the client asks too (fire rendering); the cast threw there
+            val level = level() as? ServerLevel ?: return onFire
             val p = PeaFire(level(), entityOwner)
             spawnProjectile(p, level, ItemStack.EMPTY)
             p.deltaMovement = deltaMovement

@@ -46,6 +46,7 @@ class GravestoneBlockEntity(
         private const val ZOMBIE_DETECTION_RADIUS = 32.0
         private const val MAX_TRACKED_ZOMBIES = 2
         private const val MAX_NEARBY_ZOMBIES = 3
+        const val FORGET_MISSING_TICKS = 2400
 
         fun tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: GravestoneBlockEntity) {
             if (level.isClientSide || level !is ServerLevel) return
@@ -69,10 +70,20 @@ class GravestoneBlockEntity(
         trackedZombieIds.addAll(input.read("tracked_zombies", UUIDUtil.CODEC_SET).getOrDefault(emptySet()))
     }
 
+    /** Ticks each tracked zombie has been missing from the level (unloaded, or gone without dying). */
+    private val missingTicks = mutableMapOf<UUID, Int>()
+
+    // Sprout Squad: a zombie was forgotten only once seen dead. One that despawned, was discarded on Peaceful or
+    // fell out of the world stayed tracked for good, and at two of them the gravestone never spawned again.
+    // A zombie missing for FORGET_MISSING_TICKS of this gravestone's ticks is forgotten too.
     private fun updateTrackedZombies(level: ServerLevel) {
-        if (trackedZombieIds.removeIf { uuid -> level.getEntity(uuid)?.let { !it.isAlive } == true }) {
-            setChanged()
+        val changed = trackedZombieIds.removeIf { uuid ->
+            val zombie = level.getEntity(uuid)
+            val forget = if (zombie != null) !zombie.isAlive else missingTicks.merge(uuid, 1, Int::plus)!! > FORGET_MISSING_TICKS
+            if (zombie != null || forget) missingTicks.remove(uuid)
+            forget
         }
+        if (changed) setChanged()
     }
 
     private fun isDarkEnough(level: ServerLevel): Boolean {

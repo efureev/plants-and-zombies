@@ -60,6 +60,7 @@ class WakeUpSleepingPlantsGoal(
 
     override fun doAction(): Boolean {
         for (plant in targets) plant.applyCoffeeBuff()
-        return true
+        // Sprout Squad: a success only if somebody woke up; the Coffee Bean is used up on success
+        return targets.isNotEmpty()
     }
 }

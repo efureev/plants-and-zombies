@@ -46,6 +46,8 @@ object F2WorldGameTests {
     fun zombieGoat(helper: GameTestHelper) {
         val problems = mutableListOf<String>()
         if (PazEntities.ZOMBIE_GOAT !in monsterSpawns(helper, Biomes.SNOWY_SLOPES)) problems += "snowy_slopes has no zombie goat spawn"
+        // spawned from the monster lists, so it must count against the monster cap, not the animals'
+        if (PazEntities.ZOMBIE_GOAT.category != MobCategory.MONSTER) problems += "the zombie goat is a ${PazEntities.ZOMBIE_GOAT.category}, not a monster"
         for (biome in listOf(Biomes.PLAINS, Biomes.MEADOW, Biomes.CHERRY_GROVE)) {
             if (PazEntities.ZOMBIE_GOAT in monsterSpawns(helper, biome)) problems += "${biome.identifier().path} spawns zombie goats"
         }

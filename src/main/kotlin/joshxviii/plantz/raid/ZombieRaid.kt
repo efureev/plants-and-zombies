@@ -126,6 +126,12 @@ class ZombieRaid(
         const val BOSS_WAVE_DURATION: Int = 4500 // 3.75 minutes
         const val FINAL_WAVE_DURATION: Int = WAVE_DURATION * 2 // 5 minutes
         const val PANIC_START_TIME: Int = 600
+        /**
+         * Sprout Squad: raiders are checked once every 20 ticks (updateZombieRaiders), so the panic teleport waits for
+         * the check that falls in the last 20 ticks before PANIC_START_TIME. It needed waveTimer == PANIC_START_TIME
+         * on a check tick and so ran about once in 20 waves.
+         */
+        fun isPanicCheck(waveTimer: Int): Boolean = waveTimer in PANIC_START_TIME - 19..PANIC_START_TIME
         const val MIN_PANIC_DISTANCE: Int = 8
         const val MAX_PANIC_DISTANCE: Int = 28
 
@@ -287,7 +293,8 @@ class ZombieRaid(
             sendClientUpdate(level)
         }
         for (player in currentPlayersInRaid) if (!newPlayersInRaid.contains(player)) {
-            sendClientUpdate(level, true)
+            // Sprout Squad: only the player who left drops the raid; it was sent to everyone, whose HUD and music reset
+            player.connection.send(ClientboundCustomPayloadPacket(ZombieRaidResponsePayload(ZombieRaidClientData(id = zombieRaidEvent.id, status = ZombieRaidStatus.TERMINATE))))
             zombieRaidEvent.removePlayer(player)
         }
 
@@ -331,7 +338,7 @@ class ZombieRaid(
                     continue
                 }
                 if (
-                    willLoseWhenTimeRunsOut() && waveTimer == PANIC_START_TIME &&
+                    willLoseWhenTimeRunsOut() && isPanicCheck(waveTimer) &&
                     zombiePos.distSqr(center) > MAX_PANIC_DISTANCE * MAX_PANIC_DISTANCE
                 ) {
                     findPanicTeleportPos(level, zombie, 10)?.let { teleportPos ->
@@ -468,6 +475,12 @@ class ZombieRaid(
                 zombie.setPersistenceRequired()
                 configure(zombie)
                 level.addFreshEntityWithPassengers(zombie)
+                // Sprout Squad: a raider that did not make it into the level (its join event cancelled) never ticks, so it
+                // was never removed and the wave could not be won
+                if (level.getEntity(zombie.uuid) !== zombie) {
+                    removeFromRaid(level, zombie, removeFromTotalHealth = false)
+                    return false
+                }
             }
             if (addMaxHealth) {
                 val countHealth = (zombie as? ZombieRaider)?.`plantz$getAddsHealthToRaid`() ?: true
@@ -575,7 +588,9 @@ class ZombieRaid(
     fun currentWave(): CompletedWave? = waves.lastOrNull()
     fun getLeaders(): List<Zombie> = waveZombieMap.values.flatMap { it.filter { z -> z.isLeader() } }
     fun getBosses(): List<Zombie> = waveZombieMap.values.flatMap { it.filter { z -> z.isBoss() } }
-    fun getAliveRaiders(): Int = waveZombieMap.values.stream().mapToInt { it.map { z -> if (z.getEffectiveRaidHealth()>0f) 1 else 0 }.sum() }.sum() + pendingRaiders.size
+    // Sprout Squad: unloaded raiders count like loaded ones, only if they count towards the raid health (an unloaded
+    // Engineer's bot kept the final wave from ending)
+    fun getAliveRaiders(): Int = waveZombieMap.values.stream().mapToInt { it.map { z -> if (z.getEffectiveRaidHealth()>0f) 1 else 0 }.sum() }.sum() + pendingRaiders.values.count { it.health > 0f }
     private fun raidDetails(level: ServerLevel): RaidDetails {
         val flag = level.getBlockEntity(center) as? FlagBlockEntity
         val bosses = getBosses()

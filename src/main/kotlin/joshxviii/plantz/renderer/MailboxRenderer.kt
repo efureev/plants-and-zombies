@@ -20,8 +20,6 @@ class MailboxRenderer() : BlockEntityRenderer<MailboxBlockEntity, MailboxRenderS
         return MailboxRenderState()
     }
 
-    var doParticles = true
-
     override fun extractRenderState(
         mailbox: MailboxBlockEntity,
         state: MailboxRenderState,
@@ -35,6 +33,13 @@ class MailboxRenderer() : BlockEntityRenderer<MailboxBlockEntity, MailboxRenderS
         state.level = player.level()
         state.tickCount = player.tickCount
         state.isClientPlayerHero = player.hasEffect(PazEffects.GARDEN_HERO)
+        // Sprout Squad: rolled per mailbox, once every 5th tick. One flag on the renderer, which all mailboxes share,
+        // let only one mailbox show particles, at a rate that followed the frame rate
+        state.emitHeroParticle = false
+        if (state.isClientPlayerHero && player.tickCount % 5 == 0 && mailbox.heroParticleTick != player.tickCount) {
+            mailbox.heroParticleTick = player.tickCount
+            state.emitHeroParticle = player.level().random.nextFloat() < .1f
+        }
     }
 
     override fun submit(
@@ -43,9 +48,7 @@ class MailboxRenderer() : BlockEntityRenderer<MailboxBlockEntity, MailboxRenderS
         submitNodeCollector: SubmitNodeCollector,
         camera: CameraRenderState
     ) {
-        val level = state.level ?: return
-        if (state.tickCount % 5 == 0 && level.random.nextFloat()<.1f && !doParticles) doParticles = true
-        if (doParticles && state.isClientPlayerHero) state.level?.let {
+        if (state.emitHeroParticle) state.level?.let {
             val speed = 0.1
             val distance = 0.4
             val direction = Vec3(it.random.nextDouble() - 0.5, it.random.nextDouble() - 0.5, it.random.nextDouble() - 0.5).normalize()
@@ -56,13 +59,13 @@ class MailboxRenderer() : BlockEntityRenderer<MailboxBlockEntity, MailboxRenderS
             val y = state.blockPos.y + 0.33 + direction.scale(distance).y
             val z = state.blockPos.z + 0.5 + direction.scale(distance).z
             it.addParticle(SpellParticleOption.create(ParticleTypes.EFFECT, GardenHeroEffect.EFFECT_COLOR, 0f), x, y, z, xd, yd + .1, zd)
-            doParticles = false
         }
     }
 }
 
 class MailboxRenderState : BlockEntityRenderState() {
     var isClientPlayerHero: Boolean = false
+    var emitHeroParticle: Boolean = false
     var level: Level? = null
     var tickCount: Int = 0
 }

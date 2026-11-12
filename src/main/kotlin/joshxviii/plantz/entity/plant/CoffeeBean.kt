@@ -44,6 +44,7 @@ class CoffeeBean(type: EntityType<out Plant>, level: Level) : Plant(type, level)
                     height = 0.25f,
                     speed = 0.02
                 )
+                restorePumpkinFromArmor() // Sprout Squad: its pumpkin armor stays behind
                 discard()
             }
         ))

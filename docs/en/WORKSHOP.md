@@ -36,12 +36,12 @@ For a first go, a variant is easier — a new texture for an existing mob: done 
 ## Steps
 
 1. **Class.** Copy `Potling.kt`, rename it, set up the AI goals. Ready-made goals from the original: `ProjectileAttackGoal` (shooter, like Peashooter), `GenerateSunGoal` (sun, like Sunflower), plus explosion, melee and so on in `joshxviii.plantz.ai.goal`. Sleeping at night — `sleepsDuringNight()`.
-2. **Registration.** A single line `plant("<id>", ::<Name>, width, height, sunCost, attributes)` in `SquadEntities`. The seed packet in the creative tab and the sun cost appear automatically.
+2. **Registration.** A single line `plant("<id>", ::<Name>, width, height, sunCost, attributes)` in `SquadEntities`. The seed packet in the creative tab, the sun cost and the spawn rules (on the ground, like the original's plants; another rule goes in `spawnRules`) appear automatically.
 3. **Model.** A subclass of `SquadPlantModel`: geometry in `createBodyLayer()`, animations are passed to the constructor (`init`, `idle`, `action`, `sleep` — the required minimum from the guide). A Blockbench model (Modded Entity format, Java export, Mojang mappings) translates to Kotlin one-to-one: the same `addBox`, `PartPose`, `Keyframe`.
 4. **Renderer.** Two lines in `SproutSquadClient`: the model layer and `PlantRenderer(...)`.
 5. **Textures.** Main and `_sleep` (closed eyes) — 64×64 following the style guide below; the 16×16 icon matches the size of the original's icons. The original drawing goes in `art/<id>/`.
-6. **Data.** Name in en/ru, a recipe with the `minecraft:entity_data` component, a line in `squad_plants.json`.
-7. **Check.** `./gradlew runGameTestServer` — the `sproutsquad:squad_plants` test goes through the checklist and names what is missing: class, health, cost, tag, recipe, textures, icon, names. The `/pz gallery` gallery picks up the new character by itself.
+6. **Data.** Name in en/ru, a recipe with the `minecraft:entity_data` component, a line in `squad_plants.json`, a criterion in the "plant one of each plant" advancement (`advancement/plant_all_plants.json`).
+7. **Check.** `./gradlew runGameTestServer` — the `sproutsquad:squad_plants` test goes through the checklist and names what is missing: class, health, cost, spawn rules, tag, recipe, advancement, textures, icon, names. The `/pz gallery` gallery picks up the new character by itself.
 8. **In game.** `./gradlew runClient`: plant it, watch the animations by day and at night, compare it with its neighbors in the gallery.
 9. **Card.** `docs/en/characters/<id>.md` (and the Russian one): status, stats, pictures and the index: run `python3 tools/docs/refresh.py` (needs Pillow and numpy). It renders whatever the docs ask for that has no picture yet (the character from its model and texture, its looks named in a looks table as `Name (`look`)`, items, effects and structures named in tables or listed in a `<!-- pictures: … -->` line), puts the pictures into the cards and FEATURES, rebuilds `characters/README.md` and lists what of the mod still has no picture. `--force` renders everything again, `--check` only reports missing pictures.
 

@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import net.neoforged.api.distmarker.Dist
 import net.neoforged.fml.loading.FMLEnvironment
 import net.neoforged.fml.loading.FMLPaths
+import net.neoforged.neoforge.server.ServerLifecycleHooks
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.Identifier
 import net.minecraft.world.entity.EntityType
@@ -199,7 +200,7 @@ object PazConfig {
         val key = id.toString()
         val value = server.sunCosts[key]?:// config
         defaultServerConfig.sunCosts[key]?.let {// default
-            putDefaultSunCost(id, it)
+            if (onServerThread()) putDefaultSunCost(id, it)
             it
         }
         ?: -1 // not in id list
@@ -212,12 +213,19 @@ object PazConfig {
         val key = id.toString()
         val value = server.alloyCosts[key]?:// config
         defaultServerConfig.alloyCosts[key]?.let {// default
-            putDefaultAlloyCost(id, it)
+            if (onServerThread()) putDefaultAlloyCost(id, it)
             it
         }
         ?: -1 // not in id list
         return value.coerceAtLeast(-1)
     }
+
+    /**
+     * Sprout Squad: missing defaults are written into server.json only by the server itself. A client
+     * looks costs up for tooltips: connected to a dedicated server it holds that server's config, and
+     * saving it overwrote the client's own server.json; in singleplayer it raced the server thread.
+     */
+    private fun onServerThread(): Boolean = ServerLifecycleHooks.getCurrentServer()?.isSameThread == true
 
     fun getEntityLimit(type: EntityType<*>?): Int {
         val id = type?.let { BuiltInRegistries.ENTITY_TYPE.getKey(it) }

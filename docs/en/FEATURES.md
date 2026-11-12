@@ -25,7 +25,7 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 - One plant per block. A plant standing on unsuitable ground or overlapping another one slowly dries out and takes damage.
 - A new plant faces you; in a pot it faces the same way as the pot.
 - A plant you plant is tamed to you.
-- A dispenser plants seed packets if a Solar Battery with enough sun is attached to it; the sun is taken from the battery, and the plant goes to the nearest player within 64 blocks.
+- A dispenser plants seed packets if a Solar Battery with enough sun is attached to it; the sun is taken from the battery, and the plant goes to the nearest player within 64 blocks. With no player that near, it plants nothing. The spot in front must be free, and the owner's plant limit applies.
 
 ### Sun
 
@@ -91,11 +91,11 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 
 About wild plants:
 
-- They appear as ambient mobs, alone or in small groups, far from any other plant (about 42 blocks), and never near an active raid.
+- They appear as ambient mobs, alone or in small groups, far from any other plant (about 42 blocks), and never near an active raid; even then only 6 tries in 10 succeed.
 - Most wild attackers fight only zombies. Careful: wild Cherry Bombs, Doom-shrooms, Ice-shrooms, Chompers, Bonk Choys, Lightning Reeds, Tangle Kelp and Fire and Electric Peashooters attack players too, and wild Scaredy-shrooms hide from players.
 - Once tamed, attacking plants also fight other hostile mobs. Some of them (peashooters, pults, Cactus) leave creepers alone.
 
-**Pumpkin armor.** Use a Pumpkin seed packet on one of your plants (it costs the Pumpkin's 6 sun): the plant gets a pumpkin shell that absorbs 35 damage before breaking. You can also use another plant's seed packet on a planted Pumpkin to put that plant inside. Shears take the shell off and give the Pumpkin seed packet back.
+**Pumpkin armor.** Use a Pumpkin seed packet on one of your plants (it costs the Pumpkin's 6 sun): the plant gets a pumpkin shell that absorbs 35 damage before breaking. You can also use another plant's seed packet on a planted Pumpkin to put that plant inside. Shears take the shell off a plant you may tend and give the Pumpkin seed packet back; they wear by 1.
 
 **Plantz Flag power-up.** Plants within 5 blocks of a [Plantz Flag](#flags) act 20% faster.
 
@@ -140,7 +140,7 @@ Datapacks can change these rules in `data/<namespace>/seed_mutation/<plant>.json
 | <img src="../images/items/plant_pot.png" alt="" width="112"> | Plant Pot | 3 bricks, dirt, sun | A plant in it takes 50% less damage from monsters; zombies cannot walk through pots. Digger Zombies can break plain pots |
 | <img src="../images/items/zen_plant_pot.png" alt="" width="112"> | Zen Plant Pot | Plant Pot, 2 bamboo, a bamboo slab | The same protection, and it counts as farmland for growing seeds (25% faster) |
 | <img src="../images/items/plant_pot_minecart.png" alt="" width="112"> | Minecart with Plant Pot | Plant Pot + minecart | A plant planted in it rides along on rails |
-| <img src="../images/items/watering_can.png" alt="" width="112"> | Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water: waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
+| <img src="../images/items/watering_can.png" alt="" width="112"> | Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water (a plant gets the last 1 if that is all that is left): waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
 
 ### Taming and ownership
 
@@ -163,7 +163,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 <!-- pictures: plant_pot_helmet -->
 <p><img src="../images/items/plant_pot_helmet.png" alt="Plant Pot Helmet" title="Plant Pot Helmet" width="112"></p>
 
-**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet.
+**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet; so does a mob's plant when the mob is gone without it (through a portal, by converting or despawning).
 
 <!-- pictures: gardening_glove -->
 <p><img src="../images/items/gardening_glove.png" alt="Gardening Glove" title="Gardening Glove" width="112"></p>
@@ -236,7 +236,7 @@ The Halloween season is from 14 days before to 1 day after 31 October (by the re
 ### Equipment
 
 - Browncoats can spawn with a **Cone**, a **Bucket**, a **Screen Door** (door shield) or a **Coffin**; the higher the local difficulty, the more often. In raids, equipment gets better as the waves go on.
-- Cones and buckets protect only against hits from above, so lobbed projectiles bounce off while straight shots go through. They can break. Door shields and newspapers block from the front, a coffin from all sides.
+- Cones and buckets protect only against hits from above, so lobbed projectiles bounce off while straight shots go through. They can break. Door shields and newspapers block from the front, a coffin from all sides. A block sends back arrows, tridents and the mod's projectiles, but not piercing ones; fireballs, potions and wind charges hit the blocker, as with a vanilla shield.
 - All Stars wear a Football Helmet; zombies may wear party hats, pumpkins or iron armor in special waves.
 - You can wear all of this yourself, see [helmets and armor](#helmets-armor-and-equipment).
 
@@ -440,6 +440,7 @@ Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a 
 
 - **Mailbox**: 4 iron ingots, an iron trapdoor and a newspaper; any dye recolors it (16 colors). It has 5 slots. From its screen you send the contents to any other mailbox in the same dimension: the list is sorted by distance and can be searched. A mailbox with mail shows a notification icon; right-click it to take the mail out.
 - **Collection Box**: 5 Brainz Alloy, a newspaper, 2 redstone and a mailbox. Choose a target mailbox in it; a redstone pulse sends its contents there.
+- Mail for a mailbox in an area that is not loaded waits and arrives when that area loads. The list shows the mailboxes whose area has been loaded since the server started, by the name and color they had then.
 - A Mailbox is also where raid rewards are collected.
 
 ### Decorations and other blocks
@@ -474,7 +475,7 @@ Time travel works only with the server option `enableExperimentalFeatures` turne
 | Jurassic Period | Era dimension | Ferns, parrots, pandas, ocelots, fossils |
 | Dark Ages | Era dimension | Farm animals and plenty of monsters |
 | Far Future | Era dimension | Endermen only, crystal spikes, floating particles |
-| Gnome Space | Gnome Space dimension | No way to get there in the game, only with commands (`/execute in sproutsquad:gnome_space …`) |
+| Gnome Space | Gnome Space dimension | No way to get there in the game, only with commands (`/execute in sproutsquad:gnome_space …`); gravity there is a quarter of the usual |
 
 The era dimension (`sproutsquad:time_space`) holds the four era biomes and is reached only through the [Time Machine](#time-machine).
 

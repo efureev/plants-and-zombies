@@ -26,6 +26,8 @@ import net.minecraft.world.item.component.Tool
 import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.item.enchantment.ItemEnchantments
 import net.minecraft.world.level.Level
+import net.minecraft.core.BlockPos
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.CropBlock
 
 class GardeningGloveItem(properties: Properties) : Item(properties) {
@@ -57,15 +59,18 @@ class GardeningGloveItem(properties: Properties) : Item(properties) {
         }
 
         fun hurtAndDropPlant(item: ItemStack, owner: LivingEntity, hand: InteractionHand) {
-            if (item.nextDamageWillBreak()) {
-                item.get(DataComponents.ENTITY_DATA)?.let { data ->
-                    val breakItem = SeedPacketItem.stackFor(data.type())
-                    ItemEntity(owner.level(), owner.x, owner.eyeY, owner.z, breakItem).let {
-                        owner.level().addFreshEntity(it)
-                    }
+            if (item.nextDamageWillBreak()) dropHeldPlant(item, owner)
+            item.hurtAndBreak(1, owner, hand)
+        }
+
+        /** The plant held by a glove that is about to break, dropped as its seed packet. */
+        fun dropHeldPlant(item: ItemStack, owner: LivingEntity) {
+            item.get(DataComponents.ENTITY_DATA)?.let { data ->
+                val breakItem = SeedPacketItem.stackFor(data.type())
+                ItemEntity(owner.level(), owner.x, owner.eyeY, owner.z, breakItem).let {
+                    owner.level().addFreshEntity(it)
                 }
             }
-            item.hurtAndBreak(1, owner, hand)
         }
 
         fun removePlant(item: ItemStack, owner: LivingEntity?, hand: InteractionHand) {
@@ -74,6 +79,12 @@ class GardeningGloveItem(properties: Properties) : Item(properties) {
                 hurtAndDropPlant(item, owner, hand)
             }
         }
+    }
+
+    // Sprout Squad: the glove also wears from mining (its Tool component); breaking that way lost the held plant
+    override fun mineBlock(itemStack: ItemStack, level: Level, state: BlockState, pos: BlockPos, owner: LivingEntity): Boolean {
+        if (!level.isClientSide && state.getDestroySpeed(level, pos) != 0f && itemStack.nextDamageWillBreak()) dropHeldPlant(itemStack, owner)
+        return super.mineBlock(itemStack, level, state, pos, owner)
     }
 
     override fun useOn(context: UseOnContext): InteractionResult {

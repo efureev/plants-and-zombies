@@ -5,11 +5,13 @@ import joshxviii.plantz.PazItems.DYE_BLASTER
 import joshxviii.plantz.PazItems.FOOTBALL_HELMET
 import joshxviii.plantz.PazItems.GARDENING_GLOVE
 import joshxviii.plantz.PazItems.PLANT_POT_HELMET
+import joshxviii.plantz.PazItems.ROLLER_SKATES
 import joshxviii.plantz.item.DuckTubeItem
 import joshxviii.plantz.item.DyeBlasterItem
 import joshxviii.plantz.item.FootballHelmetItem
 import joshxviii.plantz.item.GardeningGloveItem
 import joshxviii.plantz.item.PlantPotHelmetItem
+import joshxviii.plantz.item.RollerSkatesItem
 import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent
@@ -28,7 +30,8 @@ object PazClient {
 		NeoForge.EVENT_BUS.addListener(AddServerReloadListenersEvent::class.java) { event ->
 			event.addListener(
 				pazResource("server_data_reload"),
-				ResourceManagerReloadListener({ PazNetwork.ZombieRaidClientCache.clear() })
+				// Sprout Squad: the integrated server reloads on its own thread; the cache belongs to the client thread
+				ResourceManagerReloadListener({ Minecraft.getInstance().execute { PazNetwork.ZombieRaidClientCache.clear() } })
 			)
 		}
 
@@ -46,6 +49,9 @@ object PazClient {
 			if (stack.`is`(PLANT_POT_HELMET)) PlantPotHelmetItem.addToTooltip(lines)
 			if (stack.`is`(DYE_BLASTER)) DyeBlasterItem.addToTooltip(lines)
 			if (stack.`is`(DUCKY_TUBE)) DuckTubeItem.addToTooltip(lines)
+			// Sprout Squad: these two had their description but were never added to the tooltip
+			if (stack.`is`(FOOTBALL_HELMET)) FootballHelmetItem.addToTooltip(lines)
+			if (stack.`is`(ROLLER_SKATES)) RollerSkatesItem.addToTooltip(lines)
 		}
 	}
 	fun registerClientReloadListeners(event: AddClientReloadListenersEvent) {

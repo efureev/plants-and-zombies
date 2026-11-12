@@ -19,8 +19,10 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtAccounter
 import net.minecraft.nbt.NbtIo
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.contents.TranslatableContents
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
@@ -108,6 +110,20 @@ object StructuresGameTests {
             if (loot.getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Identifier.parse(table))) == LootTable.EMPTY)
                 problems += "$name: missing loot table $table"
         }
+        // keys of the original's namespace are not read any more (tools/upstream/nbt_rename.py renames them)
+        val oldKeys = sortedSetOf<String>()
+        fun collectOldKeys(nbt: Tag) {
+            when (nbt) {
+                is CompoundTag -> nbt.keySet().forEach { key ->
+                    if (key.startsWith("plantz:")) oldKeys += key
+                    nbt.get(key)?.let(::collectOldKeys)
+                }
+                is ListTag -> nbt.forEach(::collectOldKeys)
+                else -> {}
+            }
+        }
+        collectOldKeys(tag)
+        if (oldKeys.isNotEmpty()) problems += "$name: keys of the old namespace ${oldKeys.joinToString()}"
         return problems
     }
 

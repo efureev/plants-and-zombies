@@ -205,8 +205,10 @@ enum class WeatherPredicate {
     }
 
     companion object {
-        val CODEC: Codec<WeatherPredicate> = Codec.STRING.xmap(
-            { valueOf(it.uppercase()) },
+        // Sprout Squad: an unknown name is a parse error with a message (valueOf threw)
+        val CODEC: Codec<WeatherPredicate> = Codec.STRING.comapFlatMap(
+            { name -> entries.firstOrNull { it.name.equals(name, ignoreCase = true) }?.let { DataResult.success(it) }
+                ?: DataResult.error { "Unknown weather '$name', expected one of ${entries.joinToString { it.name.lowercase() }}" } },
             { it.name.lowercase() }
         )
     }

@@ -71,6 +71,9 @@ class PotatoMine(type: EntityType<out ExplosivePlant>, level: Level) : Explosive
 
     override fun getMaxSwellTime() = 4
     override fun doPush(entity: Entity) {
+        // Sprout Squad: the client also pushes (the local player), and there explode() only discarded the mine:
+        // gone on screen, still armed on the server
+        if (level().isClientSide) return
         if (isGrowingSeeds || cooldown > 0) return
         if (entity is Plant || (entity is Player && isTame) || this.hasSameRootOwner(entity)) return
         explode()

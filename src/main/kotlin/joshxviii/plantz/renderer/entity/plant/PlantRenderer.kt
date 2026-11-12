@@ -56,6 +56,12 @@ open class PlantRenderer(
                 entity.rollRotation.identity()
                 return
             }
+            // Sprout Squad: turn by the part of a tick that passed since the last frame. It turned by a whole tick's
+            // distance on every extraction, so the ball spun faster the higher the frame rate (and twice when worn)
+            val now = entity.tickCount + partialTick
+            val elapsed = (now - entity.lastRollTime).coerceIn(0f, 1f)
+            entity.lastRollTime = now
+            if (elapsed <= 0f) return
 
             val dx = (entity.x - entity.xo).toFloat()
             val dz = (entity.z - entity.zo).toFloat()
@@ -70,7 +76,7 @@ open class PlantRenderer(
             val localDz = dx * sin + -dz * cos
 
             val radius = sqrt(16.0f * entity.scale)
-            val angle = distance / radius
+            val angle = distance / radius * elapsed
 
             var axisX = localDz
             var axisZ = -localDx

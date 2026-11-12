@@ -234,7 +234,8 @@ class MailboxScreen(
 
     private fun isScrollBarActive(): Boolean = menu.filteredMailboxes.size > 4
 
-    private fun getOffscreenRows(): Int = (menu.filteredMailboxes.size - 1).coerceAtLeast(0)
+    // Sprout Squad: the rows below the 4 shown (it was size - 1: the list scrolled until one address was left)
+    private fun getOffscreenRows(): Int = (menu.filteredMailboxes.size - 4).coerceAtLeast(0)
 
     private fun containerChanged() {
         rebuildAddressButtons()

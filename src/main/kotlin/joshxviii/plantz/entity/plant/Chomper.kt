@@ -114,7 +114,8 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
 
         override fun doAction() : Boolean {
             val target = usingEntity.target?: return false
-            if(!(target.`is`(CANNOT_CHOMP) || target.maxHealth > 100)) {
+            val chompable = !(target.`is`(CANNOT_CHOMP) || target.maxHealth > 100)
+            if(chompable) {
                 //Add modifier to increase damage for insta kills
                 usingEntity.getAttribute(Attributes.ATTACK_DAMAGE)?.addOrUpdateTransientModifier(CHOMP_ATTACK_MODIFIER)
             }
@@ -130,7 +131,9 @@ class Chomper(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
                     0.2, 0.2, 0.2,
                     0.32
                 )
-                target.remove(RemovalReason.KILLED)
+                // Sprout Squad: only a swallowed mob vanishes. Removing any killed target took players out of the
+                // level before they respawned and skipped bosses' own deaths (the Ender Dragon's portal and egg).
+                if (chompable) target.remove(RemovalReason.KILLED)
                 chomperEntity.isChewing = true
             }
             return true

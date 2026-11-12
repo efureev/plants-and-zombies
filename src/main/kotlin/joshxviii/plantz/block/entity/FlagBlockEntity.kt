@@ -32,6 +32,12 @@ class FlagBlockEntity(
 ) : BlockEntity(PazBlocks.FLAG_BLOCK_ENTITY, worldPosition, blockState) {
 
     companion object {
+        /**
+         * Sprout Squad: the breaker id of a flag's crack overlay, one per flag (every flag used 0, and a client keeps
+         * one crack per id, so only one damaged flag showed its cracks). Negative: entity ids are positive.
+         */
+        fun crackId(pos: BlockPos): Int = pos.hashCode() or Int.MIN_VALUE
+
         const val MAX_HEALTH: Float = 40f
         const val HEAL_COOLDOWN_TIME = 360
         const val HEAL_TIME = 60
@@ -68,9 +74,10 @@ class FlagBlockEntity(
             resetTime--
             if (resetTime == 0) {
                 health += maxHealth * 0.01f
+                setChanged() // Sprout Squad: healing was saved only with the next hit
 
-                level.destroyBlockProgress(0, pos, healthToDestroyProgress())
-                if (health >= maxHealth) level.destroyBlockProgress(0, pos, -1)
+                level.destroyBlockProgress(crackId(pos), pos, healthToDestroyProgress())
+                if (health >= maxHealth) level.destroyBlockProgress(crackId(pos), pos, -1)
                 else resetTime = HEAL_TIME
                 syncToClient()
             }
@@ -83,9 +90,9 @@ class FlagBlockEntity(
                 level.addFreshEntity(item)
             }
             level.destroyBlock(pos, false)
-            level.destroyBlockProgress(0, pos, -1)
+            level.destroyBlockProgress(crackId(pos), pos, -1)
         } else if (health < maxHealth) {
-            level.destroyBlockProgress(0, pos, healthToDestroyProgress())
+            level.destroyBlockProgress(crackId(pos), pos, healthToDestroyProgress())
         }
 
         if (level.difficulty == Difficulty.PEACEFUL) return
