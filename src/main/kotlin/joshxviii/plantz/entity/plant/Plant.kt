@@ -363,7 +363,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         pumpkinArmor = input.getFloatOr("sproutsquad:PumpkinArmor", 0f)
         pumpkinEntityData = input.read("sproutsquad:PumpkinEntity", TypedEntityData.codec(EntityType.CODEC)).orElse(null)
         cooldown = input.getInt("sproutsquad:Cooldown").getOrElse { this.entityData.get(COOLDOWN) }.coerceAtLeast(0)
-        state = PlantState.entries[input.getInt("sproutsquad:State").getOrElse { 1 }].takeIf { it != PlantState.ACTION }?: PlantState.IDLE
+        state = PlantState.entries.getOrNull(input.getInt("sproutsquad:State").getOrElse { 1 })?.takeIf { it != PlantState.ACTION }?: PlantState.IDLE // Sprout Squad: no crash on an unknown state number
         isAsleep = input.getBooleanOr("sproutsquad:IsAsleep", false)
         poweredUp = input.getBooleanOr("sproutsquad:IsPoweredUp", false)
         rolling = input.getBooleanOr("sproutsquad:IsRolling", false)

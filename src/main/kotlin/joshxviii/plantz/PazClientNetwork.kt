@@ -11,6 +11,7 @@ import joshxviii.plantz.networking.ServerConfigResponsePayload
 import joshxviii.plantz.networking.ZombieRaidResponsePayload
 import joshxviii.plantz.raid.ZombieRaid
 import net.minecraft.client.Minecraft
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent
 import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.client.network.event.RegisterClientPayloadHandlersEvent
 import net.neoforged.neoforge.common.NeoForge
@@ -21,6 +22,10 @@ object PazClientNetwork {
 
         NeoForge.EVENT_BUS.addListener(ClientTickEvent.Pre::class.java) {
             RaidMusicManager.tick()
+        }
+        // Sprout Squad: a raid left behind kept muting the menu music and showed up on the next server
+        NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingOut::class.java) {
+            ZombieRaidClientCache.clear()
         }
     }
 

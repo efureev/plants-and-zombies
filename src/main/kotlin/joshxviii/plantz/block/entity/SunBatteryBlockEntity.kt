@@ -58,12 +58,14 @@ class SunBatteryBlockEntity(
             it.playSound(null, blockPos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 0.6f, getStoredSunPercent()+0.5f+(it.random.nextFloat()*0.1f))
         }
         updateLevel(newStoredSun.getLevel())
+        setChanged() // Sprout Squad: was saved only when the fill level (block state) changed
     }
 
     fun removeSun(amount: Int) {
         val newStoredSun = batteryItem.get(PazComponents.STORED_SUN)?.removeSun(amount) ?: StoredSun()
         batteryItem.set(PazComponents.STORED_SUN, newStoredSun)
         updateLevel(newStoredSun.getLevel())
+        setChanged()
     }
 
     fun hasSun(amount: Int): Boolean = batteryItem.get(PazComponents.STORED_SUN)?.hasSun(amount) ?: false
@@ -105,6 +107,7 @@ class SunBatteryBlockEntity(
     override fun setTheItem(itemStack: ItemStack) {
         if (!itemStack.`is`(PazItems.SUN_BATTERY)) return
         batteryItem = itemStack
+        setChanged()
     }
 
 }

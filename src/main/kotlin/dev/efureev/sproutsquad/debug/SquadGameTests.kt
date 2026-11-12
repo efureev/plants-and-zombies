@@ -2,6 +2,7 @@ package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
+import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
 import dev.efureev.sproutsquad.fixes.OriginalGapsGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
 import dev.efureev.sproutsquad.structures.StructuresGameTests
@@ -52,6 +53,16 @@ object SquadGameTests {
         Test("gaps_queued_mail_leaves", OriginalGapsGameTests::queuedMailLeaves),
         Test("gaps_pumpkin_armor_cost", OriginalGapsGameTests::pumpkinArmorCost),
         Test("gaps_config_off_server_thread", OriginalGapsGameTests::configOffServerThread),
+        Test("bugs_chomper_spares_unchompable", OriginalBugsGameTests::chomperSparesUnchompable),
+        Test("bugs_pumpkin_keeps_plant_attributes", OriginalBugsGameTests::pumpkinKeepsPlantAttributes, maxTicks = 200),
+        Test("bugs_minecart_planting_costs_sun", OriginalBugsGameTests::minecartPlantingCostsSun),
+        Test("bugs_skates_modifiers_cleared", OriginalBugsGameTests::skatesModifiersCleared, maxTicks = 200),
+        Test("bugs_newspaper_anger", OriginalBugsGameTests::newspaperAnger, maxTicks = 200),
+        Test("bugs_sun_battery_saved", OriginalBugsGameTests::sunBatterySaved),
+        Test("bugs_gravestone_forgets_vanished", OriginalBugsGameTests::gravestoneForgetsVanished),
+        Test("bugs_panic_teleport_window", OriginalBugsGameTests::panicTeleportWindow),
+        Test("bugs_zombie_unknown_state", OriginalBugsGameTests::zombieUnknownState),
+        Test("bugs_block_names", OriginalBugsGameTests::blockNames),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),

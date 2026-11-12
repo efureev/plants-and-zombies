@@ -30,6 +30,15 @@ class NewspaperZombie(type: EntityType<out NewspaperZombie>, level: Level) : Paz
         return !offhandItem.`is`(PazItems.NEWSPAPER)
     }
 
+    // Sprout Squad: the newspaper is torn through shrink() (BlockingItemBreakChance) and equipment loads without
+    // onEquipItem, so the boost only showed up for a newspaper taken away with setItemSlot; it follows the hand now
+    override fun tick() {
+        super.tick()
+        if (!level().isClientSide && isAlive) {
+            if (isAngry()) applyAngerBoost() else removeAngerBoost()
+        }
+    }
+
     override fun onEquipItem(slot: EquipmentSlot, oldStack: ItemStack, stack: ItemStack) {
         super.onEquipItem(slot, oldStack, stack)
         if(offhandItem.`is`(PazItems.NEWSPAPER)) removeAngerBoost()

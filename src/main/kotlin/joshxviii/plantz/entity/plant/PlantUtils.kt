@@ -227,6 +227,8 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
                 remove("CustomName")
                 remove("sproutsquad:State")
                 remove("sproutsquad:Cooldown")
+                // Sprout Squad: the new plant keeps its own attributes (it got the Pumpkin's: speed 0, its damage, its range)
+                remove("attributes")
             }
             val mergedData = TypedEntityData.of(seedType, seedData.copyTagWithoutId().merge(filteredData))
             mergedData.loadInto(it)

@@ -52,7 +52,7 @@ class DyeBlasterItem(properties: Properties) : ProjectileWeaponItem(properties) 
         }
         if (ticksRemaining%4 != 0) return
         level.playSound(livingEntity, livingEntity.blockPosition(), PazSounds.DYE_BLASTER, SoundSource.NEUTRAL, 0.3f, 0.7f)
-        itemStack.hurtAndBreak(1, livingEntity, livingEntity.usedItemHand)
+        // Sprout Squad: no hurtAndBreak here, shoot() already wears the blaster by 1 per shot (it lost 2)
         if (level is ServerLevel) {
             if (level.random.nextFloat() < AMMO_CHANCE) {
                 itemStack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.EMPTY)
