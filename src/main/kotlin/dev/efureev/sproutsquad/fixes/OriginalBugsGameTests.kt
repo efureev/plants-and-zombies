@@ -16,9 +16,10 @@ import joshxviii.plantz.mixin.MobAccessor
 import net.minecraft.world.item.Items
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
+import joshxviii.plantz.block.entity.MailboxBlockEntity
+import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.entity.plant.processSunItem
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
-import joshxviii.plantz.entity.PlantPotMinecart
 import joshxviii.plantz.entity.plant.Chomper
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.plant.processSeedPacketInteraction
@@ -130,7 +131,7 @@ object OriginalBugsGameTests {
 
     /** Planting into a Plant Pot Minecart costs sun like planting on the ground (it was free). */
     fun minecartPlantingCostsSun(helper: GameTestHelper) {
-        val cart = helper.spawn(PazEntities.PLANT_POT_MINECART, BlockPos(0, 1, 0)) as PlantPotMinecart
+        val cart = helper.spawn(PazEntities.PLANT_POT_MINECART, BlockPos(0, 1, 0))
         val player = helper.makeMockPlayer(GameType.SURVIVAL)
         val packet = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER)
         player.setItemInHand(InteractionHand.MAIN_HAND, packet)
@@ -318,7 +319,8 @@ object OriginalBugsGameTests {
     fun coffeeBeanNeedsSleeper(helper: GameTestHelper) {
         val bean = helper.spawn(PazEntities.COFFEE_BEAN, BlockPos(0, 1, 0))
         try {
-            val goal = (bean as MobAccessor).goalSelector.availableGoals.map { it.goal }.filterIsInstance<WakeUpSleepingPlantsGoal>().single()
+            val mob: net.minecraft.world.entity.Mob = bean
+            val goal = (mob as MobAccessor).goalSelector.availableGoals.map { it.goal }.filterIsInstance<WakeUpSleepingPlantsGoal>().single()
             helper.assertTrue(goal.targets.isEmpty(), "the test bean has someone to wake")
             helper.assertTrue(!goal.doAction(), "the Coffee Bean counts waking nobody as a success")
         } finally {
@@ -331,7 +333,8 @@ object OriginalBugsGameTests {
     fun citronChasesWhenNew(helper: GameTestHelper) {
         val citron = helper.spawn(PazEntities.CITRON, BlockPos(0, 1, 0))
         try {
-            val goals = (citron as MobAccessor).goalSelector.availableGoals.map { it.goal }
+            val mob: net.minecraft.world.entity.Mob = citron
+            val goals = (mob as MobAccessor).goalSelector.availableGoals.map { it.goal }
             helper.assertTrue(goals.any { it === citron.walkGoal }, "a new Citron has no goal to walk to its target")
         } finally {
             citron.discard()
@@ -421,6 +424,25 @@ object OriginalBugsGameTests {
         } finally {
             helper.setBlock(pos, Blocks.AIR)
             helper.setBlock(pos.below(), Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /**
+     * The mailbox list shows a known mailbox whose chunk is not loaded without loading that chunk (building the list
+     * loaded every known mailbox's chunk on the server thread, each time a mailbox was opened).
+     */
+    fun mailboxListLoadsNoChunks(helper: GameTestHelper) {
+        val far = helper.absolutePos(BlockPos.ZERO).offset(2_000_000, 0, 0)
+        helper.assertTrue(!helper.level.isLoaded(far), "the far mailbox chunk is loaded")
+        val mailbox = MailboxBlockEntity(far, PazBlocks.MAILBOX.defaultBlockState())
+        try {
+            MailboxManager.registerMailbox(helper.level, mailbox)
+            val listed = MailboxManager.getMailboxesInLevel(helper.level)
+            helper.assertTrue(!helper.level.isLoaded(far), "listing the mailboxes loaded the far mailbox's chunk")
+            helper.assertTrue(listed.any { it.blockPos == far }, "the far mailbox is missing from the list")
+        } finally {
+            MailboxManager.unregisterMailbox(helper.level, far)
         }
         helper.succeed()
     }

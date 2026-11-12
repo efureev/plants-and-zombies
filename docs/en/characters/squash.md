@@ -22,7 +22,7 @@ A single-use plant that leaps onto a nearby zombie and flattens it. In the origi
 - Winds up for about 2 s, leaps, hangs 2 blocks above the target, slams down at ~3.65 s and disappears at 4 s.
 - During the leap it follows the target, but no further than ~4.5 blocks from where it stood.
 - The slam hits every valid target in a 1.6 × 2 × 1.6 block area around the landing point, so zombies standing together are squashed at once.
-- Squashes only zombies; a tamed Squash also squashes other hostile mobs. It never hurts players, plants, villagers or pets.
+- Squashes only zombies; a tamed Squash also squashes other hostile mobs. It never hurts players, plants, villagers, pets or players' machines.
 - If the target dies or walks away before the leap, it cancels and waits for the next one; once in the air, it always finishes.
 - Does not attack while worn on a player's head or riding a Minecart with Plant Pot.
 - Survives on any block and does not turn to look around.

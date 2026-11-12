@@ -30,7 +30,8 @@ object PazClient {
 		NeoForge.EVENT_BUS.addListener(AddServerReloadListenersEvent::class.java) { event ->
 			event.addListener(
 				pazResource("server_data_reload"),
-				ResourceManagerReloadListener({ PazNetwork.ZombieRaidClientCache.clear() })
+				// Sprout Squad: the integrated server reloads on its own thread; the cache belongs to the client thread
+				ResourceManagerReloadListener({ Minecraft.getInstance().execute { PazNetwork.ZombieRaidClientCache.clear() } })
 			)
 		}
 

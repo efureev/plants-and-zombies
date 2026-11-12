@@ -72,6 +72,7 @@ object SquadGameTests {
         Test("bugs_conversion_keeps_pumpkin", OriginalBugsGameTests::conversionKeepsPumpkin),
         Test("bugs_seeds_after_required_sun", OriginalBugsGameTests::seedsAfterRequiredSun),
         Test("bugs_flag_healing_saved", OriginalBugsGameTests::flagHealingSaved),
+        Test("bugs_mailbox_list_loads_no_chunks", OriginalBugsGameTests::mailboxListLoadsNoChunks),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),

@@ -440,7 +440,7 @@ Taco: food (9 hunger). Recipe: bread, cooked beef, beetroot, carrot; there is a 
 
 - **Mailbox**: 4 iron ingots, an iron trapdoor and a newspaper; any dye recolors it (16 colors). It has 5 slots. From its screen you send the contents to any other mailbox in the same dimension: the list is sorted by distance and can be searched. A mailbox with mail shows a notification icon; right-click it to take the mail out.
 - **Collection Box**: 5 Brainz Alloy, a newspaper, 2 redstone and a mailbox. Choose a target mailbox in it; a redstone pulse sends its contents there.
-- Mail for a mailbox in an area that is not loaded waits and arrives when that area loads.
+- Mail for a mailbox in an area that is not loaded waits and arrives when that area loads. The list shows the mailboxes whose area has been loaded since the server started, by the name and color they had then.
 - A Mailbox is also where raid rewards are collected.
 
 ### Decorations and other blocks
