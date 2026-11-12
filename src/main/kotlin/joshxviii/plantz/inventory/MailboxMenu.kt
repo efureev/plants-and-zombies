@@ -43,12 +43,9 @@ class MailboxMenu(
         addStandardInventorySlots(inventory, 8, 98)
     }
 
-    override fun stillValid(player: Player): Boolean {
-        return ContainerLevelAccess.NULL.evaluate( { level: Level, pos: BlockPos ->
-            if (!isValidBlock(level.getBlockState(pos))) false
-            else player.isWithinBlockInteractionRange(pos, 4.0)
-        }, true)
-    }
+    // Sprout Squad: the mailbox's own check (present, within reach), as the Collection Box menu does;
+    // ContainerLevelAccess.NULL.evaluate never ran its check and always said yes
+    override fun stillValid(player: Player): Boolean = mailbox.stillValid(player)
     fun isValidBlock(state: BlockState): Boolean = state.`is`(PazTags.BlockTags.MAILBOX)
 
     override fun slotsChanged(container: Container) {

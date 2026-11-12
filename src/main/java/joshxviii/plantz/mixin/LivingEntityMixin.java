@@ -63,7 +63,7 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
     private CompoundTag plantData = new CompoundTag();
 
     @Unique
-    private List<CompletedWave> completedRaidWaveList = List.of();
+    private List<CompletedWave> completedRaidWaveList = new ArrayList<>();
     @Unique
     private @Nullable Plant plantEntity = null;
 
@@ -105,7 +105,9 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
 
     @Override
     public void plantz$setWaveList(@NotNull List<CompletedWave> value) {
-        completedRaidWaveList = value;
+        // Sprout Squad: a mutable copy. Loaded from a save it was the codec's immutable list, and the Mailbox crashed
+        // the server clearing it after ejecting the rewards
+        completedRaidWaveList = new ArrayList<>(value);
     }
 
     @Override
@@ -167,6 +169,9 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         output.putBoolean("sproutsquad:IsFrozen", PazSyncedData.FROZEN.get(self));
         output.putBoolean("sproutsquad:IsButtered", PazSyncedData.BUTTERED.get(self));
         output.store("sproutsquad:PaintedColor", Codec.unboundedMap(Codec.INT, Codec.INT), PazSyncedData.PAINTED_COLORS.get(self));
+        // Sprout Squad: the copy of the worn plant follows the live plant; it stayed as it was when put on, so a relog
+        // brought back its health, its sun and a broken pumpkin armor
+        if (this.plantz$hasPlantOnHead() && plantEntity != null) plantData = plantEntity.wearerSnapshot();
         if (!this.plantz$getPlantData().isEmpty()) {
             output.store("sproutsquad:AttachedPlant", CompoundTag.CODEC, this.plantz$getPlantData());
         }

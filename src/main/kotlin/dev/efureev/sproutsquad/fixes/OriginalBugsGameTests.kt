@@ -21,6 +21,7 @@ import joshxviii.plantz.block.entity.MailboxManager
 import joshxviii.plantz.entity.plant.processSunItem
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.entity.plant.Chomper
+import joshxviii.plantz.entity.plant.PacketInteractionResult
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.plant.processSeedPacketInteraction
 import joshxviii.plantz.entity.zombie.NewspaperZombie
@@ -245,6 +246,8 @@ object OriginalBugsGameTests {
             }
             helper.assertTrue(tracked.isEmpty(), "the Gravestone still waits for a zombie that is gone")
         } finally {
+            // the gravestone spawns only near a player, and the GameTest server has none; clear anyway
+            helper.level.getEntities(null as Entity?, AABB(helper.absolutePos(pos)).inflate(32.0)) { it !is Player }.forEach { it.discard() }
             helper.setBlock(pos, Blocks.AIR)
             helper.setBlock(pos.below(), Blocks.AIR)
         }
@@ -254,6 +257,8 @@ object OriginalBugsGameTests {
     /**
      * The raid checks its raiders once every 20 ticks; the panic teleport now fires on exactly one of
      * those checks, whatever tick the wave started on (it needed the timer to hit 600 on a check tick).
+     * This checks the window function `ZombieRaid.isPanicCheck` with the raid's cadence modelled here
+     * (`ticksActive % 20`, `waveTimer--` in the same tick), not a running raid.
      */
     fun panicTeleportWindow(helper: GameTestHelper) {
         val duration = ZombieRaid.FINAL_WAVE_DURATION
@@ -488,6 +493,204 @@ object OriginalBugsGameTests {
         } finally {
             wearer.discard()
             snowball.discard()
+        }
+        helper.succeed()
+    }
+
+    /**
+     * A Hero of the Garden wave list is mutable whatever it was set from: loaded from a save it was the codec's
+     * immutable list, and the Mailbox crashed the server clearing it after ejecting the rewards.
+     */
+    fun heroWaveListMutable(helper: GameTestHelper) {
+        val zombie = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        try {
+            val hero = zombie as joshxviii.plantz.raid.GardenHeroRewards
+            // as the save loads it: an immutable list
+            hero.`plantz$setWaveList`(java.util.Collections.unmodifiableList(arrayListOf(joshxviii.plantz.raid.CompletedWave(joshxviii.plantz.raid.WaveType.DEFAULT))))
+            try {
+                hero.`plantz$getWaveList`().clear() // what the Mailbox does after ejecting the rewards
+            } catch (e: UnsupportedOperationException) {
+                helper.fail("the loaded wave list cannot be cleared (${e.javaClass.simpleName})")
+            }
+        } finally {
+            zombie.discard()
+        }
+        helper.succeed()
+    }
+
+    /** The saved copy of a worn plant follows the live plant (it stayed as it was when put on: armor and health came back). */
+    fun wornPlantSnapshotFresh(helper: GameTestHelper) {
+        val pos = spot(helper)
+        prepareGround(helper, pos)
+        lateinit var wearer: net.minecraft.world.entity.monster.zombie.Zombie
+        lateinit var plant: Plant
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(helper.level.isPositionEntityTicking(helper.absolutePos(pos)), "spot is not ticking yet") }
+            .thenExecute {
+                wearer = helper.spawn(EntityTypes.ZOMBIE, pos)
+                wearer.isNoAi = true
+                wearer.setItemSlot(EquipmentSlot.HEAD, ItemStack(PazItems.PLANT_POT_HELMET))
+                plant = helper.spawn(PazEntities.SUNFLOWER, pos)
+                helper.assertTrue(plant.attachToEntity(wearer), "the Sunflower did not attach")
+                plant.health = 3f
+                val saved = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, helper.level.registryAccess())
+                wearer.saveWithoutId(saved)
+                val snapshot = saved.buildResult().getCompoundOrEmpty("sproutsquad:AttachedPlant")
+                val health = snapshot.getFloatOr("Health", -1f)
+                helper.assertTrue(health == 3f, "the saved worn plant has health $health, the live one 3")
+                clear(helper, pos)
+            }
+            .thenSucceed()
+    }
+
+    /** A plant converted by lightning keeps its owner even when the owner is not online (it became wild). */
+    fun conversionKeepsOfflineOwner(helper: GameTestHelper) {
+        val plant = helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(0, 1, 0))
+        val area = AABB(helper.absolutePos(BlockPos(0, 1, 0))).inflate(2.0)
+        val offline = UUID.randomUUID()
+        try {
+            plant.setTame(true, false)
+            plant.setOwnerReference(net.minecraft.world.entity.EntityReference.of(offline))
+            plant.convertToPlantType(PazEntities.ELECTRIC_PEA_SHOOTER)
+            val converted = helper.level.getEntitiesOfClass(Plant::class.java, area) { it.type == PazEntities.ELECTRIC_PEA_SHOOTER }.singleOrNull()
+            helper.assertTrue(converted != null, "the Peashooter was not converted")
+            helper.assertTrue(converted!!.isTame && converted.ownerReference?.uuid == offline, "the converted plant lost its offline owner")
+        } finally {
+            helper.level.getEntitiesOfClass(Entity::class.java, area) { it !is Player }.forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** A letter's author is limited to what the network can carry (a longer one kicked the client). */
+    fun letterAuthorLimit(helper: GameTestHelper) {
+        val json = com.google.gson.JsonObject().apply { addProperty("author", "x".repeat(100)) }
+        val result = LetterDataComponent.CODEC.parse(com.mojang.serialization.JsonOps.INSTANCE, json)
+        helper.assertTrue(result.isError, "a 100-character author was accepted; the network limit is 64")
+        helper.succeed()
+    }
+
+    /** A mailbox removed by anything but a player (an explosion, a zombie, a command) leaves the mailbox list. */
+    fun removedMailboxUnlisted(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), Blocks.STONE)
+        helper.setBlock(pos, PazBlocks.MAILBOX)
+        val absolute = helper.absolutePos(pos)
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(MailboxManager.isRegistered(helper.level, absolute), "the placed mailbox is not registered yet") }
+            .thenExecute {
+                helper.setBlock(pos, Blocks.AIR) // not a player's break
+                helper.assertTrue(!MailboxManager.isRegistered(helper.level, absolute), "a removed mailbox stays registered: mail to it would be queued for good")
+                helper.setBlock(pos.below(), Blocks.AIR)
+            }
+            .thenSucceed()
+    }
+
+    /** Planting into a Pumpkin follows the plant limit (planting on the ground did, into a Pumpkin did not). */
+    fun pumpkinPlantingLimit(helper: GameTestHelper) {
+        val limits = PazConfig.server.customPlantEntityLimits
+        val key = "${PazMain.MODID}:peashooter"
+        val saved = limits[key]
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val area = AABB(helper.absolutePos(BlockPos(0, 1, 0))).inflate(3.0)
+        try {
+            limits[key] = 1
+            helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(2, 1, 0)).tame(player) // the one Peashooter allowed
+            val pumpkin = helper.spawn(PazEntities.PUMPKIN, BlockPos(0, 1, 0))
+            pumpkin.tame(player)
+            val packet = SeedPacketItem.stackFor(PazEntities.PEA_SHOOTER)
+            player.inventory.add(ItemStack(PazItems.SUN, 32))
+            val result = pumpkin.processSeedPacketInteraction(player, packet, InteractionHand.MAIN_HAND)
+            val peashooters = helper.level.getEntitiesOfClass(Plant::class.java, area) { it.type == PazEntities.PEA_SHOOTER }.size
+            helper.assertTrue(peashooters == 1 && result != PacketInteractionResult.SUCCESS, "a Peashooter over the limit was planted into the Pumpkin ($result, $peashooters Peashooters)")
+        } finally {
+            if (saved != null) limits[key] = saved else limits.remove(key)
+            helper.level.getEntitiesOfClass(Entity::class.java, area) { it !is Player }.forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** A Gardening Glove that breaks from mining while holding a plant drops the plant as a seed packet. */
+    fun gloveBreakKeepsPlant(helper: GameTestHelper) {
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val glove = ItemStack(PazItems.GARDENING_GLOVE)
+        glove.set(net.minecraft.core.component.DataComponents.ENTITY_DATA, TypedEntityData.of(PazEntities.PEA_SHOOTER, CompoundTag()))
+        glove.damageValue = glove.maxDamage - 1
+        player.setItemInHand(InteractionHand.MAIN_HAND, glove)
+        val pos = helper.absolutePos(BlockPos(0, 1, 0))
+        player.snapTo(net.minecraft.world.phys.Vec3.atBottomCenterOf(pos), 0f, 0f) // the drop lands where the player is
+        val area = AABB(player.blockPosition()).inflate(3.0)
+        try {
+            glove.item.mineBlock(glove, helper.level, Blocks.DIRT.defaultBlockState(), pos, player)
+            helper.assertTrue(glove.isEmpty, "the glove did not break")
+            val dropped = helper.level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity::class.java, area) {
+                SeedPacketItem.typeFromStack(it.item) == PazEntities.PEA_SHOOTER
+            }
+            helper.assertTrue(dropped.isNotEmpty(), "the plant held by the broken glove was lost")
+        } finally {
+            helper.level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity::class.java, area).forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** The Mailbox menu closes when the player is out of reach (it stayed valid anywhere). */
+    fun mailboxMenuReach(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), Blocks.STONE)
+        helper.setBlock(pos, PazBlocks.MAILBOX)
+        try {
+            val mailbox = helper.getBlockEntity(pos, MailboxBlockEntity::class.java)
+            val player = helper.makeMockPlayer(GameType.SURVIVAL)
+            val menu = joshxviii.plantz.inventory.MailboxMenu(0, player.inventory, mailbox.asMailBoxData(), mailbox)
+            player.snapTo(net.minecraft.world.phys.Vec3.atCenterOf(helper.absolutePos(pos)).add(40.0, 0.0, 0.0))
+            helper.assertTrue(!menu.stillValid(player), "the Mailbox menu stays valid 40 blocks away")
+        } finally {
+            helper.setBlock(pos, Blocks.AIR)
+            helper.setBlock(pos.below(), Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** Moving a Coffee Bean with a glove puts no planting cooldown on the glove (a glove move is not planting). */
+    fun gloveGetsNoCooldown(helper: GameTestHelper) {
+        val config = PazConfig.server
+        val wasEnabled = config.plantCooldownEnabled
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val sleeper = helper.spawn(PazEntities.SUNFLOWER, BlockPos(0, 1, 0))
+        try {
+            config.plantCooldownEnabled = true
+            sleeper.tame(player)
+            sleeper.isAsleep = true
+            val glove = ItemStack(PazItems.GARDENING_GLOVE)
+            glove.set(net.minecraft.core.component.DataComponents.ENTITY_DATA, TypedEntityData.of(PazEntities.COFFEE_BEAN, CompoundTag()))
+            player.inventory.add(ItemStack(PazItems.SUN, 32))
+            sleeper.processSeedPacketInteraction(player, glove, InteractionHand.MAIN_HAND)
+            helper.assertTrue(!glove.has(net.minecraft.core.component.DataComponents.USE_COOLDOWN), "the glove got the Coffee Bean's planting cooldown")
+        } finally {
+            config.plantCooldownEnabled = wasEnabled
+            sleeper.discard()
+        }
+        helper.succeed()
+    }
+
+    /** A worn blocker does not send back piercing arrows (the original's changelog promises it); others still bounce. */
+    fun blockerLetsPiercingThrough(helper: GameTestHelper) {
+        val zombie = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        try {
+            zombie.isNoAi = true
+            zombie.setItemSlot(EquipmentSlot.CHEST, ItemStack(PazItems.COFFIN))
+            fun arrowInFront(pierce: Int): net.minecraft.world.entity.projectile.arrow.AbstractArrow {
+                val arrow = EntityTypes.ARROW.create(helper.level, EntitySpawnReason.COMMAND)!!
+                TypedEntityData.of(EntityTypes.ARROW, CompoundTag().apply { putByte("PierceLevel", pierce.toByte()) }).loadInto(arrow)
+                val front = zombie.position().add(net.minecraft.world.phys.Vec3.directionFromRotation(0f, zombie.yHeadRot).scale(2.0))
+                arrow.snapTo(front.x, zombie.eyeY, front.z, 0f, 0f)
+                return arrow
+            }
+            val plain = zombie.deflection(arrowInFront(0))
+            val piercing = zombie.deflection(arrowInFront(1))
+            helper.assertTrue(plain == net.minecraft.world.entity.projectile.ProjectileDeflection.REVERSE, "the Coffin did not send back a plain arrow ($plain)")
+            helper.assertTrue(piercing == net.minecraft.world.entity.projectile.ProjectileDeflection.NONE, "the Coffin sent back a piercing arrow")
+        } finally {
+            zombie.discard()
         }
         helper.succeed()
     }

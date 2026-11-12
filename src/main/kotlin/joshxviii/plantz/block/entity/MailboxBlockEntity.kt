@@ -96,6 +96,7 @@ class MailboxBlockEntity(
                             buffer.clear()
                             blockEntity.heroMailIndex = 0
                         }
+                        blockEntity.setChanged() // Sprout Squad: the rewards still to come are saved (saveAdditional)
                     }
                 }
                 blockEntity.ejectTimer--
@@ -159,7 +160,9 @@ class MailboxBlockEntity(
 
         if (heroEffect != null) {
             if (player !is ServerPlayer) return false
-            heroMailBuffer = GardenHeroRewards.collectRewards(player)
+            // Sprout Squad: one hero at a time; a second one replaced the buffer mid-ejection and both lost rewards
+            if (heroMailBuffer.isNotEmpty()) return false
+            heroMailBuffer = GardenHeroRewards.collectRewards(player).toMutableList()
             updateMailboxState(MailboxState.EJECTING)
             ejectTimer = HERO_MAIL_EJECT_DELAY+heroMailBuffer.size
             player.removeEffect(heroEffect)
@@ -242,6 +245,11 @@ class MailboxBlockEntity(
         output.store("Color", DyeColor.CODEC, color)
         output.storeNullable<Component>("CustomName", ComponentSerialization.CODEC, this.name)
         output.store("EjectTimer", Codec.INT, ejectTimer)
+        // Sprout Squad: the Hero Mail still being ejected; the player's effect is already gone, so it was lost on unload
+        if (heroMailBuffer.isNotEmpty()) {
+            output.store("HeroMail", Codec.list(CompletedWave.CODEC), heroMailBuffer)
+            output.putInt("HeroMailIndex", heroMailIndex)
+        }
         ContainerHelper.saveAllItems(output, inventory.items)
     }
     override fun loadAdditional(input: ValueInput) {
@@ -250,6 +258,8 @@ class MailboxBlockEntity(
         this.name = parseCustomNameSafe(input, "CustomName")
         // Sprout Squad: a mailbox placed by a structure or a command has no timer yet (was .get(): crash)
         ejectTimer = input.getIntOr("EjectTimer", 0)
+        heroMailBuffer = input.read("HeroMail", Codec.list(CompletedWave.CODEC)).map { it.toMutableList() }.orElseGet { mutableListOf() }
+        heroMailIndex = input.getIntOr("HeroMailIndex", 0)
         ContainerHelper.loadAllItems(input, inventory.items)
     }
 
@@ -271,9 +281,18 @@ class MailboxBlockEntity(
 
     override fun setChanged() {
         super.setChanged()
+        // Sprout Squad: the mailbox list shows unloaded mailboxes by their last known name and colour
+        (level as? ServerLevel)?.let { MailboxManager.refreshMailbox(it, this) }
         if (blockState.getValue(STATE) == MailboxState.EJECTING) return
         if (isEmpty) updateMailboxState(MailboxState.INACTIVE)
         else updateMailboxState(MailboxState.HAS_MAIL)
+    }
+
+    // Sprout Squad: forgotten however it is removed (explosion, zombie, command); only a player's break did, and mail
+    // sent to a vanished mailbox in an unloaded area was queued for good
+    override fun preRemoveSideEffects(pos: BlockPos, state: BlockState) {
+        super.preRemoveSideEffects(pos, state)
+        (level as? ServerLevel)?.let { MailboxManager.unregisterMailbox(it, pos) }
     }
 
     override fun getUpdatePacket(): ClientboundBlockEntityDataPacket? {

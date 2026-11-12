@@ -24,6 +24,7 @@ import net.minecraft.server.level.ServerLevel
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent
 import net.minecraft.core.Registry
+import net.minecraft.world.phys.AABB
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
@@ -55,6 +56,10 @@ object PazEntities {
                     0, object : NearestAttackableTargetGoal<Plant>(entity, Plant::class.java, 1, false, false, { target, _ ->
                         target.`is`(ZOMBIE_ATTACK_ON_COLLIDE) && entity.boundingBox.intersects(target.boundingBox.inflate(0.1))
                     }) {
+                        // Sprout Squad: only plants touching the zombie can match; it searched its whole follow range
+                        // (up to 100 blocks across) for every zombie every other tick
+                        override fun getTargetSearchArea(followDistance: Double): AABB = entity.boundingBox.inflate(0.1)
+
                         override fun canContinueToUse(): Boolean {
                             val currentTarget = entity.target ?: return false
                             return super.canContinueToUse()

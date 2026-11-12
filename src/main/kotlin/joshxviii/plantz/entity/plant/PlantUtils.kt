@@ -184,7 +184,8 @@ fun Plant.processSeedPacketInteraction(player: Player, itemStack: ItemStack, han
         PacketInteractionResult.SUCCESS -> {
             if (!player.hasInfiniteMaterials()) {// remove used sun
                 player.removeSunFromStorageAndInventory(sunCost)
-                if (!itemStack.`is`(PazItems.SEED_PACKET)) SeedPacketItem.applyCooldown(itemStack, player)
+                // Sprout Squad: no SeedPacketItem.applyCooldown on a glove: it stuck the moved plant's cooldown group
+                // on the glove for good, and a glove move is not planting (fixes/PlantingCooldown.kt)
             }
         }
         PacketInteractionResult.NO_INTERACTION -> {
@@ -217,9 +218,17 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
     // Sprout Squad: planting into a Pumpkin is planting too (plantCooldownEnabled)
     if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, seedType)) return PacketInteractionResult.NO_INTERACTION
     (level() as? ServerLevel)?.let { level ->
+        // Sprout Squad: the plant limit applies as on the ground, and only a plant that was really planted is a success
+        // (a failed spawn used to cost the sun and the packet)
+        var planted = false
         seedType.create(
             level, EntityType.createDefaultStackConfig(level, itemStack, null), blockPosition(), EntitySpawnReason.SPAWN_ITEM_USE, true, true
         )?.let {
+            if (it is Plant && PazConfig.getEntityLimit(seedType) > -1 && !player.hasInfiniteMaterials() && it.isOverEntityLimit()) {
+                player.sendOverlayMessage(Component.translatable("message.sproutsquad.entity_limit", seedType.description.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED))
+                it.discard()
+                return PacketInteractionResult.FAIL
+            }
             val pumpkinData = this.saveAsCompoundTag()
 
             val filteredData = pumpkinData.copy().apply {
@@ -238,9 +247,10 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
             if (level.addFreshEntity(it)) {
                 discard()
                 dev.efureev.sproutsquad.fixes.PlantingCooldown.start(player, seedType, SunCost.getSunCost(itemStack))
+                planted = true
             }
         }
-        return PacketInteractionResult.SUCCESS
+        return if (planted) PacketInteractionResult.SUCCESS else PacketInteractionResult.NO_INTERACTION
     }
     return PacketInteractionResult.SUCCESS
 }

@@ -62,7 +62,8 @@ data class LetterDataComponent(
                 Codec.string(0, 1024).sizeLimitedListOf(100).optionalFieldOf("pages", emptyList())
                     .forGetter(LetterDataComponent::pages),
                 Codec.BOOL.optionalFieldOf("sealed", false).forGetter(LetterDataComponent::signed),
-                Codec.STRING.optionalFieldOf("author", "").forGetter(LetterDataComponent::author)
+                // Sprout Squad: as long as the stream codec allows (64); a longer one kicked the client syncing the item
+                Codec.string(0, 64).optionalFieldOf("author", "").forGetter(LetterDataComponent::author)
             ).apply(instance) { background, font, item, pages, sealed, author ->
                 LetterDataComponent(background, font, item, pages, sealed, author)
             }

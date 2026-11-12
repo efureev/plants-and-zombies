@@ -23,6 +23,13 @@ object MailboxManager {
         mailboxes.getOrPut(levelKey) { mutableMapOf() }[blockEntity.blockPos.immutable()] = blockEntity.asMailBoxData()
     }
 
+    /** Updates the stored data of a registered mailbox (name, colour). */
+    fun refreshMailbox(level: Level, blockEntity: MailboxBlockEntity) {
+        mailboxes[level.dimension()]?.computeIfPresent(blockEntity.blockPos) { _, _ -> blockEntity.asMailBoxData() }
+    }
+
+    fun isRegistered(level: Level, pos: BlockPos): Boolean = mailboxes[level.dimension()]?.containsKey(pos) == true
+
     fun unregisterMailbox(level: Level, pos: BlockPos) {
         val levelKey = level.dimension()
         mailboxes[levelKey]?.remove(pos)

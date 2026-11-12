@@ -17,8 +17,8 @@ import net.minecraft.world.entity.SpawnPlacements
 
 /**
  * Checklist for Sprout Squad's own plants (docs/en/WORKSHOP.md), as a GameTest: every plant in
- * [SquadEntities] must spawn with its declared health, have a sun cost and spawn rules, be in the `plant` tag, have a seed packet
- * recipe, textures (main and `_sleep`), a seed packet icon and en/ru names.
+ * [SquadEntities] must spawn with its declared health, have a sun cost and spawn rules, be in the `plant` tag and the
+ * "plant one of each plant" advancement, have a seed packet recipe, textures (main and `_sleep`), a seed packet icon and en/ru names.
  * Registered in [SquadGameTests].
  */
 object SquadPlantsGameTest {
@@ -44,6 +44,8 @@ object SquadPlantsGameTest {
 
             val recipe = ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(PazMain.MODID, "${name}_seed_packet"))
             if (helper.level.server.recipeManager.byKey(recipe).isEmpty) problem("no recipe ${recipe.identifier()}")
+            val allPlants = helper.level.server.advancements.get(Identifier.fromNamespaceAndPath(PazMain.MODID, "plant_all_plants"))
+            if (allPlants?.value()?.criteria()?.containsKey("${PazMain.MODID}:$name") != true) problem("not in the plant_all_plants advancement")
 
             val textures = "/assets/${PazMain.MODID}/textures"
             listOf(

@@ -485,10 +485,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         plantType: EntityType<T>,
         afterConversion: (plantEntity: Plant) -> Unit = {}) {
         convertTo(plantType, ConversionParams.single(this, true, true)) { newPlant ->
-            owner?.let {
-                if (it is Player) newPlant.tame(it)
-                else newPlant.owner = it
-            }
+            // Sprout Squad: by reference, so an owner who is not online is kept (`owner` resolves only a loaded entity)
+            if (isTame) newPlant.setTame(true, true)
+            ownerReference?.let { newPlant.setOwnerReference(it) }
             // Sprout Squad: the conversion copies only vanilla data; the pumpkin armor (and the Pumpkin in it) was lost
             if (hasPumpkinArmor()) newPlant.applyPumpkinArmor(pumpkinArmor, pumpkinEntityData)
             // TODO custom sounds
@@ -1023,18 +1022,27 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     fun attachToEntity(entity: LivingEntity): Boolean {
         if (level().isClientSide) return false
+        if (entity.tryToSetPlantOnHead(wearerSnapshot())) {
+            (entity as PlantHeadAttachment).`plantz$setPlant`(this)
+            attachedEntity = entity
+            return true
+        }
+        return false
+    }
+
+    /** The plant as its wearer saves it (`sproutsquad:AttachedPlant`), respawned with the player (ServerPlayerMixin). */
+    fun wearerSnapshot(): CompoundTag {
         ScopedCollector(this.problemPath(), LOGGER).use { reporter ->
             val output = TagValueOutput.createWithContext(reporter, this.registryAccess())
             this.saveWithoutId(output)
             output.putString("id", this.encodeId!!)
-            if (entity.tryToSetPlantOnHead(output.buildResult())) {
-                (entity as PlantHeadAttachment).`plantz$setPlant`(this)
-                attachedEntity = entity
-                return true
-            }
+            return output.buildResult()
         }
-        return false
     }
+
+    // Sprout Squad: a plant on a player's head lives in the player's data; saved in the chunk too, it came back twice
+    // after a crash (from the chunk and with the player)
+    override fun shouldBeSaved(): Boolean = super.shouldBeSaved() && attachedEntity !is Player
 
     fun detachFromEntity() {
         if (attachedEntity!=null) {
