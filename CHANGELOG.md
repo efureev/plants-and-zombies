@@ -20,6 +20,8 @@ Changes since Sprout Squad 0.2.0. Everything after this section is the changelog
 - A plant converted by lightning keeps an owner who is offline.
 - Planting into a Pumpkin follows the plant limit, and a failed planting costs nothing.
 - The Potling counts for the "plant one of each plant" advancement.
+- A Watering Can with 1 water left gives 1.
+- A dispenser plants only when a player is within 64 blocks to own the plant.
 #### Zombies and raids
 - The Newspaper Zombie really gets angry when its paper tears, and stays angry after a reload.
 - The Zombie Goat counts as a monster for the mob cap.
@@ -35,6 +37,9 @@ Changes since Sprout Squad 0.2.0. Everything after this section is the changelog
 - Using a Mailbox with Hero of the Garden after a relog no longer crashes the server; a second hero has to wait until the first one's rewards are out, and rewards still being ejected are saved.
 - Hero of the Garden rewards survive leaving the End after the credits.
 - Zombies look for plants they walk into only at their own hitbox (they searched their whole follow range every other tick).
+- Villagers do not flee hypnotized zombies or players' machines.
+- Zombie villagers, zombified piglins and other mods' zombies keep vanilla's leader bonus.
+- Every damaged flag shows its cracks (only one did at a time).
 #### Items and blocks
 - Roller Skates and the Football Helmet take their speed and friction modifiers with them when they break.
 - Head protection wears and plays its sound only on the hits it blocks; head protection and shields without a break chance wear on mobs too.
@@ -43,7 +48,9 @@ Changes since Sprout Squad 0.2.0. Everything after this section is the changelog
 - The Football Helmet and Roller Skates tooltips are shown.
 - 19 blocks got their names.
 - A Gardening Glove that breaks from mining drops the plant it held; gloves get no planting cooldown.
-- Blocking items let piercing arrows and peas through.
+- Blocking items let piercing arrows and peas through, and send back only shots: fireballs, potions and wind charges hit the blocker.
+- Only the mod's own blockers cancel the knockback of a partly blocked hit.
+- A Solar Battery puts into a slot only what the slot takes.
 - A Letter's author is limited to 64 characters, as the network allows.
 #### Mail
 - Mail for a mailbox in an unloaded area is queued without loading it, and leaves the sender.

@@ -1,53 +1,62 @@
 package dev.efureev.sproutsquad.fixes
 
 import com.google.gson.JsonParser
+import java.util.UUID
 import joshxviii.plantz.PazBlocks
 import joshxviii.plantz.PazComponents
 import joshxviii.plantz.PazConfig
+import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.ai.ZombieState
 import joshxviii.plantz.ai.goal.WakeUpSleepingPlantsGoal
-import joshxviii.plantz.entity.plant.GraveBuster
-import joshxviii.plantz.inventory.LetterMenu
-import joshxviii.plantz.item.component.LetterDataComponent
-import joshxviii.plantz.mixin.MobAccessor
-import net.minecraft.world.item.Items
 import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
 import joshxviii.plantz.block.entity.MailboxBlockEntity
 import joshxviii.plantz.block.entity.MailboxManager
-import joshxviii.plantz.entity.plant.processSunItem
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.entity.plant.Chomper
+import joshxviii.plantz.entity.plant.GraveBuster
 import joshxviii.plantz.entity.plant.PacketInteractionResult
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.plant.processSeedPacketInteraction
+import joshxviii.plantz.entity.plant.processSunItem
+import joshxviii.plantz.entity.plant.processWateringItem
 import joshxviii.plantz.entity.zombie.NewspaperZombie
+import joshxviii.plantz.entity.zombie.PazZombie
 import joshxviii.plantz.getTotalSun
+import joshxviii.plantz.inventory.LetterMenu
 import joshxviii.plantz.item.RollerSkatesItem
 import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.item.component.LetterDataComponent
 import joshxviii.plantz.item.component.SunCost
+import joshxviii.plantz.mixin.MobAccessor
 import joshxviii.plantz.raid.ZombieRaid
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.EquipmentSlot
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.TypedEntityData
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
-import java.util.UUID
 
 /**
  * More GameTests for bugs of the original fixed in the fork (docs/en/UPSTREAM.md), see also
@@ -691,6 +700,159 @@ object OriginalBugsGameTests {
             helper.assertTrue(piercing == net.minecraft.world.entity.projectile.ProjectileDeflection.NONE, "the Coffin sent back a piercing arrow")
         } finally {
             zombie.discard()
+        }
+        helper.succeed()
+    }
+
+    /** Blocking sends back arrows and the mod's projectiles, not fireballs or potions (they were reflected too). */
+    fun blockerSendsBackOnlyShots(helper: GameTestHelper) {
+        val zombie = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        try {
+            zombie.isNoAi = true
+            zombie.setItemSlot(EquipmentSlot.CHEST, ItemStack(PazItems.COFFIN))
+            val front = zombie.position().add(net.minecraft.world.phys.Vec3.directionFromRotation(0f, zombie.yHeadRot).scale(2.0))
+            for (type in listOf(EntityTypes.FIREBALL, EntityTypes.SPLASH_POTION, EntityTypes.WIND_CHARGE)) {
+                val projectile = type.create(helper.level, EntitySpawnReason.COMMAND)!!
+                projectile.snapTo(front.x, zombie.eyeY, front.z, 0f, 0f)
+                val deflection = zombie.deflection(projectile)
+                helper.assertTrue(deflection == net.minecraft.world.entity.projectile.ProjectileDeflection.NONE,
+                    "blocking sent back ${BuiltInRegistries.ENTITY_TYPE.getKey(type).path}")
+            }
+        } finally {
+            zombie.discard()
+        }
+        helper.succeed()
+    }
+
+    /** A Watering Can with 1 water left gives 1 water (it gave 2). */
+    fun wateringCanLastDrop(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), Blocks.FARMLAND)
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val plant = helper.spawn(PazEntities.SUNFLOWER, pos)
+        try {
+            plant.tame(player)
+            plant.receivedWater = 0
+            val can = ItemStack(PazItems.WATERING_CAN)
+            can.set(PazComponents.STORED_WATER, joshxviii.plantz.item.component.StoredWater(storedWater = 1))
+            player.setItemInHand(InteractionHand.MAIN_HAND, can)
+            plant.processWateringItem(player, can, InteractionHand.MAIN_HAND, joshxviii.plantz.entity.plant.PlantGrowNeeds.WATER)
+            helper.assertTrue(plant.receivedWater == 1, "1 water in the can gave ${plant.receivedWater}")
+        } finally {
+            plant.discard()
+            helper.setBlock(pos.below(), Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** A dispenser plants nothing with no player near to own the plant (it planted a wild one, which may attack players). */
+    fun dispenserNeedsOwner(helper: GameTestHelper) {
+        val dispenserPos = BlockPos(0, 2, 0)
+        val front = dispenserPos.east()
+        helper.setBlock(dispenserPos, Blocks.DISPENSER.defaultBlockState().setValue(net.minecraft.world.level.block.DispenserBlock.FACING, net.minecraft.core.Direction.EAST))
+        helper.setBlock(dispenserPos.above(), PazBlocks.SUN_BATTERY_BLOCK) // on top of the dispenser, supported by it
+        helper.setBlock(front.below(), Blocks.GRASS_BLOCK)
+        helper.setBlock(front, Blocks.AIR)
+        val area = AABB(helper.absolutePos(front)).inflate(1.0)
+        try {
+            helper.assertTrue(helper.level.getNearestPlayer(helper.absolutePos(front).x.toDouble(), helper.absolutePos(front).y.toDouble(), helper.absolutePos(front).z.toDouble(), 64.0, false) == null, "a player is near the test")
+            val packet = SeedPacketItem.stackFor(PazEntities.PUFF_SHROOM)
+            packet.remove(PazComponents.SUN_COST) // the fresh battery has no sun
+            val planted = SeedPacketItem.tryPlantFromDispenser(helper.level, packet, helper.absolutePos(dispenserPos), helper.absolutePos(front),
+                net.minecraft.core.Direction.EAST, net.minecraft.core.Direction.EAST)
+            val plants = helper.level.getEntitiesOfClass(Plant::class.java, area)
+            helper.assertTrue(!planted && plants.isEmpty(), "the dispenser planted a plant nobody owns (${plants.map { it.isTame }})")
+        } finally {
+            helper.level.getEntitiesOfClass(Plant::class.java, area).forEach { it.discard() }
+            for (p in listOf(dispenserPos.above(), dispenserPos, front, front.below())) helper.setBlock(p, Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** Taking sun out of a Solar Battery onto a slot respects what the slot takes (64 went into a 1-item slot). */
+    fun batteryRespectsSlot(helper: GameTestHelper) {
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val letter = ItemStack(PazItems.LETTER)
+        player.inventory.setItem(0, letter)
+        player.inventory.selectedSlot = 0
+        val menu = LetterMenu(0, player.inventory, 0)
+        val battery = ItemStack(PazItems.SUN_BATTERY)
+        battery.set(PazComponents.STORED_SUN, joshxviii.plantz.item.component.StoredSun(storedSun = 100))
+        battery.item.overrideStackedOnOther(battery, menu.attachmentSlot, net.minecraft.world.inventory.ClickAction.SECONDARY, player)
+        val placed = menu.attachmentSlot.item.count
+        val left = battery.get(PazComponents.STORED_SUN)!!.storedSun
+        helper.assertTrue(placed == 1 && left == 99, "the battery put $placed sun into a 1-item slot ($left left in it)")
+        helper.succeed()
+    }
+
+    /** Each flag has its own crack overlay id, never an entity's (all flags shared 0: one crack showed at a time). */
+    fun flagCrackIds(helper: GameTestHelper) {
+        val a = joshxviii.plantz.block.entity.FlagBlockEntity.crackId(BlockPos(10, 64, 10))
+        val b = joshxviii.plantz.block.entity.FlagBlockEntity.crackId(BlockPos(12, 64, 10))
+        helper.assertTrue(a != b && a < 0 && b < 0, "flag crack ids $a and $b")
+        helper.succeed()
+    }
+
+    /** Villagers flee zombies, but not hypnotized ones or players' machines (they are on the players' side). */
+    fun villagersTrustAllies(helper: GameTestHelper) {
+        val villager = helper.spawn(EntityTypes.VILLAGER, BlockPos(0, 1, 0))
+        val zombie = helper.spawn(PazEntities.BROWN_COAT, BlockPos(2, 1, 0))
+        val hypnotized = helper.spawn(PazEntities.BROWN_COAT, BlockPos(0, 1, 2))
+        val machine = helper.spawn(PazEntities.ZOMBIE_TURRET, BlockPos(2, 1, 2))
+        try {
+            listOf(villager, zombie, hypnotized, machine).forEach { it.isNoAi = true }
+            hypnotized.addEffect(MobEffectInstance(PazEffects.HYPNOTIZE, 600))
+            machine.setData(dev.efureev.sproutsquad.registry.SquadAttachments.PLAYER_MACHINE, true)
+            val sensor = net.minecraft.world.entity.ai.sensing.SensorType.VILLAGER_HOSTILES.create()
+            val matches = net.minecraft.world.entity.ai.sensing.VillagerHostilesSensor::class.java.getDeclaredMethod(
+                "isMatchingEntity", ServerLevel::class.java, LivingEntity::class.java, LivingEntity::class.java
+            ).apply { isAccessible = true }
+            fun fears(mob: LivingEntity) = matches.invoke(sensor, helper.level, villager, mob) as Boolean
+            helper.assertTrue(fears(zombie), "a villager does not fear a Browncoat")
+            helper.assertTrue(!fears(hypnotized), "a villager fears a hypnotized zombie")
+            helper.assertTrue(!fears(machine), "a villager fears a player's machine")
+        } finally {
+            listOf(villager, zombie, hypnotized, machine).forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** Vanilla's leader bonus stays on zombie villagers; the mod's non-leader zombies still lose it. */
+    fun leaderBonusOnlyOffModZombies(helper: GameTestHelper) {
+        val calm = net.minecraft.world.DifficultyInstance(net.minecraft.world.Difficulty.PEACEFUL, 0L, 0L, 0f) // no new bonus rolled
+        fun bonusKept(type: EntityType<out Zombie>): Boolean {
+            val zombie = type.create(helper.level, EntitySpawnReason.COMMAND)!!
+            zombie.snapTo(helper.absolutePos(BlockPos(0, 1, 0)), 0f, 0f)
+            zombie.getAttribute(Attributes.MAX_HEALTH)!!.addPermanentModifier(
+                AttributeModifier(PazZombie.LEADER_MODIFIER_ID, 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
+            zombie.finalizeSpawn(helper.level, calm, EntitySpawnReason.NATURAL, Zombie.ZombieGroupData(false, false))
+            val kept = PazZombie.isBornLeader(zombie)
+            zombie.discard()
+            return kept
+        }
+        helper.assertTrue(bonusKept(EntityTypes.ZOMBIE_VILLAGER), "a zombie villager lost vanilla's leader bonus")
+        helper.assertTrue(!bonusKept(PazEntities.ALL_STAR), "an All-Star kept vanilla's leader bonus")
+        helper.succeed()
+    }
+
+    /** A block with an item that is not the mod's keeps vanilla's knockback; the mod's own blockers cancel it. */
+    fun blockKnockbackOnlyForModBlockers(helper: GameTestHelper) {
+        val attacker = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        val plain = helper.spawn(EntityTypes.ZOMBIE, BlockPos(2, 1, 0))
+        val coffin = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 2))
+        try {
+            listOf(attacker, plain, coffin).forEach { it.isNoAi = true; it.deltaMovement = net.minecraft.world.phys.Vec3.ZERO }
+            coffin.setItemSlot(EquipmentSlot.CHEST, ItemStack(PazItems.COFFIN))
+            val blockedByItem = LivingEntity::class.java.getDeclaredMethod("blockedByItem", LivingEntity::class.java,
+                net.minecraft.world.damagesource.DamageSource::class.java, Float::class.javaPrimitiveType, Boolean::class.javaPrimitiveType
+            ).apply { isAccessible = true }
+            val source = helper.level.damageSources().mobAttack(attacker)
+            blockedByItem.invoke(attacker, plain, source, 2f, false)
+            blockedByItem.invoke(attacker, coffin, source, 2f, false)
+            helper.assertTrue(plain.deltaMovement.horizontalDistanceSqr() > 0.0, "a block with no mod item lost vanilla's knockback")
+            helper.assertTrue(coffin.deltaMovement.horizontalDistanceSqr() == 0.0, "a block with the Coffin knocked its wearer back")
+        } finally {
+            listOf(attacker, plain, coffin).forEach { it.discard() }
         }
         helper.succeed()
     }

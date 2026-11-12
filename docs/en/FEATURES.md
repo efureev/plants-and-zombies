@@ -25,7 +25,7 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 - One plant per block. A plant standing on unsuitable ground or overlapping another one slowly dries out and takes damage.
 - A new plant faces you; in a pot it faces the same way as the pot.
 - A plant you plant is tamed to you.
-- A dispenser plants seed packets if a Solar Battery with enough sun is attached to it; the sun is taken from the battery, and the plant goes to the nearest player within 64 blocks.
+- A dispenser plants seed packets if a Solar Battery with enough sun is attached to it; the sun is taken from the battery, and the plant goes to the nearest player within 64 blocks. With no player that near, it plants nothing.
 
 ### Sun
 
@@ -140,7 +140,7 @@ Datapacks can change these rules in `data/<namespace>/seed_mutation/<plant>.json
 | <img src="../images/items/plant_pot.png" alt="" width="112"> | Plant Pot | 3 bricks, dirt, sun | A plant in it takes 50% less damage from monsters; zombies cannot walk through pots. Digger Zombies can break plain pots |
 | <img src="../images/items/zen_plant_pot.png" alt="" width="112"> | Zen Plant Pot | Plant Pot, 2 bamboo, a bamboo slab | The same protection, and it counts as farmland for growing seeds (25% faster) |
 | <img src="../images/items/plant_pot_minecart.png" alt="" width="112"> | Minecart with Plant Pot | Plant Pot + minecart | A plant planted in it rides along on rails |
-| <img src="../images/items/watering_can.png" alt="" width="112"> | Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water: waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
+| <img src="../images/items/watering_can.png" alt="" width="112"> | Watering Can | Farmer (level 2), village chests, fishing treasure, raid rewards | Holds 32 water. Fill it at water or, sneaking, from a water cauldron. Each use spends 2 water (a plant gets the last 1 if that is all that is left): waters a plant (counts as a big watering), moistens farmland, turns dirt into mud, puts out fire, fills a cauldron, turns lava into obsidian. Sneak to place it as a decoration |
 
 ### Taming and ownership
 
@@ -236,7 +236,7 @@ The Halloween season is from 14 days before to 1 day after 31 October (by the re
 ### Equipment
 
 - Browncoats can spawn with a **Cone**, a **Bucket**, a **Screen Door** (door shield) or a **Coffin**; the higher the local difficulty, the more often. In raids, equipment gets better as the waves go on.
-- Cones and buckets protect only against hits from above, so lobbed projectiles bounce off while straight shots go through. They can break. Door shields and newspapers block from the front, a coffin from all sides.
+- Cones and buckets protect only against hits from above, so lobbed projectiles bounce off while straight shots go through. They can break. Door shields and newspapers block from the front, a coffin from all sides. A block sends back arrows, tridents and the mod's projectiles, but not piercing ones; fireballs, potions and wind charges hit the blocker, as with a vanilla shield.
 - All Stars wear a Football Helmet; zombies may wear party hats, pumpkins or iron armor in special waves.
 - You can wear all of this yourself, see [helmets and armor](#helmets-armor-and-equipment).
 

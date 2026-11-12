@@ -25,6 +25,9 @@ public abstract class EntityProjectileDeflectionMixin {
         CallbackInfoReturnable<ProjectileDeflection> cir
     ) {
         if (!((Object) this instanceof LivingEntity entity)) return;
+        // Sprout Squad: only shots bounce back (arrows, tridents, the mod's peas and spikes); fireballs, potions, wind
+        // charges and pearls were sent back too and now hit the blocker, as vanilla shields have them
+        if (!(projectile instanceof AbstractArrow) && !(projectile instanceof PazProjectile)) return;
         // Sprout Squad: piercing projectiles go through, as vanilla shields let them (and as the original's changelog says
         // for Block Projectile items); they were sent back
         if (projectile instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0) return;

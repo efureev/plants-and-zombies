@@ -334,9 +334,16 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         if (!blocked || damage > 0.0F) original.call(entity, source);
     }
 
+    // Sprout Squad: only for the mod's own blockers (the Newspaper's partial block); a block with any other item
+    // keeps its vanilla knockback
     @Inject(method = "blockedByItem", at = @At("HEAD"), cancellable = true)
     private void plantz$preventKnockbackWhileBlocking(LivingEntity defender, DamageSource source, float damage, boolean fullyBlocked, CallbackInfo ci) {
-        ci.cancel();
+        ItemStack blocker = defender.getItemBlockingWith();
+        if (blocker == null) {
+            ItemStack chest = defender.getItemBySlot(EquipmentSlot.CHEST);
+            if (chest.has(PazComponents.WORN_BODY_BLOCKER)) blocker = chest;
+        }
+        if (blocker != null && net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(blocker.getItem()).getNamespace().equals(PazMain.MODID)) ci.cancel();
     }
 
 }

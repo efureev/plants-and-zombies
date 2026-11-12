@@ -130,7 +130,10 @@ public class ZombieMixin implements ZombieRaider {
 
         Zombie entity = (Zombie) (Object) this;
         if (!entity.is(PazTags.EntityTypes.CAN_BE_LEADER)) {
-            PazZombie.Companion.removeLeaderModifiers(entity);
+            // Sprout Squad: only the mod's own zombies lose vanilla's leader bonus (it multiplies max health by up
+            // to 4); zombie villagers, zombified piglins and other mods' zombies keep it
+            if (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).getNamespace().equals(joshxviii.plantz.PazMain.MODID))
+                PazZombie.Companion.removeLeaderModifiers(entity);
             return;
         }
 

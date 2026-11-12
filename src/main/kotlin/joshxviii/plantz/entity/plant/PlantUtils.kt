@@ -91,8 +91,11 @@ fun Plant.processWateringItem(player: Player, item: ItemStack, hand: Interaction
         }
         (hasStoredWater) -> {
             this.playSound(PazSounds.WATERING_CAN)
-            if (!infiniteWater) item.set(PazComponents.STORED_WATER, item.get(PazComponents.STORED_WATER)?.removeWater(2))
-            2
+            // Sprout Squad: the can gives what it has (1 water left gave 2)
+            val stored = item.get(PazComponents.STORED_WATER)!!
+            val given = if (infiniteWater) 2 else minOf(2, stored.storedWater)
+            if (!infiniteWater) item.set(PazComponents.STORED_WATER, stored.removeWater(given))
+            given
         }
         else -> 0
     }

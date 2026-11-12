@@ -241,6 +241,10 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 entity.yHeadRot = yaw
             }
 
+            // Sprout Squad: a plant goes to the nearest player within 64 blocks; with nobody there nothing is planted
+            // (a wild plant fights players and plants)
+            val owner = if (entity is TamableAnimal) level.getNearestPlayer(entity, 64.0) ?: run { entity.discard(); return false } else null
+
             if (!level.addFreshEntity(entity)) {
                 entity.discard()
                 return false
@@ -249,9 +253,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             entity.playSound(SoundEvents.BIG_DRIPLEAF_PLACE)
             level.gameEvent(null, GameEvent.ENTITY_PLACE, spawnPos)
             if (sunCost > 0) battery.removeSun(sunCost)
-            level.getNearestPlayer(entity, 64.0)?.let {
-                if (entity is TamableAnimal) entity.tame(it)
-            }
+            if (entity is TamableAnimal && owner != null) entity.tame(owner)
             return true
         }
 

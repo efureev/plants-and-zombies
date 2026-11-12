@@ -137,3 +137,11 @@ Found while launching the port; they are present in the Fabric version too. Fixe
 | Blocking items sent back piercing projectiles, although vanilla shields let them through and the original's changelog says Block Projectile items do | Piercing arrows and peas pass (`EntityProjectileDeflectionMixin`) |
 | The zombies' "walked into a plant" target goal searched every plant within the zombie's whole follow range, for every zombie every other tick, to find one touching its hitbox | It searches the hitbox only |
 | A Pea asked whether it is on fire on the client too (fire rendering) and cast the level to `ServerLevel` there | No cast on the client |
+| Blocking sent back every projectile, fireballs, potions, wind charges and pearls included | Only arrows, tridents and the mod's projectiles are sent back (`EntityProjectileDeflectionMixin`) |
+| The knockback of a partly blocked hit was cancelled for every blocking item, other mods' included | Cancelled only for the mod's own blockers (`LivingEntityMixin.plantz$preventKnockbackWhileBlocking`) |
+| A Watering Can with 1 water left gave a plant 2 | It gives what it has |
+| A dispenser with no player within 64 blocks planted a wild plant, which fights players and plants | It plants nothing then (`SeedPacketItem.tryPlantFromDispenser`) |
+| Taking sun out of a Solar Battery onto a slot ignored what the slot accepts: 64 sun went into the Letter's 1-item attachment slot and were sealed into the letter | Only what the slot takes (`SunBatteryItem`) |
+| Every flag drew its cracks with breaker id 0, and a client keeps one crack per id: of several damaged flags only one showed cracks | Each flag has its own id (`FlagBlockEntity.crackId`) |
+| Villagers fled every zombie of the `zombie_raider` tag, hypnotized ones and players' machines included | Not those (`VillagerHostilesSensorMixin`) |
+| Every zombie outside `can_be_leader` lost vanilla's leader bonus, zombie villagers and zombified piglins included | Only the mod's own zombies lose it (`ZombieMixin.checkForLeader`) |
