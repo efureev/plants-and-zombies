@@ -137,14 +137,19 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
     @Inject(method = "onEquipItem", at = @At("TAIL"))
     private void plantz$checkFloatTag(EquipmentSlot slot, ItemStack oldStack, ItemStack stack, CallbackInfo ci) {
         if ((LivingEntity) (Object) this instanceof PathfinderMob mob) {
-            if (stack.is(PazItems.DUCKY_TUBE) && slot == EquipmentSlot.LEGS) {
+            boolean wasTube = oldStack.is(PazItems.DUCKY_TUBE);
+            boolean isTube = stack.is(PazItems.DUCKY_TUBE);
+            if (slot != EquipmentSlot.LEGS || wasTube == isTube) return;
+            if (isTube) {
                 prevFloatTag = mob.getNavigation().canFloat();
                 prevWaterMalus = mob.getPathfindingMalus(PathType.WATER);
                 mob.getNavigation().setCanFloat(true);
-            }
-            else if (oldStack.is(PazItems.DUCKY_TUBE) && slot == EquipmentSlot.LEGS) {
-                mob.getNavigation().setCanFloat(prevFloatTag);
                 mob.setPathfindingMalus(PathType.WATER, 0.0F);
+            }
+            else {
+                // restore what the mob had before the tube (it used to be left at 0: mobs kept walking into water)
+                mob.getNavigation().setCanFloat(prevFloatTag);
+                mob.setPathfindingMalus(PathType.WATER, prevWaterMalus);
             }
         }
     }

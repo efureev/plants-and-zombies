@@ -44,10 +44,11 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
             val senderBE = level.getBlockEntity(menu.data.blockPos) as? MailboxBlockEntity ?: return
             if (menu.availableMailboxes.none { it.blockPos == targetPos }) return
 
-            val targetBE = level.getBlockEntity(targetPos) as? MailboxBlockEntity
+            val targetBE = loadedMailbox(level, targetPos)
             val result = trySendStack(level, menu.mailSlot.item.copy(), targetPos)
 
-            if (result == MailboxSendResult.SUCCESS) {
+            // Sprout Squad: queued mail has left too; left in the slot it would be sent again and again
+            if (result.isSent()) {
                 menu.mailSlot.set(ItemStack.EMPTY)
                 menu.broadcastChanges()
                 senderBE.setChanged()
@@ -64,28 +65,34 @@ data class SendMailRequestPayload(val targetPos: BlockPos) : CustomPacketPayload
                     Component.translatable("container.sproutsquad.mailbox_full", targetBE?.name ?: Component.translatable("item.sproutsquad.mailbox")).withColor(0xFF0000)
                 ))
             }
-            PazCriteria.SEND_MAIL.trigger(player, result == MailboxSendResult.SUCCESS)
+            PazCriteria.SEND_MAIL.trigger(player, result.isSent())
         }
 
         fun trySendStack(level: ServerLevel, stack: ItemStack, targetPos: BlockPos): MailboxSendResult {
             if (stack.isEmpty) return MailboxSendResult.FAIL
+            // Sprout Squad: checked first. getBlockEntity loads the chunk on the spot, so every letter loaded the
+            // target's chunk on the server thread and the queue below was never used.
+            if (!level.isLoaded(targetPos)) {// the target's chunk is not loaded: queue the mail
+                level.getMailboxMailQueue().queue(targetPos, stack)
+                return MailboxSendResult.QUEUED
+            }
             val targetBE = level.getBlockEntity(targetPos) as? MailboxBlockEntity
 
             return when {
                 targetBE != null -> {// the mailbox is present, try to insert mail
                     if (MailboxMailQueue.tryInsertIntoMailbox(targetBE, stack)) MailboxSendResult.SUCCESS else MailboxSendResult.FULL
                 }
-                level.isLoaded(targetPos) -> {// the chunk is loaded, but the mailbox is missing. discard
+                else -> {// the chunk is loaded, but the mailbox is missing. discard
                     level.getMailboxMailQueue().discardFor(targetPos)
                     MailboxManager.unregisterMailbox(level, targetPos)
                     MailboxSendResult.DISCARDED
                 }
-                else -> {// otherwise queue the mail
-                    level.getMailboxMailQueue().queue(targetPos, stack)
-                    MailboxSendResult.QUEUED
-                }
             }
         }
+
+        /** The target mailbox, without loading its chunk. */
+        fun loadedMailbox(level: ServerLevel, pos: BlockPos): MailboxBlockEntity? =
+            if (level.isLoaded(pos)) level.getBlockEntity(pos) as? MailboxBlockEntity else null
     }
 
     override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = ID
@@ -96,5 +103,8 @@ enum class MailboxSendResult {
     FAIL,
     FULL,
     QUEUED,
-    DISCARDED
+    DISCARDED;
+
+    /** The mail left the sender: delivered now or queued until the target mailbox loads. */
+    fun isSent(): Boolean = this == SUCCESS || this == QUEUED
 }

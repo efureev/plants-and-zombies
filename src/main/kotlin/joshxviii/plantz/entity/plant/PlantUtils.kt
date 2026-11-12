@@ -202,6 +202,8 @@ fun Plant.pumpkinSeedInteraction(itemStack: ItemStack, cantAfford: Boolean, play
     if (this.hasPumpkinArmor()) return PacketInteractionResult.NO_INTERACTION
     if (this !is Pumpkin) {
         if (this.`is`(PazTags.EntityTypes.CANNOT_PUMPKIN)) return PacketInteractionResult.NO_INTERACTION
+        // Sprout Squad: the armor costs sun like planting does; without this check it was free
+        if (cantAfford) return PacketInteractionResult.CANT_AFFORD
         val pumpkinType = itemStack.get(DataComponents.ENTITY_DATA)?.type()
         if (dev.efureev.sproutsquad.fixes.PlantingCooldown.refuse(player, pumpkinType)) return PacketInteractionResult.NO_INTERACTION
         applyPumpkinArmor(pumpkinData = itemStack.get(DataComponents.ENTITY_DATA))

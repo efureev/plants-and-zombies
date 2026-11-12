@@ -38,9 +38,14 @@ data class UpdateCollectionBoxPayload(
             val level = player.level()
 
             val be = level.getBlockEntity(payload.collectionBoxPos) as? MailCollectionBoxEntity ?: return
-            if (player.containerMenu !is MailCollectionBoxMenu) return
+            val menu = player.containerMenu as? MailCollectionBoxMenu ?: return
+            // Sprout Squad: only the box this player has open, and only a mailbox the server listed to them
+            // (any collection box in the level could be pointed anywhere, losing its mail into the queue)
+            if (menu.data.blockPos != payload.collectionBoxPos || !menu.stillValid(player)) return
+            val target = payload.selectedMailbox
+            if (target != null && menu.availableMailboxes.none { it.blockPos == target }) return
 
-            be.selectedMailbox = payload.selectedMailbox
+            be.selectedMailbox = target
             be.setChanged()
         }
     }

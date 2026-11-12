@@ -10,10 +10,14 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.MobCategory
+import net.minecraft.world.entity.SpawnPlacementTypes
+import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.item.CreativeModeTab
+import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 
@@ -35,6 +39,7 @@ object SquadEntities {
         val type: DeferredHolder<EntityType<*>, out EntityType<out Plant>>,
         val sunCost: Int,
         val attributes: Plant.Companion.PlantAttributes,
+        val spawnRules: SpawnPlacements.SpawnPredicate<Plant>,
     )
 
     private val plantEntries = mutableListOf<PlantEntry>()
@@ -55,6 +60,15 @@ object SquadEntities {
         modBus.addListener(FMLCommonSetupEvent::class.java) { event ->
             event.enqueueWork { plantEntries.forEach { PazConfig.registerDefaultSunCost("${PazMain.MODID}:${it.name}", it.sunCost) } }
         }
+        // On the ground like the original's plants: without a rule, a structure's spawn_overrides
+        // (the Garden Shack) place the plant anywhere in its piece, on the roof or in the water.
+        modBus.addListener(RegisterSpawnPlacementsEvent::class.java) { event ->
+            plantEntries.forEach { entry ->
+                @Suppress("UNCHECKED_CAST")
+                event.register(entry.type.get() as EntityType<Plant>, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    entry.spawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE)
+            }
+        }
     }
 
     /** Seed packets of our plants, appended to the original plant list in the creative tabs. */
@@ -69,6 +83,7 @@ object SquadEntities {
         height: Float = 1.0f,
         sunCost: Int,
         attributes: Plant.Companion.PlantAttributes = Plant.Companion.PlantAttributes(),
+        spawnRules: SpawnPlacements.SpawnPredicate<Plant> = SpawnPlacements.SpawnPredicate(Plant::checkPlantSpawnRules),
     ): DeferredHolder<EntityType<*>, EntityType<T>> {
         val holder = ENTITY_TYPES.register(name) { id ->
             EntityType.Builder.of(factory, MobCategory.CREATURE)
@@ -76,7 +91,7 @@ object SquadEntities {
                 .eyeHeight(height * 0.85f)
                 .build(ResourceKey.create(Registries.ENTITY_TYPE, id))
         }
-        plantEntries += PlantEntry(name, holder, sunCost, attributes)
+        plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules)
         return holder
     }
 }

@@ -12,10 +12,12 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.SpawnPlacementTypes
+import net.minecraft.world.entity.SpawnPlacements
 
 /**
  * Checklist for Sprout Squad's own plants (docs/en/WORKSHOP.md), as a GameTest: every plant in
- * [SquadEntities] must spawn with its declared health, have a sun cost, be in the `plant` tag, have a seed packet
+ * [SquadEntities] must spawn with its declared health, have a sun cost and spawn rules, be in the `plant` tag, have a seed packet
  * recipe, textures (main and `_sleep`), a seed packet icon and en/ru names.
  * Registered in [SquadGameTests].
  */
@@ -37,6 +39,8 @@ object SquadPlantsGameTest {
             // the value itself may be tuned in config/sproutsquad/server.json, only check that it is known
             if (PazConfig.getSunCost(type) < 0) problem("no sun cost (not registered in PazConfig)")
             if (!type.builtInRegistryHolder().`is`(PazTags.EntityTypes.PLANT)) problem("not in #${PazMain.MODID}:plant (add it to squad_plants.json)")
+            // without spawn rules a structure's spawn_overrides place it anywhere in the piece: on roofs, in water
+            if (SpawnPlacements.getPlacementType(type) != SpawnPlacementTypes.ON_GROUND) problem("no spawn rules (SquadEntities registers them)")
 
             val recipe = ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(PazMain.MODID, "${name}_seed_packet"))
             if (helper.level.server.recipeManager.byKey(recipe).isEmpty) problem("no recipe ${recipe.identifier()}")

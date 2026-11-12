@@ -62,6 +62,8 @@ object PazClientNetwork {
 
         event.register(ServerConfigResponsePayload.ID) { payload, context ->
             context.enqueueWork {
+                // Sprout Squad: singleplayer and LAN host share PazConfig with their own server; keep its object
+                if (Minecraft.getInstance().isLocalServer) return@enqueueWork
                 try {
                     PazConfig.server = PazConfig.GSON.fromJson(payload.json, ServerConfig::class.java)
                     PazMain.LOGGER.info("Server config synced!")

@@ -11,7 +11,7 @@ import net.neoforged.neoforge.common.world.ModifiableBiomeInfo
 
 /**
  * Adds every spawn declared through [PazSpawnPlacements.addBiomeSpawn] to the biomes in its tag
- * (Fabric: BiomeModifications.addSpawn). Enabled by `data/plantz/neoforge/biome_modifier/spawns.json`.
+ * (Fabric: BiomeModifications.addSpawn). Enabled by `data/sproutsquad/neoforge/biome_modifier/spawns.json`.
  */
 object PazSpawnsBiomeModifier : BiomeModifier {
     val CODEC: MapCodec<PazSpawnsBiomeModifier> = MapCodec.unit(this)

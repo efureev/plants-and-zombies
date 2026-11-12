@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Rewrite `plantz:` namespaces inside NBT structure files (needs `pip install nbtlib`).
 
+Renames both string values (ids such as `plantz:browncoat`) and compound keys (the mod's
+entity data such as `plantz:IsHypnotized`, which the code now reads as `sproutsquad:IsHypnotized`).
 Usage: python3 tools/upstream/nbt_rename.py [--dry] FILE...
 """
-import gzip
 import sys
 
 import nbtlib
@@ -15,6 +16,10 @@ OLD, NEW = "plantz:", "sproutsquad:"
 def walk(tag, hits):
     if isinstance(tag, Compound):
         for k in list(tag.keys()):
+            if k.startswith(OLD):
+                hits.append(k)
+                tag[NEW + k[len(OLD):]] = tag.pop(k)
+                k = NEW + k[len(OLD):]
             v = tag[k]
             if isinstance(v, String) and OLD in v:
                 hits.append(str(v))
