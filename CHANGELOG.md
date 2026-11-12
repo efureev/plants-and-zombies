@@ -1,4 +1,4 @@
-# Sprout Squad — Unreleased
+# Sprout Squad 0.2.1
 Changes since Sprout Squad 0.2.0. Everything after this section is the changelog of the original Plants & Zombies mod.
 
 ### Fixes
