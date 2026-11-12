@@ -680,7 +680,9 @@ object PazEntities {
     )
     @JvmField val ZOMBIE_GOAT: EntityType<ZombieGoat> =  registerZombie(
         "zombie_goat",
-        EntityType.Builder.of(::ZombieGoat, MobCategory.CREATURE)
+        // Sprout Squad: a monster like the other zombies (it was CREATURE, so its night spawns from the monster
+        // lists ignored the monster cap and took the animals' place)
+        EntityType.Builder.of(::ZombieGoat, MobCategory.MONSTER)
             .sized(0.68F, 0.84F)
             .passengerAttachments(0.78F)
             .clientTrackingRange(10),

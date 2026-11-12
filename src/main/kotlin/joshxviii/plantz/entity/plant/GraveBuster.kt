@@ -65,10 +65,13 @@ class GraveBuster(type: EntityType<out Plant>, level: Level) : Plant(type, level
         }
 
         override fun doAction(): Boolean {
-            graveBuster.discard()
             val posBelow = graveBuster.blockPosition().below()
             val level = graveBuster.level() as? ServerLevel?: return false
             if (level.getBlockState(posBelow).`is`(PazBlocks.GRAVESTONE)) {
+                // Sprout Squad: it vanished before checking the gravestone (gone during the wind-up: nothing busted),
+                // and its pumpkin armor went with it
+                graveBuster.restorePumpkinFromArmor()
+                graveBuster.discard()
                 level.destroyBlock(posBelow, false, graveBuster)
                 // spawn loot
                 val params: LootParams = LootParams.Builder(level)

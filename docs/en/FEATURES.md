@@ -95,7 +95,7 @@ About wild plants:
 - Most wild attackers fight only zombies. Careful: wild Cherry Bombs, Doom-shrooms, Ice-shrooms, Chompers, Bonk Choys, Lightning Reeds, Tangle Kelp and Fire and Electric Peashooters attack players too, and wild Scaredy-shrooms hide from players.
 - Once tamed, attacking plants also fight other hostile mobs. Some of them (peashooters, pults, Cactus) leave creepers alone.
 
-**Pumpkin armor.** Use a Pumpkin seed packet on one of your plants (it costs the Pumpkin's 6 sun): the plant gets a pumpkin shell that absorbs 35 damage before breaking. You can also use another plant's seed packet on a planted Pumpkin to put that plant inside. Shears take the shell off and give the Pumpkin seed packet back.
+**Pumpkin armor.** Use a Pumpkin seed packet on one of your plants (it costs the Pumpkin's 6 sun): the plant gets a pumpkin shell that absorbs 35 damage before breaking. You can also use another plant's seed packet on a planted Pumpkin to put that plant inside. Shears take the shell off a plant you may tend and give the Pumpkin seed packet back; they wear by 1.
 
 **Plantz Flag power-up.** Plants within 5 blocks of a [Plantz Flag](#flags) act 20% faster.
 

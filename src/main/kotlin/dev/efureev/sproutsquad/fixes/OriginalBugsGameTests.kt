@@ -2,10 +2,18 @@ package dev.efureev.sproutsquad.fixes
 
 import com.google.gson.JsonParser
 import joshxviii.plantz.PazBlocks
+import joshxviii.plantz.PazComponents
+import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.ai.ZombieState
+import joshxviii.plantz.ai.goal.WakeUpSleepingPlantsGoal
+import joshxviii.plantz.entity.plant.GraveBuster
+import joshxviii.plantz.inventory.LetterMenu
+import joshxviii.plantz.item.component.LetterDataComponent
+import joshxviii.plantz.mixin.MobAccessor
+import net.minecraft.world.item.Items
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.entity.PlantPotMinecart
@@ -254,6 +262,104 @@ object OriginalBugsGameTests {
             }
             helper.assertTrue(hits == 1, "a wave started on tick $start panics $hits times")
         }
+        helper.succeed()
+    }
+
+    private fun armoredPlant(helper: GameTestHelper, owner: Player): Plant {
+        val plant = helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(0, 1, 0))
+        plant.tame(owner)
+        plant.applyPumpkinArmor(pumpkinData = TypedEntityData.of(PazEntities.PUMPKIN, CompoundTag()))
+        return plant
+    }
+
+    /** Shears take pumpkin armor only off a plant the player may tend, and wear like on sheep. */
+    fun shearsFollowOwnership(helper: GameTestHelper) {
+        val config = PazConfig.server
+        val coop = config.coopPlanting
+        val owner = helper.makeMockPlayer(GameType.SURVIVAL)
+        val stranger = helper.makeMockPlayer(GameType.SURVIVAL)
+        val plant = armoredPlant(helper, owner)
+        try {
+            config.coopPlanting = false
+            stranger.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(Items.SHEARS))
+            plant.mobInteract(stranger, InteractionHand.MAIN_HAND)
+            helper.assertTrue(plant.hasPumpkinArmor(), "a stranger sheared the pumpkin armor off someone else's plant")
+            val shears = ItemStack(Items.SHEARS)
+            owner.setItemInHand(InteractionHand.MAIN_HAND, shears)
+            plant.mobInteract(owner, InteractionHand.MAIN_HAND)
+            helper.assertTrue(!plant.hasPumpkinArmor(), "the owner could not shear the pumpkin armor off")
+            helper.assertTrue(shears.damageValue == 1, "the shears did not wear (damage ${shears.damageValue})")
+        } finally {
+            config.coopPlanting = coop
+            helper.level.getEntitiesOfClass(Entity::class.java, AABB(helper.absolutePos(BlockPos(0, 1, 0))).inflate(2.0)) { it !is Player }.forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** A Grave Buster whose gravestone is gone before it busts stays (it vanished for nothing). */
+    fun graveBusterNeedsGrave(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), PazBlocks.GRAVESTONE)
+        val buster = helper.spawn(PazEntities.GRAVE_BUSTER, pos)
+        buster.tame(helper.makeMockPlayer(GameType.SURVIVAL))
+        try {
+            helper.setBlock(pos.below(), Blocks.AIR) // broken during the wind-up
+            GraveBuster.BustGraveGoal(buster).doAction()
+            helper.assertTrue(!buster.isRemoved, "the Grave Buster vanished with no gravestone to bust")
+        } finally {
+            buster.discard()
+        }
+        helper.succeed()
+    }
+
+    /** A Coffee Bean with nobody left to wake is not used up (it vanished anyway). */
+    fun coffeeBeanNeedsSleeper(helper: GameTestHelper) {
+        val bean = helper.spawn(PazEntities.COFFEE_BEAN, BlockPos(0, 1, 0))
+        try {
+            val goal = (bean as MobAccessor).goalSelector.availableGoals.map { it.goal }.filterIsInstance<WakeUpSleepingPlantsGoal>().single()
+            helper.assertTrue(goal.targets.isEmpty(), "the test bean has someone to wake")
+            helper.assertTrue(!goal.doAction(), "the Coffee Bean counts waking nobody as a success")
+        } finally {
+            bean.discard()
+        }
+        helper.succeed()
+    }
+
+    /** A Citron just planted walks to its targets (it got the goal only after a reload or a push). */
+    fun citronChasesWhenNew(helper: GameTestHelper) {
+        val citron = helper.spawn(PazEntities.CITRON, BlockPos(0, 1, 0))
+        try {
+            val goals = (citron as MobAccessor).goalSelector.availableGoals.map { it.goal }
+            helper.assertTrue(goals.any { it === citron.walkGoal }, "a new Citron has no goal to walk to its target")
+        } finally {
+            citron.discard()
+        }
+        helper.succeed()
+    }
+
+    /** The letter menu writes the attachment only into the letter it was opened on (another letter switched into the hand got it too). */
+    fun letterMenuKeepsItsLetter(helper: GameTestHelper) {
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val opened = ItemStack(PazItems.LETTER).apply { set(PazComponents.LETTER_DATA, LetterDataComponent(item = ItemStack(Items.DIAMOND))) }
+        val other = ItemStack(PazItems.LETTER)
+        player.inventory.setItem(0, opened)
+        player.inventory.setItem(1, other)
+        player.inventory.selectedSlot = 0
+        val menu = LetterMenu(0, player.inventory, 0)
+        player.inventory.selectedSlot = 1 // a modified client can switch hotbar slots with the screen open
+        helper.assertTrue(!menu.stillValid(player), "the menu stays open on another letter")
+        menu.removed(player)
+        val leaked = other.get(PazComponents.LETTER_DATA)?.item ?: ItemStack.EMPTY
+        helper.assertTrue(leaked.isEmpty, "the other letter got the attachment ${leaked.hoverName.string}")
+        helper.succeed()
+    }
+
+    /** Two letters with the same content are equal components (ItemStack inside compared by content). */
+    fun letterDataEquality(helper: GameTestHelper) {
+        val a = LetterDataComponent(item = ItemStack(Items.DIAMOND), pages = listOf("hi"))
+        val b = LetterDataComponent(item = ItemStack(Items.DIAMOND), pages = listOf("hi"))
+        helper.assertTrue(a == b && a.hashCode() == b.hashCode(), "equal letters are different components")
+        helper.assertTrue(a != b.copy(item = ItemStack(Items.EMERALD)), "letters with different attachments are equal")
         helper.succeed()
     }
 

@@ -56,6 +56,12 @@ class Citron(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
         alwaysFaceTarget = false
     )
 
+    // Sprout Squad: registerGoals runs in the Mob constructor, before these goals exist, so the walk goal came only
+    // with reassessNavigation (a reload or a push): a new Citron never went after its target
+    init {
+        goalSelector.addGoal(3, walkGoal)
+    }
+
     override fun canWalk(): Boolean = true
 
     override fun attackedWithGlove(attacker: LivingEntity, item: ItemStack, hand: InteractionHand) {

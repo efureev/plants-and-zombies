@@ -95,3 +95,13 @@ Found while launching the port; they are present in the Fabric version too. Fixe
 | A Dye Blaster shot wore the blaster by 2: once in `onUseTick` and once more in the vanilla `shoot` | Worn by 1 per shot |
 | An unknown state number in a zombie's or a plant's saved data (edited NBT, a newer version) crashed loading the chunk: the enum was indexed with no bounds check | Loads idle (`PazZombie`, `Plant`) |
 | 19 blocks (alloy blocks, flags, pots, the Gravestone…) had no `block.*` name, only their item's, so mods that show block names (Jade and the like) printed the key | Names added in en_us and ru_ru |
+| F2: the Zombie Goat's entity type is a `CREATURE`, so its night spawns from the monster lists did not count against the monster cap (goats kept spawning past it) and took the animals' cap | A `MONSTER`, like the other zombies |
+| Shears took pumpkin armor off anyone's plant (no ownership check, unlike the shovel and the glove) and did not wear | The usual ownership rules; the shears lose 1 durability |
+| A Grave Buster vanished before checking that its gravestone was still there: one broken during the wind-up left nothing; with the Coffee Bean it also destroyed its pumpkin armor | Checks first; both leave their pumpkin behind |
+| A Coffee Bean was used up when the plant it was going to wake woke up or left during the wind-up (waking nobody counted as a success) | Used up only if somebody woke up (`WakeUpSleepingPlantsGoal`) |
+| A newly planted Citron never went after its target: the walk goal was added only on a reload or a ball-form change (`registerGoals` runs before the goal exists) | Added when the Citron is created |
+| The Mailbox and Collection Box address lists scrolled until a single address was left (the range was `size - 1` instead of `size - shown rows`) | The last page is full |
+| The Letter menu read the letter from the hand each time, so another letter switched into the hand with the screen open (possible with a modified client) got the attachment while the first kept it | The menu stays on the letter it was opened on and closes if it leaves the hand |
+| Raiders in unloaded chunks counted as alive even when they do not count towards the raid health (an Engineer's bots), so the final wave could not be won | Counted like loaded raiders (`ZombieRaid.getAliveRaiders`) |
+| `LetterDataComponent` holds an `ItemStack`, which has no value equality, so two letters with the same content were different components | `equals`/`hashCode` compare the attachment by content |
+| Without the `boss_slayer` advancement (removed by a datapack) a boss kill threw inside the raid tick | The trigger does nothing then (`BossDefeatTrigger`) |

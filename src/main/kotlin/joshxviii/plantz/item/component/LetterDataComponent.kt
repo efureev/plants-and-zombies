@@ -17,6 +17,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.item.component.TooltipProvider
+import java.util.Objects
 import java.util.function.Consumer
 import java.util.function.IntFunction
 
@@ -28,6 +29,15 @@ data class LetterDataComponent(
     val signed: Boolean = false,
     val author: String = "",
 ) : TooltipProvider {
+    // Sprout Squad: ItemStack has no value equality, so two letters with the same attachment were different
+    // components (components must compare by content); the attachment is compared like ItemStack.matches
+    override fun equals(other: Any?): Boolean = this === other || (other is LetterDataComponent
+        && background == other.background && font == other.font && pages == other.pages
+        && signed == other.signed && author == other.author && ItemStack.matches(item, other.item))
+
+    override fun hashCode(): Int =
+        Objects.hash(background, font, pages, signed, author, ItemStack.hashItemAndComponents(item), item.count)
+
     override fun addToTooltip(
         context: Item.TooltipContext,
         consumer: Consumer<Component>,

@@ -15,9 +15,10 @@ class BossDefeatTrigger : SimpleCriterionTrigger<BossDefeatTrigger.TriggerInstan
     override fun codec(): Codec<TriggerInstance> = TriggerInstance.CODEC
 
     fun trigger(player: ServerPlayer) {
+        // Sprout Squad: a datapack without boss_slayer made this throw inside the raid tick
         val advancement = player.level().server.advancements
             .get(pazResource("boss_slayer"))
-            ?: error("Missing required advancement sproutsquad:boss_slayer")
+            ?: return
         val defeatedBossCount = player.advancements
             .getOrStartProgress(advancement)
             .completedCriteria

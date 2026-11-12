@@ -28,6 +28,6 @@ A protective shell: put over another plant, it soaks up damage before the plant 
   - plant a Pumpkin first and use another plant's seed packet on it: the plant grows inside, the Pumpkin's remaining health becomes its armor, and you pay that plant's cost.
 - Pumpkin armor takes the damage first; the plant is hurt only after it breaks. Magic, wither, drowning, freezing, thorns, starving, suffocating in a wall, cramming, drying out and the void go straight through.
 - A plant in a Pumpkin can stand on any block.
-- Shears take the Pumpkin off and drop a Pumpkin seed packet.
+- Shears take the Pumpkin off (from a plant you may tend) and drop a Pumpkin seed packet; they wear by 1.
 - Digging the plant up with a shovel puts the Pumpkin back in its place with its remaining health. When the [Doom Shroom](doomshroom.md) explodes or the [Squash](squash.md) slams, the Pumpkin stays behind.
 - Cannot go on the [Tangle Kelp](tanglekelp.md), the [Sea Shroom](seashroom.md) or another Pumpkin.

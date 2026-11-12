@@ -970,7 +970,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
             }
             if (itemStack.`is`(Items.SHEARS)) {
                 if (hasPumpkinArmor()) {
+                    // Sprout Squad: the same ownership rules as the shovel and the glove, and the shears wear as on sheep
+                    if (!verifyOwner(player)) return InteractionResult.FAIL
                     removePumpkinArmor()
+                    itemStack.hurtAndBreak(1, player, hand.asEquipmentSlot())
                     return InteractionResult.SUCCESS
                 }
             }

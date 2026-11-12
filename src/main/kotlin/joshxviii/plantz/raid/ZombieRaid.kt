@@ -582,7 +582,9 @@ class ZombieRaid(
     fun currentWave(): CompletedWave? = waves.lastOrNull()
     fun getLeaders(): List<Zombie> = waveZombieMap.values.flatMap { it.filter { z -> z.isLeader() } }
     fun getBosses(): List<Zombie> = waveZombieMap.values.flatMap { it.filter { z -> z.isBoss() } }
-    fun getAliveRaiders(): Int = waveZombieMap.values.stream().mapToInt { it.map { z -> if (z.getEffectiveRaidHealth()>0f) 1 else 0 }.sum() }.sum() + pendingRaiders.size
+    // Sprout Squad: unloaded raiders count like loaded ones, only if they count towards the raid health (an unloaded
+    // Engineer's bot kept the final wave from ending)
+    fun getAliveRaiders(): Int = waveZombieMap.values.stream().mapToInt { it.map { z -> if (z.getEffectiveRaidHealth()>0f) 1 else 0 }.sum() }.sum() + pendingRaiders.values.count { it.health > 0f }
     private fun raidDetails(level: ServerLevel): RaidDetails {
         val flag = level.getBlockEntity(center) as? FlagBlockEntity
         val bosses = getBosses()
