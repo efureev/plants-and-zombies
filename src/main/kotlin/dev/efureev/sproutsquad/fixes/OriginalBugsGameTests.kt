@@ -35,6 +35,7 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.ai.attributes.Attributes
@@ -443,6 +444,50 @@ object OriginalBugsGameTests {
             helper.assertTrue(listed.any { it.blockPos == far }, "the far mailbox is missing from the list")
         } finally {
             MailboxManager.unregisterMailbox(helper.level, far)
+        }
+        helper.succeed()
+    }
+
+    /** A natural plant spawn rolls the 60% chance its rule describes (`A && B || C && D` skipped it). */
+    fun plantSpawnRoll(helper: GameTestHelper) {
+        val spot = spot(helper)
+        prepareGround(helper, spot)
+        val pos = helper.absolutePos(spot)
+        val trials = 400
+        val allowed = (1..trials).count { Plant.checkValidSpawn(helper.level, pos, EntitySpawnReason.NATURAL, helper.level.random) }
+        helper.assertTrue(allowed in (trials * 0.45).toInt()..(trials * 0.75).toInt(), "$allowed of $trials natural spawns allowed, expected about 60%")
+        helper.succeed()
+    }
+
+    /**
+     * Plants are AMBIENT, the list they spawn from, so they count against that cap and not the animals'; they may
+     * still spawn far from players, as CREATURE types do.
+     */
+    fun plantsAreAmbient(helper: GameTestHelper) {
+        val wrong = BuiltInRegistries.ENTITY_TYPE.filter { it.builtInRegistryHolder().`is`(joshxviii.plantz.PazTags.EntityTypes.PLANT) }
+            .filter { it.category != net.minecraft.world.entity.MobCategory.AMBIENT || !it.canSpawnFarFromPlayer() }
+            .map { "${BuiltInRegistries.ENTITY_TYPE.getKey(it).path} (${it.category})" }
+        helper.assertTrue(wrong.isEmpty(), "plants that are not ambient or cannot spawn far from players: ${wrong.joinToString()}")
+        helper.succeed()
+    }
+
+    /** A mob's Football Helmet wears when it blocks a projectile from above, as on a player (it never wore on mobs). */
+    fun mobHelmetWears(helper: GameTestHelper) {
+        val wearer = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        // a projectile above the wearer's eyes (melee attacks bypass head protection, #bypasses_head_protection)
+        val snowball = EntityTypes.SNOWBALL.create(helper.level, EntitySpawnReason.COMMAND)!!
+        snowball.snapTo(wearer.x, wearer.eyeY + 2.0, wearer.z, 0f, 0f)
+        try {
+            wearer.isNoAi = true
+            wearer.setItemSlot(EquipmentSlot.HEAD, ItemStack(PazItems.FOOTBALL_HELMET))
+            val healthBefore = wearer.health
+            wearer.hurtServer(helper.level, helper.level.damageSources().thrown(snowball, null), 4f)
+            val helmet = wearer.getItemBySlot(EquipmentSlot.HEAD)
+            helper.assertTrue(wearer.health == healthBefore, "the Football Helmet did not block the hit from above (health ${wearer.health} of $healthBefore)")
+            helper.assertTrue(helmet.damageValue > 0, "the zombie's Football Helmet blocked a hit from above without wearing")
+        } finally {
+            wearer.discard()
+            snowball.discard()
         }
         helper.succeed()
     }

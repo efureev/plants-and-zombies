@@ -91,7 +91,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 
 About wild plants:
 
-- They appear as ambient mobs, alone or in small groups, far from any other plant (about 42 blocks), and never near an active raid.
+- They appear as ambient mobs, alone or in small groups, far from any other plant (about 42 blocks), and never near an active raid; even then only 6 tries in 10 succeed.
 - Most wild attackers fight only zombies. Careful: wild Cherry Bombs, Doom-shrooms, Ice-shrooms, Chompers, Bonk Choys, Lightning Reeds, Tangle Kelp and Fire and Electric Peashooters attack players too, and wild Scaredy-shrooms hide from players.
 - Once tamed, attacking plants also fight other hostile mobs. Some of them (peashooters, pults, Cactus) leave creepers alone.
 
@@ -475,7 +475,7 @@ Time travel works only with the server option `enableExperimentalFeatures` turne
 | Jurassic Period | Era dimension | Ferns, parrots, pandas, ocelots, fossils |
 | Dark Ages | Era dimension | Farm animals and plenty of monsters |
 | Far Future | Era dimension | Endermen only, crystal spikes, floating particles |
-| Gnome Space | Gnome Space dimension | No way to get there in the game, only with commands (`/execute in sproutsquad:gnome_space …`) |
+| Gnome Space | Gnome Space dimension | No way to get there in the game, only with commands (`/execute in sproutsquad:gnome_space …`); gravity there is a quarter of the usual |
 
 The era dimension (`sproutsquad:time_space`) holds the four era biomes and is reached only through the [Time Machine](#time-machine).
 

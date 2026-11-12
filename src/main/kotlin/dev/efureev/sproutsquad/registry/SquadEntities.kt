@@ -86,7 +86,9 @@ object SquadEntities {
         spawnRules: SpawnPlacements.SpawnPredicate<Plant> = SpawnPlacements.SpawnPredicate(Plant::checkPlantSpawnRules),
     ): DeferredHolder<EntityType<*>, EntityType<T>> {
         val holder = ENTITY_TYPES.register(name) { id ->
-            EntityType.Builder.of(factory, MobCategory.CREATURE)
+            // AMBIENT like the original's plants (PazEntities.registerPlant)
+            EntityType.Builder.of(factory, MobCategory.AMBIENT)
+                .canSpawnFarFromPlayer()
                 .sized(width, height)
                 .eyeHeight(height * 0.85f)
                 .build(ResourceKey.create(Registries.ENTITY_TYPE, id))

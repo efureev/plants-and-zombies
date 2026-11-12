@@ -3,7 +3,7 @@
   "biomes": "#sproutsquad:has_structure/garden_shack",
   "step": "surface_structures",
   "spawn_overrides": {
-    "creature": {
+    "ambient": {
       "bounding_box": "piece",
       "spawns": [
         {

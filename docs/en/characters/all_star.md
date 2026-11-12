@@ -25,7 +25,7 @@ An armoured football player in a Football Helmet. It keeps charging at its targe
 
 - Charge: while fighting and more than 1.5 blocks from its target, every 6–9 s it whistles and dashes straight ahead for 2 s.
 - During a charge it cannot be knocked back, its hits knock back much harder, and whatever it bumps into is thrown aside: other zombies a little, players and other creatures far.
-- Steps up full blocks; wears a Football Helmet that it never drops from the slot; does not pick up items; breaks doors.
+- Steps up full blocks; wears a Football Helmet that it never drops from the slot (the helmet wears as it stops projectiles from above and can break); does not pick up items; breaks doors.
 - Shares the [traits of all mod zombies](browncoat.md#traits-of-all-mod-zombies).
 
 ## Variants

@@ -15,7 +15,10 @@ object BlockingItemBreakChance {
     @JvmStatic
     fun handle(level: Level, item: ItemStack, user: LivingEntity, damage: Float, slot: EquipmentSlot): Boolean {
         val breakChance = item.get(PazComponents.BLOCK_BREAK_CHANCE)
-        if (breakChance == null && user is Player) return false
+        // Sprout Squad: without a break chance the item wears the usual way, on mobs too. For a mob this returned true
+        // with nothing applied, so the callers skipped their own wear: an All Star's Football Helmet or a mob's shield
+        // never wore out (the Cone, buckets and the Newspaper have a break chance and are not affected)
+        if (breakChance == null) return false
         if (level !is ServerLevel) return true
 
         if (user is Player) {

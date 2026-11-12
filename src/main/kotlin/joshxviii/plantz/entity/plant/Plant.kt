@@ -120,8 +120,11 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         fun checkValidSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason, random: RandomSource): Boolean {
             val blockAtPos = level.getBlockState(pos)
             if (level.isNearRaid(pos)) return false
-            return (level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(42.0)) { it.tickCount > 0 }.isEmpty()
-                    && blockAtPos.getCollisionShape(level, pos.above()).isEmpty) || EntitySpawnReason.isSpawner(spawnReason) && random.nextFloat() < 0.6f
+            // Sprout Squad: grouped as the doc says. `A && B || C && D` left natural spawns without the 60% roll; the
+            // collision shape is the one at pos (it was asked with pos.above()). Spawners still skip the spacing.
+            val spreadOut = level.getEntitiesOfClass(Plant::class.java, AABB(pos).inflate(42.0)) { it.tickCount > 0 }.isEmpty()
+                    && blockAtPos.getCollisionShape(level, pos).isEmpty
+            return (spreadOut || EntitySpawnReason.isSpawner(spawnReason)) && random.nextFloat() < 0.6f
         }
 
         fun checkWaterSpawn(level: LevelAccessor, pos: BlockPos, spawnReason: EntitySpawnReason, random: RandomSource): Boolean {
