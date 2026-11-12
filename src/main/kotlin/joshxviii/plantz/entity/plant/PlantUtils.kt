@@ -59,7 +59,7 @@ fun Plant.processSunItem(player: Player, item: ItemStack, hand: InteractionHand,
             SoundEvents.BUBBLE_POP, 1.0f,
             receivedSun.toFloat()/sunRequiredForSeeds() + 0.9f
         )
-        if (receivedSun++ >= sunRequiredForSeeds()) awardSeedPacket(player)
+        if (++receivedSun >= sunRequiredForSeeds()) awardSeedPacket(player) // Sprout Squad: was receivedSun++, one sun too many
         funnyBounce()
         success = true
     }

@@ -475,6 +475,12 @@ class ZombieRaid(
                 zombie.setPersistenceRequired()
                 configure(zombie)
                 level.addFreshEntityWithPassengers(zombie)
+                // Sprout Squad: a raider that did not make it into the level (its join event cancelled) never ticks, so it
+                // was never removed and the wave could not be won
+                if (level.getEntity(zombie.uuid) !== zombie) {
+                    removeFromRaid(level, zombie, removeFromTotalHealth = false)
+                    return false
+                }
             }
             if (addMaxHealth) {
                 val countHealth = (zombie as? ZombieRaider)?.`plantz$getAddsHealthToRaid`() ?: true

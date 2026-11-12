@@ -61,6 +61,9 @@ class MailboxBlockEntity(
     private var heroMailBuffer: MutableList<CompletedWave> = mutableListOf()
     private var heroMailIndex: Int = 0
 
+    /** Client only: the tick this mailbox last rolled for a Garden Hero particle (see MailboxRenderer). */
+    var heroParticleTick: Int = -1
+
     companion object {
         const val HERO_MAIL_EJECT_DELAY = 50
         val DEFAULT_NAME = Component.translatable("item.sproutsquad.mailbox");

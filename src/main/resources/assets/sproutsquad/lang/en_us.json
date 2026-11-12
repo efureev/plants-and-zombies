@@ -196,6 +196,7 @@
   "item.sproutsquad.dye_blaster.description": "%s chance of consuming dye",
   "item.sproutsquad.baron_staff": "Baron's Staff",
   "item.sproutsquad.roller_skates": "Roller Skates",
+  "item.sproutsquad.roller_skates.description": "Skate while sprinting: faster, and up whole blocks",
   "item.sproutsquad.taco": "Taco",
   "item.sproutsquad.door_shield": "Door Shield",
   "item.sproutsquad.door_shield.type": "%s Shield",

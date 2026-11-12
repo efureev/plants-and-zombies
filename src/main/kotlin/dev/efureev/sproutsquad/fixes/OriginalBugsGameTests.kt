@@ -14,7 +14,9 @@ import joshxviii.plantz.inventory.LetterMenu
 import joshxviii.plantz.item.component.LetterDataComponent
 import joshxviii.plantz.mixin.MobAccessor
 import net.minecraft.world.item.Items
+import joshxviii.plantz.block.entity.FlagBlockEntity
 import joshxviii.plantz.block.entity.GravestoneBlockEntity
+import joshxviii.plantz.entity.plant.processSunItem
 import joshxviii.plantz.block.entity.SunBatteryBlockEntity
 import joshxviii.plantz.entity.PlantPotMinecart
 import joshxviii.plantz.entity.plant.Chomper
@@ -360,6 +362,66 @@ object OriginalBugsGameTests {
         val b = LetterDataComponent(item = ItemStack(Items.DIAMOND), pages = listOf("hi"))
         helper.assertTrue(a == b && a.hashCode() == b.hashCode(), "equal letters are different components")
         helper.assertTrue(a != b.copy(item = ItemStack(Items.EMERALD)), "letters with different attachments are equal")
+        helper.succeed()
+    }
+
+    /** A plant converted by lightning (Peashooter into Electric Peashooter) keeps its pumpkin armor. */
+    fun conversionKeepsPumpkin(helper: GameTestHelper) {
+        val owner = helper.makeMockPlayer(GameType.SURVIVAL)
+        val plant = armoredPlant(helper, owner)
+        val area = AABB(helper.absolutePos(BlockPos(0, 1, 0))).inflate(2.0)
+        try {
+            plant.convertToPlantType(PazEntities.ELECTRIC_PEA_SHOOTER)
+            val converted = helper.level.getEntitiesOfClass(Plant::class.java, area) { it.type == PazEntities.ELECTRIC_PEA_SHOOTER }.singleOrNull()
+            helper.assertTrue(converted != null, "the Peashooter was not converted")
+            helper.assertTrue(converted!!.hasPumpkinArmor(), "the converted plant lost its pumpkin armor")
+        } finally {
+            helper.level.getEntitiesOfClass(Entity::class.java, area) { it !is Player }.forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** Seeds come after exactly the sun a plant needs (it took one more). */
+    fun seedsAfterRequiredSun(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), Blocks.FARMLAND)
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        val plant = helper.spawn(PazEntities.SUNFLOWER, pos)
+        try {
+            plant.tame(player)
+            plant.receivedWater = 1
+            plant.seedGrowCooldown = 0
+            val required = plant.sunRequiredForSeeds()
+            val sun = ItemStack(PazItems.SUN, required)
+            repeat(required) { plant.processSunItem(player, sun, InteractionHand.MAIN_HAND, plant.testGrowConditions()) }
+            helper.assertTrue(plant.receivedSun == 0, "after $required sun (the requirement) no seeds came, ${plant.receivedSun} sun counted")
+        } finally {
+            helper.level.getEntities(null as Entity?, AABB(helper.absolutePos(pos)).inflate(2.0)) { it !is Player }.forEach { it.discard() }
+            helper.setBlock(pos.below(), Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** A Flag's passive healing is saved (only damage marked it for saving). */
+    fun flagHealingSaved(helper: GameTestHelper) {
+        val pos = BlockPos(0, 2, 0)
+        helper.setBlock(pos.below(), Blocks.STONE)
+        helper.setBlock(pos, PazBlocks.PLANTZ_FLAG_BLOCK)
+        try {
+            val flag = helper.getBlockEntity(pos, FlagBlockEntity::class.java)
+            val absolute = helper.absolutePos(pos)
+            flag.hurt(10f)
+            val hurtHealth = flag.health
+            repeat(FlagBlockEntity.HEAL_COOLDOWN_TIME - 1) { flag.tick(helper.level, absolute, helper.getBlockState(pos)) }
+            val chunk = helper.level.getChunkAt(absolute)
+            chunk.tryMarkSaved()
+            flag.tick(helper.level, absolute, helper.getBlockState(pos))
+            helper.assertTrue(flag.health > hurtHealth, "the Flag did not heal")
+            helper.assertTrue(chunk.isUnsaved, "the Flag's healing is not marked for saving")
+        } finally {
+            helper.setBlock(pos, Blocks.AIR)
+            helper.setBlock(pos.below(), Blocks.AIR)
+        }
         helper.succeed()
     }
 

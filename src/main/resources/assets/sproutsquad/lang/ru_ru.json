@@ -196,6 +196,7 @@
   "item.sproutsquad.dye_blaster.description": "Шанс потратить краску: %s",
   "item.sproutsquad.baron_staff": "Посох Барона",
   "item.sproutsquad.roller_skates": "Роликовые коньки",
+  "item.sproutsquad.roller_skates.description": "На бегу катят: быстрее и прямо на блоки",
   "item.sproutsquad.taco": "Тако",
   "item.sproutsquad.door_shield": "Щит-дверь",
   "item.sproutsquad.door_shield.type": "Щит: %s",

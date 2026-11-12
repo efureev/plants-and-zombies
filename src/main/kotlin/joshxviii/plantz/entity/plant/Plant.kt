@@ -183,6 +183,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
 
     var clientOldAttachPosition: BlockPos? = null
     var rollRotation: Quaternionf = Quaternionf()
+    /** Client only: tickCount + partial tick of the last roll update (PlantRenderer). */
+    var lastRollTime: Float = 0f
     private var nutrientSupply = NUTRIENT_SUPPLY_MAX
     private var loadedFromSave = false
 
@@ -484,6 +486,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
                 if (it is Player) newPlant.tame(it)
                 else newPlant.owner = it
             }
+            // Sprout Squad: the conversion copies only vanilla data; the pumpkin armor (and the Pumpkin in it) was lost
+            if (hasPumpkinArmor()) newPlant.applyPumpkinArmor(pumpkinArmor, pumpkinEntityData)
             // TODO custom sounds
             playSound(SoundEvents.ZOMBIE_VILLAGER_CONVERTED)
             afterConversion(newPlant)
@@ -903,7 +907,7 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     private fun isOverlappingWithOther(pos: BlockPos): Boolean {
         val otherPlantsAtPos = level().getEntitiesOfClass(Plant::class.java, AABB(pos)) { it != this }
         otherPlantsAtPos.forEach {
-            if (!it.isAlive || it.isDeadOrDying) return false
+            if (!it.isAlive || it.isDeadOrDying) return@forEach // Sprout Squad: was return false, which skipped the other plants
             if(boundingBox.intersects(it.boundingBox)) return true
         }
         return false

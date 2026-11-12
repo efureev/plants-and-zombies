@@ -68,6 +68,7 @@ class FlagBlockEntity(
             resetTime--
             if (resetTime == 0) {
                 health += maxHealth * 0.01f
+                setChanged() // Sprout Squad: healing was saved only with the next hit
 
                 level.destroyBlockProgress(0, pos, healthToDestroyProgress())
                 if (health >= maxHealth) level.destroyBlockProgress(0, pos, -1)

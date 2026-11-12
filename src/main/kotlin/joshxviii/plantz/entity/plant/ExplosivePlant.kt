@@ -81,7 +81,8 @@ abstract class ExplosivePlant(type: EntityType<out ExplosivePlant>, level: Level
 
     override fun tick() {
         super.tick()
-        if (swell == getMaxSwellTime() && !isRemoved) explode()
+        // Sprout Squad: only the server explodes; the client's own swell count removed the plant on the client alone
+        if (!level().isClientSide && swell == getMaxSwellTime() && !isRemoved) explode()
         calculateSwell()
     }
 

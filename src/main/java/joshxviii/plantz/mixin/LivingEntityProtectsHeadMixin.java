@@ -37,11 +37,13 @@ public abstract class LivingEntityProtectsHeadMixin {
             ProtectsHeadDataComponent component = item.get(PazComponents.PROTECTS_HEAD);
             if (component == null || !component.getSlot().test(slot)) continue;
             if (!component.canBlockFrom(source, entity)) continue;
+            // Sprout Squad: checked before the item wears and the block sound plays; a hit from the side or below,
+            // which is not blocked, wore the cone or bucket (and rolled its break chance) and sounded like a block
+            if (!component.isFromAbove(source, entity)) continue;
 
             float blocked = component.resolveBlockedDamage(source, remainingDamage);
             component.hurtBlockingItem(entity.level(), item, entity, slot, blocked);
             component.onBlocked(level, entity);
-            if (!component.isFromAbove(source, entity)) continue;
 
             if (blocked <= 0.0F) continue;
             totalBlocked += blocked;
