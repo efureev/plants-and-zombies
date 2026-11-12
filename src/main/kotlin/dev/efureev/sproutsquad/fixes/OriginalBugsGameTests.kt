@@ -32,6 +32,7 @@ import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.item.component.LetterDataComponent
 import joshxviii.plantz.item.component.SunCost
 import joshxviii.plantz.mixin.MobAccessor
+import joshxviii.plantz.positionPlant
 import joshxviii.plantz.raid.ZombieRaid
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
@@ -741,6 +742,87 @@ object OriginalBugsGameTests {
         } finally {
             plant.discard()
             helper.setBlock(pos.below(), Blocks.AIR)
+        }
+        helper.succeed()
+    }
+
+    /** A worn plant whose wearer is gone (a portal, a conversion, a despawn) drops as its seed packet (it fell through the world). */
+    fun wearerGoneDropsPlant(helper: GameTestHelper) {
+        val wearer = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        wearer.isNoAi = true
+        wearer.setItemSlot(EquipmentSlot.HEAD, ItemStack(PazItems.PLANT_POT_HELMET))
+        val plant = helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(0, 1, 0))
+        val area = AABB(helper.absolutePos(BlockPos(0, 1, 0))).inflate(4.0)
+        helper.assertTrue(plant.attachToEntity(wearer), "the Peashooter did not go on the helmet")
+        wearer.discard() // gone without taking the plant along
+        helper.startSequence()
+            .thenWaitUntil {
+                val packets = helper.level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity::class.java, area) {
+                    SeedPacketItem.typeFromStack(it.item) == PazEntities.PEA_SHOOTER
+                }
+                helper.assertTrue(plant.isRemoved && packets.isNotEmpty(),
+                    "the plant of a vanished wearer did not drop (removed: ${plant.isRemoved}, at y ${"%.1f".format(plant.y)})")
+            }
+            .thenExecute { helper.level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity::class.java, area).forEach { it.discard() } }
+            .thenSucceed()
+    }
+
+    /** A wearer riding something keeps its plant on its head in the same tick (only wearers on foot were followed). */
+    fun ridingWearerPlantFollows(helper: GameTestHelper) {
+        val plant = helper.spawn(PazEntities.PEA_SHOOTER, BlockPos(0, 1, 0)) // ticks before the wearer
+        val cart = helper.spawn(EntityTypes.MINECART, BlockPos(0, 1, 0))
+        val wearer = helper.spawn(EntityTypes.ZOMBIE, BlockPos(0, 1, 0))
+        wearer.isNoAi = true
+        wearer.setItemSlot(EquipmentSlot.HEAD, ItemStack(PazItems.PLANT_POT_HELMET))
+        helper.assertTrue(wearer.startRiding(cart, true, false) && plant.attachToEntity(wearer), "the wearer is not riding the cart with its plant")
+        helper.startSequence()
+            .thenExecute { cart.deltaMovement = net.minecraft.world.phys.Vec3(0.6, 0.0, 0.0) }
+            .thenIdle(1)
+            .thenExecute {
+                val before = plant.position()
+                wearer.positionPlant(plant)
+                helper.assertTrue(plant.position().distanceToSqr(before) < 1.0E-6, "the plant lagged behind its riding wearer by ${"%.2f".format(plant.position().distanceTo(before))} blocks")
+                listOf(plant, wearer, cart).forEach { it.discard() }
+            }
+            .thenSucceed()
+    }
+
+    /** A dispenser follows the plant limit and plants only into a free spot (it planted into solid blocks). */
+    fun dispenserLimitAndSpot(helper: GameTestHelper) {
+        val limits = PazConfig.server.customPlantEntityLimits
+        val key = BuiltInRegistries.ENTITY_TYPE.getKey(PazEntities.PUFF_SHROOM).toString()
+        val saved = limits[key]
+        val dispenserPos = BlockPos(0, 2, 0)
+        val front = dispenserPos.east()
+        val east = net.minecraft.core.Direction.EAST
+        helper.setBlock(dispenserPos, Blocks.DISPENSER.defaultBlockState().setValue(net.minecraft.world.level.block.DispenserBlock.FACING, east))
+        helper.setBlock(dispenserPos.above(), PazBlocks.SUN_BATTERY_BLOCK)
+        helper.setBlock(front.below(), Blocks.GRASS_BLOCK)
+        // the owner the dispenser looks for: a player in the level, without a login (and removed before it ticks)
+        val player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(helper.level, com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "dispenser-owner"))
+        player.snapTo(net.minecraft.world.phys.Vec3.atBottomCenterOf(helper.absolutePos(BlockPos(0, 1, 3))), 0f, 0f)
+        helper.level.addNewPlayer(player)
+        val area = AABB(helper.absolutePos(front)).inflate(3.0)
+        fun dispense(): Boolean {
+            val packet = SeedPacketItem.stackFor(PazEntities.PUFF_SHROOM)
+            packet.remove(PazComponents.SUN_COST) // the fresh battery has no sun
+            return SeedPacketItem.tryPlantFromDispenser(helper.level, packet, helper.absolutePos(dispenserPos), helper.absolutePos(front), east, east)
+        }
+        try {
+            helper.setBlock(front, Blocks.STONE)
+            helper.assertTrue(!dispense(), "the dispenser planted into stone")
+            helper.setBlock(front, Blocks.AIR)
+            limits[key] = 1
+            helper.spawn(PazEntities.PUFF_SHROOM, BlockPos(0, 1, 2)).tame(player) // the one Puff-shroom allowed
+            helper.assertTrue(!dispense(), "the dispenser planted over the plant limit")
+            limits.remove(key)
+            if (saved != null) limits[key] = saved
+            helper.assertTrue(dispense(), "the dispenser did not plant into a free spot under the limit")
+        } finally {
+            if (saved != null) limits[key] = saved else limits.remove(key)
+            helper.level.getEntitiesOfClass(Plant::class.java, area).forEach { it.discard() }
+            helper.level.removePlayerImmediately(player, Entity.RemovalReason.DISCARDED)
+            for (p in listOf(dispenserPos.above(), dispenserPos, front, front.below())) helper.setBlock(p, Blocks.AIR)
         }
         helper.succeed()
     }

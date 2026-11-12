@@ -145,3 +145,10 @@ Found while launching the port; they are present in the Fabric version too. Fixe
 | Every flag drew its cracks with breaker id 0, and a client keeps one crack per id: of several damaged flags only one showed cracks | Each flag has its own id (`FlagBlockEntity.crackId`) |
 | Villagers fled every zombie of the `zombie_raider` tag, hypnotized ones and players' machines included | Not those (`VillagerHostilesSensorMixin`) |
 | Every zombie outside `can_be_leader` lost vanilla's leader bonus, zombie villagers and zombified piglins included | Only the mod's own zombies lose it (`ZombieMixin.checkForLeader`) |
+| A plant worn by a mob that left without it (through a portal, by converting, by despawning) kept its on-head state: no collisions but gravity again, so it fell through the world | After 2 seconds without its wearer it drops as its seed packet, and it does not fall while it waits (`Plant.tick`) |
+| A dispenser skipped the plant limit, so a redstone clock planted without end | The owner's limit applies (`SeedPacketItem.tryPlantFromDispenser`) |
+| A dispenser planted into a solid block in front of it (both branches of the spot check were the same position) | It needs a free spot |
+| A wearer riding something is ticked through `tickPassenger`, so its plant lagged a tick behind it on the server | The plant follows riding wearers too (`ServerLevelMixin`) |
+| `canBeAffected` (a check, asked on every potion cloud tick and before an effect exists) also resynced the effect flags and built a new paint map each time | No side effects there: adding, updating, removing and loading effects sync the flags |
+| The frozen-pose cache compared entities with `Entity.equals`, i.e. by id, so a new entity with a reused id (another world) took a stale pose | Compared by identity (`LivingEntityRendererMixin`) |
+| The Digger Zombie spawn rule cast the level to `ServerLevel` | Uses `ServerLevelAccessor.getLevel()` |

@@ -21,7 +21,8 @@ Changes since Sprout Squad 0.2.0. Everything after this section is the changelog
 - Planting into a Pumpkin follows the plant limit, and a failed planting costs nothing.
 - The Potling counts for the "plant one of each plant" advancement.
 - A Watering Can with 1 water left gives 1.
-- A dispenser plants only when a player is within 64 blocks to own the plant.
+- A dispenser plants only when a player is within 64 blocks to own the plant, into a free spot and within the owner's plant limit.
+- A mob's worn plant drops as its seed packet when the mob is gone without it (it fell through the world); plants on riding wearers keep up with them.
 #### Zombies and raids
 - The Newspaper Zombie really gets angry when its paper tears, and stays angry after a reload.
 - The Zombie Goat counts as a monster for the mob cap.

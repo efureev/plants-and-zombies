@@ -228,7 +228,8 @@ abstract public class LivingEntityMixin implements PlantHeadAttachment, GardenHe
         if (newEffect.is(PazEffects.CHILLED) || newEffect.is(PazEffects.FROZEN)) {
             cir.setReturnValue(entity.canFreeze());
         }
-        updateEffects();
+        // Sprout Squad: no updateEffects() here: this is only a check, asked before the effect exists and on every
+        // potion cloud tick; adding, updating, removing and loading effects already sync the flags
     }
 
     @Inject(method = "canAttack", at = @At(value = "RETURN"), cancellable = true)

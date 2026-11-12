@@ -12,6 +12,7 @@ import net.minecraft.world.level.entity.EntityTickList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -36,6 +37,17 @@ public abstract class ServerLevelMixin {
     // the level ticks first.
     @Inject(method = "tickNonPassenger", at = @At(value = "TAIL"))
     public void tickSyncPlant(Entity entity, CallbackInfo ci) {
+        plantz$followWearer(entity);
+    }
+
+    // Sprout Squad: a wearer riding something (a boat, a minecart, a chicken) is ticked here, not in tickNonPassenger
+    @Inject(method = "tickPassenger", at = @At(value = "TAIL"))
+    private void plantz$tickSyncRidingPlant(Entity vehicle, Entity entity, CallbackInfo ci) {
+        plantz$followWearer(entity);
+    }
+
+    @Unique
+    private static void plantz$followWearer(Entity entity) {
         if (entity instanceof PlantHeadAttachment wearer && wearer.plantz$hasPlantOnHead()) {
             Plant plant = wearer.plantz$getPlant();
             if (plant != null) UtilsKt.positionPlant(entity, plant);

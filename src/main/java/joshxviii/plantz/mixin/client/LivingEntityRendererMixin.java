@@ -26,7 +26,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static joshxviii.plantz.PazModels.*;
@@ -90,9 +89,13 @@ abstract public class LivingEntityRendererMixin<T extends LivingEntity, S extend
         }
     }
 
-    /** Pose each frozen entity had when it froze; render thread only, weak keys drop unloaded entities. */
+    /**
+     * Pose each frozen entity had when it froze; render thread only, weak keys drop unloaded entities. Keys are
+     * compared by identity: Entity.equals compares ids, and a new entity with a reused id (another world) took the
+     * stale pose of the old one.
+     */
     @Unique
-    private static final Map<Entity, float[]> plantz$frozenPoses = new WeakHashMap<>();
+    private static final Map<Entity, float[]> plantz$frozenPoses = new com.google.common.collect.MapMaker().weakKeys().makeMap();
 
     @Unique
     private static final int PLANTZ_HYPNO_TINT = ARGB.opaque(0xD036FF);

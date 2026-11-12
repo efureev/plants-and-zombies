@@ -83,6 +83,8 @@ import kotlin.jvm.optionals.getOrNull
  */
 abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(type, level) {
     companion object {
+        /** How long a worn plant waits for its wearer to show up before it drops (Sprout Squad). */
+        const val WEARER_MISSING_TICKS = 40
         val LOGGER: Logger = LoggerFactory.getLogger(Plant::class.java)
         private const val NUTRIENT_SUPPLY_MAX = 160  // ticks before suffocating when on invalid ground
 
@@ -263,6 +265,9 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         getAttribute(Attributes.SCALE)?.removeModifier(LEGACY_ON_HEAD_SCALE)
         noPhysics = true
     }
+
+    /** Ticks the wearer of this plant has not been found (see [tick]). */
+    private var wearerMissingTicks = 0
 
     fun removeOnHeadEffects() {
         getAttribute(Attributes.SCALE)?.removeModifier(LEGACY_ON_HEAD_SCALE)
@@ -545,12 +550,24 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         return result
     }
 
-    override fun getDefaultGravity(): Double = if (isAttached()) 0.0 else super.getDefaultGravity()
+    // Sprout Squad: also while it waits for a missing wearer (see tick), so it does not fall away meanwhile
+    override fun getDefaultGravity(): Double = if (attachedPlayerReference != null) 0.0 else super.getDefaultGravity()
     override fun doPush(entity: Entity) { if (!clampToGrid()) super.doPush(entity) }
     override fun isAffectedByBlocks(): Boolean = if (isAttached()) !isRemoved else super.isAffectedByBlocks()
 
     override fun tick() {
         super.tick()
+        // Sprout Squad: a plant whose wearer is gone without taking it along (a portal, a conversion, a despawn) kept
+        // the on-head state: no collisions, but gravity again, so it fell through the world. After a short wait (the
+        // wearer may be in a chunk that is still loading) it drops as its seed packet, as when the helmet comes off.
+        if (!level().isClientSide && attachedPlayerReference != null && attachedEntity == null) {
+            if (++wearerMissingTicks >= WEARER_MISSING_TICKS) {
+                attachedPlayerReference = null
+                removeOnHeadEffects()
+                if (dropAsSeedPacketItem(force = true, dropPumpkin = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)
+                return
+            }
+        } else wearerMissingTicks = 0
         attachedEntity?.positionPlant(this)
         if (attachedEntity?.canWearPlant() == false) {
             if(dropAsSeedPacketItem(force = true, dropPumpkin = true)) playSound(SoundEvents.ROOTED_DIRT_BREAK)

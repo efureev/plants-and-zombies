@@ -217,7 +217,9 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             val sunCost = itemStack.get(PazComponents.SUN_COST)?.getSunCost(entityType) ?: 0
             val battery = SunBatteryBlockEntity.findAttachedSunBattery(level, dispenserPos, sunCost)?: return false
 
-            val spawnPos = if (level.getBlockState(pos).getCollisionShape(level, pos).isEmpty) pos else pos
+            // Sprout Squad: the spot in front must be free (both branches were `pos`, so a plant went into a solid block)
+            if (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty) return false
+            val spawnPos = pos
 
             val entity = entityType.create(
                 level,
@@ -244,6 +246,12 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
             // Sprout Squad: a plant goes to the nearest player within 64 blocks; with nobody there nothing is planted
             // (a wild plant fights players and plants)
             val owner = if (entity is TamableAnimal) level.getNearestPlayer(entity, 64.0) ?: run { entity.discard(); return false } else null
+            // Sprout Squad: the plant limit applies to dispensers as to players (a redstone clock planted without end);
+            // it counts the owner's plants, so the owner is set first
+            if (entity is Plant && owner != null && PazConfig.getEntityLimit(entityType) > -1) {
+                entity.setOwnerReference(net.minecraft.world.entity.EntityReference.of(owner))
+                if (entity.isOverEntityLimit()) return false
+            }
 
             if (!level.addFreshEntity(entity)) {
                 entity.discard()
