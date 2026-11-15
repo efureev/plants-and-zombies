@@ -6,9 +6,12 @@ import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.pazResource
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.registries.Registries
+import net.minecraft.tags.TagKey
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageSource
@@ -20,6 +23,7 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec2
@@ -53,6 +57,9 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         const val STRAIN_MILLIS = 850L
 
         const val EYE_HEIGHT = 1.4f
+
+        /** Where it grows wild: snowy slopes and groves (`data/sproutsquad/tags/worldgen/biome/plant/has_needle_spruce.json`). */
+        val HAS_NEEDLE_SPRUCE: TagKey<Biome> = TagKey.create(Registries.BIOME, pazResource("plant/has_needle_spruce"))
 
         /**
          * Where the needles leave the crown, as [Needle] spawn offsets from the eyes: x forward along

@@ -2,6 +2,7 @@ package dev.efureev.sproutsquad.registry
 
 import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.Potling
+import joshxviii.plantz.PazSpawnPlacements
 import joshxviii.plantz.entity.plant.IcePeaShooter
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
@@ -72,6 +73,8 @@ object SquadEntities {
         // On the ground like the original's plants: without a rule, a structure's spawn_overrides
         // (the Garden Shack) place the plant anywhere in its piece, on the roof or in the water.
         modBus.addListener(RegisterSpawnPlacementsEvent::class.java) { event ->
+            // biome spawn lists, read later by PazSpawnsBiomeModifier when a server starts
+            PazSpawnPlacements.addBiomeSpawn(NeedleSpruce.HAS_NEEDLE_SPRUCE, NEEDLE_SPRUCE.get(), weight = 4, minGroupSize = 1, maxGroupSize = 2)
             plantEntries.forEach { entry ->
                 @Suppress("UNCHECKED_CAST")
                 event.register(entry.type.get() as EntityType<Plant>, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

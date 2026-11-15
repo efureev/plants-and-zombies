@@ -103,6 +103,7 @@ object SquadGameTests {
         Test("needle_spruce_face", NeedleSpruceGameTests::face),
         Test("needle_spruce_volley", NeedleSpruceGameTests::volley, maxTicks = 400, structure = id("gametest/lane")),
         Test("needle_spruce_out_of_range", NeedleSpruceGameTests::outOfRange, maxTicks = 400, structure = id("gametest/lane")),
+        Test("needle_spruce_spawns", NeedleSpruceGameTests::spawns, structure = id("gametest/lane")),
         Test("needle_spruce_stump_on_death", NeedleSpruceGameTests::stumpOnDeath, structure = id("gametest/lane")),
         Test("needle_spruce_killed_by_zombie", NeedleSpruceGameTests::killedByZombie, structure = id("gametest/lane")),
         Test("needle_spruce_stump_replaces_snow_layer", NeedleSpruceGameTests::stumpReplacesSnowLayer, structure = id("gametest/lane")),

@@ -4,16 +4,21 @@ import dev.efureev.sproutsquad.registry.SquadBlocks
 import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
+import joshxviii.plantz.PazSpawnPlacements
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.GameType
+import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
 
@@ -120,6 +125,33 @@ object NeedleSpruceGameTests {
                 clearMobs(helper, dx, dz)
             }
             .thenSucceed()
+    }
+
+    /**
+     * Wild in snowy mountains: a biome spawn for `#sproutsquad:plant/has_needle_spruce` (snowy slopes and
+     * groves), standing on snow but not on stone. SPAWNER skips the 42-block spacing from other plants
+     * (the test world is full of them) and the random source always passes the 60% roll.
+     */
+    fun spawns(helper: GameTestHelper) {
+        val type = SquadEntities.NEEDLE_SPRUCE.get()
+        val entry = PazSpawnPlacements.allBiomeSpawns.singleOrNull { it.entityType == type }
+            ?: return helper.fail("no biome spawn for the Needle Spruce")
+        helper.assertValueEqual(entry.biomeTag, NeedleSpruce.HAS_NEEDLE_SPRUCE, "biome tag")
+        val biomes = helper.level.registryAccess().lookupOrThrow(Registries.BIOME)
+        listOf(Biomes.SNOWY_SLOPES, Biomes.GROVE).forEach {
+            helper.assertTrue(biomes.getOrThrow(it).`is`(NeedleSpruce.HAS_NEEDLE_SPRUCE), "${it.identifier()} is not in the tag")
+        }
+        helper.assertFalse(biomes.getOrThrow(Biomes.PLAINS).`is`(NeedleSpruce.HAS_NEEDLE_SPRUCE), "plains are in the tag")
+
+        val lucky = object : RandomSource by RandomSource.create() { override fun nextFloat() = 0f }
+        fun canSpawnOn(ground: net.minecraft.world.level.block.Block): Boolean {
+            helper.setBlock(SPOT.below(), ground)
+            for (y in 0..3) helper.setBlock(SPOT.above(y), Blocks.AIR)
+            return SpawnPlacements.checkSpawnRules(type, helper.level, EntitySpawnReason.SPAWNER, helper.absolutePos(SPOT), lucky)
+        }
+        helper.assertTrue(canSpawnOn(Blocks.SNOW_BLOCK), "does not spawn on a snow block")
+        helper.assertFalse(canSpawnOn(Blocks.STONE), "spawns on stone")
+        helper.succeed()
     }
 
     // region death and the stump
