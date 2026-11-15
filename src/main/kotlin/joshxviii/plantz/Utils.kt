@@ -110,7 +110,7 @@ interface PlantHeadAttachment {
 
             val placePos = clickedPos.above()
             val spaceFree = level.getBlockState(placePos).getCollisionShape(level, placePos).isEmpty
-            if (!spaceFree) return InteractionResult.FAIL
+            if (!spaceFree || !plant.hasRoomAt(level, placePos)) return InteractionResult.FAIL // Sprout Squad: tall plants
             if (level.getEntitiesOfClass(Plant::class.java, AABB(placePos)).any { it !== plant }) {
                 if (!level.isClientSide) {
                     player.sendOverlayMessage(Component.translatable("message.sproutsquad.already_planted").withStyle(ChatFormatting.RED))

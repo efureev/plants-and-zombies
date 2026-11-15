@@ -4,23 +4,33 @@ import dev.efureev.sproutsquad.registry.SquadBlocks
 import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
+import joshxviii.plantz.PazItems
 import joshxviii.plantz.PazSpawnPlacements
+import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.registries.Registries
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.tags.EntityTypeTags
 import net.minecraft.util.RandomSource
+import net.minecraft.world.InteractionHand
+import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.biome.Biomes
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.Vec3
 
 /**
  * GameTests of the Needle Spruce (docs/en/characters/needle_spruce.md). Registered in SquadGameTests.
@@ -163,6 +173,47 @@ object NeedleSpruceGameTests {
             spruce.discard()
         }
         helper.assertFalse(standOn(helper, Blocks.STONE).onValidGround(), "lives on stone")
+        helper.succeed()
+    }
+
+    /**
+     * It is three blocks tall: a seed packet does not plant it under a lower ceiling (it would stand in
+     * the ceiling, suffocate and die), and plants it where there is room.
+     */
+    fun needsHeadroom(helper: GameTestHelper) {
+        // a mock "creative" player gets no infinite materials: a survival one with sun, as in OriginalGapsGameTests
+        val player = helper.makeMockPlayer(GameType.SURVIVAL)
+        player.inventory.setItem(9, ItemStack(PazItems.SUN, 64)) // not the selected slot: the packet goes there
+        fun plant(): InteractionResult {
+            val packet = SeedPacketItem.stackFor(SquadEntities.NEEDLE_SPRUCE.get())
+            player.setItemInHand(InteractionHand.MAIN_HAND, packet)
+            val below = helper.absolutePos(SPOT.below())
+            val hit = BlockHitResult(Vec3.atCenterOf(below).add(0.0, 0.5, 0.0), Direction.UP, below, false)
+            return packet.useOn(UseOnContext(helper.level, player, InteractionHand.MAIN_HAND, packet, hit))
+        }
+        fun planted() = helper.level.getEntities(SquadEntities.NEEDLE_SPRUCE.get(), around(helper)) { true }
+
+        standOn(helper, Blocks.SNOW_BLOCK).discard()
+        helper.setBlock(SPOT.above(2), Blocks.STONE) // a room two blocks high
+        val refused = plant()
+        helper.assertTrue(planted().isEmpty(), "planted in a room two blocks high ($refused)")
+        helper.setBlock(SPOT.above(2), Blocks.AIR)
+        helper.setBlock(SPOT.above(3), Blocks.STONE) // three blocks high: enough for a 2.9-block tree
+        val result = plant()
+        helper.assertValueEqual(planted().size, 1, "spruces planted in a room three blocks high ($result)")
+        planted().forEach { it.discard() }
+        helper.succeed()
+    }
+
+    /**
+     * Powder snow looks like snow but swallows a plant: it cannot be planted there. And a mountain
+     * spruce does not freeze.
+     */
+    fun powderSnow(helper: GameTestHelper) {
+        val spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        helper.assertFalse(spruce.canPlaceOn(Blocks.POWDER_SNOW.defaultBlockState()), "can be planted on powder snow")
+        helper.assertTrue(spruce.type.builtInRegistryHolder().`is`(EntityTypeTags.FREEZE_IMMUNE_ENTITY_TYPES), "freezes in powder snow")
+        spruce.discard()
         helper.succeed()
     }
 

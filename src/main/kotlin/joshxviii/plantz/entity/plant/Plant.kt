@@ -868,6 +868,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = canWalk() || block.`is`(PLANTABLE)
     open fun canPlaceOn(block: BlockState) : Boolean = canSurviveOn(block)
+    /** Sprout Squad: room for the whole plant at [pos] beyond the block it stands in (tall plants: the Needle Spruce). */
+    open fun hasRoomAt(level: net.minecraft.world.level.LevelReader, pos: BlockPos): Boolean = true
     open fun canProduceSeeds(): Boolean = true
     open fun clampToGrid() = !canWalk() && !rolling && onValidGround()
     open fun cooldownFinished() {}

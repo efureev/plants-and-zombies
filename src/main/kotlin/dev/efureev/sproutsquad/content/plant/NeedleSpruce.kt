@@ -9,6 +9,7 @@ import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.pazResource
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
+import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.BlockTags
@@ -24,10 +25,12 @@ import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -72,8 +75,20 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
 
     override fun sleepsDuringNight(): Boolean = false
 
-    /** A mountain spruce: lives and is planted on snow too, where it grows wild (like the Ice Peashooter). */
-    override fun canSurviveOn(block: BlockState): Boolean = super.canSurviveOn(block) || block.`is`(BlockTags.SNOW)
+    /**
+     * A mountain spruce: lives and is planted on snow too, where it grows wild (like the Ice Peashooter).
+     * Not on powder snow: it would sink in (it is freeze immune, but buried).
+     */
+    override fun canSurviveOn(block: BlockState): Boolean =
+        super.canSurviveOn(block) || (block.`is`(BlockTags.SNOW) && !block.`is`(Blocks.POWDER_SNOW))
+
+    /** Three blocks tall: a lower ceiling would leave it standing in the ceiling, suffocating. */
+    override fun hasRoomAt(level: LevelReader, pos: BlockPos): Boolean {
+        val half = type.width / 2.0
+        val x = pos.x + 0.5
+        val z = pos.z + 0.5
+        return level.noBlockCollision(null, AABB(x - half, pos.y + 1.0, z - half, x + half, pos.y + type.height.toDouble(), z + half))
+    }
 
     /**
      * The texture suffix for the face: `strain` (eyes squeezed shut) for the first [STRAIN_MILLIS] of a

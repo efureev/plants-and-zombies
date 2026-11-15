@@ -11,11 +11,12 @@ A three-block mountain spruce with two eyes on its bottom tier and four sharp fa
 | Id | `sproutsquad:needle_spruce` |
 | Health | 40 |
 | Sun cost | 7 |
-| Size | 0.9 × 2.9 blocks |
+| Size | 0.9 × 2.9 blocks; needs 3 blocks of height to be planted |
 | Attack | 3 needles per volley, 1 damage each; a needle pierces up to 4 targets |
 | Volley | every 3.5 s |
 | Range | 20 blocks, needs line of sight |
 | At night | does not sleep |
+| Ground | like other plants, plus snow (not powder snow); does not freeze |
 | How to get | grows wild on snowy slopes and in groves; shapeless recipe: spruce sapling + 7 sun → Needle Spruce seed packet |
 
 ## Abilities
