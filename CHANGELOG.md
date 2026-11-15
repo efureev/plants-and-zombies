@@ -1,3 +1,9 @@
+# Sprout Squad — Unreleased
+Changes since Sprout Squad 0.2.1.
+
+### Fixes
+- Saved worlds load again: a returning player was rejected with "Invalid player data" (in single player as well as on a server), because restoring the mod's status flags tried to send them before the player was connected.
+
 # Sprout Squad 0.2.1
 Changes since Sprout Squad 0.2.0. Everything after this section is the changelog of the original Plants & Zombies mod.
 

@@ -16,6 +16,7 @@
     "ServerPlayerMixin",
     "VillagerHostilesSensorMixin",
     "ZombieMixin",
+    "neoforge.EntitySyncDataMixin",
     "neoforge.LivingEntityEffectsRemovedMixin",
     "neoforge.MobEffectInstanceMixin"
   ],
