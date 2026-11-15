@@ -11,6 +11,7 @@ import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.registries.Registries
+import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
@@ -26,6 +27,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -69,6 +71,9 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
     }
 
     override fun sleepsDuringNight(): Boolean = false
+
+    /** A mountain spruce: lives and is planted on snow too, where it grows wild (like the Ice Peashooter). */
+    override fun canSurviveOn(block: BlockState): Boolean = super.canSurviveOn(block) || block.`is`(BlockTags.SNOW)
 
     /**
      * The texture suffix for the face: `strain` (eyes squeezed shut) for the first [STRAIN_MILLIS] of a

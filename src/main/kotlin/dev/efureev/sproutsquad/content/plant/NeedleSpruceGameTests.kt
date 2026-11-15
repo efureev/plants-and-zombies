@@ -154,6 +154,18 @@ object NeedleSpruceGameTests {
         helper.succeed()
     }
 
+    /** It grows wild on snow, so it can live and be planted there (otherwise it dries out and dies). */
+    fun livesOnSnow(helper: GameTestHelper) {
+        listOf(Blocks.SNOW_BLOCK, Blocks.GRASS_BLOCK).forEach { ground ->
+            val spruce = standOn(helper, ground)
+            helper.assertTrue(spruce.onValidGround(), "cannot live on ${ground.name.string}")
+            helper.assertTrue(spruce.canPlaceOn(ground.defaultBlockState()), "cannot be planted on ${ground.name.string}")
+            spruce.discard()
+        }
+        helper.assertFalse(standOn(helper, Blocks.STONE).onValidGround(), "lives on stone")
+        helper.succeed()
+    }
+
     // region death and the stump
 
     private val SPOT = BlockPos(2, 0, 1)
