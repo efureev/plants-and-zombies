@@ -6,16 +6,16 @@ import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.Sun
-import joshxviii.plantz.pazResource
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
+import joshxviii.plantz.pazResource
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.registries.Registries
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
-import net.minecraft.core.particles.ParticleTypes
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -30,7 +30,6 @@ import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -46,7 +45,10 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         const val SUN_COST = 7
         const val VOLLEY_SIZE = 3
 
-        /** Ticks from the start of the action to the shot: the crown is at the bottom of its whip (0.55 s). */
+        /**
+         * Ticks from the start of the action to the shot. ActionGoal counts down on the starting tick, so the
+         * needles leave 10 ticks after it, about 0.45 s into the action animation: the whip's peak.
+         */
         const val ACTION_DELAY = 11
 
         /**
@@ -58,8 +60,8 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         /** Sun dropped when a player kills it (the drawing's number; other plants drop half their price). */
         const val PLAYER_KILL_SUN = 4
 
-        /** How long the eyes stay squeezed shut from the start of a volley. */
-        const val STRAIN_MILLIS = 850L
+        /** How long the eyes stay squeezed shut from the start of a volley: until the overshoot back. */
+        const val STRAIN_MILLIS = 750L
 
         const val EYE_HEIGHT = 1.4f
 
@@ -83,12 +85,8 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         super.canSurviveOn(block) || (block.`is`(BlockTags.SNOW) && !block.`is`(Blocks.POWDER_SNOW))
 
     /** Three blocks tall: a lower ceiling would leave it standing in the ceiling, suffocating. */
-    override fun hasRoomAt(level: LevelReader, pos: BlockPos): Boolean {
-        val half = type.width / 2.0
-        val x = pos.x + 0.5
-        val z = pos.z + 0.5
-        return level.noBlockCollision(null, AABB(x - half, pos.y + 1.0, z - half, x + half, pos.y + type.height.toDouble(), z + half))
-    }
+    override fun hasRoomAt(level: LevelReader, pos: BlockPos): Boolean =
+        level.noBlockCollision(null, type.getSpawnAABB(pos.x + 0.5, pos.y.toDouble(), pos.z + 0.5).setMinY(pos.y + 1.0))
 
     /**
      * The texture suffix for the face: `strain` (eyes squeezed shut) for the first [STRAIN_MILLIS] of a
@@ -113,7 +111,7 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         val wasDead = dead
         super.die(source)
         val level = level() as? ServerLevel ?: return
-        if (wasDead) return
+        if (wasDead || !dead) return // already dead, or the death was cancelled (LivingDeathEvent)
         val stump = SquadBlocks.NEEDLE_SPRUCE_STUMP.get().defaultBlockState()
         if (isPassenger || isAttached()) Block.dropResources(stump, level, blockPosition())
         else NeedleSpruceStumpBlock.placeOrDrop(level, blockPosition())
@@ -123,6 +121,17 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
             val extra = PLAYER_KILL_SUN - PazConfig.getSunCost(type) / 2
             if (extra > 0) Sun.award(level, position(), extra)
         }
+    }
+
+    /**
+     * Dying, with its stump in place of the lower trunk (NeedleSpruceStumpBlock.placeOrDrop put it at its
+     * block, or on top of ground a little lower than a full block). The model hides the lower trunk then.
+     */
+    fun standsOnItsStump(): Boolean {
+        if (!isDeadOrDying) return false
+        val stump = SquadBlocks.NEEDLE_SPRUCE_STUMP.get()
+        val level = level()
+        return level.getBlockState(blockPosition()).`is`(stump) || level.getBlockState(blockPosition().above()).`is`(stump)
     }
 
     override fun registerGoals() {

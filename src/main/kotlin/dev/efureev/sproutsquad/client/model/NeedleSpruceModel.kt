@@ -28,8 +28,9 @@ import kotlin.math.sin
  * fang_0..fang_3. Texture 128×64, drawn by `art/needle_spruce/draw_needle_spruce.py` (the UV origins
  * there must match the texOffs here). Positive X rotation leans forward, towards the target.
  *
- * Death: the plant leaves a stump block where it stood, so the lower trunk is not drawn while dying;
- * the rest snaps off at the bend and falls back while the renderer shrinks it (all plants do).
+ * Death: the trunk snaps off at the bend and falls back while the renderer shrinks it (all plants do).
+ * When a stump block took the lower trunk's place (`useSpecialAction`, NeedleSpruce.standsOnItsStump),
+ * the lower trunk is not drawn.
  */
 class NeedleSpruceModel(root: ModelPart) : SquadPlantModel(
     root,
@@ -45,7 +46,7 @@ class NeedleSpruceModel(root: ModelPart) : SquadPlantModel(
     override fun setupAnim(state: PlantRenderState) {
         super.setupAnim(state)
         val dying = state.deathTime > 0
-        trunkLower.skipDraw = dying // the model is shared: reset it for the living ones
+        trunkLower.skipDraw = dying && state.useSpecialAction // the model is shared: reset it for the others
         if (!dying) return
         val fall = (state.deathTime / DEATH_TICKS).coerceAtMost(1f)
         trunkLower.xRot = 0f
@@ -136,14 +137,15 @@ object NeedleSpruceAnimation {
         .build()
 
     /**
-     * A volley, like a catapult: the trunk winds back, whips forward (the needles leave at 0.55 s,
-     * NeedleSpruce.ACTION_DELAY), overshoots back and settles.
+     * A volley, like a catapult: the trunk winds back, whips forward, overshoots back and settles. The
+     * needles leave about 0.45 s in (NeedleSpruce.ACTION_DELAY: the client starts this animation a tick
+     * after the action starts), at the peak of the whip.
      */
-    val action: AnimationDefinition = AnimationDefinition.Builder.withLength(1.2f)
+    val action: AnimationDefinition = AnimationDefinition.Builder.withLength(1.05f)
         .addAnimation("trunk_lower", AnimationChannel(ROTATION,
-            rot(0f, 0f, 0f, 0f), rot(0.4f, -8f, 0f, 0f), rot(0.6f, 22f, 0f, 0f), rot(0.85f, -6f, 0f, 0f), rot(1.2f, 0f, 0f, 0f)))
+            rot(0f, 0f, 0f, 0f), rot(0.25f, -8f, 0f, 0f), rot(0.45f, 22f, 0f, 0f), rot(0.7f, -6f, 0f, 0f), rot(1.05f, 0f, 0f, 0f)))
         .addAnimation("trunk_upper", AnimationChannel(ROTATION,
-            rot(0f, 0f, 0f, 0f), rot(0.4f, -6f, 0f, 0f), rot(0.6f, 24f, 0f, 0f), rot(0.85f, -4f, 0f, 0f), rot(1.2f, 0f, 0f, 0f)))
+            rot(0f, 0f, 0f, 0f), rot(0.25f, -6f, 0f, 0f), rot(0.45f, 24f, 0f, 0f), rot(0.7f, -4f, 0f, 0f), rot(1.05f, 0f, 0f, 0f)))
         .build()
 
     /** The spruce does not sleep; this pose (the idle sway) only completes the set. */

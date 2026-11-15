@@ -58,7 +58,7 @@ object NeedleSpruceGameTests {
 
     /**
      * The face follows the state: plain without a target, angry while aiming, straining for the first
-     * 850 ms of a volley, and the plain sleep texture while dying (there is no `_angry_sleep`).
+     * 750 ms of a volley, and the plain sleep texture while dying (there is no `_angry_sleep`).
      */
     fun face(helper: GameTestHelper) {
         val spruce = SquadEntities.NEEDLE_SPRUCE.get().create(helper.level, EntitySpawnReason.COMMAND)
@@ -228,6 +228,9 @@ object NeedleSpruceGameTests {
         helper.assertTrue(spruce.isDeadOrDying, "the spruce survived")
         helper.assertBlockPresent(SquadBlocks.NEEDLE_SPRUCE_STUMP.get(), SPOT)
         helper.assertValueEqual(sunAround(helper), NeedleSpruce.PLAYER_KILL_SUN, "sun dropped")
+        // a second die() call (another mod, a double hit in one tick) pays nothing more
+        spruce.die(helper.level.damageSources().playerAttack(helper.makeMockPlayer(GameType.SURVIVAL)))
+        helper.assertValueEqual(sunAround(helper), NeedleSpruce.PLAYER_KILL_SUN, "sun after a second die()")
         helper.succeed()
     }
 
@@ -274,6 +277,52 @@ object NeedleSpruceGameTests {
         helper.level.destroyBlock(helper.absolutePos(SPOT), true)
         helper.assertBlockPresent(Blocks.AIR, SPOT)
         assertStumpLoot(helper, "from the broken stump")
+        helper.succeed()
+    }
+
+    /**
+     * A death that does not happen leaves nothing: a removed spruce (or one whose LivingDeathEvent was
+     * cancelled) gets no stump and pays no sun.
+     */
+    fun noStumpWithoutDeath(helper: GameTestHelper) {
+        val spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        spruce.discard()
+        spruce.die(helper.level.damageSources().playerAttack(helper.makeMockPlayer(GameType.SURVIVAL)))
+        helper.assertBlockPresent(Blocks.AIR, SPOT)
+        helper.assertValueEqual(sunAround(helper), 0, "sun paid for a death that did not happen")
+        helper.succeed()
+    }
+
+    /**
+     * On ground a little lower than a full block (farmland, a dirt path, mud) the spruce stands inside the
+     * ground's block space; the stump goes on top of it, where the trunk was.
+     */
+    fun stumpOnFarmlandPathAndMud(helper: GameTestHelper) {
+        listOf(Blocks.FARMLAND, Blocks.DIRT_PATH, Blocks.MUD).forEach { ground ->
+            val spruce = standOn(helper, ground)
+            val groundPos = helper.absolutePos(SPOT.below())
+            val top = helper.level.getBlockState(groundPos).getCollisionShape(helper.level, groundPos).max(Direction.Axis.Y)
+            spruce.setPos(spruce.x, groundPos.y + top, spruce.z) // where it settles: inside the ground's block
+            spruce.kill(helper.level)
+            helper.assertBlockPresent(SquadBlocks.NEEDLE_SPRUCE_STUMP.get(), SPOT)
+            helper.assertTrue(spruce.standsOnItsStump(), "the dying spruce on ${ground.name.string} does not know about its stump")
+            helper.setBlock(SPOT, Blocks.AIR)
+            helper.level.getEntities(EntityTypes.ITEM, around(helper)) { true }.forEach { it.discard() }
+        }
+        helper.succeed()
+    }
+
+    /** The model hides the lower trunk only when the stump stands in its place: not in water. */
+    fun standsOnItsStumpOnlyWithAStump(helper: GameTestHelper) {
+        var spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        helper.assertFalse(spruce.standsOnItsStump(), "a living spruce stands on a stump")
+        spruce.kill(helper.level)
+        helper.assertTrue(spruce.standsOnItsStump(), "dead on snow, but no stump under it")
+        helper.setBlock(SPOT, Blocks.AIR)
+        spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        helper.setBlock(SPOT, Blocks.WATER)
+        spruce.kill(helper.level)
+        helper.assertFalse(spruce.standsOnItsStump(), "dead in water, where no stump was placed")
         helper.succeed()
     }
 

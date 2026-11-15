@@ -26,21 +26,36 @@ class NeedleSpruceStumpBlock(properties: Properties) : Block(properties) {
             box(11.0, 0.0, 7.0, 14.0, 2.0, 9.0),
         )
 
+        /** Ground at least this high (of a block) carries a stump: farmland, dirt paths, mud; not a slab. */
+        private const val MIN_GROUND_HEIGHT = 14.0 / 16.0
+
         /**
-         * Puts a stump at [pos] if there is room: air, or a replaceable block without fluid (a snow layer,
-         * grass), on a block with a sturdy top. Otherwise drops what breaking the stump would give and
-         * returns false.
+         * Puts a stump where a spruce standing at [pos] (its block position) had its trunk: in [pos] when that
+         * is air or a replaceable block without fluid (a snow layer, grass) on ground below, or on top of
+         * [pos] when the spruce stands inside a ground block a little lower than a full one (farmland, a
+         * dirt path, mud). Never replaces anything else. Otherwise drops what breaking the stump would give
+         * and returns false.
          */
         fun placeOrDrop(level: ServerLevel, pos: BlockPos): Boolean {
             val stump = SquadBlocks.NEEDLE_SPRUCE_STUMP.get().defaultBlockState()
-            val here = level.getBlockState(pos)
-            val room = here.isAir || (here.canBeReplaced() && here.fluidState.isEmpty)
-            if (room && level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP)) {
-                level.setBlockAndUpdate(pos, stump)
+            val target = if (hasRoom(level, pos)) pos else pos.above()
+            if (hasRoom(level, target) && isGround(level, target.below())) {
+                level.setBlockAndUpdate(target, stump)
                 return true
             }
             dropResources(stump, level, pos)
             return false
+        }
+
+        private fun hasRoom(level: ServerLevel, pos: BlockPos): Boolean {
+            val state = level.getBlockState(pos)
+            return state.isAir || (state.canBeReplaced() && state.fluidState.isEmpty)
+        }
+
+        private fun isGround(level: ServerLevel, pos: BlockPos): Boolean {
+            val state = level.getBlockState(pos)
+            return state.isFaceSturdy(level, pos, Direction.UP)
+                || state.getCollisionShape(level, pos).max(Direction.Axis.Y) >= MIN_GROUND_HEIGHT
         }
     }
 

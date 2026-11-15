@@ -1082,7 +1082,10 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     override fun die(source: DamageSource) {
+        val wasDead = dead
         super.die(source)
+        // Sprout Squad: sun only once, for a death that happened (not a cancelled LivingDeathEvent, a removed plant or a second call)
+        if (wasDead || !dead) return
         if (source.entity is Player) {
             val sunCost = PazConfig.getSunCost(type)
             val level = level() as? ServerLevel

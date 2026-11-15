@@ -177,6 +177,8 @@ open class PlantRenderer(
                 is BonkChoy -> entity.useUppercut
                 is Chomper -> entity.isChewing
                 is Citron -> entity.rolling
+                // Sprout Squad: the stump stands in place of its lower trunk
+                is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> entity.standsOnItsStump()
                 else -> false
             }
         state.textureExtra = mutableListOf<String>().apply {

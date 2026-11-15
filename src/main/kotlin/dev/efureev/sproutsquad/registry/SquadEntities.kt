@@ -2,10 +2,10 @@ package dev.efureev.sproutsquad.registry
 
 import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.Potling
-import joshxviii.plantz.PazSpawnPlacements
-import joshxviii.plantz.entity.plant.IcePeaShooter
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
+import joshxviii.plantz.PazSpawnPlacements
+import joshxviii.plantz.entity.plant.IcePeaShooter
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.registries.Registries
