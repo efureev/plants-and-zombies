@@ -170,11 +170,15 @@ object PoppyRattleAnimation {
             rot(0f, 0f, 0f, 0f), rot(0.25f, -35f, 0f, 0f), rot(0.55f, 4f, 0f, 0f), rot(0.8f, 0f, 0f, 0f)))
         .build()
 
-    /** It never sleeps: this is only its dying pose — petals drop, the head sags. */
+    /**
+     * Asleep: only while it grows its own seeds on farmland (day and night do not put it to sleep).
+     * The petals fold up around the head like a closed flower, the head breathes slowly.
+     */
     val sleep: AnimationDefinition = AnimationDefinition.Builder.withLength(4.0f).looping()
         .apply {
-            PETALS.forEach { addAnimation(it, AnimationChannel(ROTATION, rot(0f, 40f, 0f, 0f), rot(4f, 40f, 0f, 0f))) }
+            PETALS.forEach { addAnimation(it, AnimationChannel(ROTATION, rot(0f, -55f, 0f, 0f), rot(4f, -55f, 0f, 0f))) }
         }
-        .addAnimation("pod", AnimationChannel(SCALE, scale(0f, 0.95f), scale(4f, 0.95f)))
+        .addAnimation("pod", AnimationChannel(SCALE,
+            scale(0f, 1f), scale(2f, 1.03f, 0.97f, 1.03f), scale(4f, 1f)))
         .build()
 }

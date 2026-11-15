@@ -126,6 +126,7 @@ object SquadGameTests {
         Test("poppy_rattle_collect", PoppyRattleGameTests::collect),
         Test("poppy_rattle_drops", PoppyRattleGameTests::drops),
         Test("poppy_rattle_saved", PoppyRattleGameTests::saved),
+        Test("poppy_rattle_night_texture", PoppyRattleGameTests::nightTexture),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),

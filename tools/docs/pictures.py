@@ -48,7 +48,8 @@ STRUCTURE_NAMES = {"graveyard/mausoleum": {"en": "Mausoleum", "ru": "Мавзо�
                    "garden_shack/spruce": {"en": "Garden Shack (spruce)", "ru": "Огородная сторожка (ель)"},
                    "garden_shack/cherry": {"en": "Garden Shack (cherry)", "ru": "Огородная сторожка (вишня)"},
                    "robo_junkyard/yard": {"en": "Robo Junkyard", "ru": "Свалка роботов"}}
-LOOK_TITLES = {"zombat_baron": {"en": "Baron's bat", "ru": "Зомбимышь Барона"}}
+LOOK_TITLES = {"zombat_baron": {"en": "Baron's bat", "ru": "Зомбимышь Барона"},
+               "poppy_rattle_night": {"en": "Poppy Rattle at night", "ru": "Мак-погремушка ночью"}}
 
 Picture = namedtuple("Picture", "kind id name base look", defaults=(None, None))
 

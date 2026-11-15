@@ -6,7 +6,7 @@ Usage (needs Pillow), from the repository root:
 
 Writes (64x64 unless noted):
     src/main/resources/assets/sproutsquad/textures/entity/plant/poppy_rattle/poppy_rattle.png
-    .../poppy_rattle_sleep.png            closed eyes (used while dying: it never sleeps)
+    .../poppy_rattle_sleep.png            closed eyes (asleep growing its own seeds, or dying)
     .../poppy_rattle_night.png            glowing eyes at night
     .../poppy_rattle_night_emissive.png   only the eyes, drawn full-bright by the game
     src/main/resources/assets/sproutsquad/textures/item/plant_icon/poppy_rattle.png  (16x16)

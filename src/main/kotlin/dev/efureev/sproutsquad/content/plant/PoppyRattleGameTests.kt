@@ -235,4 +235,22 @@ object PoppyRattleGameTests {
         helper.assertValueEqual(loaded.owedSeeds(), rattle.owedSeeds(), "owed after a tick in the same phase")
         helper.succeed()
     }
+
+    /**
+     * Glowing night eyes only while awake and alive: it sleeps while growing its own seeds on farmland,
+     * and then shows the plain `_sleep` texture (there is no `_night_sleep`).
+     */
+    fun nightTexture(helper: GameTestHelper) {
+        val rattle = rattle(helper)
+        rattle.advanceClock(100)
+        helper.assertTrue(rattle.textureSuffix() == null, "a suffix by day")
+        rattle.advanceClock(mid(1))
+        helper.assertTrue(rattle.textureSuffix() == "night", "no night suffix at night")
+        rattle.isAsleep = true
+        helper.assertTrue(rattle.textureSuffix() == null, "the night suffix while asleep")
+        rattle.isAsleep = false
+        rattle.deathTime = 5
+        helper.assertTrue(rattle.textureSuffix() == null, "the night suffix while dying")
+        helper.succeed()
+    }
 }

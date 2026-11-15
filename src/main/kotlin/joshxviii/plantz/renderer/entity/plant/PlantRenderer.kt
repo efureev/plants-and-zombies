@@ -197,8 +197,8 @@ open class PlantRenderer(
                 // Sprout Squad: the Needle Spruce's angry and straining faces (NeedleSpruce.faceSuffix)
                 is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> add(entity.faceSuffix(
                     entity.actionAnimationState.takeIf { it.isStarted }?.getTimeInMillis(state.ageInTicks)))
-                // Sprout Squad: the Poppy Rattle's glowing night eyes (not while dying: there is no _night_sleep)
-                is dev.efureev.sproutsquad.content.plant.PoppyRattle -> if (entity.isNightPose && entity.deathTime == 0) add("night")
+                // Sprout Squad: the Poppy Rattle's glowing night eyes (PoppyRattle.textureSuffix)
+                is dev.efureev.sproutsquad.content.plant.PoppyRattle -> entity.textureSuffix()?.let { add(it) }
                 else -> {}
             }
         }

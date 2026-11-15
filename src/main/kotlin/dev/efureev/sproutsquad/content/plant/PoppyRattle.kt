@@ -28,7 +28,8 @@ import net.minecraft.world.level.storage.ValueOutput
 /**
  * Poppy Rattle: a poppy seed head with a face and a crown-shaped lid. Once by day and once by night it
  * grows a seed packet of a random plant and keeps up to two under its lid until its owner takes them.
- * Never sleeps. See docs/en/characters/poppy_rattle.md.
+ * Awake by day and at night; like any plant it sleeps only while growing its own seeds on farmland.
+ * See docs/en/characters/poppy_rattle.md.
  *
  * Days and nights are counted by the dimension's clock as phase numbers ([phaseOf]), so a night slept
  * through still gives its seed, a thunderstorm is not a night, and time set back gives nothing.
@@ -81,6 +82,12 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
     val isNightPose: Boolean get() = entityData.get(NIGHT)
 
     fun held(): List<EntityType<*>> = held.toList()
+
+    /**
+     * Texture suffix: `night` for the glowing night eyes. None while asleep (growing its own seeds on
+     * farmland) or dying: those show `_sleep`, and there is no `_night_sleep`.
+     */
+    fun textureSuffix(): String? = if (isNightPose && !isAsleep && deathTime == 0) "night" else null
 
     /** Seeds owed and not yet delivered, `true` for a night seed. */
     fun owedSeeds(): List<Boolean> = owed.toList()
