@@ -181,6 +181,8 @@ open class PlantRenderer(
                 is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> entity.standsOnItsStump()
                 else -> false
             }
+        // Sprout Squad: a pose number our own plants' models read (the Poppy Rattle: packets under its lid)
+        state.squadPose = (entity as? dev.efureev.sproutsquad.content.plant.PoppyRattle)?.heldCount ?: 0
         state.textureExtra = mutableListOf<String>().apply {
             when (entity) {
                 is WallNut -> add(when {
@@ -195,6 +197,8 @@ open class PlantRenderer(
                 // Sprout Squad: the Needle Spruce's angry and straining faces (NeedleSpruce.faceSuffix)
                 is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> add(entity.faceSuffix(
                     entity.actionAnimationState.takeIf { it.isStarted }?.getTimeInMillis(state.ageInTicks)))
+                // Sprout Squad: the Poppy Rattle's glowing night eyes (not while dying: there is no _night_sleep)
+                is dev.efureev.sproutsquad.content.plant.PoppyRattle -> if (entity.isNightPose && entity.deathTime == 0) add("night")
                 else -> {}
             }
         }
@@ -301,6 +305,8 @@ open class PlantRenderState : LivingEntityRenderState() {
     var isAsleep: Boolean = false
     var customName: String = ""
     var textureExtra: List<String> = listOf()
+    /** Sprout Squad: an extra pose value for our own plants' models (PlantRenderer.extractRenderState). */
+    var squadPose: Int = 0
     var glowPercent: Float = 0f
     var plantState: PlantState = PlantState.IDLE
     var useSpecialAction: Boolean = false

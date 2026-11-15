@@ -16,6 +16,8 @@ import net.minecraft.client.model.geom.PartPose
 import net.minecraft.client.model.geom.builders.CubeListBuilder
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.model.geom.builders.MeshDefinition
+import net.minecraft.util.Mth
+import joshxviii.plantz.renderer.entity.plant.PlantRenderState
 
 /**
  * Poppy Rattle: a poppy seed head with a face, a crown-shaped lid and four red petals.
@@ -30,7 +32,48 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
     action = PoppyRattleAnimation.action,
     sleep = PoppyRattleAnimation.sleep,
 ) {
+    private val pod = root.getChild("body").getChild("pod")
+    private val lid = pod.getChild("lid")
+    private val packet = pod.getChild("packet")
+    private val packet2 = pod.getChild("packet2")
+    private val petals = listOf("petal_fl", "petal_fr", "petal_bl", "petal_br").map { pod.getChild(it) }
+
+    /**
+     * The held packets and the night on top of the animations: the lid opens wider with each packet,
+     * the packets show, a full head swells a little; at night the petals are pulled up to the "chin".
+     */
+    override fun setupAnim(state: PlantRenderState) {
+        super.setupAnim(state)
+        val count = if (state.deathTime > 0) 0 else state.squadPose.coerceIn(0, 2)
+        lid.xRot += LID_OPEN[count] * Mth.DEG_TO_RAD
+        packet.visible = count >= 1
+        packet2.visible = count >= 2
+        if (count >= 2) {
+            packet.zRot += FAN * Mth.DEG_TO_RAD
+            pod.xScale *= FULL_SWELL
+            pod.zScale *= FULL_SWELL
+        }
+        val night = "night" in state.textureExtra
+        petals.forEach {
+            if (night) {
+                it.xRot += PETAL_NIGHT_LIFT * Mth.DEG_TO_RAD
+                it.zScale *= PETAL_NIGHT_LENGTH
+            }
+        }
+    }
+
     companion object {
+        /** Lid angle (degrees, the front lifts) with 0, 1 and 2 packets held. */
+        private val LID_OPEN = floatArrayOf(0f, -30f, -50f)
+
+        /** With two packets the front one leans aside, a fan. */
+        private const val FAN = 14f
+        private const val FULL_SWELL = 1.08f
+
+        /** At night the petals rise from −30° to −95° and look shorter, hugging the head. */
+        private const val PETAL_NIGHT_LIFT = -65f
+        private const val PETAL_NIGHT_LENGTH = 0.75f
+
         @JvmField val LAYER_LOCATION = ModelLayerLocation(pazResource("poppy_rattle"), "main")
 
         fun createBodyLayer(): LayerDefinition {
