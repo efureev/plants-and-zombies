@@ -1,6 +1,8 @@
 package dev.efureev.sproutsquad.registry
 
+import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.Potling
+import joshxviii.plantz.entity.plant.IcePeaShooter
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.entity.plant.Plant
@@ -49,6 +51,13 @@ object SquadEntities {
     /** Potling, the mascot: a cheap sun maker and the template for new plants. */
     val POTLING = plant("potling", ::Potling, width = 0.65f, height = 1.0f, sunCost = 3,
         attributes = Plant.Companion.PlantAttributes(maxHealth = 12.0))
+
+    /** Needle Spruce: a three-block mountain spruce firing three needles per volley. */
+    val NEEDLE_SPRUCE = plant("needle_spruce", ::NeedleSpruce, width = 0.9f, height = 2.9f, eyeHeight = NeedleSpruce.EYE_HEIGHT,
+        sunCost = NeedleSpruce.SUN_COST,
+        attributes = Plant.Companion.PlantAttributes(maxHealth = NeedleSpruce.MAX_HEALTH, attackDamage = NeedleSpruce.NEEDLE_DAMAGE,
+            followRange = NeedleSpruce.RANGE),
+        spawnRules = SpawnPlacements.SpawnPredicate(IcePeaShooter::checkIcePeaShooterSpawnRules))
     // endregion
 
     fun register(modBus: IEventBus) {
@@ -81,6 +90,7 @@ object SquadEntities {
         factory: EntityType.EntityFactory<T>,
         width: Float = 0.6f,
         height: Float = 1.0f,
+        eyeHeight: Float = height * 0.85f,
         sunCost: Int,
         attributes: Plant.Companion.PlantAttributes = Plant.Companion.PlantAttributes(),
         spawnRules: SpawnPlacements.SpawnPredicate<Plant> = SpawnPlacements.SpawnPredicate(Plant::checkPlantSpawnRules),
@@ -90,7 +100,7 @@ object SquadEntities {
             EntityType.Builder.of(factory, MobCategory.AMBIENT)
                 .canSpawnFarFromPlayer()
                 .sized(width, height)
-                .eyeHeight(height * 0.85f)
+                .eyeHeight(eyeHeight)
                 .build(ResourceKey.create(Registries.ENTITY_TYPE, id))
         }
         plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules)

@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.debug
 
+import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
@@ -98,6 +99,9 @@ object SquadGameTests {
         Test("bugs_wearer_gone_drops_plant", OriginalBugsGameTests::wearerGoneDropsPlant),
         Test("bugs_riding_wearer_plant_follows", OriginalBugsGameTests::ridingWearerPlantFollows),
         Test("bugs_dispenser_limit_and_spot", OriginalBugsGameTests::dispenserLimitAndSpot),
+        Test("needle_spruce_stats", NeedleSpruceGameTests::stats),
+        Test("needle_spruce_volley", NeedleSpruceGameTests::volley, maxTicks = 400, structure = id("gametest/lane")),
+        Test("needle_spruce_out_of_range", NeedleSpruceGameTests::outOfRange, maxTicks = 400, structure = id("gametest/lane")),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
