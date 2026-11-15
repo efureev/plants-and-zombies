@@ -34,7 +34,7 @@ import net.minecraft.world.level.storage.ValueOutput
  * Days and nights are counted by the dimension's clock as phase numbers ([phaseOf]), so a night slept
  * through still gives its seed, a thunderstorm is not a night, and time set back gives nothing.
  */
-class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
+class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level), SquadPlantLook {
     companion object {
         const val MAX_HEALTH = 16.0
         const val SUN_COST = 6
@@ -92,9 +92,13 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
     /** Seeds owed and not yet delivered, `true` for a night seed. */
     fun owedSeeds(): List<Boolean> = owed.toList()
 
+    val hasOwedSeeds: Boolean get() = owed.isNotEmpty()
+
     override fun attackGoals() {}
 
-    override fun sleepsDuringNight(): Boolean = false
+    override fun lookSuffix(actionMillis: Long?): String? = textureSuffix()
+
+    override fun lookPose(): Int = heldCount
 
     override fun registerGoals() {
         super.registerGoals()
@@ -144,8 +148,9 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
         }
     }
 
+    /** Owes a seed only if there is room under the lid for it: a full rattle grows nothing. */
     private fun owe(night: Boolean) {
-        if (owed.size < CAPACITY) owed += night
+        if (held.size + owed.size < CAPACITY) owed += night
     }
 
     /** Turns the first owed seed into a packet under the lid; false if it is full (the seed is lost) or no plant fits. */
@@ -238,8 +243,9 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
     /** Delivers an owed seed: the head jolts and the lid hops (the `action` animation), then the packet is there. */
     class PoppySeedGoal(private val rattle: PoppyRattle) : ActionGoal(rattle, cooldownTime = 20, actionDelay = 10) {
         override fun startOnCooldown(): Boolean = false
-        override fun canUse(): Boolean = rattle.isAlive && !rattle.isAttached()
-        override fun canDoAction(): Boolean = rattle.owedSeeds().isNotEmpty()
+        // asleep (growing its own seeds) it waits: the seed stays owed until it wakes
+        override fun canUse(): Boolean = rattle.isAlive && !rattle.isAttached() && !rattle.isAsleep
+        override fun canDoAction(): Boolean = rattle.hasOwedSeeds
         override fun doAction(): Boolean = rattle.deliverSeed()
     }
 }

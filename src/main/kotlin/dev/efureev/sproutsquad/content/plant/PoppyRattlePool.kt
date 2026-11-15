@@ -8,16 +8,12 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Which plant a [PoppyRattle] hands out: every plant of the `sproutsquad:plant` tag except
  * [PoppyRattle.EXCLUDED], awake at that time of day, cheaper ones more often.
  */
 object PoppyRattlePool {
-    /** Whether a plant type sleeps by day and at night, asked once of a sample plant. */
-    private val sleeps = ConcurrentHashMap<EntityType<*>, Pair<Boolean, Boolean>>()
-
     /** Plants for a day seed (not asleep by day) or a night seed (not asleep at night). */
     fun candidates(level: ServerLevel, night: Boolean): List<EntityType<*>> =
         BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(PazTags.EntityTypes.PLANT)
@@ -44,8 +40,10 @@ object PoppyRattlePool {
         return pool.last()
     }
 
+    /**
+     * Whether a plant type sleeps by day and at night, asked of a sample plant (not added to the world).
+     * Not cached: it runs twice a game day per rattle, and the answer can follow tags a datapack reloads.
+     */
     private fun sleepFlags(level: ServerLevel, type: EntityType<*>): Pair<Boolean, Boolean>? =
-        sleeps[type] ?: (type.create(level, EntitySpawnReason.LOAD) as? Plant)
-            ?.let { Pair(it.sleepsDuringDay(), it.sleepsDuringNight()) }
-            ?.also { sleeps[type] = it }
+        (type.create(level, EntitySpawnReason.LOAD) as? Plant)?.let { Pair(it.sleepsDuringDay(), it.sleepsDuringNight()) }
 }

@@ -5,6 +5,7 @@ import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
+import joshxviii.plantz.ServerConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
 import net.minecraft.gametest.framework.GameTestHelper
@@ -251,6 +252,63 @@ object PoppyRattleGameTests {
         rattle.isAsleep = false
         rattle.deathTime = 5
         helper.assertTrue(rattle.textureSuffix() == null, "the night suffix while dying")
+        helper.succeed()
+    }
+
+    /**
+     * A plant limit the server config does not name falls back to the global default, not to the
+     * original's built-in list; our own plants' limits from code still apply.
+     */
+    fun entityLimitFallback(helper: GameTestHelper) {
+        val saved = PazConfig.server
+        try {
+            PazConfig.server = ServerConfig(customPlantEntityLimits = mutableMapOf())
+            helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.MELON_PULT), 30, "Melon-pult limit with an empty config map")
+            helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.COFFEE_BEAN), 30, "Coffee Bean limit with an empty config map")
+            helper.assertValueEqual(PazConfig.getEntityLimit(SquadEntities.POPPY_RATTLE.get()), 4, "Poppy Rattle limit from code")
+        } finally {
+            PazConfig.server = saved
+        }
+        helper.succeed()
+    }
+
+    /** Asleep (growing its own seeds) it delivers nothing; the owed seed waits for it to wake. */
+    fun asleepWaits(helper: GameTestHelper) {
+        val rattle = rattle(helper)
+        rattle.advanceClock(100)
+        rattle.advanceClock(mid(1))
+        val goal = PoppyRattle.PoppySeedGoal(rattle)
+        rattle.isAsleep = true
+        helper.assertFalse(goal.canUse(), "delivers while asleep")
+        rattle.isAsleep = false
+        helper.assertTrue(goal.canUse(), "does not deliver awake")
+        helper.assertTrue(rattle.hasOwedSeeds, "the owed seed is gone")
+        helper.succeed()
+    }
+
+    /** Full, it owes nothing: no "packet ready" jolt for a seed that would be thrown away. */
+    fun fullOwesNothing(helper: GameTestHelper) {
+        val rattle = rattle(helper)
+        fill(rattle, 2)
+        rattle.advanceClock(mid(3))
+        helper.assertFalse(rattle.hasOwedSeeds, "owes a seed while full")
+        rattle.takeAll(helper.makeMockPlayer(GameType.SURVIVAL))
+        rattle.advanceClock(mid(4))
+        helper.assertTrue(rattle.hasOwedSeeds, "owes nothing once emptied")
+        helper.succeed()
+    }
+
+    /** The renderer learns how to draw our plants from SquadPlantLook, not from per-plant branches. */
+    fun look(helper: GameTestHelper) {
+        val rattle = rattle(helper)
+        val look: SquadPlantLook = rattle
+        fill(rattle, 1)
+        helper.assertValueEqual(look.lookPose(), 1, "Poppy Rattle pose")
+        helper.assertTrue(look.lookSuffix(null) == "night", "Poppy Rattle suffix in the night it was filled in")
+        val spruce: SquadPlantLook = SquadEntities.NEEDLE_SPRUCE.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("the Needle Spruce does not spawn")
+        helper.assertTrue(spruce.lookSuffix(100L) == "strain", "Needle Spruce straining face")
+        helper.assertFalse(spruce.lookSpecialAction(), "a live Needle Spruce stands on a stump")
         helper.succeed()
     }
 }
