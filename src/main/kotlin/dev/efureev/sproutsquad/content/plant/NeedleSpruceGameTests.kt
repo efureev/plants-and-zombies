@@ -37,6 +37,26 @@ object NeedleSpruceGameTests {
         helper.succeed()
     }
 
+    /**
+     * The face follows the state: plain without a target, angry while aiming, straining for the first
+     * 850 ms of a volley, and the plain sleep texture while dying (there is no `_angry_sleep`).
+     */
+    fun face(helper: GameTestHelper) {
+        val spruce = SquadEntities.NEEDLE_SPRUCE.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("the Needle Spruce does not spawn")
+        helper.assertValueEqual(spruce.faceSuffix(null), "", "no target")
+        spruce.isAggressive = true
+        helper.assertValueEqual(spruce.faceSuffix(null), "angry", "aiming")
+        helper.assertValueEqual(spruce.faceSuffix(100L), "strain", "100 ms into a volley")
+        helper.assertValueEqual(spruce.faceSuffix(900L), "angry", "900 ms into a volley")
+        spruce.isAggressive = false
+        helper.assertValueEqual(spruce.faceSuffix(100L), "strain", "a volley at a target just lost")
+        spruce.isAggressive = true
+        spruce.deathTime = 5
+        helper.assertValueEqual(spruce.faceSuffix(100L), "", "dying")
+        helper.succeed()
+    }
+
     /** A zombie 10 blocks away gets volleys of exactly three 1-damage needles, one volley per 70 ticks. */
     fun volley(helper: GameTestHelper) {
         val (dx, dz) = strip(helper)

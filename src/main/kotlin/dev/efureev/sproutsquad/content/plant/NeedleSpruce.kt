@@ -52,6 +52,19 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
 
     override fun sleepsDuringNight(): Boolean = false
 
+    /**
+     * The texture suffix for the face: `strain` (eyes squeezed shut) for the first [STRAIN_MILLIS] of a
+     * volley, `angry` while it has a target in range (the synced [isAggressive] flag that
+     * ProjectileAttackGoal sets), plain otherwise. Nothing while dying: the renderer adds `sleep` then.
+     * @param actionMillis how long the action animation has been running, or null if it is not.
+     */
+    fun faceSuffix(actionMillis: Long?): String = when {
+        deathTime > 0 -> ""
+        actionMillis != null && actionMillis < STRAIN_MILLIS -> "strain"
+        isAggressive -> "angry"
+        else -> ""
+    }
+
     override fun registerGoals() {
         super.registerGoals()
         goalSelector.addGoal(2, NeedleVolleyGoal(this))

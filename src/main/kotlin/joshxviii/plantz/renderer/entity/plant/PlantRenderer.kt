@@ -190,6 +190,9 @@ open class PlantRenderer(
                 // Sprout Squad: dyed Marigolds (MarigoldColors); sleeping textures are named marigold_sleep_<colour>
                 is Marigold -> if (state.validMagicName(state.customName) == null) // a magic name ("Rainbow", "Flowey") wins over the dye
                     dev.efureev.sproutsquad.fixes.MarigoldColors.color(entity)?.let { add(if (entity.isAsleep || entity.deathTime > 0) "sleep_${it.serializedName}" else it.serializedName) }
+                // Sprout Squad: the Needle Spruce's angry and straining faces (NeedleSpruce.faceSuffix)
+                is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> add(entity.faceSuffix(
+                    entity.actionAnimationState.takeIf { it.isStarted }?.getTimeInMillis(state.ageInTicks)))
                 else -> {}
             }
         }

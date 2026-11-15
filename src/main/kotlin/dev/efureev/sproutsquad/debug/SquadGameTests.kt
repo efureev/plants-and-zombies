@@ -100,6 +100,7 @@ object SquadGameTests {
         Test("bugs_riding_wearer_plant_follows", OriginalBugsGameTests::ridingWearerPlantFollows),
         Test("bugs_dispenser_limit_and_spot", OriginalBugsGameTests::dispenserLimitAndSpot),
         Test("needle_spruce_stats", NeedleSpruceGameTests::stats),
+        Test("needle_spruce_face", NeedleSpruceGameTests::face),
         Test("needle_spruce_volley", NeedleSpruceGameTests::volley, maxTicks = 400, structure = id("gametest/lane")),
         Test("needle_spruce_out_of_range", NeedleSpruceGameTests::outOfRange, maxTicks = 400, structure = id("gametest/lane")),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
