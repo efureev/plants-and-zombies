@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "sproutsquad:potling"
+    "sproutsquad:potling",
+    "sproutsquad:needle_spruce"
   ]
 }

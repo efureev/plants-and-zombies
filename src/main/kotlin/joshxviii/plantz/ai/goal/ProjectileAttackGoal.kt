@@ -18,7 +18,7 @@ import java.util.function.Predicate
 import kotlin.math.atan
 import kotlin.math.sqrt
 
-class ProjectileAttackGoal(
+open class ProjectileAttackGoal(
     usingEntity: PathfinderMob,
     cooldownTime: Int = 20,
     actionDelay: Int = 0,

@@ -868,6 +868,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     open fun sleepsDuringDay(): Boolean = this.`is`(PazTags.EntityTypes.MUSHROOM)
     open fun canSurviveOn(block: BlockState) : Boolean = canWalk() || block.`is`(PLANTABLE)
     open fun canPlaceOn(block: BlockState) : Boolean = canSurviveOn(block)
+    /** Sprout Squad: room for the whole plant at [pos] beyond the block it stands in (tall plants: the Needle Spruce). */
+    open fun hasRoomAt(level: net.minecraft.world.level.LevelReader, pos: BlockPos): Boolean = true
     open fun canProduceSeeds(): Boolean = true
     open fun clampToGrid() = !canWalk() && !rolling && onValidGround()
     open fun cooldownFinished() {}
@@ -1080,13 +1082,18 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
     }
 
     override fun die(source: DamageSource) {
+        val wasDead = dead
         super.die(source)
+        // Sprout Squad: sun only once, for a death that happened (not a cancelled LivingDeathEvent, a removed plant or a second call)
+        if (wasDead || !dead) return
         if (source.entity is Player) {
-            val sunCost = PazConfig.getSunCost(type)
             val level = level() as? ServerLevel
-            if (level!=null) Sun.award(level, position(), (sunCost/2) - random.nextInt(0,1))
+            if (level!=null) Sun.award(level, position(), playerKillSun() - random.nextInt(0,1))
         }
     }
+
+    /** Sprout Squad: sun dropped when a player kills this plant; half its price unless a plant says otherwise. */
+    open fun playerKillSun(): Int = PazConfig.getSunCost(type) / 2
 
     fun verifyOwner(player: Player): Boolean {
         if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {

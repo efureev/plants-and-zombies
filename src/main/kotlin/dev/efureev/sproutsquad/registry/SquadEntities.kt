@@ -1,18 +1,22 @@
 package dev.efureev.sproutsquad.registry
 
+import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.Potling
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
+import joshxviii.plantz.PazSpawnPlacements
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.item.SeedPacketItem
 import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceKey
+import net.minecraft.tags.TagKey
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.MobCategory
 import net.minecraft.world.entity.SpawnPlacementTypes
 import net.minecraft.world.entity.SpawnPlacements
 import net.minecraft.world.item.CreativeModeTab
+import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.levelgen.Heightmap
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
@@ -40,7 +44,11 @@ object SquadEntities {
         val sunCost: Int,
         val attributes: Plant.Companion.PlantAttributes,
         val spawnRules: SpawnPlacements.SpawnPredicate<Plant>,
+        val wild: WildSpawn?,
     )
+
+    /** Where a plant grows wild: a biome spawn for every biome in [biomes] (applied by PazSpawnsBiomeModifier). */
+    class WildSpawn(val biomes: TagKey<Biome>, val weight: Int, val minGroupSize: Int = 1, val maxGroupSize: Int = 1)
 
     private val plantEntries = mutableListOf<PlantEntry>()
     val plants: List<PlantEntry> get() = plantEntries.toList()
@@ -49,6 +57,14 @@ object SquadEntities {
     /** Potling, the mascot: a cheap sun maker and the template for new plants. */
     val POTLING = plant("potling", ::Potling, width = 0.65f, height = 1.0f, sunCost = 3,
         attributes = Plant.Companion.PlantAttributes(maxHealth = 12.0))
+
+    /** Needle Spruce: a three-block mountain spruce firing three needles per volley. */
+    val NEEDLE_SPRUCE = plant("needle_spruce", ::NeedleSpruce, width = 0.9f, height = 2.9f, eyeHeight = NeedleSpruce.EYE_HEIGHT,
+        sunCost = NeedleSpruce.SUN_COST,
+        attributes = Plant.Companion.PlantAttributes(maxHealth = NeedleSpruce.MAX_HEALTH, attackDamage = NeedleSpruce.NEEDLE_DAMAGE,
+            followRange = NeedleSpruce.RANGE),
+        spawnRules = SpawnPlacements.SpawnPredicate(NeedleSpruce::checkNeedleSpruceSpawnRules),
+        wild = WildSpawn(NeedleSpruce.HAS_NEEDLE_SPRUCE, weight = 4, minGroupSize = 1, maxGroupSize = 2))
     // endregion
 
     fun register(modBus: IEventBus) {
@@ -65,8 +81,11 @@ object SquadEntities {
         modBus.addListener(RegisterSpawnPlacementsEvent::class.java) { event ->
             plantEntries.forEach { entry ->
                 @Suppress("UNCHECKED_CAST")
-                event.register(entry.type.get() as EntityType<Plant>, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                val type = entry.type.get() as EntityType<Plant>
+                event.register(type, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                     entry.spawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE)
+                // biome spawn lists, read later by PazSpawnsBiomeModifier when a server starts
+                entry.wild?.let { PazSpawnPlacements.addBiomeSpawn(it.biomes, type, it.weight, it.minGroupSize, it.maxGroupSize) }
             }
         }
     }
@@ -81,19 +100,21 @@ object SquadEntities {
         factory: EntityType.EntityFactory<T>,
         width: Float = 0.6f,
         height: Float = 1.0f,
+        eyeHeight: Float = height * 0.85f,
         sunCost: Int,
         attributes: Plant.Companion.PlantAttributes = Plant.Companion.PlantAttributes(),
         spawnRules: SpawnPlacements.SpawnPredicate<Plant> = SpawnPlacements.SpawnPredicate(Plant::checkPlantSpawnRules),
+        wild: WildSpawn? = null,
     ): DeferredHolder<EntityType<*>, EntityType<T>> {
         val holder = ENTITY_TYPES.register(name) { id ->
             // AMBIENT like the original's plants (PazEntities.registerPlant)
             EntityType.Builder.of(factory, MobCategory.AMBIENT)
                 .canSpawnFarFromPlayer()
                 .sized(width, height)
-                .eyeHeight(height * 0.85f)
+                .eyeHeight(eyeHeight)
                 .build(ResourceKey.create(Registries.ENTITY_TYPE, id))
         }
-        plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules)
+        plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules, wild)
         return holder
     }
 }

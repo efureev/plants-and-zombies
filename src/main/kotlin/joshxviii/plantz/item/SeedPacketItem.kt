@@ -156,6 +156,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
                 if (
                     !(entity.canPlaceOn(blockBelow) || checkWater)
                     || !(spawnBlockCollisionShape==null || !entityBox.intersects(spawnBlockCollisionShape))
+                    || !entity.hasRoomAt(level, spawnPos) // Sprout Squad: tall plants
                 ) {
                     player.sendOverlayMessage(
                         Component.translatable("message.sproutsquad.cannot_place", entity.name.copy().withStyle(ChatFormatting.RED)).withStyle(ChatFormatting.DARK_RED)
@@ -234,7 +235,7 @@ class SeedPacketItem(properties: Properties) : Item(properties) {
 
             if (entity is Plant) {
                 val blockBelow = level.getBlockState(spawnPos.below())
-                if (!entity.canPlaceOn(blockBelow)) return false
+                if (!entity.canPlaceOn(blockBelow) || !entity.hasRoomAt(level, spawnPos)) return false // Sprout Squad: tall plants
 
                 if (level.getEntitiesOfClass(Plant::class.java, AABB(spawnPos)).isNotEmpty()) return false
                 val yaw = horizontalDir.toYRot()

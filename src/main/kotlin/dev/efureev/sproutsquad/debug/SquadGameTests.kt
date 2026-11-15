@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.debug
 
+import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
@@ -98,6 +99,22 @@ object SquadGameTests {
         Test("bugs_wearer_gone_drops_plant", OriginalBugsGameTests::wearerGoneDropsPlant),
         Test("bugs_riding_wearer_plant_follows", OriginalBugsGameTests::ridingWearerPlantFollows),
         Test("bugs_dispenser_limit_and_spot", OriginalBugsGameTests::dispenserLimitAndSpot),
+        Test("needle_spruce_stats", NeedleSpruceGameTests::stats),
+        Test("needle_spruce_face", NeedleSpruceGameTests::face),
+        Test("needle_spruce_volley", NeedleSpruceGameTests::volley, maxTicks = 400, structure = id("gametest/lane")),
+        Test("needle_spruce_out_of_range", NeedleSpruceGameTests::outOfRange, maxTicks = 400, structure = id("gametest/lane")),
+        Test("needle_spruce_lives_on_snow", NeedleSpruceGameTests::livesOnSnow, structure = id("gametest/lane")),
+        Test("needle_spruce_needs_headroom", NeedleSpruceGameTests::needsHeadroom, structure = id("gametest/lane")),
+        Test("needle_spruce_powder_snow", NeedleSpruceGameTests::powderSnow, structure = id("gametest/lane")),
+        Test("needle_spruce_spawns", NeedleSpruceGameTests::spawns, structure = id("gametest/lane")),
+        Test("needle_spruce_stump_on_death", NeedleSpruceGameTests::stumpOnDeath, structure = id("gametest/lane")),
+        Test("needle_spruce_killed_by_zombie", NeedleSpruceGameTests::killedByZombie, structure = id("gametest/lane")),
+        Test("needle_spruce_stump_replaces_snow_layer", NeedleSpruceGameTests::stumpReplacesSnowLayer, structure = id("gametest/lane")),
+        Test("needle_spruce_no_stump_in_water_or_on_slab", NeedleSpruceGameTests::noStumpInWaterOrOnSlab, structure = id("gametest/lane")),
+        Test("needle_spruce_no_stump_without_death", NeedleSpruceGameTests::noStumpWithoutDeath, structure = id("gametest/lane")),
+        Test("needle_spruce_stump_on_farmland_path_and_mud", NeedleSpruceGameTests::stumpOnFarmlandPathAndMud, structure = id("gametest/lane")),
+        Test("needle_spruce_stands_on_its_stump", NeedleSpruceGameTests::standsOnItsStumpOnlyWithAStump, structure = id("gametest/lane")),
+        Test("needle_spruce_stump_loot", NeedleSpruceGameTests::stumpLoot, structure = id("gametest/lane")),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
