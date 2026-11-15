@@ -1,16 +1,27 @@
 package dev.efureev.sproutsquad.content.plant
 
+import dev.efureev.sproutsquad.content.block.NeedleSpruceStumpBlock
+import dev.efureev.sproutsquad.registry.SquadBlocks
+import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
+import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
+import net.minecraft.core.particles.BlockParticleOption
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -63,6 +74,28 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         actionMillis != null && actionMillis < STRAIN_MILLIS -> "strain"
         isAggressive -> "angry"
         else -> ""
+    }
+
+    /**
+     * The trunk snaps at the bend: the lower part stays as a stump block (NeedleSpruceStumpBlock), the
+     * crown falls (NeedleSpruceModel) and sheds its needles. A spruce worn on a head or riding something
+     * drops what the stump would. A player's kill drops [PLAYER_KILL_SUN] sun in all: Plant.die gives
+     * half the price, this adds the rest.
+     */
+    override fun die(source: DamageSource) {
+        val wasDead = dead
+        super.die(source)
+        val level = level() as? ServerLevel ?: return
+        if (wasDead) return
+        val stump = SquadBlocks.NEEDLE_SPRUCE_STUMP.get().defaultBlockState()
+        if (isPassenger || isAttached()) Block.dropResources(stump, level, blockPosition())
+        else NeedleSpruceStumpBlock.placeOrDrop(level, blockPosition())
+        level.sendParticles(BlockParticleOption(ParticleTypes.BLOCK, Blocks.SPRUCE_LEAVES.defaultBlockState()),
+            x, y + 2.0, z, 40, 0.5, 0.6, 0.5, 0.1)
+        if (source.entity is Player) {
+            val extra = PLAYER_KILL_SUN - PazConfig.getSunCost(type) / 2
+            if (extra > 0) Sun.award(level, position(), extra)
+        }
     }
 
     override fun registerGoals() {

@@ -1,0 +1,241 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "sproutsquad:block/needle_spruce_stump_side",
+    "side": "sproutsquad:block/needle_spruce_stump_side",
+    "top": "sproutsquad:block/needle_spruce_stump_top",
+    "shoot": "sproutsquad:block/needle_spruce_stump_shoot"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#top",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        2
+      ],
+      "to": [
+        9,
+        2,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0,
+        11
+      ],
+      "to": [
+        9,
+        2,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        0,
+        7
+      ],
+      "to": [
+        5,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        0,
+        7
+      ],
+      "to": [
+        14,
+        2,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side"
+        },
+        "south": {
+          "texture": "#side"
+        },
+        "east": {
+          "texture": "#side"
+        },
+        "west": {
+          "texture": "#side"
+        },
+        "up": {
+          "texture": "#side"
+        },
+        "down": {
+          "texture": "#side",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        9,
+        6
+      ],
+      "to": [
+        10,
+        12,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shoot"
+        },
+        "south": {
+          "texture": "#shoot"
+        },
+        "east": {
+          "texture": "#shoot"
+        },
+        "west": {
+          "texture": "#shoot"
+        },
+        "up": {
+          "texture": "#shoot"
+        },
+        "down": {
+          "texture": "#shoot"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        12,
+        5
+      ],
+      "to": [
+        11,
+        13,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#shoot"
+        },
+        "south": {
+          "texture": "#shoot"
+        },
+        "east": {
+          "texture": "#shoot"
+        },
+        "west": {
+          "texture": "#shoot"
+        },
+        "up": {
+          "texture": "#shoot"
+        },
+        "down": {
+          "texture": "#shoot"
+        }
+      }
+    }
+  ]
+}

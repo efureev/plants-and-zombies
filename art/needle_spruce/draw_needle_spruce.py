@@ -8,6 +8,7 @@ Writes:
     src/main/resources/assets/sproutsquad/textures/entity/plant/needle_spruce/needle_spruce.png         (128x64)
     .../needle_spruce_angry.png, needle_spruce_strain.png, needle_spruce_sleep.png                     (128x64)
     src/main/resources/assets/sproutsquad/textures/item/plant_icon/needle_spruce.png                    (16x16)
+    src/main/resources/assets/sproutsquad/textures/block/needle_spruce_stump_{side,top,shoot}.png        (16x16)
 and, if preview_dir is given, needle_spruce_faces.png there (the four faces side by side, x8).
 
 The UV layout follows NeedleSpruceModel.createBodyLayer() (box UV: top and bottom faces in the first
@@ -22,6 +23,7 @@ from PIL import Image
 ROOT = os.path.join("src", "main", "resources", "assets", "sproutsquad", "textures")
 ENTITY_DIR = os.path.join(ROOT, "entity", "plant", "needle_spruce")
 ICON_PATH = os.path.join(ROOT, "item", "plant_icon", "needle_spruce.png")
+BLOCK_DIR = os.path.join(ROOT, "block")
 
 
 def c(h):
@@ -174,6 +176,21 @@ def draw_icon():
     return img
 
 
+def draw_stump():
+    """Block textures of the stump (models/block/needle_spruce_stump.json): bark, rings, the shoot."""
+    side = Image.new("RGBA", (16, 16), CLEAR)
+    bark(side, 0, 0, 16, 16, "side", random.Random(900))
+    top = Image.new("RGBA", (16, 16), CLEAR)
+    bark(top, 0, 0, 16, 16, "side", random.Random(901))
+    for j in range(5, 11):  # rings around a dark core, on the trunk's top face (pixels 5..10)
+        for i in range(5, 11):
+            d = max(abs(i - 7.5), abs(j - 7.5))
+            top.putpixel((i, j), B1 if d > 2 else B3 if d > 1 else B2 if d > 0.5 else B0)
+    shoot = Image.new("RGBA", (16, 16), CLEAR)
+    needles(shoot, 0, 0, 16, 16, "top", random.Random(902))
+    return {"side": side, "top": top, "shoot": shoot}
+
+
 def main():
     os.makedirs(ENTITY_DIR, exist_ok=True)
     names = {"normal": "needle_spruce", "angry": "needle_spruce_angry",
@@ -184,6 +201,9 @@ def main():
         bodies[mood].save(os.path.join(ENTITY_DIR, name + ".png"))
     os.makedirs(os.path.dirname(ICON_PATH), exist_ok=True)
     draw_icon().save(ICON_PATH)
+    os.makedirs(BLOCK_DIR, exist_ok=True)
+    for name, img in draw_stump().items():
+        img.save(os.path.join(BLOCK_DIR, "needle_spruce_stump_" + name + ".png"))
 
     if len(sys.argv) > 1:
         out = sys.argv[1]

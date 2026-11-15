@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.content.plant
 
+import dev.efureev.sproutsquad.registry.SquadBlocks
 import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazEntities
@@ -8,8 +9,11 @@ import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
 
@@ -117,6 +121,86 @@ object NeedleSpruceGameTests {
             }
             .thenSucceed()
     }
+
+    // region death and the stump
+
+    private val SPOT = BlockPos(2, 0, 1)
+
+    /** Killed by a player on snow: a stump where it stood and 4 sun. */
+    fun stumpOnDeath(helper: GameTestHelper) {
+        val spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        spruce.hurtServer(helper.level, helper.level.damageSources().playerAttack(helper.makeMockPlayer(GameType.SURVIVAL)), 1000f)
+        helper.assertTrue(spruce.isDeadOrDying, "the spruce survived")
+        helper.assertBlockPresent(SquadBlocks.NEEDLE_SPRUCE_STUMP.get(), SPOT)
+        helper.assertValueEqual(sunAround(helper), NeedleSpruce.PLAYER_KILL_SUN, "sun dropped")
+        helper.succeed()
+    }
+
+    /** Killed by a zombie: the stump, but no sun. */
+    fun killedByZombie(helper: GameTestHelper) {
+        val spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, SPOT.offset(3, 0, 0))
+        spruce.hurtServer(helper.level, helper.level.damageSources().mobAttack(zombie), 1000f)
+        helper.assertBlockPresent(SquadBlocks.NEEDLE_SPRUCE_STUMP.get(), SPOT)
+        helper.assertValueEqual(sunAround(helper), 0, "sun dropped")
+        zombie.discard()
+        helper.succeed()
+    }
+
+    /** A snow layer where it stood is replaced by the stump. */
+    fun stumpReplacesSnowLayer(helper: GameTestHelper) {
+        val spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        helper.setBlock(SPOT, Blocks.SNOW)
+        spruce.kill(helper.level)
+        helper.assertBlockPresent(SquadBlocks.NEEDLE_SPRUCE_STUMP.get(), SPOT)
+        helper.succeed()
+    }
+
+    /** In water or on a bottom slab there is no stump: its sapling and sticks drop as items. */
+    fun noStumpInWaterOrOnSlab(helper: GameTestHelper) {
+        var spruce = standOn(helper, Blocks.SNOW_BLOCK)
+        helper.setBlock(SPOT, Blocks.WATER)
+        spruce.kill(helper.level)
+        helper.assertBlockPresent(Blocks.WATER, SPOT)
+        assertStumpLoot(helper, "in water")
+        helper.level.getEntities(EntityTypes.ITEM, around(helper)) { true }.forEach { it.discard() }
+
+        spruce = standOn(helper, Blocks.OAK_SLAB)
+        spruce.kill(helper.level)
+        helper.assertBlockPresent(Blocks.AIR, SPOT)
+        assertStumpLoot(helper, "on a slab")
+        helper.succeed()
+    }
+
+    /** Breaking the stump gives a spruce sapling and one or two sticks. */
+    fun stumpLoot(helper: GameTestHelper) {
+        helper.setBlock(SPOT.below(), Blocks.SNOW_BLOCK)
+        helper.setBlock(SPOT, SquadBlocks.NEEDLE_SPRUCE_STUMP.get())
+        helper.level.destroyBlock(helper.absolutePos(SPOT), true)
+        helper.assertBlockPresent(Blocks.AIR, SPOT)
+        assertStumpLoot(helper, "from the broken stump")
+        helper.succeed()
+    }
+
+    private fun standOn(helper: GameTestHelper, ground: net.minecraft.world.level.block.Block): NeedleSpruce {
+        helper.setBlock(SPOT.below(), ground)
+        for (y in 0..3) helper.setBlock(SPOT.above(y), Blocks.AIR)
+        return helper.spawn(SquadEntities.NEEDLE_SPRUCE.get(), SPOT)
+    }
+
+    private fun around(helper: GameTestHelper): AABB = AABB(helper.absolutePos(SPOT)).inflate(3.0)
+
+    private fun sunAround(helper: GameTestHelper): Int =
+        helper.level.getEntities(PazEntities.SUN, around(helper)) { true }.sumOf { it.value }
+
+    private fun assertStumpLoot(helper: GameTestHelper, where: String) {
+        val stacks = helper.level.getEntities(EntityTypes.ITEM, around(helper)) { true }.map { it.item }
+        helper.assertValueEqual(stacks.filter { it.`is`(Items.SPRUCE_SAPLING) }.sumOf { it.count }, 1, "spruce saplings $where")
+        val sticks = stacks.filter { it.`is`(Items.STICK) }.sumOf { it.count }
+        helper.assertTrue(sticks in 1..2, "$sticks sticks $where, expected 1-2")
+    }
+
+    // endregion
 
     // region strip helpers: a straight lane along +x through the middle of `gametest/lane`
 
