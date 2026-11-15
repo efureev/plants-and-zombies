@@ -161,6 +161,7 @@ object NeedleSpruceGameTests {
         }
         helper.assertTrue(canSpawnOn(Blocks.SNOW_BLOCK), "does not spawn on a snow block")
         helper.assertFalse(canSpawnOn(Blocks.STONE), "spawns on stone")
+        helper.assertFalse(canSpawnOn(Blocks.POWDER_SNOW), "spawns on powder snow, where it cannot live")
         helper.succeed()
     }
 

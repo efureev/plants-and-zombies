@@ -1087,11 +1087,13 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         // Sprout Squad: sun only once, for a death that happened (not a cancelled LivingDeathEvent, a removed plant or a second call)
         if (wasDead || !dead) return
         if (source.entity is Player) {
-            val sunCost = PazConfig.getSunCost(type)
             val level = level() as? ServerLevel
-            if (level!=null) Sun.award(level, position(), (sunCost/2) - random.nextInt(0,1))
+            if (level!=null) Sun.award(level, position(), playerKillSun() - random.nextInt(0,1))
         }
     }
+
+    /** Sprout Squad: sun dropped when a player kills this plant; half its price unless a plant says otherwise. */
+    open fun playerKillSun(): Int = PazConfig.getSunCost(type) / 2
 
     fun verifyOwner(player: Player): Boolean {
         if (!isTame || (player != owner && !PazConfig.COOP_PLANTING)) {

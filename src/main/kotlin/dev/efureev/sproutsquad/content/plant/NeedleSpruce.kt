@@ -2,10 +2,9 @@ package dev.efureev.sproutsquad.content.plant
 
 import dev.efureev.sproutsquad.content.block.NeedleSpruceStumpBlock
 import dev.efureev.sproutsquad.registry.SquadBlocks
-import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
-import joshxviii.plantz.entity.Sun
+import joshxviii.plantz.entity.plant.IcePeaShooter
 import joshxviii.plantz.entity.plant.Plant
 import joshxviii.plantz.entity.projectile.Needle
 import joshxviii.plantz.pazResource
@@ -16,15 +15,17 @@ import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.BlockTags
 import net.minecraft.tags.TagKey
+import net.minecraft.util.RandomSource
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.LevelAccessor
 import net.minecraft.world.level.LevelReader
 import net.minecraft.world.level.biome.Biome
 import net.minecraft.world.level.block.Block
@@ -65,6 +66,9 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
 
         const val EYE_HEIGHT = 1.4f
 
+        /** Height of the stump block's top (NeedleSpruceStumpBlock's trunk), in blocks. */
+        private const val STUMP_TOP = 9.0 / 16.0
+
         /** Where it grows wild: snowy slopes and groves (`data/sproutsquad/tags/worldgen/biome/plant/has_needle_spruce.json`). */
         val HAS_NEEDLE_SPRUCE: TagKey<Biome> = TagKey.create(Registries.BIOME, pazResource("plant/has_needle_spruce"))
 
@@ -73,6 +77,16 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
          * the look direction, y up. The fronts of the three tiers, as the crown leans into the shot.
          */
         val NEEDLE_OFFSETS = listOf(Vec2(0.6f, 0.0f), Vec2(0.7f, 0.5f), Vec2(0.8f, 0.9f))
+
+        /** Wild spawns: on plant ground or snow like the Ice Peashooter, but not on powder snow ([canSurviveOn]). */
+        fun checkNeedleSpruceSpawnRules(
+            type: EntityType<out Plant>,
+            level: LevelAccessor,
+            spawnReason: EntitySpawnReason,
+            pos: BlockPos,
+            random: RandomSource,
+        ): Boolean = IcePeaShooter.checkIcePeaShooterSpawnRules(type, level, spawnReason, pos, random)
+            && !level.getBlockState(pos.below()).`is`(Blocks.POWDER_SNOW)
     }
 
     override fun sleepsDuringNight(): Boolean = false
@@ -104,8 +118,7 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
     /**
      * The trunk snaps at the bend: the lower part stays as a stump block (NeedleSpruceStumpBlock), the
      * crown falls (NeedleSpruceModel) and sheds its needles. A spruce worn on a head or riding something
-     * drops what the stump would. A player's kill drops [PLAYER_KILL_SUN] sun in all: Plant.die gives
-     * half the price, this adds the rest.
+     * drops what the stump would.
      */
     override fun die(source: DamageSource) {
         val wasDead = dead
@@ -117,11 +130,10 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         else NeedleSpruceStumpBlock.placeOrDrop(level, blockPosition())
         level.sendParticles(BlockParticleOption(ParticleTypes.BLOCK, Blocks.SPRUCE_LEAVES.defaultBlockState()),
             x, y + 2.0, z, 40, 0.5, 0.6, 0.5, 0.1)
-        if (source.entity is Player) {
-            val extra = PLAYER_KILL_SUN - PazConfig.getSunCost(type) / 2
-            if (extra > 0) Sun.award(level, position(), extra)
-        }
     }
+
+    /** A player's kill drops [PLAYER_KILL_SUN] sun, or half the price if a raised price makes that more. */
+    override fun playerKillSun(): Int = maxOf(PLAYER_KILL_SUN, super.playerKillSun())
 
     /**
      * Dying, with its stump in place of the lower trunk (NeedleSpruceStumpBlock.placeOrDrop put it at its
@@ -131,7 +143,10 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
         if (!isDeadOrDying) return false
         val stump = SquadBlocks.NEEDLE_SPRUCE_STUMP.get()
         val level = level()
-        return level.getBlockState(blockPosition()).`is`(stump) || level.getBlockState(blockPosition().above()).`is`(stump)
+        val pos = blockPosition()
+        // a stump in its own block counts only if the spruce is not standing on top of it (an older stump:
+        // then its own stump was dropped as items)
+        return (level.getBlockState(pos).`is`(stump) && y - pos.y < STUMP_TOP) || level.getBlockState(pos.above()).`is`(stump)
     }
 
     override fun registerGoals() {

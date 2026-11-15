@@ -31,7 +31,7 @@ class NeedleSpruceStumpBlock(properties: Properties) : Block(properties) {
 
         /**
          * Puts a stump where a spruce standing at [pos] (its block position) had its trunk: in [pos] when that
-         * is air or a replaceable block without fluid (a snow layer, grass) on ground below, or on top of
+         * is air or a replaceable block without fluid or collision (a thin snow layer, grass) on ground below, or on top of
          * [pos] when the spruce stands inside a ground block a little lower than a full one (farmland, a
          * dirt path, mud). Never replaces anything else. Otherwise drops what breaking the stump would give
          * and returns false.
@@ -49,7 +49,8 @@ class NeedleSpruceStumpBlock(properties: Properties) : Block(properties) {
 
         private fun hasRoom(level: ServerLevel, pos: BlockPos): Boolean {
             val state = level.getBlockState(pos)
-            return state.isAir || (state.canBeReplaced() && state.fluidState.isEmpty)
+            // every snow layer is "replaceable"; a deeper one has collision and the spruce stands on top of it
+            return state.isAir || (state.canBeReplaced() && state.fluidState.isEmpty && state.getCollisionShape(level, pos).isEmpty)
         }
 
         private fun isGround(level: ServerLevel, pos: BlockPos): Boolean {
