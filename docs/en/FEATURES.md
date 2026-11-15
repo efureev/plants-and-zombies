@@ -21,7 +21,7 @@ Contents: [Quick start](#quick-start) · [Plants](#plants) · [Zombies](#zombies
 
 - A seed packet ("Peashooter Seeds" and so on) holds one plant. Right-click the top of a block to plant it. Water plants (Sea-shroom, Tangle Kelp) are placed on the water surface.
 - Planting costs sun: the cost is shown in the packet's tooltip. Sun is taken from Sun items in your inventory and from Solar Batteries you carry. In creative mode planting is free and ignores limits.
-- The block below must suit the plant. Every plant grows on dirt, grass, mud, moss, clay, soul soil, nylium, dirt paths, flower pots, lily pads, farmland and plant pots. Some accept more: Cactus (sand, soul sand), Potato Mine (sand, gravel), Snow Pea and Ice-shroom (snow), Doom-shroom (gravel, basalt), Grave Buster (gravestones), Cherry Bomb and Coffee Bean (any solid block), Squash and Pumpkin (anything).
+- The block below must suit the plant. Every plant grows on dirt, grass, mud, moss, clay, soul soil, nylium, dirt paths, flower pots, lily pads, farmland and plant pots. Some accept more: Cactus (sand, soul sand), Potato Mine (sand, gravel), Snow Pea, Ice-shroom and Needle Spruce (snow), Doom-shroom (gravel, basalt), Grave Buster (gravestones), Cherry Bomb and Coffee Bean (any solid block), Squash and Pumpkin (anything).
 - One plant per block. A plant standing on unsuitable ground or overlapping another one slowly dries out and takes damage.
 - A new plant faces you; in a pot it faces the same way as the pot.
 - A plant you plant is tamed to you.
@@ -39,12 +39,12 @@ Sun is the plant currency.
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 1 sun about every 45 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 1 sun about every 60 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 1 sun about every 65 s, 2 once it has grown up; a mushroom, so it works at night and underground |
-|  | Killing a plant yourself | half of its sun cost |
+|  | Killing a plant yourself | half of its sun cost ([Needle Spruce](characters/needle_spruce.md): 4) |
 | <img src="../images/items/sun_bottle.png" alt="" width="112"> | Bottle of Sun | throw it to release 8 sun, or craft it back into 8 sun |
 |  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
-- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling).
+- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce).
 - **Bottle of Sun**: 8 sun around a glass bottle. It can also be fired from a dispenser.
 - **Solar Battery**: 4 Brainz Alloy, a Reinforced Brainz Alloy block, a Daylight Detector and 2 glass. It stores up to 512 sun. In the inventory, drop sun onto it to charge it, or right-click it with an empty cursor to take out up to a stack. Picked-up sun goes into the battery first, and planting, taming and feeding use its charge. Sneak and right-click to place it on any face of a block: a placed battery pulls in sun within 8 blocks, glows brighter the fuller it is, gives a comparator signal, accepts sun by right-click, feeds an attached dispenser and powers the [Time Machine](#time-machine).
 - The client option "Sun Info HUD" shows your total sun and the cost of the held seed packet.
@@ -65,6 +65,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 | <img src="../images/characters/fire_peashooter.png" alt="" width="112"> | [Fire Peashooter](characters/fire_peashooter.md) | 7 | Fire peas | Crimson Forest; Peashooter mutation there |
 | <img src="../images/characters/electric_peashooter.png" alt="" width="112"> | [Electric Peashooter](characters/electric_peashooter.md) | 8 | Electric peas (Electrified) | A Peashooter struck by lightning turns into one; mutation during thunderstorms; late raid rewards |
 | <img src="../images/characters/cactus.png" alt="" width="112"> | [Cactus](characters/cactus.md) | 6 | Shoots needles | Deserts, badlands |
+| <img src="../images/characters/needle_spruce.png" alt="" width="112"> | [Needle Spruce](characters/needle_spruce.md) | 7 | Fires three needles at once; 40 health, 20-block range | Snowy slopes, groves; crafting: spruce sapling, 7 sun |
 | <img src="../images/characters/cabbagepult.png" alt="" width="112"> | [Cabbage-pult](characters/cabbagepult.md) | 5 | Lobs cabbages over obstacles | Plains, forests; village chests |
 | <img src="../images/characters/kernelpult.png" alt="" width="112"> | [Kernel-pult](characters/kernelpult.md) | 6 | Lobs kernels, every fourth shot or so is butter (Buttered) | Plains, savannas; village chests |
 | <img src="../images/characters/melonpult.png" alt="" width="112"> | [Melon-pult](characters/melonpult.md) | 10 | Lobs heavy melons | Jungles |
@@ -569,7 +570,7 @@ The first three can be changed in game with `/pz options`.
 
 ## Characters
 
-Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md).
+Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md) and the [Needle Spruce](characters/needle_spruce.md).
 
 ### Secret names
 

@@ -1,6 +1,9 @@
 # Sprout Squad — Unreleased
 Changes since Sprout Squad 0.2.1.
 
+### Additions
+- Needle Spruce, a new plant: a three-block mountain spruce that fires three needles at once (1 damage each) at enemies within 20 blocks, with angry and straining faces. 40 health, 7 sun. Grows wild on snowy slopes and in groves; seed packet from a spruce sapling and 7 sun. When it dies it leaves a stump that gives a spruce sapling and sticks.
+
 ### Fixes
 - Saved worlds load again: a returning player was rejected with "Invalid player data" (in single player as well as on a server), because restoring the mod's status flags tried to send them before the player was connected.
 
