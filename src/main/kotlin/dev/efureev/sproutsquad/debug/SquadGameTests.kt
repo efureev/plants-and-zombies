@@ -4,6 +4,7 @@ import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
 import dev.efureev.sproutsquad.fixes.OriginalGapsGameTests
+import dev.efureev.sproutsquad.fixes.PortGameTests
 import dev.efureev.sproutsquad.machines.MachinesGameTests
 import dev.efureev.sproutsquad.structures.StructuresGameTests
 import joshxviii.plantz.PazMain
@@ -97,6 +98,7 @@ object SquadGameTests {
         Test("bugs_wearer_gone_drops_plant", OriginalBugsGameTests::wearerGoneDropsPlant),
         Test("bugs_riding_wearer_plant_follows", OriginalBugsGameTests::ridingWearerPlantFollows),
         Test("bugs_dispenser_limit_and_spot", OriginalBugsGameTests::dispenserLimitAndSpot),
+        Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
         Test("machines_turret", MachinesGameTests::turret, maxTicks = 1200),
