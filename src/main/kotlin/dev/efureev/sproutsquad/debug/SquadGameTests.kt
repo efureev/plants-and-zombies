@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
+import dev.efureev.sproutsquad.content.plant.PoppyRattleGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
@@ -115,6 +116,7 @@ object SquadGameTests {
         Test("needle_spruce_stump_on_farmland_path_and_mud", NeedleSpruceGameTests::stumpOnFarmlandPathAndMud, structure = id("gametest/lane")),
         Test("needle_spruce_stands_on_its_stump", NeedleSpruceGameTests::standsOnItsStumpOnlyWithAStump, structure = id("gametest/lane")),
         Test("needle_spruce_stump_loot", NeedleSpruceGameTests::stumpLoot, structure = id("gametest/lane")),
+        Test("poppy_rattle_stats", PoppyRattleGameTests::stats),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:poppy",
+    "minecraft:torch",
+    "sproutsquad:sun",
+    "sproutsquad:sun",
+    "sproutsquad:sun",
+    "sproutsquad:sun",
+    "sproutsquad:sun",
+    "sproutsquad:sun"
+  ],
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "sproutsquad:poppy_rattle"
+      }
+    }
+  }
+}

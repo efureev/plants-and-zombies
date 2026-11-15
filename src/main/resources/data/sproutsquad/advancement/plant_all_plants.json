@@ -425,6 +425,18 @@
           }
         }
       }
+    },
+    "sproutsquad:poppy_rattle": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:poppy_rattle"
+          }
+        }
+      }
     }
   },
   "sends_telemetry_event": false
