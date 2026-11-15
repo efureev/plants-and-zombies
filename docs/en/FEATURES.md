@@ -167,7 +167,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 <!-- pictures: plant_pot_helmet -->
 <p><img src="../images/items/plant_pot_helmet.png" alt="Plant Pot Helmet" title="Plant Pot Helmet" width="112"></p>
 
-**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet; so does a mob's plant when the mob is gone without it (through a portal, by converting or despawning).
+**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters (a [Poppy Rattle](characters/poppy_rattle.md) grows no seed packets while worn). To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet; so does a mob's plant when the mob is gone without it (through a portal, by converting or despawning).
 
 <!-- pictures: gardening_glove -->
 <p><img src="../images/items/gardening_glove.png" alt="Gardening Glove" title="Gardening Glove" width="112"></p>
