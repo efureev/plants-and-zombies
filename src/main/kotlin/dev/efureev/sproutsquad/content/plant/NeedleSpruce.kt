@@ -38,7 +38,7 @@ import net.minecraft.world.phys.Vec2
  * 20 blocks it bends forward like a catapult and fires three needles at once, one from each tier.
  * Does not sleep at night. See docs/en/characters/needle_spruce.md.
  */
-class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, level) {
+class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, level), SquadPlantLook {
     companion object {
         const val MAX_HEALTH = 40.0
         const val NEEDLE_DAMAGE = 1.0
@@ -108,6 +108,10 @@ class NeedleSpruce(type: EntityType<out Plant>, level: Level) : Plant(type, leve
      * ProjectileAttackGoal sets), plain otherwise. Nothing while dying: the renderer adds `sleep` then.
      * @param actionMillis how long the action animation has been running, or null if it is not.
      */
+    override fun lookSuffix(actionMillis: Long?): String? = faceSuffix(actionMillis).ifEmpty { null }
+
+    override fun lookSpecialAction(): Boolean = standsOnItsStump()
+
     fun faceSuffix(actionMillis: Long?): String = when {
         deathTime > 0 -> ""
         actionMillis != null && actionMillis < STRAIN_MILLIS -> "strain"

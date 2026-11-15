@@ -1,3 +1,9 @@
+# Sprout Squad — Unreleased
+Changes since Sprout Squad 0.2.2.
+
+### Additions
+- Poppy Rattle, a new plant: a poppy seed head with a crown-shaped lid that grows a seed packet of a random plant once by day and once by night (a plant awake at that time; cheaper plants come up more often; never a Marigold, Citron or Royal Sunflower). It keeps up to two under its lid, its owner takes them with an empty hand. It never sleeps, and at night its eyes glow. 16 health, 6 sun, at most 4 within 32 blocks. Seed packet from a poppy, a torch and 6 sun.
+
 # Sprout Squad 0.2.2
 Changes since Sprout Squad 0.2.1.
 

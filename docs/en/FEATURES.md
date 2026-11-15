@@ -44,7 +44,7 @@ Sun is the plant currency.
 |  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
-- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce).
+- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce, Poppy Rattle).
 - **Bottle of Sun**: 8 sun around a glass bottle. It can also be fired from a dispenser.
 - **Solar Battery**: 4 Brainz Alloy, a Reinforced Brainz Alloy block, a Daylight Detector and 2 glass. It stores up to 512 sun. In the inventory, drop sun onto it to charge it, or right-click it with an empty cursor to take out up to a stack. Picked-up sun goes into the battery first, and planting, taming and feeding use its charge. Sneak and right-click to place it on any face of a block: a placed battery pulls in sun within 8 blocks, glows brighter the fuller it is, gives a comparator signal, accepts sun by right-click, feeds an attached dispenser and powers the [Time Machine](#time-machine).
 - The client option "Sun Info HUD" shows your total sun and the cost of the held seed packet.
@@ -58,6 +58,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 5 | Makes sun by day | Plains, flower forests, oak and birch forests; Browncoat drop (1%) |
 | <img src="../images/characters/marigold.png" alt="" width="112"> | [Marigold](characters/marigold.md) | 5 | Does not fight; when "grown" gives treasure instead of seeds (see below) | Raid rewards of later waves |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 3 | Sprout Squad's mascot: cheap sun maker | Crafting: flower pot, wheat seeds, 3 sun |
+| <img src="../images/characters/poppy_rattle.png" alt="" width="112"> | [Poppy Rattle](characters/poppy_rattle.md) | 6 | Grows a random plant's seed packet once by day and once by night, holds up to two | Crafting: poppy, torch, 6 sun |
 | <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 6 | Mushroom that makes sun | Lush caves, dark forests, warped and crimson forests, mushroom fields; rarely plains |
 | <img src="../images/characters/peashooter.png" alt="" width="112"> | [Peashooter](characters/peashooter.md) | 5 | Shoots peas | Plains, flower forests, oak forests; Browncoat drop (1%) |
 | <img src="../images/characters/repeater.png" alt="" width="112"> | [Repeater](characters/repeater.md) | 7 | Shoots two peas | Peashooter seed mutation; early raid rewards |
@@ -120,6 +121,8 @@ Important: a tamed plant on farmland or in a Zen Plant Pot is busy growing seeds
 
 The Marigold is special: it needs 32 sun and gives treasure instead of seeds (4–6 rolls of diamonds, emeralds and gold, and a 1% chance of a Golden Garden Gnome).
 
+The [Poppy Rattle](characters/poppy_rattle.md) needs no watering for its other trick: once by day and once by night it grows a seed packet of a random plant (by day of a plant that is awake by day, at night of one awake at night; cheaper plants come up more often; never a Marigold, Citron or Royal Sunflower). It keeps up to two under its lid; right-click it with an empty hand to take them.
+
 **Seed mutations.** Rules are checked from top to bottom; the first one that matches decides.
 
 | | Plant | What its seeds can turn into |
@@ -164,7 +167,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 <!-- pictures: plant_pot_helmet -->
 <p><img src="../images/items/plant_pot_helmet.png" alt="Plant Pot Helmet" title="Plant Pot Helmet" width="112"></p>
 
-**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters. To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet; so does a mob's plant when the mob is gone without it (through a portal, by converting or despawning).
+**Plant Pot Helmet** (late raid rewards and the Farmer at level 4; repaired with bricks, can be enchanted). Wear it, then sneak and right-click one of your plants with an empty hand: the plant sits on your head and keeps working, taking 50% less damage from monsters (a [Poppy Rattle](characters/poppy_rattle.md) grows no seed packets while worn). To put it down, sneak and right-click the top of a block with an empty hand or with a Gardening Glove. If you take the helmet off, the plant drops as a seed packet; so does a mob's plant when the mob is gone without it (through a portal, by converting or despawning).
 
 <!-- pictures: gardening_glove -->
 <p><img src="../images/items/gardening_glove.png" alt="Gardening Glove" title="Gardening Glove" width="112"></p>
@@ -180,7 +183,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 
 ### Plant limits
 
-You can have at most 30 plants of the same kind within 32 blocks (with co-op planting this counts everyone's plants). Melon-pult, Winter Melon and Doom-shroom are limited to 20, Coffee Bean and Grave Buster have no limit. Creative mode ignores the limit. Server options `defaultPlantEntityLimit` and `customPlantEntityLimits`.
+You can have at most 30 plants of the same kind within 32 blocks (with co-op planting this counts everyone's plants). Melon-pult, Winter Melon and Doom-shroom are limited to 20, the Poppy Rattle to 4, Coffee Bean and Grave Buster have no limit. Creative mode ignores the limit. Server options `defaultPlantEntityLimit` and `customPlantEntityLimits`.
 
 ## Zombies
 
@@ -570,7 +573,7 @@ The first three can be changed in game with `/pz options`.
 
 ## Characters
 
-Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md) and the [Needle Spruce](characters/needle_spruce.md).
+Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md), the [Needle Spruce](characters/needle_spruce.md) and the [Poppy Rattle](characters/poppy_rattle.md).
 
 ### Secret names
 

@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
+import dev.efureev.sproutsquad.content.plant.PoppyRattleGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
 import dev.efureev.sproutsquad.fixes.F2WorldGameTests
 import dev.efureev.sproutsquad.fixes.OriginalBugsGameTests
@@ -115,6 +116,21 @@ object SquadGameTests {
         Test("needle_spruce_stump_on_farmland_path_and_mud", NeedleSpruceGameTests::stumpOnFarmlandPathAndMud, structure = id("gametest/lane")),
         Test("needle_spruce_stands_on_its_stump", NeedleSpruceGameTests::standsOnItsStumpOnlyWithAStump, structure = id("gametest/lane")),
         Test("needle_spruce_stump_loot", NeedleSpruceGameTests::stumpLoot, structure = id("gametest/lane")),
+        Test("poppy_rattle_stats", PoppyRattleGameTests::stats),
+        Test("poppy_rattle_pool", PoppyRattleGameTests::pool),
+        Test("poppy_rattle_phases", PoppyRattleGameTests::phases),
+        Test("poppy_rattle_skipped_night", PoppyRattleGameTests::skippedNight),
+        Test("poppy_rattle_time_rewind", PoppyRattleGameTests::timeRewind),
+        Test("poppy_rattle_capacity", PoppyRattleGameTests::capacity),
+        Test("poppy_rattle_worn", PoppyRattleGameTests::worn),
+        Test("poppy_rattle_collect", PoppyRattleGameTests::collect),
+        Test("poppy_rattle_drops", PoppyRattleGameTests::drops),
+        Test("poppy_rattle_saved", PoppyRattleGameTests::saved),
+        Test("poppy_rattle_night_texture", PoppyRattleGameTests::nightTexture),
+        Test("poppy_rattle_entity_limit_fallback", PoppyRattleGameTests::entityLimitFallback),
+        Test("poppy_rattle_asleep_waits", PoppyRattleGameTests::asleepWaits),
+        Test("poppy_rattle_full_owes_nothing", PoppyRattleGameTests::fullOwesNothing),
+        Test("poppy_rattle_look", PoppyRattleGameTests::look),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),

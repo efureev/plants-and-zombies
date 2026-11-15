@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.registry
 
 import dev.efureev.sproutsquad.content.plant.NeedleSpruce
+import dev.efureev.sproutsquad.content.plant.PoppyRattle
 import dev.efureev.sproutsquad.content.plant.Potling
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
@@ -45,6 +46,7 @@ object SquadEntities {
         val attributes: Plant.Companion.PlantAttributes,
         val spawnRules: SpawnPlacements.SpawnPredicate<Plant>,
         val wild: WildSpawn?,
+        val entityLimit: Int?,
     )
 
     /** Where a plant grows wild: a biome spawn for every biome in [biomes] (applied by PazSpawnsBiomeModifier). */
@@ -65,6 +67,11 @@ object SquadEntities {
             followRange = NeedleSpruce.RANGE),
         spawnRules = SpawnPlacements.SpawnPredicate(NeedleSpruce::checkNeedleSpruceSpawnRules),
         wild = WildSpawn(NeedleSpruce.HAS_NEEDLE_SPRUCE, weight = 4, minGroupSize = 1, maxGroupSize = 2))
+
+    /** Poppy Rattle: grows a random plant's seed packet once by day and once by night. */
+    val POPPY_RATTLE = plant("poppy_rattle", ::PoppyRattle, width = 0.6f, height = 1.0f, sunCost = PoppyRattle.SUN_COST,
+        entityLimit = PoppyRattle.ENTITY_LIMIT,
+        attributes = Plant.Companion.PlantAttributes(maxHealth = PoppyRattle.MAX_HEALTH))
     // endregion
 
     fun register(modBus: IEventBus) {
@@ -74,7 +81,13 @@ object SquadEntities {
         }
         // Common setup runs in parallel across mods; the config map is not thread-safe.
         modBus.addListener(FMLCommonSetupEvent::class.java) { event ->
-            event.enqueueWork { plantEntries.forEach { PazConfig.registerDefaultSunCost("${PazMain.MODID}:${it.name}", it.sunCost) } }
+            event.enqueueWork {
+                plantEntries.forEach { entry ->
+                    val id = "${PazMain.MODID}:${entry.name}"
+                    PazConfig.registerDefaultSunCost(id, entry.sunCost)
+                    entry.entityLimit?.let { PazConfig.registerDefaultEntityLimit(id, it) }
+                }
+            }
         }
         // On the ground like the original's plants: without a rule, a structure's spawn_overrides
         // (the Garden Shack) place the plant anywhere in its piece, on the roof or in the water.
@@ -105,6 +118,7 @@ object SquadEntities {
         attributes: Plant.Companion.PlantAttributes = Plant.Companion.PlantAttributes(),
         spawnRules: SpawnPlacements.SpawnPredicate<Plant> = SpawnPlacements.SpawnPredicate(Plant::checkPlantSpawnRules),
         wild: WildSpawn? = null,
+        entityLimit: Int? = null,
     ): DeferredHolder<EntityType<*>, EntityType<T>> {
         val holder = ENTITY_TYPES.register(name) { id ->
             // AMBIENT like the original's plants (PazEntities.registerPlant)
@@ -114,7 +128,7 @@ object SquadEntities {
                 .eyeHeight(eyeHeight)
                 .build(ResourceKey.create(Registries.ENTITY_TYPE, id))
         }
-        plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules, wild)
+        plantEntries += PlantEntry(name, holder, sunCost, attributes, spawnRules, wild, entityLimit)
         return holder
     }
 }

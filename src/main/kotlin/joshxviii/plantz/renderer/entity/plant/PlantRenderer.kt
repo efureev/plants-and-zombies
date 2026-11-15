@@ -177,10 +177,12 @@ open class PlantRenderer(
                 is BonkChoy -> entity.useUppercut
                 is Chomper -> entity.isChewing
                 is Citron -> entity.rolling
-                // Sprout Squad: the stump stands in place of its lower trunk
-                is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> entity.standsOnItsStump()
+                // Sprout Squad: our own plants say it themselves (the Needle Spruce's stump)
+                is dev.efureev.sproutsquad.content.plant.SquadPlantLook -> entity.lookSpecialAction()
                 else -> false
             }
+        // Sprout Squad: a pose number our own plants' models read (the Poppy Rattle: packets under its lid)
+        state.squadPose = (entity as? dev.efureev.sproutsquad.content.plant.SquadPlantLook)?.lookPose() ?: 0
         state.textureExtra = mutableListOf<String>().apply {
             when (entity) {
                 is WallNut -> add(when {
@@ -192,9 +194,10 @@ open class PlantRenderer(
                 // Sprout Squad: dyed Marigolds (MarigoldColors); sleeping textures are named marigold_sleep_<colour>
                 is Marigold -> if (state.validMagicName(state.customName) == null) // a magic name ("Rainbow", "Flowey") wins over the dye
                     dev.efureev.sproutsquad.fixes.MarigoldColors.color(entity)?.let { add(if (entity.isAsleep || entity.deathTime > 0) "sleep_${it.serializedName}" else it.serializedName) }
-                // Sprout Squad: the Needle Spruce's angry and straining faces (NeedleSpruce.faceSuffix)
-                is dev.efureev.sproutsquad.content.plant.NeedleSpruce -> add(entity.faceSuffix(
-                    entity.actionAnimationState.takeIf { it.isStarted }?.getTimeInMillis(state.ageInTicks)))
+                // Sprout Squad: our own plants name their texture variant (SquadPlantLook): the Needle Spruce's
+                // faces, the Poppy Rattle's night eyes
+                is dev.efureev.sproutsquad.content.plant.SquadPlantLook -> entity.lookSuffix(
+                    entity.actionAnimationState.takeIf { it.isStarted }?.getTimeInMillis(state.ageInTicks))?.let { add(it) }
                 else -> {}
             }
         }
@@ -301,6 +304,8 @@ open class PlantRenderState : LivingEntityRenderState() {
     var isAsleep: Boolean = false
     var customName: String = ""
     var textureExtra: List<String> = listOf()
+    /** Sprout Squad: an extra pose value for our own plants' models (PlantRenderer.extractRenderState). */
+    var squadPose: Int = 0
     var glowPercent: Float = 0f
     var plantState: PlantState = PlantState.IDLE
     var useSpecialAction: Boolean = false

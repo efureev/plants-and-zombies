@@ -231,7 +231,8 @@ object PazConfig {
         val id = type?.let { BuiltInRegistries.ENTITY_TYPE.getKey(it) }
         val default = server.defaultPlantEntityLimit
         val key = id?.toString()?: return default
-        val value = server.customPlantEntityLimits[key]?: default
+        // Sprout Squad: a limit our own plants set in code applies unless the server config names one
+        val value = server.customPlantEntityLimits[key]?: squadEntityLimits[key] ?: default
         return value.coerceAtLeast(-1)
     }
 
@@ -249,6 +250,17 @@ object PazConfig {
      */
     fun registerDefaultSunCost(entityId: String, sunCost: Int) {
         defaultServerConfig.sunCosts.putIfAbsent(entityId, sunCost.coerceAtLeast(0))
+    }
+
+    /**
+     * Sprout Squad: planting limits our own plants set in code (SquadEntities). Kept apart from the
+     * original's built-in customPlantEntityLimits, which a server config replaces as a whole.
+     */
+    private val squadEntityLimits = java.util.concurrent.ConcurrentHashMap<String, Int>()
+
+    /** Sprout Squad: the planting limit of one of our plants; a value in the server config wins. */
+    fun registerDefaultEntityLimit(entityId: String, limit: Int) {
+        squadEntityLimits.putIfAbsent(entityId, limit.coerceAtLeast(-1))
     }
 
     fun putDefaultSunCost(entityId: Identifier, sunCost: Int) {

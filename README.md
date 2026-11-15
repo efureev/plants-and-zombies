@@ -27,7 +27,7 @@ The full guide is in [FEATURES](docs/en/FEATURES.md); every plant, zombie and ma
 What the fork adds on top of the original:
 
 - **Fixes for content you could not get or use**: battle machines built from blueprints fight for the player, the lawn mower works as the last line of defence, Squash attacks, brewable potions, loot for raids and mobs, Zombie Goat spawns, no kicks for flying on balloons ([full list](docs/en/UPSTREAM.md)).
-- **Its own characters**: the mascot plant [Potling](docs/en/characters/potling.md) and the [Needle Spruce](docs/en/characters/needle_spruce.md), a mountain spruce that fires three needles at once.
+- **Its own characters**: the mascot plant [Potling](docs/en/characters/potling.md), the [Needle Spruce](docs/en/characters/needle_spruce.md), a mountain spruce that fires three needles at once, and the [Poppy Rattle](docs/en/characters/poppy_rattle.md), a poppy seed head that grows a random plant's seeds by day and by night.
 - **New structures**: the [Garden Shack](docs/en/STRUCTURES.md#garden-shack), an abandoned garden with wild plants to tame, and the [Robo Junkyard](docs/en/STRUCTURES.md#robo-junkyard), a scrap yard guarded by turrets, with blueprints in its workshop.
 
 | | |

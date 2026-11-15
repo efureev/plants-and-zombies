@@ -1107,7 +1107,8 @@ abstract class Plant(type: EntityType<out Plant>, level: Level) : TamableAnimal(
         return this.hasSameRootOwner(target)
     }
 
-    fun dropAsSeedPacketItem(force: Boolean = false, dropPumpkin: Boolean = false): Boolean {
+    // Sprout Squad: open, a plant holding items drops them first (PoppyRattle)
+    open fun dropAsSeedPacketItem(force: Boolean = false, dropPumpkin: Boolean = false): Boolean {
         val level = level() as? ServerLevel ?: return false
         if (force || customName!=null) {// Spawn a seed packet item containing this plant's data
             val drop = SeedPacketItem.stackFor(this.type).also { if (customName!=null) it.set(DataComponents.CUSTOM_NAME, customName) }
