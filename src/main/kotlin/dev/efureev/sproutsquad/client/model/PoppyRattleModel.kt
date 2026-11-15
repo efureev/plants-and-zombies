@@ -48,8 +48,11 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
         lid.xRot += LID_OPEN[count] * Mth.DEG_TO_RAD
         packet.visible = count >= 1
         packet2.visible = count >= 2
+        if (count >= 1) packet.y -= PACKET_RISE
+        if (count >= 2) packet2.y -= PACKET_RISE
         if (count >= 2) {
             packet.zRot += FAN * Mth.DEG_TO_RAD
+            packet2.zRot += FAN_BACK * Mth.DEG_TO_RAD
             pod.xScale *= FULL_SWELL
             pod.zScale *= FULL_SWELL
         }
@@ -68,7 +71,11 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
 
         /** With two packets the front one leans aside, a fan. */
         private const val FAN = 14f
+        private const val FAN_BACK = 17f
         private const val FULL_SWELL = 1.08f
+
+        /** How far a held packet rises out of the head, pixels: its top shows above the neck. */
+        private const val PACKET_RISE = 5f
 
         /** At night the petals rise from −30° to −95° and look shorter, hugging the head. */
         private const val PETAL_NIGHT_LIFT = -65f
@@ -101,11 +108,11 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
                 .texOffs(48, 8).addBox(-1f, -2f, -4.5f, 2f, 1f, 2f),
                 PartPose.offset(0f, -10f, 3.5f))
 
-            // Seed packets inside the head, seen when the lid is open (PoppyRattleModel.setupAnim shows them).
+            // Seed packets, tucked inside the head; setupAnim raises them under the open lid when it holds some.
             pod.addOrReplaceChild("packet", CubeListBuilder.create()
-                .texOffs(40, 16).addBox(-2f, -6f, -0.5f, 4f, 6f, 1f), PartPose.offset(0f, -6f, 0f))
+                .texOffs(40, 16).addBox(-2f, -6f, -0.5f, 4f, 6f, 1f), PartPose.offset(0f, -1f, 0f))
             pod.addOrReplaceChild("packet2", CubeListBuilder.create()
-                .texOffs(40, 16).addBox(-2f, -6f, -0.5f, 4f, 6f, 1f), PartPose.offsetAndRotation(1.5f, -6f, 1f, 0f, 0f, 0.3f))
+                .texOffs(40, 16).addBox(-2f, -6f, -0.5f, 4f, 6f, 1f), PartPose.offset(1.5f, -1f, 1f))
 
             // Petals point out of the base's corners (yaw ±45°, ±135°), opened as a cup by day (X −30°).
             // Spelled out one by one: tools/docs/render_character.py reads the literal numbers.
