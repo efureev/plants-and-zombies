@@ -39,7 +39,8 @@ so the client plays a script: `dev.efureev.sproutsquad.debug.client.Autopilot`.
    - `wait <ticks>` (20 a second), `cmd <command without slash>` (as the player, full permissions),
      `hud on|off`, `shot <name>` → `run/screenshots/<name>.png`, `quit`.
    - The step after a `cmd` waits until the server has run it, but the result reaches the screen a few ticks
-     later: put `wait 5` (or more) between a `cmd` and a `shot`.
+     later: put `wait 5` (or more) between a `cmd` and a `shot`. A `shot` itself waits for a frame drawn after the
+     step before it (so `hud off` right before it is fine). Words are split on any whitespace.
    - A flat stage high up, cleared, daytime:
      ```
      wait 40
@@ -84,8 +85,10 @@ Run the items whose trigger the change touches.
 - **Server code that places things at a model part** (sun from a head, a projectile from a mouth): the model may turn
   that part with the head (`state.yRot`, i.e. `yHeadRot`), not the body. Use the same angle on the server, and check
   in game with the plant looking sideways.
-- **A spawn point outside the plant's hitbox** (a head reaching past the box): it can land inside the next block.
-  A `Sun` pushes itself out only a quarter of a block and starts a little above the point, so test against a
-  two-block wall with the plant off its block's centre (`DoubleSunflowerGameTests.sunNotInWall`).
+- **A spawn point away from the plant's feet** (a head reaching past the box, a head near the top): it can land
+  inside a wall or a ceiling. A `Sun` starts a little above the point and pushes itself out only a quarter of a
+  block, so check the box the entity really gets (make it, test `noCollision(it, it.boundingBox)`, then add it),
+  and test a two-block wall with the plant off its block's centre and a ceiling two blocks above a plant raised half
+  a block (`DoubleSunflowerGameTests.sunNotInWall`, `sunUnderLowCeiling`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
