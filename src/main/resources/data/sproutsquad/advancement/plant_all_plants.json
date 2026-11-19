@@ -437,6 +437,18 @@
           }
         }
       }
+    },
+    "sproutsquad:double_sunflower": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:double_sunflower"
+          }
+        }
+      }
     }
   },
   "sends_telemetry_event": false

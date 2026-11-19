@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.registry
 
+import dev.efureev.sproutsquad.content.plant.DoubleSunflower
 import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.PoppyRattle
 import dev.efureev.sproutsquad.content.plant.Potling
@@ -72,6 +73,11 @@ object SquadEntities {
     val POPPY_RATTLE = plant("poppy_rattle", ::PoppyRattle, width = 0.6f, height = 1.0f, sunCost = PoppyRattle.SUN_COST,
         entityLimit = PoppyRattle.ENTITY_LIMIT,
         attributes = Plant.Companion.PlantAttributes(maxHealth = PoppyRattle.MAX_HEALTH))
+
+    /** Double Sunflower: two stems, two flowers, twice the Sunflower's sun. */
+    val DOUBLE_SUNFLOWER = plant("double_sunflower", ::DoubleSunflower, width = 0.9f, height = 1.5f,
+        sunCost = DoubleSunflower.SUN_COST,
+        attributes = Plant.Companion.PlantAttributes(maxHealth = DoubleSunflower.MAX_HEALTH))
     // endregion
 
     fun register(modBus: IEventBus) {
