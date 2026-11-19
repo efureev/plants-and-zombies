@@ -69,3 +69,17 @@ so the client plays a script: `dev.efureev.sproutsquad.debug.client.Autopilot`.
 - By day and at night (asleep pose, `_sleep` texture, glowing/emissive parts).
 - Its action: glow before it, the result (sun count, projectiles, effects) in the world.
 - The docs picture: `python3 tools/docs/render_character.py <id>` / `tools/docs/refresh.py` matches the game.
+
+## Checklist from past misses
+
+Run the items whose trigger the change touches.
+
+- **A glow or emissive layer** (`_glow`, `_emissive`, `SquadPlantLook.lookGlow`): the texture lookup appends the
+  layer's suffix to the plant's (`baby`, `sleep` while dying, a magic name) and falls back to a *plain* texture,
+  drawing the whole plant full-bright. Check a baby (`{Age:-240000}`) and a plant dying during the glow: either
+  give the variant its own sheet (`<id>_baby_glow.png`) or return no glow for it.
+- **Server code that places things at a model part** (sun from a head, a projectile from a mouth): the model may turn
+  that part with the head (`state.yRot`, i.e. `yHeadRot`), not the body. Use the same angle on the server, and check
+  in game with the plant looking sideways.
+- **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
+  `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
