@@ -87,6 +87,22 @@ object DoubleSunflowerGameTests {
         helper.succeed()
     }
 
+    /** Raised half a block (as on a slab) under a ceiling two blocks up: the tall head's sun would start in the ceiling. */
+    fun sunUnderLowCeiling(helper: GameTestHelper) {
+        val plant = helper.spawn(SquadEntities.DOUBLE_SUNFLOWER.get(), BlockPos(2, 1, 2))
+        plant.setPos(plant.x, plant.y + 0.5, plant.z)
+        val ceiling = plant.blockPosition().above(2)
+        BlockPos.betweenClosed(ceiling.offset(-1, 0, -1), ceiling.offset(1, 0, 1))
+            .forEach { helper.level.setBlockAndUpdate(it, Blocks.GLASS.defaultBlockState()) }
+        helper.assertTrue(BlockPos.containing(plant.headPositions()[0].add(0.0, 0.2, 0.0)) == ceiling,
+            "the tall head's sun would start in the ceiling: ${plant.headPositions()[0]}")
+        helper.assertValueEqual(plant.dropSun(helper.level), 2, "sun made")
+        val suns = helper.level.getEntitiesOfClass(Sun::class.java, AABB(plant.blockPosition()).inflate(2.0))
+        helper.assertValueEqual(suns.sumOf { it.value }, 2, "sun in the world")
+        suns.forEach { helper.assertTrue(helper.level.noCollision(it.boundingBox), "a sun inside a block at ${it.position()}") }
+        helper.succeed()
+    }
+
     /** Two Sunflower seed packets in the middle column under a crown of 7 sun make a Double Sunflower packet. */
     fun recipe(helper: GameTestHelper) {
         fun craft(packet: EntityType<*>): ItemStack {

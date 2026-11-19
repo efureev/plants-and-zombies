@@ -135,6 +135,7 @@ object SquadGameTests {
         Test("double_sunflower_stats", DoubleSunflowerGameTests::stats),
         Test("double_sunflower_two_suns", DoubleSunflowerGameTests::twoSuns),
         Test("double_sunflower_sun_not_in_wall", DoubleSunflowerGameTests::sunNotInWall),
+        Test("double_sunflower_sun_under_low_ceiling", DoubleSunflowerGameTests::sunUnderLowCeiling),
         Test("double_sunflower_recipe", DoubleSunflowerGameTests::recipe),
         Test("double_sunflower_mutation", DoubleSunflowerGameTests::mutation),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
