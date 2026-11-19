@@ -3,6 +3,7 @@ package dev.efureev.sproutsquad.debug.client
 import joshxviii.plantz.PazMain
 import net.minecraft.client.Minecraft
 import net.minecraft.client.Screenshot
+import net.minecraft.client.gui.screens.PauseScreen
 import net.neoforged.neoforge.client.gui.LoadingErrorScreen
 import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.common.NeoForge
@@ -65,6 +66,9 @@ object Autopilot {
         }
         val player = minecraft.player ?: return
         val server = minecraft.singleplayerServer ?: return
+        // nobody is at the keyboard: losing focus (another window, another desktop) must not pause the script
+        minecraft.options.pauseOnLostFocus = false
+        if (minecraft.gui.screen() is PauseScreen) minecraft.gui.setScreen(null)
         if (minecraft.level == null || minecraft.gui.screen() != null) return
         if (waitTicks > 0) {
             waitTicks--
@@ -74,7 +78,7 @@ object Autopilot {
         val (verb, arg) = step.split(' ', limit = 2).let { it[0] to it.getOrElse(1) { "" } }
         PazMain.LOGGER.info("Autopilot: {}", step)
         when (verb) {
-            "wait" -> waitTicks = arg.toInt()
+            "wait" -> waitTicks = arg.toIntOrNull() ?: 0.also { PazMain.LOGGER.error("Autopilot: '{}' needs a number of ticks", step) }
             "cmd" -> server.execute {
                 val serverPlayer = server.playerList.getPlayer(player.uuid) ?: return@execute
                 val source = server.createCommandSourceStack().withEntity(serverPlayer)

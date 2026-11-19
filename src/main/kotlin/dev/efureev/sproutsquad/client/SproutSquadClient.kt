@@ -4,6 +4,7 @@ import dev.efureev.sproutsquad.client.model.DoubleSunflowerModel
 import dev.efureev.sproutsquad.client.model.NeedleSpruceModel
 import dev.efureev.sproutsquad.client.model.PoppyRattleModel
 import dev.efureev.sproutsquad.client.model.PotlingModel
+import dev.efureev.sproutsquad.debug.client.Autopilot
 import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.renderer.entity.plant.PlantRenderer
 import net.neoforged.bus.api.IEventBus
@@ -15,6 +16,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent
  */
 object SproutSquadClient {
     fun init(modBus: IEventBus) {
+        Autopilot.init()
         modBus.addListener(EntityRenderersEvent.RegisterLayerDefinitions::class.java) { event ->
             event.registerLayerDefinition(PotlingModel.LAYER_LOCATION) { PotlingModel.createBodyLayer() }
             event.registerLayerDefinition(NeedleSpruceModel.LAYER_LOCATION) { NeedleSpruceModel.createBodyLayer() }

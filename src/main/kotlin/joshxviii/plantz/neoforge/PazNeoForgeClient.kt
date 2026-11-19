@@ -41,7 +41,6 @@ class PazNeoForgeClient(modBus: IEventBus, container: ModContainer) {
         modBus.addListener(EntityRenderersEvent.RegisterLayerDefinitions::class.java) { PazModels.registerLayerDefinitions(it) }
         modBus.addListener(EntityRenderersEvent.RegisterRenderers::class.java) { PazModels.registerRenderers(it) }
         SproutSquadClient.init(modBus)
-        dev.efureev.sproutsquad.debug.client.Autopilot.init()
         modBus.addListener(RegisterParticleGroupsEvent::class.java) { PazParticles.registerGroups(it) }
         modBus.addListener(RegisterParticleProvidersEvent::class.java) { PazParticles.registerProviders(it) }
         modBus.addListener(RegisterMenuScreensEvent::class.java) { PazScreens.registerMenuScreens(it) }
