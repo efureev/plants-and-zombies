@@ -208,6 +208,8 @@ open class PlantRenderer(
             }
             is Marigold -> if (!entity.isGrowingSeeds) 0f else entity.receivedSun / entity.sunRequiredForSeeds().toFloat()
             is ExplosivePlant -> entity.getSwelling(partialTick)
+            // Sprout Squad: our own plants say it themselves (the Double Sunflower glows like the Sunflower)
+            is dev.efureev.sproutsquad.content.plant.SquadPlantLook -> entity.lookGlow(state.cooldown) ?: 0f
             else -> 0f
         }
     }
