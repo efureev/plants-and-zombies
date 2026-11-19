@@ -142,12 +142,20 @@ object Autopilot {
                     }
                 }
             }
-            "hud" -> if (minecraft.gui.hud.isHidden != (arg == "off")) minecraft.gui.hud.toggle()
-            "shot" -> {
+            "hud" -> when (arg) {
+                "on", "off" -> if (minecraft.gui.hud.isHidden != (arg == "off")) minecraft.gui.hud.toggle()
+                else -> PazMain.LOGGER.error("Autopilot: '{}' needs on or off", step)
+            }
+            "shot" -> if (arg.isEmpty()) PazMain.LOGGER.error("Autopilot: '{}' needs a file name", step) else {
                 shotsSaving.incrementAndGet()
-                Screenshot.grab(minecraft.gameDirectory, "$arg.png", minecraft.gameRenderer.mainRenderTarget(), 1) {
-                    PazMain.LOGGER.info("Autopilot: {}", it.string)
+                try {
+                    Screenshot.grab(minecraft.gameDirectory, "$arg.png", minecraft.gameRenderer.mainRenderTarget(), 1) {
+                        PazMain.LOGGER.info("Autopilot: {}", it.string)
+                        shotsSaving.decrementAndGet()
+                    }
+                } catch (e: RuntimeException) { // e.g. the frame is being rebuilt (a resize): log it, go on
                     shotsSaving.decrementAndGet()
+                    PazMain.LOGGER.error("Autopilot: could not take '{}'", step, e)
                 }
             }
             "quit" -> {
