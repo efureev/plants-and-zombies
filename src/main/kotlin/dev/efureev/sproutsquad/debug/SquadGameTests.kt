@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.debug
 
+import dev.efureev.sproutsquad.content.plant.DoubleSunflowerGameTests
 import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
 import dev.efureev.sproutsquad.content.plant.PoppyRattleGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
@@ -131,6 +132,12 @@ object SquadGameTests {
         Test("poppy_rattle_asleep_waits", PoppyRattleGameTests::asleepWaits),
         Test("poppy_rattle_full_owes_nothing", PoppyRattleGameTests::fullOwesNothing),
         Test("poppy_rattle_look", PoppyRattleGameTests::look),
+        Test("double_sunflower_stats", DoubleSunflowerGameTests::stats),
+        Test("double_sunflower_two_suns", DoubleSunflowerGameTests::twoSuns),
+        Test("double_sunflower_sun_not_in_wall", DoubleSunflowerGameTests::sunNotInWall),
+        Test("double_sunflower_sun_under_low_ceiling", DoubleSunflowerGameTests::sunUnderLowCeiling),
+        Test("double_sunflower_recipe", DoubleSunflowerGameTests::recipe),
+        Test("double_sunflower_mutation", DoubleSunflowerGameTests::mutation),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),

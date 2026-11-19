@@ -203,11 +203,15 @@ open class PlantRenderer(
         }
         state.glowPercent = when (entity) {
             is Sunflower, is SunShroom -> {
-                if (entity.isAsleep || entity.isGrowingSeeds) 0f
+                // Sprout Squad: not while dying either: the renderer then draws the _sleep texture, and the glow
+                // lookup fell back to it, lighting up the whole plant
+                if (entity.isAsleep || entity.isGrowingSeeds || entity.deathTime > 0) 0f
                 else 1f - ((state.cooldown).coerceIn(0, 100) / 100f)
             }
             is Marigold -> if (!entity.isGrowingSeeds) 0f else entity.receivedSun / entity.sunRequiredForSeeds().toFloat()
             is ExplosivePlant -> entity.getSwelling(partialTick)
+            // Sprout Squad: our own plants say it themselves (the Double Sunflower glows like the Sunflower)
+            is dev.efureev.sproutsquad.content.plant.SquadPlantLook -> entity.lookGlow(state.cooldown) ?: 0f
             else -> 0f
         }
     }

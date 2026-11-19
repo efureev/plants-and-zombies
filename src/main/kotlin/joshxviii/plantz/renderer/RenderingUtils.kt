@@ -146,7 +146,8 @@ fun ModelPart.scaleDownRotation(scale: Float) {
 fun List<String>.permutationsDescending(): List<String> = buildList {
     add(this@permutationsDescending.joinToString("_"))
     for (i in size - 1 downTo 1) {
-        add(this@permutationsDescending.subList(0, i).joinToString(""))
+        // Sprout Squad: joined with "_" like the full list; "" gave names like "baby" + "sleep" = "babysleep"
+        add(this@permutationsDescending.subList(0, i).joinToString("_"))
     }
 }
 

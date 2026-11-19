@@ -2,10 +2,11 @@
 
 Every plant, zombie and machine of the mod has its own card. How to add a new character, the checklist and the style guide are in [WORKSHOP](../WORKSHOP.md); what the mod offers overall is in [FEATURES](../FEATURES.md).
 
-## Own characters (Sprout Squad) (3)
+## Own characters (Sprout Squad) (4)
 
 | | Character | Role | Status | What it does |
 |---|---|---|---|---|
+| <img src="../../images/characters/double_sunflower.png" alt="" width="112"> | [Double Sunflower](double_sunflower.md) | sun producer | in code | A Sunflower with two stems and a flower on each: a tall one at the back with the Sunflower's face and a short one in front that winks. |
 | <img src="../../images/characters/needle_spruce.png" alt="" width="112"> | [Needle Spruce](needle_spruce.md) | shooter | in code | A three-block mountain spruce with two eyes on its bottom tier and four sharp fangs hanging under its front. |
 | <img src="../../images/characters/poppy_rattle.png" alt="" width="112"> | [Poppy Rattle](poppy_rattle.md) | seed producer | in code | A poppy seed head with a face, a crown-shaped lid and four red petals. |
 | <img src="../../images/characters/potling.png" alt="" width="112"> | [Potling](potling.md) | sun producer | in code | The mod's mascot: a terracotta pot with a face and a two-leaf sprout. |

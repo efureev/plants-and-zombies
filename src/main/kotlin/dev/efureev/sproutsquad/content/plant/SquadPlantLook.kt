@@ -17,4 +17,10 @@ interface SquadPlantLook {
 
     /** `PlantRenderState.useSpecialAction` for the model. */
     fun lookSpecialAction(): Boolean = false
+
+    /**
+     * How bright the `<id>_glow.png` layer is, 0..1 (the Sunflower glows up before its sun), or null for none.
+     * [cooldown]: ticks until the plant's next action (`Plant.cooldown`).
+     */
+    fun lookGlow(cooldown: Int): Float? = null
 }

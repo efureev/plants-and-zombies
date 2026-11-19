@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SPS",
+    "SPS"
+  ],
+  "key": {
+    "S": "sproutsquad:sun",
+    "P": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": "sproutsquad:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "sproutsquad:sunflower"
+        }
+      }
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "sproutsquad:double_sunflower"
+      }
+    }
+  }
+}
