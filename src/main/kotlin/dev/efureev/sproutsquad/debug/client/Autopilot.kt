@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent
 import net.neoforged.neoforge.client.event.RenderFrameEvent
 import net.neoforged.neoforge.common.NeoForge
 import java.io.File
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Development aid for checking the game by eye without anyone at the keyboard: plays a script of
@@ -21,7 +22,7 @@ import java.io.File
  *   waits until the server has run it, but what it changes reaches the screen a few ticks later (`wait 5` before a `shot`);
  * - `hud on|off` — show or hide the HUD (F1);
  * - `shot <name>` — save `screenshots/<name>.png` in the game directory, from a frame drawn after the steps before it;
- * - `quit` — close the game.
+ * - `quit` — close the game, once the screenshots taken are saved.
  * The script starts once the player is in the world. While it runs, losing focus does not pause the game; the
  * setting is restored when the script ends.
  */
@@ -34,6 +35,11 @@ object Autopilot {
     private var lastScreen: String? = null
     /** A `cmd` the server has not run yet: the script waits for it, so steps keep their order. */
     @Volatile private var commandPending = false
+    /** Number of the last `cmd`: a command the script stopped waiting for must not clear a later one's [commandPending]. */
+    private val commandNumber = AtomicInteger()
+    /** Screenshots copied from the GPU but not saved yet: `quit` waits for them, or the last one is lost. */
+    private val shotsSaving = AtomicInteger()
+    private var quitWaitTicks = 0
     /** Client ticks spent waiting for [commandPending]; past [COMMAND_TIMEOUT] the script gives up on it. */
     private var commandWaitTicks = 0
     /** Frames drawn so far, and when the last step ran: a `shot` waits for a frame drawn after the steps before it. */
@@ -111,6 +117,7 @@ object Autopilot {
         }
         val step = steps.firstOrNull() ?: return
         val (verb, arg) = step.split(Regex("\\s+"), limit = 2).let { it[0] to it.getOrElse(1) { "" }.trim() }
+        if (verb == "quit" && shotsSaving.get() > 0 && ++quitWaitTicks <= COMMAND_TIMEOUT) return
         // a screenshot shows the frame drawn last: wait for one drawn after the previous step (a hidden HUD, a change)
         if (verb == "shot" && frames <= lastStepFrame) return
         steps.removeFirst()
@@ -122,6 +129,7 @@ object Autopilot {
             "cmd" -> {
                 commandPending = true
                 commandWaitTicks = 0
+                val number = commandNumber.incrementAndGet()
                 server.execute {
                     try {
                         val serverPlayer = server.playerList.getPlayer(player.uuid)
@@ -130,13 +138,17 @@ object Autopilot {
                             .withPosition(serverPlayer.position()).withRotation(serverPlayer.rotationVector).withLevel(serverPlayer.level())
                         server.commands.performPrefixedCommand(source, arg)
                     } finally {
-                        commandPending = false
+                        if (commandNumber.get() == number) commandPending = false
                     }
                 }
             }
             "hud" -> if (minecraft.gui.hud.isHidden != (arg == "off")) minecraft.gui.hud.toggle()
-            "shot" -> Screenshot.grab(minecraft.gameDirectory, "$arg.png", minecraft.gameRenderer.mainRenderTarget(), 1) {
-                PazMain.LOGGER.info("Autopilot: {}", it.string)
+            "shot" -> {
+                shotsSaving.incrementAndGet()
+                Screenshot.grab(minecraft.gameDirectory, "$arg.png", minecraft.gameRenderer.mainRenderTarget(), 1) {
+                    PazMain.LOGGER.info("Autopilot: {}", it.string)
+                    shotsSaving.decrementAndGet()
+                }
             }
             "quit" -> {
                 restoreOptions(minecraft)
