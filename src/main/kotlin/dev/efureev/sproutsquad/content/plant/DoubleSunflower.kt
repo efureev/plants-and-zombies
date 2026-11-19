@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.content.plant
 
+import joshxviii.plantz.PazEntities
 import joshxviii.plantz.ai.goal.ActionGoal
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.plant.Plant
@@ -8,6 +9,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -51,9 +53,19 @@ class DoubleSunflower(type: EntityType<out Plant>, level: Level) : Plant(type, l
     /** One sun from each head; a baby (half the sun, like GenerateSunGoal) only from the tall one. Returns the sun made. */
     fun dropSun(level: ServerLevel): Int {
         val heads = headPositions().let { if (isBaby) it.take(1) else it }
-        heads.forEach { Sun.award(level, it, SUN_PER_HEAD) }
+        heads.forEach { Sun.award(level, clearSpot(level, it), SUN_PER_HEAD) }
         playSound(SoundEvents.CHICKEN_EGG, 1.0f, 0.5f) // the Sunflower's sound
         return heads.size * SUN_PER_HEAD
+    }
+
+    /**
+     * Where a head's sun can appear: the short head reaches 0.6 blocks out, past the plant's box and into the next
+     * block when it looks diagonally at a wall; then the sun comes out above the plant's centre instead (a sun inside
+     * a block gets pushed out to wherever there is room, even behind the wall).
+     */
+    private fun clearSpot(level: ServerLevel, spot: Vec3): Vec3 {
+        val half = PazEntities.SUN.width / 2.0
+        return if (level.noCollision(AABB.ofSize(spot, half * 2, half * 2, half * 2))) spot else Vec3(x, spot.y, z)
     }
 
     /**
