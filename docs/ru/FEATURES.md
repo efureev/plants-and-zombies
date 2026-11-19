@@ -57,7 +57,7 @@ Sprout Squad — мод для Minecraft 26.3 на NeoForge, который пр
 | | Растение | Солнце | Что делает | Где взять |
 |---|---|---|---|---|
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Подсолнух](characters/sunflower.md) | 5 | Даёт солнце днём | Равнины, цветочные леса, дубовые и берёзовые леса; выпадает из Обычного Зомби (1 %) |
-| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Двойной подсолнух](characters/double_sunflower.md) | 8 | Две головы, вдвое больше солнца, чем у Подсолнуха | Мутация семян Подсолнуха; крафт: 2 пакета семян Подсолнуха, 7 солнц |
+| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Двойной подсолнух](characters/double_sunflower.md) | 8 | Две головы, вдвое больше солнца, чем у Подсолнуха | Мутация семян Подсолнуха; крафт: 2 пакета семян Подсолнуха, 7 солнц; Мак-погремушка днём |
 | <img src="../images/characters/marigold.png" alt="" width="112"> | [Бархатцы](characters/marigold.md) | 5 | Не сражается; когда «вырастает», вместо семян даёт сокровища (см. ниже) | Награды за поздние волны рейда |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Горшочек](characters/potling.md) | 3 | Маскот Sprout Squad: дешёвый источник солнца | Крафт: цветочный горшок, семена пшеницы, 3 солнца |
 | <img src="../images/characters/poppy_rattle.png" alt="" width="112"> | [Мак-погремушка](characters/poppy_rattle.md) | 6 | Раз днём и раз ночью выращивает пакет семян случайного растения, держит до двух | Крафт: мак, факел, 6 солнц |

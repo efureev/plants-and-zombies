@@ -57,7 +57,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 | | Plant | Sun | What it does | Where to get it |
 |---|---|---|---|---|
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 5 | Makes sun by day | Plains, flower forests, oak and birch forests; Browncoat drop (1%) |
-| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Double Sunflower](characters/double_sunflower.md) | 8 | Two heads, twice the Sunflower's sun | Sunflower seed mutation; crafting: 2 Sunflower seed packets, 7 sun |
+| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Double Sunflower](characters/double_sunflower.md) | 8 | Two heads, twice the Sunflower's sun | Sunflower seed mutation; crafting: 2 Sunflower seed packets, 7 sun; Poppy Rattle by day |
 | <img src="../images/characters/marigold.png" alt="" width="112"> | [Marigold](characters/marigold.md) | 5 | Does not fight; when "grown" gives treasure instead of seeds (see below) | Raid rewards of later waves |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 3 | Sprout Squad's mascot: cheap sun maker | Crafting: flower pot, wheat seeds, 3 sun |
 | <img src="../images/characters/poppy_rattle.png" alt="" width="112"> | [Poppy Rattle](characters/poppy_rattle.md) | 6 | Grows a random plant's seed packet once by day and once by night, holds up to two | Crafting: poppy, torch, 6 sun |

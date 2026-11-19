@@ -9,6 +9,8 @@ Reads the Sunflower's textures (textures/entity/plant/sunflower/sunflower{,_slee
     src/main/resources/assets/sproutsquad/textures/entity/plant/double_sunflower/double_sunflower.png
     .../double_sunflower_sleep.png   both heads with closed eyes
     .../double_sunflower_glow.png    the glow before the sun (drawn full-bright, faded in by the game)
+    .../double_sunflower_baby_glow.png  the same for a baby: the game looks up <id>_baby_glow first and would
+                                        otherwise fall back to the plain texture, lighting up the whole plant
     src/main/resources/assets/sproutsquad/textures/item/plant_icon/double_sunflower.png  (16x16)
 and, if preview_dir is given, double_sunflower_preview.png there (the three sheets, x8).
 
@@ -133,6 +135,7 @@ def main():
     }
     for name, img in sheets.items():
         img.save(os.path.join(ENTITY_DIR, name))
+    sheets["double_sunflower_glow.png"].save(os.path.join(ENTITY_DIR, "double_sunflower_baby_glow.png"))
     icon().save(ICON_PATH)
     if len(sys.argv) > 1:
         preview = Image.new("RGBA", (64 * 3 * 8 + 16, 64 * 8), (60, 40, 60, 255))

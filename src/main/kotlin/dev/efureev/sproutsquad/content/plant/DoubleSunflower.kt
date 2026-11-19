@@ -40,9 +40,12 @@ class DoubleSunflower(type: EntityType<out Plant>, level: Level) : Plant(type, l
         goalSelector.addGoal(1, DoubleSunGoal(this))
     }
 
-    /** The heads' positions in the world: [TALL_HEAD] and [SHORT_HEAD] turned with the body. */
+    /**
+     * The heads' positions in the world: [TALL_HEAD] and [SHORT_HEAD] turned the way the plant looks
+     * (DoubleSunflowerModel turns the whole stem, both heads with it, by the head's yaw).
+     */
     fun headPositions(): List<Vec3> = listOf(TALL_HEAD, SHORT_HEAD).map {
-        it.yRot(-yBodyRot * Mth.DEG_TO_RAD).scale(scale.toDouble()).add(position())
+        it.yRot(-yHeadRot * Mth.DEG_TO_RAD).scale(scale.toDouble()).add(position())
     }
 
     /** One sun from each head; a baby (half the sun, like GenerateSunGoal) only from the tall one. Returns the sun made. */
@@ -53,9 +56,12 @@ class DoubleSunflower(type: EntityType<out Plant>, level: Level) : Plant(type, l
         return heads.size * SUN_PER_HEAD
     }
 
-    /** Glows up before the sun comes, like the Sunflower (PlantRenderer's glow for it). */
+    /**
+     * Glows up before the sun comes, like the Sunflower (PlantRenderer's glow for it). Not while dying: the
+     * renderer then draws the `_sleep` texture, which has no glow sheet, and would light up the whole plant.
+     */
     override fun lookGlow(cooldown: Int): Float =
-        if (isAsleep || isGrowingSeeds) 0f else 1f - (cooldown.coerceIn(0, 100) / 100f)
+        if (isAsleep || isGrowingSeeds || deathTime > 0) 0f else 1f - (cooldown.coerceIn(0, 100) / 100f)
 
     /** GenerateSunGoal of the Sunflower (awake at night with coffee), dropping the sun from both heads. */
     private class DoubleSunGoal(val plant: DoubleSunflower) :

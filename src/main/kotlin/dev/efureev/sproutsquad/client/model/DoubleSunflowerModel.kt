@@ -25,7 +25,7 @@ import net.minecraft.util.Mth
  * Parts: body → stem (common) → stem_tall_1..3 → head_tall (the Sunflower's face) and
  * stem_short_1..3 → head_short (the winking face, texture block at 0, 50); body → leaves → leaf_1..6 → leaf_tip_1..6.
  * The poses are in the parts themselves, so the animations only add to them.
- * Texture 64×64, drawn by .
+ * Texture 64×64, drawn by `art/double_sunflower/draw_double_sunflower.py`.
  */
 class DoubleSunflowerModel(root: ModelPart) : SquadPlantModel(
     root,

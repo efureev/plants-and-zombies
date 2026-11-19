@@ -16,7 +16,7 @@ A Sunflower with two stems and a flower on each: a tall one at the back with the
 | Attack | none |
 | At night | sleeps |
 | Limit | 30 within 32 blocks |
-| How to get | [Sunflower](sunflower.md) seeds grown on farmland turn into it 10% of the time; crafting: 2 Sunflower seed packets in the middle column (centre and bottom) and 7 sun in the other slots → Double Sunflower seed packet; does not grow in the wild |
+| How to get | [Sunflower](sunflower.md) seeds grown on farmland turn into it 10% of the time; crafting: 2 Sunflower seed packets in the middle column (centre and bottom) and 7 sun in the other slots → Double Sunflower seed packet; now and then from a [Poppy Rattle](poppy_rattle.md) by day; does not grow in the wild |
 
 ## Abilities
 
