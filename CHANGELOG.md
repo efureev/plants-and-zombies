@@ -5,7 +5,6 @@ Changes since Sprout Squad 0.2.3.
 - Double Sunflower, a new plant: a Sunflower with two stems and a flower on each, the tall one with the Sunflower's face, the short one winking. Each head drops a sun every Sunflower cycle, 2 sun in all (a baby drops one); it sleeps at night like the Sunflower. 30 health, 8 sun. Sunflower seeds grown on farmland turn into it 10% of the time; two Sunflower seed packets in the middle column under 7 sun craft one.
 
 ### Fixes
-- A texture variant named after two of three or more suffixes (a sleeping baby with a name tag look) is found: the shorter fallback names were joined without `_`.
 - A Sunflower or Sun-shroom killed shortly before its sun no longer lights up whole while it dies.
 
 # Sprout Squad 0.2.3
