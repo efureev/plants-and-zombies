@@ -50,6 +50,12 @@ neoForge {
 		client {
 			client()
 			systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+			// ./gradlew runClient -Pautopilot=<script>: plays a script of commands and screenshots in the
+			// singleplayer world run/saves/verify, then quits (dev.efureev.sproutsquad.debug.client.Autopilot)
+			if (project.hasProperty('autopilot')) {
+				systemProperty 'sproutsquad.autopilot', file(project.property('autopilot')).absolutePath
+				programArguments.addAll('--quickPlaySingleplayer', 'verify')
+			}
 		}
 		server {
 			server()
