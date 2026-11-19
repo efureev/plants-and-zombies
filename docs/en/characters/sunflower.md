@@ -30,6 +30,7 @@ The basic economy plant: it does not fight, but regularly drops sun that pays fo
 - A [Coffee Bean](coffeebean.md) wakes it up. A Sunflower can make sun in the dark, so an awake one keeps producing through the night.
 - Named `vampire` with a name tag, it gets a different look.
 - A [Potling](potling.md) can be crafted, but makes sun more slowly (about every 60 s).
+- Its seeds grown on farmland turn into a [Double Sunflower](double_sunflower.md) 10% of the time; two of its seed packets and 7 sun also craft one.
 
 <!-- pictures: sunflower_vampire -->
 <p><img src="../../images/characters/sunflower_vampire.png" alt="Sunflower «Vampire»" title="Sunflower «Vampire»" width="112"></p>

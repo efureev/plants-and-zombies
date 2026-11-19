@@ -21,7 +21,7 @@ A poppy seed head with a face, a crown-shaped lid and four red petals. Once by d
 
 ## Abilities
 
-- Once a day it grows a seed packet of a plant that is awake by day (any plant but the mushrooms), once a night one of a plant that is awake at night (any plant but the Sunflower and the Potling). The moment is random, within the first half of the day or the night.
+- Once a day it grows a seed packet of a plant that is awake by day (any plant but the mushrooms), once a night one of a plant that is awake at night (any plant but the Sunflower, the Double Sunflower and the Potling). The moment is random, within the first half of the day or the night.
 - Cheaper plants come up more often: one costing up to 4 sun four times as often as one costing 11 or more. The same plant never comes twice in a row. It never hands out a Marigold, a Citron, a Royal Sunflower or another Poppy Rattle.
 - It holds up to two packets, and you can see how many: the lid is shut when it is empty, ajar with one packet showing, flipped open with two packets fanned out. While it is full it grows nothing.
 - Right-click it with an empty hand to take the packets (its owner, or anyone with co-op planting). Sneaking with an empty hand still puts it on your head.

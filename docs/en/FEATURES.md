@@ -37,6 +37,7 @@ Sun is the plant currency.
 | | Source | What you get |
 |---|---|---|
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 1 sun about every 45 s while the sun is visible; sleeps at night |
+| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Double Sunflower](characters/double_sunflower.md) | 2 sun (one from each head) about every 45 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 1 sun about every 60 s while the sun is visible; sleeps at night |
 | <img src="../images/characters/sunshroom.png" alt="" width="112"> | [Sun-shroom](characters/sunshroom.md) | 1 sun about every 65 s, 2 once it has grown up; a mushroom, so it works at night and underground |
 |  | Killing a plant yourself | half of its sun cost ([Needle Spruce](characters/needle_spruce.md): 4) |
@@ -44,7 +45,7 @@ Sun is the plant currency.
 |  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
-- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce, Poppy Rattle).
+- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce, Poppy Rattle, Double Sunflower).
 - **Bottle of Sun**: 8 sun around a glass bottle. It can also be fired from a dispenser.
 - **Solar Battery**: 4 Brainz Alloy, a Reinforced Brainz Alloy block, a Daylight Detector and 2 glass. It stores up to 512 sun. In the inventory, drop sun onto it to charge it, or right-click it with an empty cursor to take out up to a stack. Picked-up sun goes into the battery first, and planting, taming and feeding use its charge. Sneak and right-click to place it on any face of a block: a placed battery pulls in sun within 8 blocks, glows brighter the fuller it is, gives a comparator signal, accepts sun by right-click, feeds an attached dispenser and powers the [Time Machine](#time-machine).
 - The client option "Sun Info HUD" shows your total sun and the cost of the held seed packet.
@@ -56,6 +57,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 | | Plant | Sun | What it does | Where to get it |
 |---|---|---|---|---|
 | <img src="../images/characters/sunflower.png" alt="" width="112"> | [Sunflower](characters/sunflower.md) | 5 | Makes sun by day | Plains, flower forests, oak and birch forests; Browncoat drop (1%) |
+| <img src="../images/characters/double_sunflower.png" alt="" width="112"> | [Double Sunflower](characters/double_sunflower.md) | 8 | Two heads, twice the Sunflower's sun | Sunflower seed mutation; crafting: 2 Sunflower seed packets, 7 sun |
 | <img src="../images/characters/marigold.png" alt="" width="112"> | [Marigold](characters/marigold.md) | 5 | Does not fight; when "grown" gives treasure instead of seeds (see below) | Raid rewards of later waves |
 | <img src="../images/characters/potling.png" alt="" width="112"> | [Potling](characters/potling.md) | 3 | Sprout Squad's mascot: cheap sun maker | Crafting: flower pot, wheat seeds, 3 sun |
 | <img src="../images/characters/poppy_rattle.png" alt="" width="112"> | [Poppy Rattle](characters/poppy_rattle.md) | 6 | Grows a random plant's seed packet once by day and once by night, holds up to two | Crafting: poppy, torch, 6 sun |
@@ -103,7 +105,7 @@ About wild plants:
 
 ### Sleep, mushrooms and coffee
 
-- Sunflowers and Potlings sleep at night, that is, whenever the sun is not visible.
+- Sunflowers, Double Sunflowers and Potlings sleep at night, that is, whenever the sun is not visible.
 - Mushrooms (Puff-, Scaredy-, Fume-, Sun-, Hypno-, Ice-, Doom- and Sea-shroom) sleep while the sun is visible: by day under the open sky. At night, in caves or under a roof they are awake.
 - A sleeping plant does not attack and does not make sun.
 - A Coffee Bean planted nearby wakes the closest sleeping plant and is used up. You can also use a Coffee Bean seed packet directly on a sleeping plant (2 sun). A plant woken this way stays awake for 40 minutes.
@@ -127,6 +129,7 @@ The [Poppy Rattle](characters/poppy_rattle.md) needs no watering for its other t
 
 | | Plant | What its seeds can turn into |
 |---|---|---|
+| <img src="../images/characters/sunflower.png" alt="" width="112"> | Sunflower | Double Sunflower (10%) |
 | <img src="../images/characters/peashooter.png" alt="" width="112"> | Peashooter | Electric Peashooter (50%) during a thunderstorm; Fire Peashooter (50%) in a Crimson Forest; otherwise Repeater (10%) |
 | <img src="../images/characters/electric_peashooter.png" alt="" width="112"> | Electric Peashooter | always itself during a thunderstorm; otherwise Peashooter (15%) |
 | <img src="../images/characters/fire_peashooter.png" alt="" width="112"> | Fire Peashooter | always itself in a Crimson Forest; otherwise Peashooter (15%) |
@@ -573,7 +576,7 @@ The first three can be changed in game with `/pz options`.
 
 ## Characters
 
-Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md), the [Needle Spruce](characters/needle_spruce.md) and the [Poppy Rattle](characters/poppy_rattle.md).
+Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md), the [Needle Spruce](characters/needle_spruce.md), the [Poppy Rattle](characters/poppy_rattle.md) and the [Double Sunflower](characters/double_sunflower.md).
 
 ### Secret names
 
