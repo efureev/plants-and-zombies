@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.RecipeType
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
 
 /** GameTests of the Double Sunflower (docs/en/characters/double_sunflower.md). Registered in SquadGameTests. */
@@ -61,6 +62,28 @@ object DoubleSunflowerGameTests {
         val turned = adult.headPositions()[0].subtract(adult.position())
         val expected = DoubleSunflower.TALL_HEAD.yRot(-90f * net.minecraft.util.Mth.DEG_TO_RAD)
         helper.assertTrue(turned.distanceTo(expected) < 1e-6, "tall head with the head turned 90°: $turned, expected $expected")
+        helper.succeed()
+    }
+
+    /** Looking diagonally at a greenhouse wall, the short head reaches into the next block: its sun still comes out in the open. */
+    fun sunNotInWall(helper: GameTestHelper) {
+        val plant = helper.spawn(SquadEntities.DOUBLE_SUNFLOWER.get(), BlockPos(2, 1, 2))
+        // off the block's centre toward the wall, as a wild or pushed plant may stand: the head goes 0.45 deep,
+        // too far for the sun to push itself out (it tries only a quarter of a block)
+        plant.setPos(plant.blockPosition().x + 0.15, plant.y, plant.blockPosition().z + 0.5)
+        // the turn at which the short head (0.6 blocks out) points straight along -x, past the plant's box
+        plant.yBodyRot = 40.9f
+        plant.yHeadRot = 40.9f
+        val short = plant.headPositions()[1]
+        val wall = BlockPos.containing(short)
+        helper.assertTrue(wall != plant.blockPosition(), "the short head stays in the plant's own block: $short")
+        // two blocks high: a sun starts a little above the head and would hop over a one-block wall
+        helper.level.setBlockAndUpdate(wall, Blocks.GLASS.defaultBlockState())
+        helper.level.setBlockAndUpdate(wall.above(), Blocks.GLASS.defaultBlockState())
+        helper.assertValueEqual(plant.dropSun(helper.level), 2, "sun made")
+        val suns = helper.level.getEntitiesOfClass(Sun::class.java, AABB(plant.blockPosition()).inflate(2.0))
+        helper.assertValueEqual(suns.sumOf { it.value }, 2, "sun in the world")
+        suns.forEach { helper.assertTrue(helper.level.noCollision(it.boundingBox), "a sun inside a block at ${it.position()}") }
         helper.succeed()
     }
 
