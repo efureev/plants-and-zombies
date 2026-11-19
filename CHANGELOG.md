@@ -6,6 +6,7 @@ Changes since Sprout Squad 0.2.3.
 
 ### Fixes
 - A texture variant named after two of three or more suffixes (a sleeping baby with a name tag look) is found: the shorter fallback names were joined without `_`.
+- A Sunflower or Sun-shroom killed shortly before its sun no longer lights up whole while it dies.
 
 # Sprout Squad 0.2.3
 Changes since Sprout Squad 0.2.2.
