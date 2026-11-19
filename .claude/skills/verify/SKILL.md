@@ -34,9 +34,12 @@ so the client plays a script: `dev.efureev.sproutsquad.debug.client.Autopilot`.
    `rsync -a --exclude session.lock run/world/ run/saves/verify/`.
 2. **Early window off** while checking: `earlyWindowControl = false` in `run/config/fml.toml`
    (macOS hangs in `SDL_GL_SwapWindow` when the window is not visible). Put it back to `true` afterwards.
-3. **Script** (a text file in the scratchpad), one step per line, `#` comments:
+3. **Script** (a text file in the scratchpad), one step per line; a line starting with `#` is a comment (only
+   whole lines: `#` inside a command is a tag):
    - `wait <ticks>` (20 a second), `cmd <command without slash>` (as the player, full permissions),
      `hud on|off`, `shot <name>` → `run/screenshots/<name>.png`, `quit`.
+   - The step after a `cmd` waits until the server has run it, but the result reaches the screen a few ticks
+     later: put `wait 5` (or more) between a `cmd` and a `shot`.
    - A flat stage high up, cleared, daytime:
      ```
      wait 40
@@ -81,5 +84,8 @@ Run the items whose trigger the change touches.
 - **Server code that places things at a model part** (sun from a head, a projectile from a mouth): the model may turn
   that part with the head (`state.yRot`, i.e. `yHeadRot`), not the body. Use the same angle on the server, and check
   in game with the plant looking sideways.
+- **A spawn point outside the plant's hitbox** (a head reaching past the box): it can land inside the next block.
+  A `Sun` pushes itself out only a quarter of a block and starts a little above the point, so test against a
+  two-block wall with the plant off its block's centre (`DoubleSunflowerGameTests.sunNotInWall`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
