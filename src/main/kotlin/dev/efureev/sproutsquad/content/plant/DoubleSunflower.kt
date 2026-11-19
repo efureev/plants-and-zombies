@@ -1,6 +1,5 @@
 package dev.efureev.sproutsquad.content.plant
 
-import joshxviii.plantz.PazEntities
 import joshxviii.plantz.ai.goal.ActionGoal
 import joshxviii.plantz.entity.Sun
 import joshxviii.plantz.entity.plant.Plant
@@ -9,7 +8,6 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.Level
-import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 /**
@@ -53,19 +51,21 @@ class DoubleSunflower(type: EntityType<out Plant>, level: Level) : Plant(type, l
     /** One sun from each head; a baby (half the sun, like GenerateSunGoal) only from the tall one. Returns the sun made. */
     fun dropSun(level: ServerLevel): Int {
         val heads = headPositions().let { if (isBaby) it.take(1) else it }
-        heads.forEach { Sun.award(level, clearSpot(level, it), SUN_PER_HEAD) }
+        heads.forEach { level.addFreshEntity(sunInTheOpen(level, it)) }
         playSound(SoundEvents.CHICKEN_EGG, 1.0f, 0.5f) // the Sunflower's sound
         return heads.size * SUN_PER_HEAD
     }
 
     /**
-     * Where a head's sun can appear: the short head reaches 0.6 blocks out, past the plant's box and into the next
-     * block when it looks diagonally at a wall; then the sun comes out above the plant's centre instead (a sun inside
-     * a block gets pushed out to wherever there is room, even behind the wall).
+     * A head's sun, placed where it is free. The short head reaches 0.6 blocks out, past the plant's box, and a sun
+     * starts a little above its spot (Sun's constructor), so next to a wall or under a low ceiling it could start inside
+     * a block and be pushed out anywhere, even behind the wall. The sun is made first and its own box checked, at the
+     * head, then above the plant's centre at the head's height, then at the plant's feet like the Sunflower's sun.
      */
-    private fun clearSpot(level: ServerLevel, spot: Vec3): Vec3 {
-        val half = PazEntities.SUN.width / 2.0
-        return if (level.noCollision(AABB.ofSize(spot, half * 2, half * 2, half * 2))) spot else Vec3(x, spot.y, z)
+    private fun sunInTheOpen(level: ServerLevel, head: Vec3): Sun {
+        val spots = listOf(head, Vec3(x, head.y, z), position())
+        return spots.asSequence().map { Sun(level, it, Vec3.Y_AXIS, SUN_PER_HEAD) }
+            .firstOrNull { level.noCollision(it, it.boundingBox) } ?: Sun(level, position(), Vec3.Y_AXIS, SUN_PER_HEAD)
     }
 
     /**
