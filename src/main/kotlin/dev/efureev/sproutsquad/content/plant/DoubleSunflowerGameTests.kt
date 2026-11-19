@@ -35,7 +35,7 @@ object DoubleSunflowerGameTests {
         helper.succeed()
     }
 
-    /** One sun from each head (2), a baby only 1; no glow while asleep. */
+    /** One sun from each head (2), a baby only 1; no glow while asleep or dying; the sun follows the head's turn. */
     fun twoSuns(helper: GameTestHelper) {
         val type = SquadEntities.DOUBLE_SUNFLOWER.get()
         val adult = helper.spawn(type, BlockPos(1, 1, 1))
@@ -49,8 +49,18 @@ object DoubleSunflowerGameTests {
 
         helper.assertValueEqual(adult.lookGlow(0), 1f, "glow right before the sun")
         helper.assertValueEqual(adult.lookGlow(500), 0f, "glow long before the sun")
+        adult.deathTime = 1
+        helper.assertValueEqual(adult.lookGlow(0), 0f, "glow while dying")
+        adult.deathTime = 0
         adult.isAsleep = true
         helper.assertValueEqual(adult.lookGlow(0), 0f, "glow while asleep")
+
+        // the sun comes from the heads as drawn: the model turns them with the head, not the body
+        adult.yBodyRot = 0f
+        adult.yHeadRot = 90f
+        val turned = adult.headPositions()[0].subtract(adult.position())
+        val expected = DoubleSunflower.TALL_HEAD.yRot(-90f * net.minecraft.util.Mth.DEG_TO_RAD)
+        helper.assertTrue(turned.distanceTo(expected) < 1e-6, "tall head with the head turned 90°: $turned, expected $expected")
         helper.succeed()
     }
 
