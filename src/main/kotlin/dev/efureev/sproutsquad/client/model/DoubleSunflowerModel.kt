@@ -248,12 +248,12 @@ object DoubleSunflowerAnimation {
     /** Asleep: both stems bend, the heads hang down and breathe slowly, out of step. */
     val sleep: AnimationDefinition = AnimationDefinition.Builder.withLength(5.0f).looping()
         .addAnimation("stem_tall_2", AnimationChannel(ROTATION,
-            rot(0f, -15f, 0f, 0f), rot(2.5f, -22f, 0f, 0f), rot(5f, -15f, 0f, 0f)))
+            rot(0f, -8f, 0f, 0f), rot(2.5f, -12f, 0f, 0f), rot(5f, -8f, 0f, 0f)))
         .addAnimation("head_tall", AnimationChannel(ROTATION,
-            rot(0f, -30f, 0f, 8f), rot(2.5f, -38f, 0f, 8f), rot(5f, -30f, 0f, 8f)))
+            rot(0f, -18f, 0f, 8f), rot(2.5f, -24f, 0f, 8f), rot(5f, -18f, 0f, 8f)))
         .addAnimation("stem_short_2", AnimationChannel(ROTATION,
-            rot(0f, -12f, 0f, 0f), rot(1.5f, -6f, 0f, 0f), rot(3.5f, -16f, 0f, 0f), rot(5f, -12f, 0f, 0f)))
+            rot(0f, -6f, 0f, 0f), rot(1.5f, -3f, 0f, 0f), rot(3.5f, -10f, 0f, 0f), rot(5f, -6f, 0f, 0f)))
         .addAnimation("head_short", AnimationChannel(ROTATION,
-            rot(0f, -28f, 0f, -10f), rot(1.5f, -22f, 0f, -10f), rot(3.5f, -34f, 0f, -10f), rot(5f, -28f, 0f, -10f)))
+            rot(0f, -16f, 0f, -10f), rot(1.5f, -12f, 0f, -10f), rot(3.5f, -22f, 0f, -10f), rot(5f, -16f, 0f, -10f)))
         .build()
 }
