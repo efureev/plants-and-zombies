@@ -68,9 +68,9 @@ object DoubleSunflowerGameTests {
     /** Looking diagonally at a greenhouse wall, the short head reaches into the next block: its sun still comes out in the open. */
     fun sunNotInWall(helper: GameTestHelper) {
         val plant = helper.spawn(SquadEntities.DOUBLE_SUNFLOWER.get(), BlockPos(2, 1, 2))
-        // off the block's centre toward the wall, as a wild or pushed plant may stand: the head goes 0.45 deep,
-        // too far for the sun to push itself out (it tries only a quarter of a block)
-        plant.setPos(plant.blockPosition().x + 0.15, plant.y, plant.blockPosition().z + 0.5)
+        // pushed flush against the wall (its 0.9-wide box touching it): the short head goes about 0.15 into the wall,
+        // too deep for the sun to push itself out (it moves at most an eighth of a block, half its own size)
+        plant.setPos(plant.blockPosition().x + 0.45, plant.y, plant.blockPosition().z + 0.5)
         // the turn at which the short head (0.6 blocks out) points straight along -x, past the plant's box
         plant.yBodyRot = 40.9f
         plant.yHeadRot = 40.9f
