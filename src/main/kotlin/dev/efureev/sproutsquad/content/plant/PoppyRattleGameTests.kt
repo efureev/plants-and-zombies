@@ -311,4 +311,20 @@ object PoppyRattleGameTests {
         helper.assertFalse(spruce.lookSpecialAction(), "a live Needle Spruce stands on a stump")
         helper.succeed()
     }
+
+    /** Planted under a ceiling one block up (a tunnel, leaves) it does not choke: its eyes stay below the block. */
+    fun underLowCeiling(helper: GameTestHelper) {
+        val spot = BlockPos(2, 1, 2)
+        helper.setBlock(spot.below(), Blocks.GRASS_BLOCK)
+        helper.setBlock(spot.above(), Blocks.STONE)
+        val rattle = helper.spawn(SquadEntities.POPPY_RATTLE.get(), spot)
+        helper.assertFalse(rattle.isInWall, "eyes inside the ceiling at ${rattle.eyeY}")
+        helper.startSequence()
+            .thenIdle(40)
+            .thenExecute {
+                helper.assertTrue(rattle.isAlive, "choked under the ceiling")
+                helper.assertValueEqual(rattle.health, rattle.maxHealth, "health under the ceiling")
+            }
+            .thenSucceed()
+    }
 }
