@@ -34,7 +34,7 @@ object PoppyRattleGameTests {
             ?: return helper.fail("the Poppy Rattle does not spawn")
         helper.assertValueEqual(rattle.maxHealth, 16f, "max health")
         helper.assertValueEqual(PazConfig.getSunCost(type), 6, "sun cost")
-        helper.assertValueEqual(PazConfig.getEntityLimit(type), 4, "planting limit")
+        helper.assertValueEqual(PazConfig.getEntityLimit(type), 6, "planting limit")
         helper.assertFalse(rattle.sleepsDuringDay(), "sleeps by day")
         helper.assertFalse(rattle.sleepsDuringNight(), "sleeps at night")
         listOf(PazEntities.MARIGOLD, PazEntities.CITRON, PazEntities.ROYAL_SUNFLOWER, type).forEach {
@@ -265,7 +265,7 @@ object PoppyRattleGameTests {
             PazConfig.server = ServerConfig(customPlantEntityLimits = mutableMapOf())
             helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.MELON_PULT), 30, "Melon-pult limit with an empty config map")
             helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.COFFEE_BEAN), 30, "Coffee Bean limit with an empty config map")
-            helper.assertValueEqual(PazConfig.getEntityLimit(SquadEntities.POPPY_RATTLE.get()), 4, "Poppy Rattle limit from code")
+            helper.assertValueEqual(PazConfig.getEntityLimit(SquadEntities.POPPY_RATTLE.get()), 6, "Poppy Rattle limit from code")
         } finally {
             PazConfig.server = saved
         }
