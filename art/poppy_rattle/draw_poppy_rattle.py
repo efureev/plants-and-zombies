@@ -152,7 +152,7 @@ def draw_body(eyes="open"):
     fill(img, 46, 17, 4, 6, PAPER_SH)
 
     # ---- petal plane 5x0x5 at (0,27): row 0 at the head, row 4 the tip; a black blotch at the base ----
-    # Only the first square is drawn, from both sides (ONE_FACE in the model); the second, the underside,
+    # Only the first square is drawn, from both sides (PlaneSide.TOP in the model); the second, the underside,
     # is left unused, and so are the leaves' second squares.
     pal = {"r": RED, "R": RED_HI, "s": RED_SH, "d": LID_DEEP}
     rows(img, 5, 27, ["..d..",

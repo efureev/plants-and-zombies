@@ -20,6 +20,7 @@ import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 public class ZombatModel<S extends ZombatRenderState> extends EntityModel<S> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("zombat"), "main");
@@ -52,8 +53,8 @@ public class ZombatModel<S extends ZombatRenderState> extends EntityModel<S> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(1, 15).addBox(1.5F, -8.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(8, 15).addBox(-4.5F, -8.0F, 0.0F, 3.0F, 5.0F, 0.0F, new CubeDeformation(0.0F))
+		PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(1, 15).addBox(1.5F, -8.0F, 0.0F, 3.0F, 5.0F, 0.0F, PlaneSide.NORTH)
+				.texOffs(8, 15).addBox(-4.5F, -8.0F, 0.0F, 3.0F, 5.0F, 0.0F, PlaneSide.NORTH)
 				.texOffs(0, 20).addBox(-2.5F, -5.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, 0.0F));
 
 		PartDefinition top_hat = head.addOrReplaceChild("top_hat", CubeListBuilder.create().texOffs(0, 45).addBox(-2.5F, -5.0F, -2.5F, 5.0F, 5.0F, 5.0F, new CubeDeformation(0.5F))
@@ -61,15 +62,15 @@ public class ZombatModel<S extends ZombatRenderState> extends EntityModel<S> {
 
 		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-1.5F, 0.0F, -1.0F, 3.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, 0.0F));
 
-		PartDefinition feet = body.addOrReplaceChild("feet", CubeListBuilder.create().texOffs(16, 16).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 2.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 5.0F, 0.0F));
+		PartDefinition feet = body.addOrReplaceChild("feet", CubeListBuilder.create().texOffs(16, 16).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 2.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(0.0F, 5.0F, 0.0F));
 
-		PartDefinition left_wing = body.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(12, 0).addBox(0.0F, -2.0F, 0.0F, 2.0F, 7.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 0.0F, 0.0F));
+		PartDefinition left_wing = body.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(12, 0).addBox(0.0F, -2.0F, 0.0F, 2.0F, 7.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(1.5F, 0.0F, 0.0F));
 
-		PartDefinition left_wing_tip = left_wing.addOrReplaceChild("left_wing_tip", CubeListBuilder.create().texOffs(16, 0).addBox(0.0F, -2.0F, 0.0F, 6.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 0.0F, 0.0F));
+		PartDefinition left_wing_tip = left_wing.addOrReplaceChild("left_wing_tip", CubeListBuilder.create().texOffs(16, 0).addBox(0.0F, -2.0F, 0.0F, 6.0F, 8.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(2.0F, 0.0F, 0.0F));
 
-		PartDefinition right_wing = body.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(12, 7).addBox(-2.0F, -2.0F, 0.0F, 2.0F, 7.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 0.0F, 0.0F));
+		PartDefinition right_wing = body.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(12, 7).addBox(-2.0F, -2.0F, 0.0F, 2.0F, 7.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(-1.5F, 0.0F, 0.0F));
 
-		PartDefinition right_wing_tip = right_wing.addOrReplaceChild("right_wing_tip", CubeListBuilder.create().texOffs(16, 8).addBox(-6.0F, -2.0F, 0.0F, 6.0F, 8.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 0.0F, 0.0F));
+		PartDefinition right_wing_tip = right_wing.addOrReplaceChild("right_wing_tip", CubeListBuilder.create().texOffs(16, 8).addBox(-6.0F, -2.0F, 0.0F, 6.0F, 8.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(-2.0F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}

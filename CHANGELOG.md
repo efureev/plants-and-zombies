@@ -5,7 +5,7 @@ Changes since Sprout Squad 0.2.4.
 - Poppy Rattle: at most 6 within 32 blocks instead of 4; its stem is twice as tall (its hitbox is now 1.2 blocks high).
 
 ### Fixes
-- Poppy Rattle: the petals and leaves no longer flicker while it sways.
+- Flat parts no longer flicker as a model moves: the Poppy Rattle's petals and leaves, the Potling's leaves, the Cabbage-pult's and Kernel-pult's springs and eyebrows, the eyebrows of the Repeater, Fume-shroom and gnome, the Zombat's wings, head and feet, two flat parts of Baron von Bats' body, the glasses of the Disco Zombie and the Backup Dancer and the Zombie Drone's helmet.
 
 # Sprout Squad 0.2.4
 Changes since Sprout Squad 0.2.3.

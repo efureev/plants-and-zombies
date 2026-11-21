@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 
 public class KernelPultModel extends PlantModel {
@@ -74,13 +75,13 @@ public class KernelPultModel extends PlantModel {
 
 		PartDefinition eyebrow_L = eyebrows.addOrReplaceChild("eyebrow_L", CubeListBuilder.create(), PartPose.offset(-2.0F, -3.5F, -5.125F));
 
-		PartDefinition cube_r1 = eyebrow_L.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 29).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
+		PartDefinition cube_r1 = eyebrow_L.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 29).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.SOUTH), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.0F, 3.1416F, 0.0F));
 
-		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(0, 29).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -3.5F, -5.125F));
+		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(0, 29).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(2.0F, -3.5F, -5.125F));
 
-		PartDefinition coil = head.addOrReplaceChild("coil", CubeListBuilder.create().texOffs(12, 55).addBox(0.0F, -10.0F, -1.0F, 0.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -16.0F, 0.0F));
+		PartDefinition coil = head.addOrReplaceChild("coil", CubeListBuilder.create().texOffs(12, 55).addBox(0.0F, -10.0F, -1.0F, 0.0F, 10.0F, 2.0F, PlaneSide.WEST), PartPose.offset(0.0F, -16.0F, 0.0F));
 
-		PartDefinition coil_2 = coil.addOrReplaceChild("coil_2", CubeListBuilder.create().texOffs(12, 55).addBox(0.0F, -10.0F, -1.0F, 0.0F, 10.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.0F, 0.0F));
+		PartDefinition coil_2 = coil.addOrReplaceChild("coil_2", CubeListBuilder.create().texOffs(12, 55).addBox(0.0F, -10.0F, -1.0F, 0.0F, 10.0F, 2.0F, PlaneSide.WEST), PartPose.offset(0.0F, -10.0F, 0.0F));
 
 		PartDefinition basket = coil_2.addOrReplaceChild("basket", CubeListBuilder.create().texOffs(0, 42).addBox(-4.0F, -8.0F, 2.0F, 8.0F, 8.0F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(1, 58).addBox(-4.0F, -7.0F, -2.0F, 1.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))

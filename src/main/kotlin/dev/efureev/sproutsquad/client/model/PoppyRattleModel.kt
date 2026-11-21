@@ -16,10 +16,8 @@ import net.minecraft.client.model.geom.PartPose
 import net.minecraft.client.model.geom.builders.CubeListBuilder
 import net.minecraft.client.model.geom.builders.LayerDefinition
 import net.minecraft.client.model.geom.builders.MeshDefinition
-import net.minecraft.core.Direction
 import net.minecraft.util.Mth
 import joshxviii.plantz.renderer.entity.plant.PlantRenderState
-import java.util.EnumSet
 
 /**
  * Poppy Rattle: a poppy seed head with a face, a crown-shaped lid and four red petals.
@@ -83,14 +81,6 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
         private const val PETAL_NIGHT_LIFT = -65f
         private const val PETAL_NIGHT_LENGTH = 0.75f
 
-        /**
-         * Petals and leaves are flat planes drawn with one face. A zero-thickness box has its top and bottom
-         * faces in the same plane, and the entity render type does not cull back faces, so both were drawn and
-         * fought over the depth buffer: the petals flickered between their two colours as the plant swayed.
-         * Model Y points down, so DOWN is the face seen from above: the first (lighter) square of the plane's UV.
-         */
-        private val ONE_FACE: Set<Direction> = EnumSet.of(Direction.DOWN)
-
         @JvmField val LAYER_LOCATION = ModelLayerLocation(pazResource("poppy_rattle"), "main")
 
         fun createBodyLayer(): LayerDefinition {
@@ -99,11 +89,11 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
 
             body.addOrReplaceChild("stem", CubeListBuilder.create()
                 .texOffs(56, 8).addBox(-1f, -6f, -1f, 2f, 6f, 2f), PartPose.ZERO)
-            // Leaves are flat planes (one face, see ONE_FACE) at the foot of the stem, spread forward to the sides.
+            // Leaves are flat planes (one side, see PlaneSide) at the foot of the stem, spread forward to the sides.
             body.addOrReplaceChild("leaf_right", CubeListBuilder.create()
-                .texOffs(0, 33).addBox(0f, 0f, -2f, 7f, 0f, 4f, ONE_FACE), PartPose.offsetAndRotation(0.5f, -0.5f, 0f, 0f, 0.7f, -0.6f))
+                .texOffs(0, 33).addBox(0f, 0f, -2f, 7f, 0f, 4f, PlaneSide.TOP), PartPose.offsetAndRotation(0.5f, -0.5f, 0f, 0f, 0.7f, -0.6f))
             body.addOrReplaceChild("leaf_left", CubeListBuilder.create()
-                .texOffs(22, 33).addBox(-7f, 0f, -2f, 7f, 0f, 4f, ONE_FACE), PartPose.offsetAndRotation(-0.5f, -0.5f, 0f, 0f, -0.7f, 0.6f))
+                .texOffs(22, 33).addBox(-7f, 0f, -2f, 7f, 0f, 4f, PlaneSide.TOP), PartPose.offsetAndRotation(-0.5f, -0.5f, 0f, 0f, -0.7f, 0.6f))
 
             val pod = body.addOrReplaceChild("pod", CubeListBuilder.create()
                 .texOffs(32, 0).addBox(-3f, -1f, -3f, 6f, 1f, 6f)      // base
@@ -127,13 +117,13 @@ class PoppyRattleModel(root: ModelPart) : SquadPlantModel(
             // Petals point out of the base's corners (yaw ±45°, ±135°), opened as a cup by day (X −30°).
             // Spelled out one by one: tools/docs/render_character.py reads the literal numbers.
             pod.addOrReplaceChild("petal_fl", CubeListBuilder.create()
-                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, ONE_FACE), PartPose.offsetAndRotation(-3f, 0f, -3f, -0.5236f, 0.7854f, 0f))
+                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, PlaneSide.TOP), PartPose.offsetAndRotation(-3f, 0f, -3f, -0.5236f, 0.7854f, 0f))
             pod.addOrReplaceChild("petal_fr", CubeListBuilder.create()
-                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, ONE_FACE), PartPose.offsetAndRotation(3f, 0f, -3f, -0.5236f, -0.7854f, 0f))
+                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, PlaneSide.TOP), PartPose.offsetAndRotation(3f, 0f, -3f, -0.5236f, -0.7854f, 0f))
             pod.addOrReplaceChild("petal_bl", CubeListBuilder.create()
-                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, ONE_FACE), PartPose.offsetAndRotation(-3f, 0f, 3f, -0.5236f, 2.3562f, 0f))
+                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, PlaneSide.TOP), PartPose.offsetAndRotation(-3f, 0f, 3f, -0.5236f, 2.3562f, 0f))
             pod.addOrReplaceChild("petal_br", CubeListBuilder.create()
-                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, ONE_FACE), PartPose.offsetAndRotation(3f, 0f, 3f, -0.5236f, -2.3562f, 0f))
+                .texOffs(0, 27).addBox(-2.5f, 0f, -5f, 5f, 0f, 5f, PlaneSide.TOP), PartPose.offsetAndRotation(3f, 0f, 3f, -0.5236f, -2.3562f, 0f))
             return LayerDefinition.create(mesh, 64, 64)
         }
     }
