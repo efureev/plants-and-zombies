@@ -91,7 +91,7 @@ class Part:
         self.offset = np.zeros(3)
         self.rotation = np.zeros(3)  # radians, x y z
         self.scale = np.ones(3)
-        self.cubes = []              # (u, v, mirror, x, y, z, w, h, d, inflate)
+        self.cubes = []              # (u, v, mirror, x, y, z, w, h, d, inflate, faces or None = all)
         self.children = []
 
 
@@ -100,8 +100,22 @@ def strip_comments(text):
     return re.sub(r"//[^\n]*", "", text)
 
 
+# Minecraft's Direction of a box face -> the face name here. Model Y points down, so DOWN is the face at
+# the box's top (seen from above) and UP the one at its bottom.
+DIRECTION_FACES = {"DOWN": "top", "UP": "bottom", "NORTH": "north", "SOUTH": "south", "WEST": "west", "EAST": "east"}
+
+
+def parse_faces(expr):
+    """Face names of an `EnumSet.of(Direction.X, ...)` expression, or None if it lists none."""
+    names = [DIRECTION_FACES[d] for d in re.findall(r"Direction\.(\w+)", expr) if d in DIRECTION_FACES]
+    return set(names) or None
+
+
 def parse_model(text):
     text = strip_comments(text)
+    # named face sets, as in `val ONE_FACE: Set<Direction> = EnumSet.of(Direction.DOWN)`
+    face_sets = {m.group(1): parse_faces(m.group(2)) for m in re.finditer(
+        r"\b(\w+)\s*(?::[^=\n]*)?=\s*(?:java\.util\.)?EnumSet\.of\(([^()]*)\)", text)}
     size = re.search(r"LayerDefinition\.create\(\s*\w+\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", text)
     tex_w, tex_h = (int(size.group(1)), int(size.group(2))) if size else (64, 64)
     root = Part("root", None)
@@ -144,7 +158,11 @@ def parse_model(text):
                 if deformation:
                     inflate = num(deformation.group(1))
                 box = [num(x) for x in values[:6]]
-                part.cubes.append((u, v, mirror, *box, inflate))
+                # addBox(x, y, z, w, h, d, visibleSides): only the listed faces are drawn
+                faces = parse_faces(args)
+                for name in re.findall(r"\b([A-Z][A-Z0-9_]+)\b", args):
+                    faces = faces or face_sets.get(name)
+                part.cubes.append((u, v, mirror, *box, inflate, faces))
     return root, (tex_w, tex_h)
 
 
@@ -222,7 +240,7 @@ MODEL_TO_WORLD[1, 3] = 24.0
 
 def collect_faces(part, parent_matrix, faces):
     matrix = parent_matrix @ part_matrix(part)
-    for (u, v, mirror, x, y, z, w, h, d, g) in part.cubes:
+    for (u, v, mirror, x, y, z, w, h, d, g, visible) in part.cubes:
         x0, y0, z0, x1, y1, z1 = x - g, y - g, z - g, x + w + g, y + h + g, z + d + g
         # (texture rect u, v, width, height), origin corner, s-edge, t-edge, local outward normal
         tw, th, td = w, h, d
@@ -237,6 +255,8 @@ def collect_faces(part, parent_matrix, faces):
         if mirror:  # Minecraft swaps the east/west textures and flips u
             defs["west"], defs["east"] = (defs["east"][0],) + defs["west"][1:], (defs["west"][0],) + defs["east"][1:]
         for name, (rect, o, s_end, t_end, normal) in defs.items():
+            if visible is not None and name not in visible:
+                continue  # addBox(..., visibleSides) leaves this face out
             if rect[2] <= 0 or rect[3] <= 0:
                 continue  # zero-area face of a flat plane
             pts = [np.array([*p, 1.0]) for p in (o, s_end, t_end)]
