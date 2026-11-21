@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 public class RepeaterModel extends PlantModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("repeater"), "main");
@@ -85,9 +86,9 @@ public class RepeaterModel extends PlantModel {
 
 		PartDefinition eyebrow = head.addOrReplaceChild("eyebrow", CubeListBuilder.create(), PartPose.offset(0.0F, -5.25F, -3.1F));
 
-		PartDefinition left_brow = eyebrow.addOrReplaceChild("left_brow", CubeListBuilder.create().texOffs(36, 23).addBox(-1.5F, -0.5F, 0.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 0.0F, 0.0F));
+		PartDefinition left_brow = eyebrow.addOrReplaceChild("left_brow", CubeListBuilder.create().texOffs(36, 23).addBox(-1.5F, -0.5F, 0.0F, 3.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(2.0F, 0.0F, 0.0F));
 
-		PartDefinition right_brow = eyebrow.addOrReplaceChild("right_brow", CubeListBuilder.create().texOffs(36, 23).mirror().addBox(-1.5F, -0.5F, 0.0F, 3.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(-2.0F, 0.0F, 0.0F));
+		PartDefinition right_brow = eyebrow.addOrReplaceChild("right_brow", CubeListBuilder.create().texOffs(36, 23).mirror().addBox(-1.5F, -0.5F, 0.0F, 3.0F, 1.0F, 0.0F, PlaneSide.NORTH).mirror(false), PartPose.offset(-2.0F, 0.0F, 0.0F));
 
 		PartDefinition barrel = head.addOrReplaceChild("barrel", CubeListBuilder.create().texOffs(18, 25).addBox(-2.5F, -2.5F, -2.0F, 5.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, -5.0F));
 

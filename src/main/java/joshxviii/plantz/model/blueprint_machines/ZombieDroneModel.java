@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 public class ZombieDroneModel<T extends BlueprintMachineRenderState> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("drone_turret"), "main");
@@ -45,7 +46,7 @@ public class ZombieDroneModel<T extends BlueprintMachineRenderState> extends Ent
 		PartDefinition hat = body.addOrReplaceChild("hat", CubeListBuilder.create().texOffs(0, 0).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
 		PartDefinition helmet_r1 = hat.addOrReplaceChild("helmet_r1", CubeListBuilder.create().texOffs(0, 16).addBox(-4.5F, -4.0F, -4.5F, 9.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
-				.texOffs(16, 0).addBox(-4.5F, 0.0F, -6.5F, 9.0F, 0.0F, 12.0F, new CubeDeformation(0.0F))
+				.texOffs(16, 0).addBox(-4.5F, 0.0F, -6.5F, 9.0F, 0.0F, 12.0F, PlaneSide.TOP)
 				.texOffs(0, 34).addBox(-1.0F, -8.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
 				.texOffs(3, 38).addBox(-0.5F, -6.0F, 0.0F, 1.0F, 1.0F, 0.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 0).addBox(-1.5F, -5.0F, -5.5F, 3.0F, 5.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -0.75F, 0.0F, -0.0872F, 0.0038F, 0.0435F));

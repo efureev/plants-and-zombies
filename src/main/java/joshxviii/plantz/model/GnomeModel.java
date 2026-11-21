@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 public class GnomeModel<T extends GnomeRenderState> extends EntityModel<T> implements ArmedModel<T>, HeadedModel {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(pazResource("gnome"), "main");
@@ -80,9 +81,9 @@ public class GnomeModel<T extends GnomeRenderState> extends EntityModel<T> imple
 
 		PartDefinition eyebrows = head.addOrReplaceChild("eyebrows", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, -2.05F));
 
-		PartDefinition eyebrow_L = eyebrows.addOrReplaceChild("eyebrow_L", CubeListBuilder.create().texOffs(14, 12).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(1.5F, 0.0F, -0.05F));
+		PartDefinition eyebrow_L = eyebrows.addOrReplaceChild("eyebrow_L", CubeListBuilder.create().texOffs(14, 12).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(1.5F, 0.0F, -0.05F));
 
-		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(18, 12).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.5F, 0.0F, -0.05F));
+		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(18, 12).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(-1.5F, 0.0F, -0.05F));
 
 		PartDefinition arms = torso.addOrReplaceChild("arms", CubeListBuilder.create(), PartPose.offset(0.0F, -3.0F, 0.0F));
 

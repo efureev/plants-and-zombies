@@ -49,10 +49,10 @@ class PotlingModel(root: ModelPart) : SquadPlantModel(
 
             // Leaves are flat planes; the smaller one points left, the bigger one waves up to the right.
             stem.addOrReplaceChild("leaf_left", CubeListBuilder.create()
-                .texOffs(40, 8).addBox(-5f, 0f, -1.5f, 5f, 0f, 3f),
+                .texOffs(40, 8).addBox(-5f, 0f, -1.5f, 5f, 0f, 3f, PlaneSide.TOP),
                 PartPose.offsetAndRotation(-0.5f, -4f, 0f, 0f, 0f, 0.45f))
             stem.addOrReplaceChild("leaf_right", CubeListBuilder.create()
-                .texOffs(40, 12).addBox(0f, 0f, -2f, 6f, 0f, 4f),
+                .texOffs(40, 12).addBox(0f, 0f, -2f, 6f, 0f, 4f, PlaneSide.TOP),
                 PartPose.offsetAndRotation(0.5f, -5f, 0f, 0f, 0f, -0.6f))
 
             return LayerDefinition.create(mesh, 64, 64)

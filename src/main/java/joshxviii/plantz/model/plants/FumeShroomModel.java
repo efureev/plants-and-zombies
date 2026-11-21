@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.builders.*;
 import org.jetbrains.annotations.NotNull;
 
 import static joshxviii.plantz.UtilsKt.pazResource;
+import dev.efureev.sproutsquad.client.model.PlaneSide; // Sprout Squad: one visible side for flat planes, see PlaneSide
 
 
 public class FumeShroomModel extends PlantModel {
@@ -50,9 +51,9 @@ public class FumeShroomModel extends PlantModel {
 
 		PartDefinition eyebrows = head.addOrReplaceChild("eyebrows", CubeListBuilder.create(), PartPose.offset(0.0F, -4.5F, -5.1F));
 
-		PartDefinition eyebrow_L = eyebrows.addOrReplaceChild("eyebrow_L", CubeListBuilder.create().texOffs(2, 2).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, 0.0F));
+		PartDefinition eyebrow_L = eyebrows.addOrReplaceChild("eyebrow_L", CubeListBuilder.create().texOffs(2, 2).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(3.0F, 0.0F, 0.0F));
 
-		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(2, 2).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, 0.0F));
+		PartDefinition eyebrow_R = eyebrows.addOrReplaceChild("eyebrow_R", CubeListBuilder.create().texOffs(2, 2).addBox(-1.0F, -0.5F, 0.0F, 2.0F, 1.0F, 0.0F, PlaneSide.NORTH), PartPose.offset(-3.0F, 0.0F, 0.0F));
 
 		PartDefinition cap = head.addOrReplaceChild("cap", CubeListBuilder.create().texOffs(0, 0).addBox(-7.0F, -8.75F, -7.0F, 14.0F, 9.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.25F, 0.0F));
 
