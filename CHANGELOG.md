@@ -1,4 +1,4 @@
-# Sprout Squad — Unreleased
+# Sprout Squad 0.2.5
 Changes since Sprout Squad 0.2.4.
 
 ### Changes
