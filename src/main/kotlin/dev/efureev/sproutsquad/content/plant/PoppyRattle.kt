@@ -40,7 +40,7 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
         const val SUN_COST = 6
 
         /** How many may stand within 32 blocks per owner (PazConfig entity limit). */
-        const val ENTITY_LIMIT = 4
+        const val ENTITY_LIMIT = 6
 
         /** Seed packets it can hold at once: one from the day, one from the night. */
         const val CAPACITY = 2

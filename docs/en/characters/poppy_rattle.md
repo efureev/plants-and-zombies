@@ -11,12 +11,12 @@ A poppy seed head with a face, a crown-shaped lid and four red petals. Once by d
 | Id | `sproutsquad:poppy_rattle` |
 | Health | 16 |
 | Sun cost | 6 |
-| Size | 0.6 × 1.0 blocks |
+| Size | 0.6 × 1.2 blocks |
 | Seeds | 1 seed packet a day and 1 a night, holds up to 2 |
 | Attack | none |
 | At night | does not sleep; its eyes glow |
 | Asleep | only while it grows its own seeds on farmland, like any plant |
-| Limit | 4 within 32 blocks |
+| Limit | 6 within 32 blocks |
 | How to get | shapeless recipe: poppy + torch + 6 sun → Poppy Rattle seed packet; does not grow in the wild |
 
 ## Abilities

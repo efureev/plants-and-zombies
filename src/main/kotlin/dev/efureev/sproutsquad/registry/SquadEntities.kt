@@ -70,7 +70,7 @@ object SquadEntities {
         wild = WildSpawn(NeedleSpruce.HAS_NEEDLE_SPRUCE, weight = 4, minGroupSize = 1, maxGroupSize = 2))
 
     /** Poppy Rattle: grows a random plant's seed packet once by day and once by night. */
-    val POPPY_RATTLE = plant("poppy_rattle", ::PoppyRattle, width = 0.6f, height = 1.0f, sunCost = PoppyRattle.SUN_COST,
+    val POPPY_RATTLE = plant("poppy_rattle", ::PoppyRattle, width = 0.6f, height = 1.2f, sunCost = PoppyRattle.SUN_COST,
         entityLimit = PoppyRattle.ENTITY_LIMIT,
         attributes = Plant.Companion.PlantAttributes(maxHealth = PoppyRattle.MAX_HEALTH))
 
