@@ -111,11 +111,20 @@ def parse_faces(expr):
     return set(names) or None
 
 
+def named_face_sets(text):
+    """Named face sets, as in `val TOP: Set<Direction> = EnumSet.of(Direction.DOWN)`."""
+    return {m.group(1): parse_faces(m.group(2)) for m in re.finditer(
+        r"\b(\w+)\s*(?::[^=\n]*)?=\s*(?:java\.util\.)?EnumSet\.of\(([^()]*)\)", strip_comments(text))}
+
+
+# the shared sides (`addBox(..., PlaneSide.TOP)`), dev/efureev/sproutsquad/client/model/PlaneSide.kt
+PLANE_SIDES = named_face_sets(open(os.path.join(SRC, "kotlin/dev/efureev/sproutsquad/client/model/PlaneSide.kt"),
+                                   encoding="utf-8").read())
+
+
 def parse_model(text):
     text = strip_comments(text)
-    # named face sets, as in `val ONE_FACE: Set<Direction> = EnumSet.of(Direction.DOWN)`
-    face_sets = {m.group(1): parse_faces(m.group(2)) for m in re.finditer(
-        r"\b(\w+)\s*(?::[^=\n]*)?=\s*(?:java\.util\.)?EnumSet\.of\(([^()]*)\)", text)}
+    face_sets = {**{"PlaneSide." + k: v for k, v in PLANE_SIDES.items()}, **named_face_sets(text)}
     size = re.search(r"LayerDefinition\.create\(\s*\w+\s*,\s*(\d+)\s*,\s*(\d+)\s*\)", text)
     tex_w, tex_h = (int(size.group(1)), int(size.group(2))) if size else (64, 64)
     root = Part("root", None)
@@ -160,7 +169,7 @@ def parse_model(text):
                 box = [num(x) for x in values[:6]]
                 # addBox(x, y, z, w, h, d, visibleSides): only the listed faces are drawn
                 faces = parse_faces(args)
-                for name in re.findall(r"\b([A-Z][A-Z0-9_]+)\b", args):
+                for name in re.findall(r"\b((?:PlaneSide\.)?[A-Z][A-Z0-9_]+)\b", args):
                     faces = faces or face_sets.get(name)
                 part.cubes.append((u, v, mirror, *box, inflate, faces))
     return root, (tex_w, tex_h)
@@ -254,6 +263,8 @@ def collect_faces(part, parent_matrix, faces):
         }
         if mirror:  # Minecraft swaps the east/west textures and flips u
             defs["west"], defs["east"] = (defs["east"][0],) + defs["west"][1:], (defs["west"][0],) + defs["east"][1:]
+            if visible is not None:  # and turns a listed EAST face to the west, a WEST face to the east
+                visible = {{"east": "west", "west": "east"}.get(f, f) for f in visible}
         for name, (rect, o, s_end, t_end, normal) in defs.items():
             if visible is not None and name not in visible:
                 continue  # addBox(..., visibleSides) leaves this face out
