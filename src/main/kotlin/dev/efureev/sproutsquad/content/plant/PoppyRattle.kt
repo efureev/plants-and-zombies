@@ -40,7 +40,13 @@ class PoppyRattle(type: EntityType<out Plant>, level: Level) : Plant(type, level
         const val SUN_COST = 6
 
         /** How many may stand within 32 blocks per owner (PazConfig entity limit). */
-        const val ENTITY_LIMIT = 4
+        const val ENTITY_LIMIT = 6
+
+        /**
+         * Eye height, blocks: below a one-block ceiling. The hitbox (1.2) covers the lid, but the default eye
+         * (0.85 of it) would sit inside a block one up, and plants may be planted under one: it would choke.
+         */
+        const val EYE_HEIGHT = 0.85f
 
         /** Seed packets it can hold at once: one from the day, one from the night. */
         const val CAPACITY = 2

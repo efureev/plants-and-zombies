@@ -34,7 +34,7 @@ object PoppyRattleGameTests {
             ?: return helper.fail("the Poppy Rattle does not spawn")
         helper.assertValueEqual(rattle.maxHealth, 16f, "max health")
         helper.assertValueEqual(PazConfig.getSunCost(type), 6, "sun cost")
-        helper.assertValueEqual(PazConfig.getEntityLimit(type), 4, "planting limit")
+        helper.assertValueEqual(PazConfig.getEntityLimit(type), 6, "planting limit")
         helper.assertFalse(rattle.sleepsDuringDay(), "sleeps by day")
         helper.assertFalse(rattle.sleepsDuringNight(), "sleeps at night")
         listOf(PazEntities.MARIGOLD, PazEntities.CITRON, PazEntities.ROYAL_SUNFLOWER, type).forEach {
@@ -265,7 +265,7 @@ object PoppyRattleGameTests {
             PazConfig.server = ServerConfig(customPlantEntityLimits = mutableMapOf())
             helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.MELON_PULT), 30, "Melon-pult limit with an empty config map")
             helper.assertValueEqual(PazConfig.getEntityLimit(PazEntities.COFFEE_BEAN), 30, "Coffee Bean limit with an empty config map")
-            helper.assertValueEqual(PazConfig.getEntityLimit(SquadEntities.POPPY_RATTLE.get()), 4, "Poppy Rattle limit from code")
+            helper.assertValueEqual(PazConfig.getEntityLimit(SquadEntities.POPPY_RATTLE.get()), 6, "Poppy Rattle limit from code")
         } finally {
             PazConfig.server = saved
         }
@@ -310,5 +310,21 @@ object PoppyRattleGameTests {
         helper.assertTrue(spruce.lookSuffix(100L) == "strain", "Needle Spruce straining face")
         helper.assertFalse(spruce.lookSpecialAction(), "a live Needle Spruce stands on a stump")
         helper.succeed()
+    }
+
+    /** Planted under a ceiling one block up (a tunnel, leaves) it does not choke: its eyes stay below the block. */
+    fun underLowCeiling(helper: GameTestHelper) {
+        val spot = BlockPos(2, 1, 2)
+        helper.setBlock(spot.below(), Blocks.GRASS_BLOCK)
+        helper.setBlock(spot.above(), Blocks.STONE)
+        val rattle = helper.spawn(SquadEntities.POPPY_RATTLE.get(), spot)
+        helper.assertFalse(rattle.isInWall, "eyes inside the ceiling at ${rattle.eyeY}")
+        helper.startSequence()
+            .thenIdle(40)
+            .thenExecute {
+                helper.assertTrue(rattle.isAlive, "choked under the ceiling")
+                helper.assertValueEqual(rattle.health, rattle.maxHealth, "health under the ceiling")
+            }
+            .thenSucceed()
     }
 }

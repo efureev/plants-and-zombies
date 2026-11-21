@@ -132,6 +132,7 @@ object SquadGameTests {
         Test("poppy_rattle_asleep_waits", PoppyRattleGameTests::asleepWaits),
         Test("poppy_rattle_full_owes_nothing", PoppyRattleGameTests::fullOwesNothing),
         Test("poppy_rattle_look", PoppyRattleGameTests::look),
+        Test("poppy_rattle_under_low_ceiling", PoppyRattleGameTests::underLowCeiling),
         Test("double_sunflower_stats", DoubleSunflowerGameTests::stats),
         Test("double_sunflower_two_suns", DoubleSunflowerGameTests::twoSuns),
         Test("double_sunflower_sun_not_in_wall", DoubleSunflowerGameTests::sunNotInWall),

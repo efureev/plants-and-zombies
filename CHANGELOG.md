@@ -1,3 +1,12 @@
+# Sprout Squad — Unreleased
+Changes since Sprout Squad 0.2.4.
+
+### Changes
+- Poppy Rattle: at most 6 within 32 blocks instead of 4; its stem is twice as tall (its hitbox is now 1.2 blocks high).
+
+### Fixes
+- Poppy Rattle: the petals and leaves no longer flicker while it sways.
+
 # Sprout Squad 0.2.4
 Changes since Sprout Squad 0.2.3.
 

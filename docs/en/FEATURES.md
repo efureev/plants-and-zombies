@@ -186,7 +186,7 @@ Server option `coopPlanting` (on by default): any player can dig up, feed and co
 
 ### Plant limits
 
-You can have at most 30 plants of the same kind within 32 blocks (with co-op planting this counts everyone's plants). Melon-pult, Winter Melon and Doom-shroom are limited to 20, the Poppy Rattle to 4, Coffee Bean and Grave Buster have no limit. Creative mode ignores the limit. Server options `defaultPlantEntityLimit` and `customPlantEntityLimits`.
+You can have at most 30 plants of the same kind within 32 blocks (with co-op planting this counts everyone's plants). Melon-pult, Winter Melon and Doom-shroom are limited to 20, the Poppy Rattle to 6, Coffee Bean and Grave Buster have no limit. Creative mode ignores the limit. Server options `defaultPlantEntityLimit` and `customPlantEntityLimits`.
 
 ## Zombies
 

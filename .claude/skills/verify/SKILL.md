@@ -90,5 +90,13 @@ Run the items whose trigger the change touches.
   block (half its own size), so check the box the entity really gets (make it, test `noCollision(it, it.boundingBox)`, then add it),
   and test a two-block wall with the plant pushed flush against it and a ceiling two blocks above a plant raised half
   a block (`DoubleSunflowerGameTests.sunNotInWall`, `sunUnderLowCeiling`).
+- **A flat plane in a model** (a zero-thickness `addBox`: leaves, petals, cards): both of its faces lie in one plane and
+  `entity_cutout` draws back faces too, so they z-fight and the plane flickers between its two UV squares as the
+  plant sways. Give it one side, `addBox(..., EnumSet.of(Direction.DOWN))` (model Y points down: `DOWN` is the side
+  seen from above, the first UV square), as `PoppyRattleModel.ONE_FACE` does. Check three shots a few ticks apart
+  with the plant swaying: the plane must look the same in all of them.
+- **A taller hitbox** (`height` in `SquadEntities`): the eye defaults to 0.85 of it, and above 1 block it ends up inside
+  a ceiling one block up, where plants may be planted: the plant chokes (`in_wall`). Pin `eyeHeight` below 1 or add
+  `hasRoomAt`; test it under a one-block ceiling (`PoppyRattleGameTests.underLowCeiling`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.

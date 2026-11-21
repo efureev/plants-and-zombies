@@ -131,11 +131,12 @@ def draw_body(eyes="open"):
     fill(img, 52, 8, 2, 2, LID_DEEP)
     fill(img, 48, 10, 8, 1, LID)
 
-    # ---- stem 2x3x2 at (56,8) ----
+    # ---- stem 2x6x2 at (56,8), the bottom row a shade darker ----
     fill(img, 58, 8, 2, 2, LEAF)
     fill(img, 60, 8, 2, 2, LEAF_SH)
     for i, col in enumerate((LEAF, LEAF_HI, LEAF_HI, LEAF, LEAF, LEAF_SH, LEAF_SH, LEAF)):
-        fill(img, 56 + i, 10, 1, 3, col)
+        fill(img, 56 + i, 10, 1, 6, col)
+    fill(img, 56, 15, 8, 1, LEAF_SH)
 
     # ---- seed packet 4x6x1 at (40,16): paper with a green band and a red "?" ----
     fill(img, 41, 16, 4, 1, PAPER_HI)
@@ -151,6 +152,8 @@ def draw_body(eyes="open"):
     fill(img, 46, 17, 4, 6, PAPER_SH)
 
     # ---- petal plane 5x0x5 at (0,27): row 0 at the head, row 4 the tip; a black blotch at the base ----
+    # Only the first square is drawn, from both sides (ONE_FACE in the model); the second, the underside,
+    # is left unused, and so are the leaves' second squares.
     pal = {"r": RED, "R": RED_HI, "s": RED_SH, "d": LID_DEEP}
     rows(img, 5, 27, ["..d..",
                       ".rdr.",
