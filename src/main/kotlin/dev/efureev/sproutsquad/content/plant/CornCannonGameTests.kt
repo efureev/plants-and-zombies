@@ -2,7 +2,9 @@ package dev.efureev.sproutsquad.content.plant
 
 import dev.efureev.sproutsquad.content.projectile.CornCob
 import dev.efureev.sproutsquad.registry.SquadEntities
+import dev.efureev.sproutsquad.registry.SquadAttachments
 import joshxviii.plantz.PazConfig
+import joshxviii.plantz.PazEffects
 import joshxviii.plantz.PazComponents
 import joshxviii.plantz.PazEntities
 import joshxviii.plantz.PazItems
@@ -10,7 +12,9 @@ import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.item.component.SunCost
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
+import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.EntitySpawnReason
@@ -23,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.phys.AABB
@@ -215,6 +220,163 @@ object CornCannonGameTests {
         helper.assertTrue(stray.hits(zombie), "a cob without a cannon misses a zombie")
         listOf(fired, loaded, stray).forEach { it.discard() }
         helper.succeed()
+    }
+
+    /**
+     * A zombie under a roof (in a cave, a house) is not a target: the cob would only hit the roof. Once the
+     * roof is gone, the cannon fires at it.
+     */
+    fun coveredTarget(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                wall(helper, 12)
+                helper.setBlock(BlockPos(11, 3, 1), Blocks.STONE)
+                helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenExecuteFor(100) {
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "fired at a zombie under a roof")
+            }
+            .thenExecute {
+                helper.assertTrue(cannon.target == null, "targets a zombie under a roof")
+                helper.setBlock(BlockPos(11, 3, 1), Blocks.AIR)
+            }
+            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "no shot once the roof is gone") }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
+    }
+
+    /**
+     * A hypnotized zombie and a player's machine are allies: never a target, and never hit, also by a cob that
+     * was reloaded or has no cannon.
+     */
+    fun sparesAllies(helper: GameTestHelper) {
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(5, 0, 1))
+        val hypnotized = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(7, 0, 1))
+        hypnotized.addEffect(MobEffectInstance(PazEffects.HYPNOTIZE, 600))
+        val machine = helper.spawnWithNoFreeWill(PazEntities.ZOMBIE_TURRET, BlockPos(9, 0, 1))
+        machine.setData(SquadAttachments.PLAYER_MACHINE, true)
+        helper.assertFalse(cannon.isValidTarget(hypnotized), "targets a hypnotized zombie")
+        helper.assertFalse(cannon.isValidTarget(machine), "targets a player's machine")
+        val fired = CornCob(helper.level, cannon)
+        val saved = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.level.registryAccess())
+        fired.saveWithoutId(saved)
+        val loaded = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.LOAD)
+            ?: return helper.fail("no corn cob")
+        loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.level.registryAccess(), saved.buildResult()))
+        val stray = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("no corn cob")
+        listOf("fired" to fired, "reloaded" to loaded, "stray" to stray).forEach { (name, cob) ->
+            helper.assertTrue(cob.hits(zombie), "a $name cob misses a zombie")
+            helper.assertFalse(cob.hits(hypnotized), "a $name cob hits a hypnotized zombie")
+            helper.assertFalse(cob.hits(machine), "a $name cob hits a player's machine")
+            cob.discard()
+        }
+        helper.succeed()
+    }
+
+    /**
+     * A shot called off during the aim (the zombie came within 5 blocks) uses up no cob: no cob leaves and
+     * the cannon does not reload.
+     */
+    fun cancelledShot(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        lateinit var zombie: Entity
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                cannon.cooldown = 0
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenWaitUntil { helper.assertValueEqual(cannon.cooldown, -1, "aiming") }
+            .thenExecute {
+                val pos = helper.absoluteVec(Vec3(4.5, 0.0, 1.5))
+                zombie.teleportTo(pos.x, pos.y, pos.z)
+            }
+            .thenWaitUntil { helper.assertTrue(cannon.cooldown != -1, "still aiming") }
+            .thenExecute {
+                helper.assertValueEqual(cannon.cooldown, 0, "reload after a called-off shot")
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cob left on a called-off shot")
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /** The cob grows back over the cooldown the shot really started, also a powered-up (shorter) one. */
+    fun cobGrowth(helper: GameTestHelper) {
+        val cannon = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("the Corn Cannon does not spawn")
+        cannon.cooldown = 0
+        helper.assertValueEqual(cannon.cobGrowth(), 1f, "idle")
+        cannon.cooldown = -1
+        helper.assertValueEqual(cannon.cobGrowth(), 1f, "aiming")
+        cannon.cooldown = CornCannon.COOLDOWN
+        helper.assertValueEqual(cannon.cobGrowth(), 0f, "right after a shot")
+        cannon.cooldown = CornCannon.COOLDOWN / 2
+        helper.assertValueEqual(cannon.cobGrowth(), 0.5f, "half way")
+        cannon.poweredUp = true
+        cannon.cooldown = Mth.floor(CornCannon.COOLDOWN * PazConfig.POWERED_UP_COOLDOWN_REDUCTION)
+        helper.assertValueEqual(cannon.cobGrowth(), 0f, "right after a powered-up shot")
+        helper.succeed()
+    }
+
+    /** A wall between the blast and a zombie shields it; a zombie in the open on the other side is hurt. */
+    fun blastBehindWall(helper: GameTestHelper) {
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(20, 0, 1))
+                for (y in 0..2) helper.setBlock(BlockPos(5, y, 1), Blocks.STONE)
+                val shielded = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(6, 0, 1))
+                val open = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(3, 0, 1))
+                val cob = CornCob(helper.level, cannon)
+                cob.explodeAt(helper.absoluteVec(Vec3(4.7, 0.5, 1.5)))
+                helper.assertValueEqual(shielded.health, shielded.maxHealth, "health behind the wall")
+                helper.assertTrue(open.health < open.maxHealth, "the zombie in the open was not hurt")
+                cob.discard()
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /** A bigger cannon (the scale attribute) makes a bigger blast: radius times the square root of the scale. */
+    fun scaledBlast(helper: GameTestHelper) {
+        val cob = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("no corn cob")
+        helper.assertValueEqual(cob.blastRadius(), CornCob.RADIUS, "radius at scale 1")
+        cob.scale = 4f
+        helper.assertValueEqual(cob.blastRadius(), 2 * CornCob.RADIUS, "radius at scale 4")
+        helper.assertValueEqual(CornCob.splashDamage(2.5, 5.0), 6f, "half way out of a radius of 5")
+        helper.assertValueEqual(CornCob.splashDamage(5.1, 5.0), 0f, "past a radius of 5")
+        cob.discard()
+        helper.succeed()
+    }
+
+    /** A cob that lands on a target block powers it, as other projectiles do. */
+    fun hitsTargetBlock(helper: GameTestHelper) {
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                helper.setBlock(BlockPos(5, 0, 1), Blocks.TARGET)
+                val cob = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)!!
+                cob.setPos(helper.absoluteVec(Vec3(5.5, 3.0, 1.5)))
+                cob.deltaMovement = Vec3(0.0, -0.6, 0.0)
+                helper.level.addFreshEntity(cob)
+            }
+            .thenWaitUntil {
+                val power = helper.getBlockState(BlockPos(5, 0, 1)).getValue(BlockStateProperties.POWER)
+                helper.assertTrue(power > 0, "the target block is not powered")
+            }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
     }
 
     /** A Kernel Pult seed packet in the middle of 8 sun makes a Corn Cannon packet; a Peashooter packet does not. */
