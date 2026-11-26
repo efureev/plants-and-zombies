@@ -48,12 +48,13 @@ object CornCannonGameTests {
         helper.succeed()
     }
 
-    /** The face squints while aiming and firing, and is plain again while dying (the renderer adds `sleep`). */
+    /** The face squints while aiming and firing (the first 700 ms), and is plain again after it and while dying (the renderer adds `sleep`). */
     fun face(helper: GameTestHelper) {
         val cannon = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.COMMAND)
             ?: return helper.fail("the Corn Cannon does not spawn")
         helper.assertValueEqual(cannon.faceSuffix(null), "", "no action")
         helper.assertValueEqual(cannon.faceSuffix(100L), "aim", "100 ms into a shot")
+        helper.assertValueEqual(cannon.faceSuffix(900L), "", "900 ms into a shot, the cob long gone")
         cannon.deathTime = 5
         helper.assertValueEqual(cannon.faceSuffix(100L), "", "dying")
         helper.succeed()
