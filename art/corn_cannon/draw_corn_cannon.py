@@ -53,7 +53,6 @@ BOXES = [
     ("husk", "cradle", 18, 1, -4, 4, 1, 8, "leaf_dark"),
     ("husk", "leaf_left", 18, 2, -5, 3, 4, 1, "leaf"),
     ("husk", "leaf_right", 18, 2, 4, 3, 4, 1, "leaf"),
-    ("husk", "hole", 17, 2, -4, 1, 8, 8, "hole"),
     ("cob", "cob", 15, 2, -4, 11, 8, 8, "cob"),
     ("cob", "cob_tip", 26, 3, -3, 2, 6, 6, "cob"),
     ("cob", "cob_end", 28, 4, -2, 1, 4, 4, "cob"),
@@ -71,7 +70,8 @@ BOXES = [
 # Part pivots in concept coordinates: the husk tilts about its bottom near the tail, the cob slides
 # back into the husk from its own back end, the tendril sways from where it leaves the husk.
 PIVOTS = {"husk": (6, 1, 0), "cob": (15, 6, 0), "tendril": (0, 6, 0), "ground": (0, 0, 0)}
-PARENT = {"husk": "body", "cob": "husk", "tendril": "husk", "ground": "body"}
+# the ground rosette hangs off the root (y 24), not the body: it stays put while the cannon turns its head
+PARENT = {"husk": "body", "cob": "husk", "tendril": "husk", "ground": "root"}
 
 # The flying cob: the same cob with the cone at both ends.
 COB_BOXES = [
@@ -227,7 +227,7 @@ def ground_leaf(img, x0, y0, w, h, face, box):
 PAINTERS = {
     "husk": husk, "husk_mouth": husk_mouth, "lid": lid,
     "leaf": leaf(D5, D4), "leaf_light": leaf(D7, D6), "leaf_dark": leaf(D3, D2),
-    "hole": solid(HOLE), "cob": cob, "stem": leaf(D2, D1), "ground": ground, "ground_leaf": ground_leaf,
+    "cob": cob, "stem": leaf(D2, D1), "ground": ground, "ground_leaf": ground_leaf,
 }
 
 
@@ -324,8 +324,10 @@ def print_kotlin():
         return p[2], -p[1], NOSE_Z - p[0]
     for part in ("husk", "cob", "tendril", "ground"):
         pv = PIVOTS[part]
-        parent = (0, 0, 0) if PARENT[part] == "body" else pm(PIVOTS[PARENT[part]])
+        parent = (0, 0, 0) if PARENT[part] in ("body", "root") else pm(PIVOTS[PARENT[part]])
         off = [a - b for a, b in zip(pm(pv), parent)]
+        if PARENT[part] == "root":
+            off[1] += 24
         print(f"// part {part}: parent {PARENT[part]}, PartPose.offset({', '.join(fmt(o) for o in off)})")
         for p, name, x, y, z, length, h, w, _ in BOXES:
             if p == part:
