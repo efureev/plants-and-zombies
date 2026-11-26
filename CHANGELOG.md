@@ -1,3 +1,9 @@
+# Sprout Squad 0.2.6
+Changes since Sprout Squad 0.2.5.
+
+### Additions
+- Corn Cannon, a new plant: a long corn husk lying on a rosette of leaves that launches its corn cob like a rocket in a high arc every 3.5 s. The cob blows up on impact (8 damage at the centre down to 4 at 2.5 blocks) and hurts only zombies, or other monsters when the cannon is tamed: players, pets, villagers and plants are spared, and no blocks break. It does not see zombies within 5 blocks; range 40 blocks. A new cob grows back in 3 s. 90 health, 14 sun, at most 10 within 32 blocks. Seed packet from a Kernel Pult seed packet and 8 sun.
+
 # Sprout Squad 0.2.5
 Changes since Sprout Squad 0.2.4.
 
