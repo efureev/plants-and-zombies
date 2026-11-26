@@ -40,8 +40,12 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         const val ENTITY_LIMIT = 10
         const val EYE_HEIGHT = 0.6f
 
-        /** Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes: forward and up. */
-        val COB_SPAWN = Vec2(0.6f, -0.2f)
+        /**
+         * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes: forward and up, about where
+         * the raised mouth is and still inside the cannon's own block (a cob that starts in a wall right in
+         * front vanishes on its first tick).
+         */
+        val COB_SPAWN = Vec2(0.3f, 0.15f)
     }
 
     override fun sleepsDuringNight(): Boolean = false
@@ -70,9 +74,20 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
     override fun registerGoals() {
         super.registerGoals()
         goalSelector.addGoal(2, CornCannonAttackGoal(this))
-        targetSelector.addGoal(4, NearestAttackableTargetGoal(this, LivingEntity::class.java, 5, false, false) { target, _ ->
-            isValidTarget(target) && !inDeadZone(target)
-        })
+        targetSelector.addGoal(4, CornCannonTargetGoal(this))
+    }
+}
+
+/**
+ * The nearest valid target outside the dead zone, seen or not: the cob flies in a high arc, and the eyes sit
+ * only 0.6 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
+ */
+class CornCannonTargetGoal(cannon: CornCannon) : NearestAttackableTargetGoal<LivingEntity>(
+    cannon, LivingEntity::class.java, 5, false, false,
+    { target, _ -> cannon.isValidTarget(target) && !cannon.inDeadZone(target) },
+) {
+    init {
+        targetConditions.ignoreLineOfSight()
     }
 }
 

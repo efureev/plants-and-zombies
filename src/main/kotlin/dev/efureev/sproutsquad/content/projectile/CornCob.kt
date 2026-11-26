@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
@@ -50,22 +51,36 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
 
     override fun getDefaultGravity(): Double = 0.03
 
-    /** Only what its cannon would shoot at; a cob without a cannon (a summoned one) hits as any projectile. */
+    /**
+     * The cannon that fired it. [entityOwner] exists only on the server and only for a cob it has just made; a
+     * cob on the client or loaded from a save knows its cannon from the projectile's owner reference (synced
+     * in the spawn packet, kept in the save). Not `getOwner()`: that gives the planting player for player credit.
+     */
+    private fun cannon(): CornCannon? =
+        entityOwner as? CornCannon ?: owner?.getEntity(level(), Entity::class.java) as? CornCannon
+
+    /**
+     * Only what its cannon would shoot at, never the cannon itself. A cob whose cannon is gone (unloaded,
+     * dead, or a summoned cob) hits only zombies, never a player, a pet or a plant.
+     */
     override fun canHitEntity(entity: Entity): Boolean {
-        if (!super.canHitEntity(entity)) return false
-        val cannon = entityOwner as? CornCannon ?: return true
-        return entity is LivingEntity && cannon.isValidTarget(entity)
+        if (!super.canHitEntity(entity) || entity !is LivingEntity) return false
+        val cannon = cannon() ?: return entity is Zombie
+        return entity !== cannon && cannon.isValidTarget(entity)
     }
 
     /** [canHitEntity] for callers outside the class (tests). */
     fun hits(entity: Entity): Boolean = canHitEntity(entity)
 
+    /** The server decides where the cob blows up; the client only draws it and waits for the removal. */
     override fun onHitEntity(hitResult: EntityHitResult) {
+        if (level() !is ServerLevel) return
         explodeAt(position())
         discard()
     }
 
     override fun onHitBlock(hitResult: BlockHitResult) {
+        if (level() !is ServerLevel) return
         explodeAt(hitResult.location)
         discard()
     }
