@@ -112,9 +112,13 @@ Run the items whose trigger the change touches.
   shooter is gone. Test a save-and-load round trip (`CornCannonGameTests.cobAfterReload`).
 - **A high-arc shooter that targets without line of sight**: a target under a roof or in a cave is reachable only
   through the roof, and the target goal never lets it go. Pick only targets under open sky by the projectile's own collision
-  rules (a ray straight up: leaves block, water does not; a bare heightmap gets both wrong), check the shooter's own
+  rules (a ray straight up with a context coming from above: leaves and scaffolding block, water does not; a heightmap
+  alone gets water and non-solid colliders wrong, and scaffolding is not in `MOTION_BLOCKING`), check the shooter's own
   sky too, and test a roof, leaves and deep water (`CornCannonGameTests.coveredTarget`, `leafRoof`, `zombieInWater`).
 - **Area damage of our own** (not `level.explode`): check exposure (a ray from the centre to the target) so walls shield,
   scale the radius with the projectile's scale, and let the hit block react (`state.onProjectileHit`) as `super` would.
 - **Who counts as an ally of the players** in target filters: hypnotized mobs (`isHypnotized`) and a player's machines
   (`PlayerMachines.isPlayerMachine`) are `Zombie`/`Enemy` subclasses too.
+- **A GameTest that spawns a long-range shooter**: tests run one after another in the same world, and a shooter left
+  alive keeps firing at the next tests' mobs (a Corn Cannon killed the Squash test's zombie). Every such test discards
+  what it spawned at the end, the shooter included.
