@@ -161,7 +161,7 @@ object SquadGameTests {
         Test("corn_cannon_scaffolding_roof", CornCannonGameTests::scaffoldingRoof, maxTicks = 300, structure = id("gametest/lane")),
         Test("corn_cannon_misses_drop_target", CornCannonGameTests::missesDropTarget, maxTicks = 400, structure = id("gametest/lane")),
         Test("corn_cannon_cob_keeps_speed_in_water", CornCannonGameTests::cobKeepsSpeedInWater, structure = id("gametest/lane")),
-        Test("corn_cannon_blasts_in_invulnerability", CornCannonGameTests::blastsInInvulnerabilityAreNoMisses, maxTicks = 100, structure = id("gametest/lane")),
+        Test("corn_cannon_blocked_blast_is_no_miss", CornCannonGameTests::blockedBlastIsNoMiss, structure = id("gametest/lane")),
         Test("corn_cannon_overhang_misses", CornCannonGameTests::overhangMisses, structure = id("gametest/lane")),
         Test("corn_cannon_ignored_targets_forgotten", CornCannonGameTests::ignoredTargetsForgotten, maxTicks = 300, structure = id("gametest/lane")),
         Test("corn_cannon_scaffolding_over_cannon", CornCannonGameTests::scaffoldingOverCannon, maxTicks = 400, structure = id("gametest/lane")),

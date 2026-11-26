@@ -36,6 +36,9 @@ import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.neoforge.common.NeoForge
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent
 import java.util.UUID
 
 /**
@@ -478,43 +481,40 @@ object CornCannonGameTests {
     }
 
     /**
-     * Blasts right after a hit from another plant still hurt (plant damage bypasses the hurt cooldown), and do not
-     * count as misses: after the frames the zombie is a target as before, not one left alone.
+     * A blast that reaches the target counts as a hit even when the damage does not go through (a worn bucket or
+     * shield blocks it, an Enderman dodges, a mod cancels it; here an event cancels it): three such blasts right
+     * over its head are no misses.
      */
-    fun blastsInInvulnerabilityAreNoMisses(helper: GameTestHelper) {
-        lateinit var cannon: CornCannon
-        lateinit var zombie: LivingEntity
-        helper.startSequence()
-            .thenExecute {
-                prepare(helper)
-                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
-                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
-                zombie.getAttribute(Attributes.KNOCKBACK_RESISTANCE)!!.baseValue = 1.0 // stays in the open lane
-                cannon.target = zombie
-                zombie.hurtServer(helper.level, helper.level.damageSources().generic(), 4f)
-                repeat(CornCannon.MISSES_TO_DROP) {
-                    val before = zombie.health
-                    val cob = CornCob(helper.level, cannon).also { it.firedAt = zombie.uuid }
-                    cob.explodeAt(helper.absoluteVec(Vec3(14.1, 0.5, 1.5))) // at the blast's edge: about 4 damage
-                    cob.discard()
-                    helper.assertTrue(zombie.health < before, "a blast in the invulnerability frames did not hurt")
-                }
+    fun blockedBlastIsNoMiss(helper: GameTestHelper) {
+        prepare(helper)
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+        zombie.getAttribute(Attributes.KNOCKBACK_RESISTANCE)!!.baseValue = 1.0
+        val blocker = object {
+            @SubscribeEvent
+            fun onDamage(event: LivingIncomingDamageEvent) {
+                if (event.entity === zombie) event.isCanceled = true
             }
-            .thenIdle(25)
-            .thenExecute {
-                helper.assertTrue(zombie.isAlive, "the zombie died")
-                // vanilla drops a target while it is invulnerable and the search finds it again; it must not be left alone
-                helper.assertValueEqual(cannon.ignoredTargets, 0, "targets left alone after blasts in the frames")
-                helper.assertTrue(cannon.canShootAt(zombie), "cannot shoot at the zombie after its frames")
-                clearMobs(helper)
-            }
-            .thenSucceed()
+        }
+        NeoForge.EVENT_BUS.register(blocker)
+        onFinish(helper) { NeoForge.EVENT_BUS.unregister(blocker) }
+        cannon.target = zombie
+        repeat(CornCannon.MISSES_TO_DROP) {
+            val cob = CornCob(helper.level, cannon).also { it.firedAt = zombie.uuid }
+            cob.explodeAt(helper.absoluteVec(Vec3(11.5, 2.3, 1.5)))
+            cob.discard()
+        }
+        helper.assertValueEqual(zombie.health, zombie.maxHealth, "health with the damage cancelled")
+        helper.assertTrue(cannon.target === zombie, "dropped a target its blasts reached")
+        helper.assertValueEqual(cannon.ignoredTargets, 0, "targets left alone")
+        clearMobs(helper)
+        helper.succeed()
     }
 
     /**
-     * Only blasts that look like an overhang count as misses: three bursting on a block over the zombie's head
-     * drop it; three on open ground 4 blocks away (a moving target dodged) do not; nor do blasts of a cob fired
-     * at another target.
+     * Only blasts that look like an overhang count as misses: three bursting on a block right over the zombie's
+     * head drop it; three on open ground 4 blocks away or on a slope beside it in plain view (a moving target
+     * dodged) do not; nor do blasts of a cob fired at another target, or ones that hurt another zombie.
      */
     fun overhangMisses(helper: GameTestHelper) {
         prepare(helper)
@@ -528,9 +528,18 @@ object CornCannonGameTests {
         }
         repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(15.5, 0.1, 1.5)) }
         helper.assertTrue(cannon.target === zombie, "dropped the target over blasts on open ground away from it")
+        // a slope 2 blocks away, above its head but in plain view: dodged, not an overhang
+        repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(14.0, 3.5, 1.5)) } // out of reach, 2.2 blocks aside
+        helper.assertTrue(cannon.target === zombie, "dropped the target over blasts on a slope beside it")
         helper.setBlock(BlockPos(11, 2, 1), Blocks.STONE)
         repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(11.5, 3.05, 1.5), firedAt = UUID.randomUUID()) }
         helper.assertTrue(cannon.target === zombie, "dropped the target over blasts of cobs fired at something else")
+        // another zombie standing on the overhang takes the blasts: they hurt something, so no misses
+        val upper = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 3, 1))
+        upper.getAttribute(Attributes.KNOCKBACK_RESISTANCE)!!.baseValue = 1.0
+        repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(11.5, 3.05, 1.5)) }
+        helper.assertTrue(cannon.target === zombie, "dropped the target over blasts that hurt a zombie above it")
+        upper.discard()
         repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(11.5, 3.05, 1.5)) }
         helper.assertTrue(cannon.target == null, "kept the target over three blasts on the overhang above it")
         clearMobs(helper)
@@ -559,7 +568,10 @@ object CornCannonGameTests {
             .thenSucceed()
     }
 
-    /** Scaffolding over the cannon is no roof for it: a rising cob passes through scaffolding from below. */
+    /**
+     * Scaffolding over the cannon is a roof for it too: a rising cob would get stuck in its plates and be lost, so
+     * the cannon does not fire.
+     */
     fun scaffoldingOverCannon(helper: GameTestHelper) {
         lateinit var cannon: CornCannon
         helper.startSequence()
@@ -573,7 +585,9 @@ object CornCannonGameTests {
                 wall(helper, 12)
                 helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
             }
-            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "a cannon under scaffolding did not fire") }
+            .thenExecuteFor(100) {
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cannon under scaffolding fired")
+            }
             .thenExecute {
                 for (y in 0..2) helper.setBlock(BlockPos(2, y, 0), Blocks.AIR)
                 helper.setBlock(BlockPos(2, 2, 1), Blocks.AIR)
