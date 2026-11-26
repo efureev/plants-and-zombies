@@ -102,15 +102,15 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
      * from the eyes to just above the column's highest block of any kind (scaffolding is not in the
      * motion-blocking heightmap).
      */
-    fun underOpenSky(entity: Entity, comingDown: Boolean = true): Boolean {
+    fun underOpenSky(entity: Entity): Boolean {
         val level = level()
         val from = entity.eyePosition
         val top = level.getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockX, entity.blockZ) + 1.0
         if (from.y >= top) return true
-        // collision as for the cob: coming down onto a target from above (scaffolding has its top plate), or rising
-        // from the cannon from below (scaffolding lets it through)
+        // collision as for something coming down from above: scaffolding has its plates (a rising cob gets stuck in
+        // them too: the projectile's in-block check sees scaffolding as from above), leaves are solid, water is not
         val up = ClipContext(from, Vec3(from.x, top, from.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-            CollisionContext.positionContext(if (comingDown) top else from.y))
+            CollisionContext.positionContext(top))
         return level.clip(up).type == HitResult.Type.MISS
     }
 
@@ -119,7 +119,7 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         isValidTarget(target) && !inDeadZone(target) && !ignores(target) && underOpenSky(target)
 
     /** A target it can shoot at right now: [canAimAt], and open sky over the cannon too. */
-    fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this, comingDown = false)
+    fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this)
 
     /** The cooldown the last shot set (shorter when powered up), synced for the cob's growth; 0 after a called-off shot. */
     var reloadTotal: Int
@@ -230,7 +230,7 @@ class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTa
     }
 
     /** The cannon's own sky once per search, before the per-target checks. */
-    override fun canUse(): Boolean = cannon.underOpenSky(cannon, comingDown = false) && super.canUse()
+    override fun canUse(): Boolean = cannon.underOpenSky(cannon) && super.canUse()
 }
 
 /**

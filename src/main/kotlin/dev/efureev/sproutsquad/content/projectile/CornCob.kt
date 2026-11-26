@@ -47,6 +47,9 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         const val DAMAGE_EDGE = 4f
         const val RADIUS = 2.5
 
+        /** How far aside from the target, in blocks, a blast above its head still counts as over it (an overhang). */
+        private const val OVERHEAD = 1.0
+
         /** Popcorn puffs scattered by the blast. */
         private const val POPCORN = 24
 
@@ -135,7 +138,7 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
             val distance = sqrt(target.boundingBox.distanceToSqr(centre))
             val amount = splashDamage(distance, radius)
             if (amount <= 0f) return@forEach
-            reached += target // a hit even if it takes no damage now (invulnerable after a harder hit)
+            reached += target // a hit even if the damage does not go through (a worn bucket or shield, an Enderman dodging, a cancelled event)
             if (target.hurtServer(level, source, amount)) {
                 val direction = calculateHorizontalHurtKnockbackDirection(target, source)
                 target.knockback(this.knockback, -direction.leftDouble(), -direction.rightDouble())
@@ -149,18 +152,22 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
 
     /**
      * Tells the cannon how its shot at its current target went (only if this cob was fired at that target): a
-     * blast that reached it is a hit; one that burst right over its head or next to it behind cover (an overhang,
-     * a wall) is a miss. A blast on open ground away from it (a moving target dodged it) is neither.
+     * blast that reached it is a hit; one that reached nobody and burst right over its head (within [OVERHEAD]
+     * blocks aside) or next to it behind cover (an overhang, a wall) is a miss. A blast in plain view away from it
+     * (a moving target dodged it, a slope beside it) or one that hurt someone else is neither.
      */
     private fun reportTo(cannon: CornCannon?, centre: Vec3, radius: Double, reached: Set<LivingEntity>) {
         val target = cannon?.target ?: return
         if (firedAt == null || firedAt != target.uuid) return
         if (target in reached) return cannon.blastHit(target)
+        if (reached.isNotEmpty()) return
         val box = target.boundingBox
         val dx = maxOf(box.minX - centre.x, 0.0, centre.x - box.maxX)
         val dz = maxOf(box.minZ - centre.z, 0.0, centre.z - box.maxZ)
-        val near = dx * dx + dz * dz <= radius * radius
-        if (near && (centre.y > box.maxY || !exposed(centre, target))) cannon.blastMissed(target)
+        val aside = sqrt(dx * dx + dz * dz)
+        val overHead = centre.y > box.maxY && aside <= OVERHEAD
+        val behindCover = aside <= radius && !exposed(centre, target)
+        if (overHead || behindCover) cannon.blastMissed(target)
     }
 
     /** Whether nothing solid stands between the blast and the target's middle or its eyes. */
