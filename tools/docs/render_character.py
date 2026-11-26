@@ -37,6 +37,9 @@ MODEL_LAYER = {
 }
 # Textures that do not follow textures/entity/<kind>/<id>/<id>.png
 TEXTURE = {"gnome": "gnome/red.png"}
+# Characters whose shape reads better from another side than the default 3/4 from the front-right (yaw 30):
+# the long, low Corn Cannon is drawn more from the side, so its cob, eye and tendril all show.
+VIEW_YAW = {"corn_cannon": -55.0}
 NUM = r"-?\d+(?:\.\d+)?(?:[eE]-?\d+)?[fFdD]?"
 
 
@@ -282,7 +285,9 @@ def collect_faces(part, parent_matrix, faces):
 
 # ---------------------------------------------------------------- rendering
 
-def render(entity_id, out, yaw=30.0, pitch=22.0, size=512, pose_name="idle", look=None):
+def render(entity_id, out, yaw=None, pitch=22.0, size=512, pose_name="idle", look=None):
+    if yaw is None:
+        yaw = VIEW_YAW.get(entity_id, 30.0)
     model_path, model_text = find_model(entity_id)
     root, (tex_w, tex_h) = parse_model(model_text)
     pose = parse_pose(find_animation(model_path, model_text), pose_name)
@@ -388,7 +393,7 @@ def main():
     ap.add_argument("id")
     ap.add_argument("--look", help="texture variant: <id>_<look>.png")
     ap.add_argument("--out")
-    ap.add_argument("--yaw", type=float, default=30.0, help="turn to the viewer's right, degrees")
+    ap.add_argument("--yaw", type=float, default=None, help="turn to the viewer's right, degrees (default 30, or VIEW_YAW)")
     ap.add_argument("--pitch", type=float, default=22.0, help="look down, degrees")
     ap.add_argument("--size", type=int, default=512)
     ap.add_argument("--pose", default="idle", help="animation whose first keyframe sets the pose ('none' for the bind pose)")
