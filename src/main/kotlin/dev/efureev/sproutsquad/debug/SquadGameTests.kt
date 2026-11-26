@@ -145,6 +145,8 @@ object SquadGameTests {
         Test("corn_cannon_fires", CornCannonGameTests::fires, maxTicks = 400, structure = id("gametest/lane")),
         Test("corn_cannon_dead_zone", CornCannonGameTests::deadZone, maxTicks = 600, structure = id("gametest/lane")),
         Test("corn_cannon_spares_friends", CornCannonGameTests::sparesFriends, structure = id("gametest/lane")),
+        Test("corn_cannon_wall_in_front", CornCannonGameTests::wallInFront, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_cob_after_reload", CornCannonGameTests::cobAfterReload, structure = id("gametest/lane")),
         Test("corn_cannon_recipe", CornCannonGameTests::recipe),
         Test("corn_cannon_not_from_poppy_rattle", CornCannonGameTests::notFromPoppyRattle),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),

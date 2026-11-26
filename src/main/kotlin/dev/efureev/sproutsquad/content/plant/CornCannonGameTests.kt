@@ -10,7 +10,9 @@ import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.item.component.SunCost
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.util.ProblemReporter
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EntityTypes
@@ -21,6 +23,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.storage.TagValueInput
+import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
@@ -166,6 +170,51 @@ object CornCannonGameTests {
                 clearMobs(helper)
             }
             .thenSucceed()
+    }
+
+    /**
+     * A one-block wall right in front of the cannon: the cob still leaves the husk and hits the zombie
+     * behind it (a cob that started inside the wall block vanished on its first tick).
+     */
+    fun wallInFront(helper: GameTestHelper) {
+        lateinit var zombie: LivingEntity
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                helper.setBlock(BlockPos(2, 0, 1), Blocks.STONE)
+                wall(helper, 12)
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenWaitUntil { helper.assertTrue(!zombie.isAlive || zombie.health < zombie.maxHealth, "the zombie behind the wall was not hurt") }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
+    }
+
+    /**
+     * A cob keeps knowing its cannon after a save and load (a chunk unloaded mid-flight): it still spares a
+     * villager and the cannon itself. A cob with no cannon at all hits only zombies.
+     */
+    fun cobAfterReload(helper: GameTestHelper) {
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        val villager = helper.spawnWithNoFreeWill(EntityTypes.VILLAGER, BlockPos(3, 0, 1))
+        val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(5, 0, 1))
+        val fired = CornCob(helper.level, cannon)
+        val saved = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.level.registryAccess())
+        fired.saveWithoutId(saved)
+        val loaded = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.LOAD)
+            ?: return helper.fail("no corn cob")
+        loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.level.registryAccess(), saved.buildResult()))
+        helper.assertFalse(loaded.hits(villager), "a reloaded cob hits a villager")
+        helper.assertFalse(loaded.hits(cannon), "a reloaded cob hits its own cannon")
+        helper.assertTrue(loaded.hits(zombie), "a reloaded cob misses a zombie")
+        val stray = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("no corn cob")
+        helper.assertFalse(stray.hits(villager), "a cob without a cannon hits a villager")
+        helper.assertTrue(stray.hits(zombie), "a cob without a cannon misses a zombie")
+        listOf(fired, loaded, stray).forEach { it.discard() }
+        helper.succeed()
     }
 
     /** A Kernel Pult seed packet in the middle of 8 sun makes a Corn Cannon packet; a Peashooter packet does not. */
