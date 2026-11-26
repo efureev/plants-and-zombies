@@ -55,6 +55,8 @@ object CornCannonGameTests {
         helper.assertValueEqual(CornCob.splashDamage(1.25), 6f, "damage half way out")
         helper.assertValueEqual(CornCob.splashDamage(2.5), 4f, "damage at the edge")
         helper.assertValueEqual(CornCob.splashDamage(2.6), 0f, "damage past the edge")
+        helper.assertTrue(CornCannon.ACTION_DELAY + CornCannon.SETTLE_TICKS >= CornCannon.SHOT_ANIMATION_TICKS,
+            "a called-off shot settles before its animation ends")
         helper.succeed()
     }
 
@@ -220,6 +222,7 @@ object CornCannonGameTests {
         helper.assertFalse(stray.hits(villager), "a cob without a cannon hits a villager")
         helper.assertTrue(stray.hits(zombie), "a cob without a cannon misses a zombie")
         listOf(fired, loaded, stray).forEach { it.discard() }
+        clearMobs(helper) // a live cannon left behind would shoot at the next tests' zombies
         helper.succeed()
     }
 
@@ -277,6 +280,7 @@ object CornCannonGameTests {
             helper.assertFalse(cob.hits(machine), "a $name cob hits a player's machine")
             cob.discard()
         }
+        clearMobs(helper) // a live cannon left behind would shoot at the next tests' zombies
         helper.succeed()
     }
 
@@ -412,32 +416,117 @@ object CornCannonGameTests {
             .thenSucceed()
     }
 
-    /**
-     * Water is no roof: the cob flies through it. A zombie held at the bottom of a pool three blocks deep is a
-     * target, and gets shot.
-     */
-    fun zombieInWater(helper: GameTestHelper) {
+    /** Scaffolding over a zombie is a roof: the cob comes down on its top plate. Not a target. */
+    fun scaffoldingRoof(helper: GameTestHelper) {
         lateinit var cannon: CornCannon
         lateinit var zombie: LivingEntity
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
             .thenExecute {
                 prepare(helper)
-                for (y in -4..-1) {
-                    helper.setBlock(BlockPos(10, y, 1), Blocks.STONE)
-                    helper.setBlock(BlockPos(12, y, 1), Blocks.STONE)
-                    helper.setBlock(BlockPos(11, y, 0), Blocks.STONE)
-                    helper.setBlock(BlockPos(11, y, 2), Blocks.STONE)
-                }
-                helper.setBlock(BlockPos(11, -4, 1), Blocks.STONE)
-                for (y in -3..-1) helper.setBlock(BlockPos(11, y, 1), Blocks.WATER)
                 cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
-                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, -3, 1))
+                // a scaffolding post next to the zombie and an arm over it (unsupported scaffolding falls)
+                for (y in 0..2) helper.setBlock(BlockPos(12, y, 1), Blocks.SCAFFOLDING)
+                helper.setBlock(BlockPos(11, 2, 1), Blocks.SCAFFOLDING)
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+                helper.assertFalse(cannon.canShootAt(zombie), "a zombie under scaffolding is a target")
+            }
+            .thenExecuteFor(100) {
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "fired at a zombie under scaffolding")
+            }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
+    }
+
+    /**
+     * Blasts that keep missing the target (the cob bursts on an overhang next to it) make the cannon leave that
+     * target alone for a while: three misses in a row; a hit in between starts the count again.
+     */
+    fun missesDropTarget(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        lateinit var zombie: LivingEntity
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper) // open sky: the test structure is closed on top
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+                cannon.target = zombie
+                cannon.blastMissed(zombie)
+                cannon.blastMissed(zombie)
+                cannon.blastHit(zombie)
+                cannon.blastMissed(zombie)
+                cannon.blastMissed(zombie)
+                helper.assertTrue(cannon.target === zombie, "dropped the target after a hit and two misses")
+                cannon.blastMissed(zombie)
+                helper.assertTrue(cannon.target == null, "kept the target after three misses in a row")
+                helper.assertFalse(cannon.canShootAt(zombie), "shoots again right after three misses")
+            }
+            .thenIdle(CornCannon.MISS_IGNORE_TICKS + 1)
+            .thenExecute {
+                helper.assertTrue(cannon.canShootAt(zombie), "still ignores the target after the pause")
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * Water is no roof: the cob flies through it without slowing down. A zombie held at the bottom of a pool
+     * eight blocks deep is a target, and gets hurt.
+     */
+    fun zombieInWater(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        lateinit var zombie: LivingEntity
+        val pool = (-9..-1).flatMap { y -> listOf(BlockPos(10, y, 1), BlockPos(12, y, 1), BlockPos(11, y, 0), BlockPos(11, y, 2), BlockPos(11, y, 1)) }
+        val before = pool.associateWith { helper.getBlockState(it) }
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                pool.forEach { helper.setBlock(it, Blocks.STONE) }
+                for (y in -8..-1) helper.setBlock(BlockPos(11, y, 1), Blocks.WATER)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, -8, 1))
                 zombie.isNoGravity = true
                 helper.assertTrue(cannon.canShootAt(zombie), "a zombie at the bottom of a pool is not a target")
             }
-            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "no shot at a zombie in water") }
-            .thenExecute { clearMobs(helper) }
+            .thenWaitUntil { helper.assertTrue(zombie.health < zombie.maxHealth, "the zombie in the water was not hurt") }
+            .thenExecute {
+                clearMobs(helper)
+                before.forEach { (pos, state) -> helper.setBlock(pos, state) } // the pool reaches below the structure
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * The cob keeps its speed in water (the original's projectiles lose a fifth of it every tick there): fired at
+     * a zombie on the bottom of a lake, it would otherwise stall at the surface and sink short of it.
+     */
+    fun cobKeepsSpeedInWater(helper: GameTestHelper) {
+        lateinit var cob: CornCob
+        lateinit var start: Vec3
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                // a closed glass trough: water must not flow out into the neighbouring tests
+                for (x in 1..15) for (y in 0..3) for (z in 0..2) helper.setBlock(BlockPos(x, y, z), Blocks.GLASS)
+                for (x in 2..14) for (y in 0..2) helper.setBlock(BlockPos(x, y, 1), Blocks.WATER)
+                cob = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)!!
+                start = helper.absoluteVec(Vec3(3.5, 1.0, 1.5))
+                cob.setPos(start)
+                cob.isNoGravity = true
+                cob.deltaMovement = Vec3(0.5, 0.0, 0.0)
+                helper.level.addFreshEntity(cob)
+            }
+            .thenIdle(6)
+            .thenExecute {
+                val travelled = cob.x - start.x
+                helper.assertTrue(travelled >= 2.5, "the cob travelled $travelled blocks in 6 ticks of water, expected 3")
+                cob.discard()
+                clearMobs(helper)
+                for (x in 1..15) for (y in 0..3) for (z in 0..2) helper.setBlock(BlockPos(x, y, z), Blocks.AIR)
+            }
             .thenSucceed()
     }
 
