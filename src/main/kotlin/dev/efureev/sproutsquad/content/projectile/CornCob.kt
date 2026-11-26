@@ -9,6 +9,7 @@ import joshxviii.plantz.PazSounds
 import joshxviii.plantz.entity.projectile.PazProjectile
 import joshxviii.plantz.hasSameRootOwner
 import joshxviii.plantz.knockback
+import net.minecraft.core.UUIDUtil
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundSource
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import java.util.UUID
 import kotlin.math.sqrt
 
 /**
@@ -54,6 +56,9 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
             else (DAMAGE_CENTER - (DAMAGE_CENTER - DAMAGE_EDGE) * (distance / radius)).toFloat()
     }
 
+    /** The target it was fired at: only a blast of a cob fired at the cannon's current target counts as its hit or miss. */
+    var firedAt: UUID? = null
+
     override fun getDefaultGravity(): Double = 0.03
 
     /** A rocket: it keeps its speed in water, so a zombie on the bottom of a lake is reachable (the cannon aims as in air). */
@@ -63,11 +68,13 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
         output.putFloat("sproutsquad:Scale", scale)
+        firedAt?.let { output.store("sproutsquad:FiredAt", UUIDUtil.CODEC, it) }
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
         scale = input.getFloatOr("sproutsquad:Scale", 1f)
+        firedAt = input.read("sproutsquad:FiredAt", UUIDUtil.CODEC).orElse(null)
     }
 
     /** [RADIUS] grown with the cannon's scale (the cob inherits it), as the original's explosions: by its square root. */
@@ -123,22 +130,37 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         val level = level() as? ServerLevel ?: return
         val radius = blastRadius()
         val source = damageSources().source(damageType, this, getOwner())
-        val hurt = mutableSetOf<LivingEntity>()
+        val reached = mutableSetOf<LivingEntity>()
         level.getEntitiesOfClass(LivingEntity::class.java, AABB(centre, centre).inflate(radius)) { hits(it) && exposed(centre, it) }.forEach { target ->
             val distance = sqrt(target.boundingBox.distanceToSqr(centre))
             val amount = splashDamage(distance, radius)
             if (amount <= 0f) return@forEach
+            reached += target // a hit even if it takes no damage now (invulnerable after a harder hit)
             if (target.hurtServer(level, source, amount)) {
-                hurt += target
                 val direction = calculateHorizontalHurtKnockbackDirection(target, source)
                 target.knockback(this.knockback, -direction.leftDouble(), -direction.rightDouble())
             }
         }
-        // tell the cannon whether its target was hurt: blasts that keep missing make it leave that target alone
-        cannon()?.let { cannon -> cannon.target?.let { target -> if (target in hurt) cannon.blastHit(target) else cannon.blastMissed(target) } }
+        reportTo(cannon(), centre, radius, reached)
         level.sendParticles(ParticleTypes.EXPLOSION, centre.x, centre.y, centre.z, 1, 0.0, 0.0, 0.0, 0.0)
         level.sendParticles(SquadParticles.POPCORN.get(), centre.x, centre.y + 0.3, centre.z, POPCORN, 0.6, 0.3, 0.6, 0.12)
         level.playSound(null, centre.x, centre.y, centre.z, PazSounds.MISSILE_EXPLODE.value(), SoundSource.NEUTRAL, 1.0f, 1.0f)
+    }
+
+    /**
+     * Tells the cannon how its shot at its current target went (only if this cob was fired at that target): a
+     * blast that reached it is a hit; one that burst right over its head or next to it behind cover (an overhang,
+     * a wall) is a miss. A blast on open ground away from it (a moving target dodged it) is neither.
+     */
+    private fun reportTo(cannon: CornCannon?, centre: Vec3, radius: Double, reached: Set<LivingEntity>) {
+        val target = cannon?.target ?: return
+        if (firedAt == null || firedAt != target.uuid) return
+        if (target in reached) return cannon.blastHit(target)
+        val box = target.boundingBox
+        val dx = maxOf(box.minX - centre.x, 0.0, centre.x - box.maxX)
+        val dz = maxOf(box.minZ - centre.z, 0.0, centre.z - box.maxZ)
+        val near = dx * dx + dz * dz <= radius * radius
+        if (near && (centre.y > box.maxY || !exposed(centre, target))) cannon.blastMissed(target)
     }
 
     /** Whether nothing solid stands between the blast and the target's middle or its eyes. */

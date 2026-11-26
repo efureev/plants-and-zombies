@@ -61,9 +61,10 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
         /**
          * A called-off shot: it goes through the rest of the shot's motion without firing before it may aim again
-         * (ACTION_DELAY + SETTLE_TICKS covers SHOT_ANIMATION_TICKS, so the pose does not snap back).
+         * (the launch is ACTION_DELAY - 1 ticks in, and from there SETTLE_TICKS cover the rest of SHOT_ANIMATION_TICKS,
+         * so the pose does not snap back).
          */
-        const val SETTLE_TICKS = 11
+        const val SETTLE_TICKS = 12
 
         /** Length of the shot's animation (CornCannonModel): aim, launch, kick back and settle. */
         const val SHOT_ANIMATION_TICKS = 22
@@ -101,14 +102,15 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
      * from the eyes to just above the column's highest block of any kind (scaffolding is not in the
      * motion-blocking heightmap).
      */
-    fun underOpenSky(entity: Entity): Boolean {
+    fun underOpenSky(entity: Entity, comingDown: Boolean = true): Boolean {
         val level = level()
         val from = entity.eyePosition
         val top = level.getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockX, entity.blockZ) + 1.0
         if (from.y >= top) return true
-        // collision as for something coming down from above (scaffolding then has its top plate), not as for the entity
+        // collision as for the cob: coming down onto a target from above (scaffolding has its top plate), or rising
+        // from the cannon from below (scaffolding lets it through)
         val up = ClipContext(from, Vec3(from.x, top, from.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
-            CollisionContext.positionContext(top))
+            CollisionContext.positionContext(if (comingDown) top else from.y))
         return level.clip(up).type == HitResult.Type.MISS
     }
 
@@ -117,7 +119,7 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         isValidTarget(target) && !inDeadZone(target) && !ignores(target) && underOpenSky(target)
 
     /** A target it can shoot at right now: [canAimAt], and open sky over the cannon too. */
-    fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this)
+    fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this, comingDown = false)
 
     /** The cooldown the last shot set (shorter when powered up), synced for the cob's growth; 0 after a called-off shot. */
     var reloadTotal: Int
@@ -139,7 +141,9 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         }
         if (++misses < MISSES_TO_DROP) return
         misses = 0
-        ignoredUntil[target.uuid] = level().gameTime + MISS_IGNORE_TICKS
+        val now = level().gameTime
+        ignoredUntil.values.removeIf { it <= now } // forget the ones whose pause is over (dead or gone ones too)
+        ignoredUntil[target.uuid] = now + MISS_IGNORE_TICKS
         if (this.target === target) this.target = null
     }
 
@@ -147,6 +151,9 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
     fun blastHit(target: LivingEntity) {
         if (missedTarget == target.uuid) misses = 0
     }
+
+    /** How many targets it is leaving alone (or has not yet forgotten). */
+    val ignoredTargets: Int get() = ignoredUntil.size
 
     private fun ignores(target: Entity): Boolean {
         val until = ignoredUntil[target.uuid] ?: return false
@@ -223,7 +230,7 @@ class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTa
     }
 
     /** The cannon's own sky once per search, before the per-target checks. */
-    override fun canUse(): Boolean = cannon.underOpenSky(cannon) && super.canUse()
+    override fun canUse(): Boolean = cannon.underOpenSky(cannon, comingDown = false) && super.canUse()
 }
 
 /**
@@ -243,7 +250,7 @@ class CornCannonAttackGoal private constructor(private val cannon: CornCannon, p
             cannon.cooldown = CornCannon.SETTLE_TICKS
         }
     },
-    projectileFactory = { CornCob(cannon.level(), cannon) },
+    projectileFactory = { CornCob(cannon.level(), cannon).also { it.firedAt = cannon.target?.uuid } },
     velocity = 1.1,
     useHighArc = true,
     soundEvent = null,
