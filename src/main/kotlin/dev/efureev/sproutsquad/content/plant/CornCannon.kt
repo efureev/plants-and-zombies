@@ -22,8 +22,10 @@ import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.Vec2
+import java.util.UUID
 import kotlin.math.roundToInt
 
 /**
@@ -57,8 +59,18 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         /** How long the eyes squint from the start of a shot: the aim and the launch, until the kick back settles. */
         const val AIM_MILLIS = 700L
 
-        /** A called-off shot: the nose comes down for this long before the cannon may aim again. */
-        const val SETTLE_TICKS = 8
+        /**
+         * A called-off shot: it goes through the rest of the shot's motion without firing before it may aim again
+         * (ACTION_DELAY + SETTLE_TICKS covers SHOT_ANIMATION_TICKS, so the pose does not snap back).
+         */
+        const val SETTLE_TICKS = 11
+
+        /** Length of the shot's animation (CornCannonModel): aim, launch, kick back and settle. */
+        const val SHOT_ANIMATION_TICKS = 22
+
+        /** Blasts in a row that miss the target before the cannon leaves it alone for [MISS_IGNORE_TICKS]. */
+        const val MISSES_TO_DROP = 3
+        const val MISS_IGNORE_TICKS = 100
 
         const val ENTITY_LIMIT = 10
         const val EYE_HEIGHT = 0.6f
@@ -86,25 +98,62 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
      * Nothing the cob would hit over [entity]'s head, by the cob's own rules: blocks with collision count (leaves
      * too), water does not (the cob flies through it). The cob goes up and comes down from the sky, so a cannon
      * under a roof or a target in a cave or under a tree would only get the roof hit, forever. A ray straight up
-     * from the eyes to just above the column's top (the heightmap that counts leaves and fluids).
+     * from the eyes to just above the column's highest block of any kind (scaffolding is not in the
+     * motion-blocking heightmap).
      */
     fun underOpenSky(entity: Entity): Boolean {
         val level = level()
         val from = entity.eyePosition
-        val top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, entity.blockX, entity.blockZ) + 1.0
+        val top = level.getHeight(Heightmap.Types.WORLD_SURFACE, entity.blockX, entity.blockZ) + 1.0
         if (from.y >= top) return true
-        val up = ClipContext(from, Vec3(from.x, top, from.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)
+        // collision as for something coming down from above (scaffolding then has its top plate), not as for the entity
+        val up = ClipContext(from, Vec3(from.x, top, from.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+            CollisionContext.positionContext(top))
         return level.clip(up).type == HitResult.Type.MISS
     }
 
-    /** A target it can shoot at right now: valid, out of the dead zone, and open sky over both of them. */
-    fun canShootAt(target: LivingEntity): Boolean =
-        isValidTarget(target) && !inDeadZone(target) && underOpenSky(target) && underOpenSky(this)
+    /** A target worth aiming at, sky over the cannon aside: valid, out of the dead zone, not left alone after misses, under open sky. */
+    fun canAimAt(target: LivingEntity): Boolean =
+        isValidTarget(target) && !inDeadZone(target) && !ignores(target) && underOpenSky(target)
+
+    /** A target it can shoot at right now: [canAimAt], and open sky over the cannon too. */
+    fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this)
 
     /** The cooldown the last shot set (shorter when powered up), synced for the cob's growth; 0 after a called-off shot. */
     var reloadTotal: Int
         get() = entityData.get(RELOAD_TOTAL)
         private set(value) = entityData.set(RELOAD_TOTAL, value)
+
+    private var missedTarget: UUID? = null
+    private var misses = 0
+    private val ignoredUntil = HashMap<UUID, Long>()
+
+    /**
+     * A blast of its cob that did not hurt [target] (it burst on an overhang or a wall next to it). After
+     * [MISSES_TO_DROP] in a row the cannon drops the target and leaves it alone for [MISS_IGNORE_TICKS].
+     */
+    fun blastMissed(target: LivingEntity) {
+        if (missedTarget != target.uuid) {
+            missedTarget = target.uuid
+            misses = 0
+        }
+        if (++misses < MISSES_TO_DROP) return
+        misses = 0
+        ignoredUntil[target.uuid] = level().gameTime + MISS_IGNORE_TICKS
+        if (this.target === target) this.target = null
+    }
+
+    /** A blast that hurt [target]: the count of misses starts again. */
+    fun blastHit(target: LivingEntity) {
+        if (missedTarget == target.uuid) misses = 0
+    }
+
+    private fun ignores(target: Entity): Boolean {
+        val until = ignoredUntil[target.uuid] ?: return false
+        if (until > level().gameTime) return true
+        ignoredUntil.remove(target.uuid)
+        return false
+    }
 
     /** Called when a shot's action ends: [total] is the cooldown it set, 0 if no cob left. */
     fun reloadStarted(total: Int) {
@@ -165,13 +214,16 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
  * The nearest target it can shoot at ([CornCannon.canShootAt]), seen or not: the cob flies in a high arc, and
  * the eyes sit only 0.6 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
  */
-class CornCannonTargetGoal(cannon: CornCannon) : NearestAttackableTargetGoal<LivingEntity>(
+class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTargetGoal<LivingEntity>(
     cannon, LivingEntity::class.java, 5, false, false,
-    { target, _ -> cannon.canShootAt(target) },
+    { target, _ -> cannon.canAimAt(target) },
 ) {
     init {
         targetConditions.ignoreLineOfSight()
     }
+
+    /** The cannon's own sky once per search, before the per-target checks. */
+    override fun canUse(): Boolean = cannon.underOpenSky(cannon) && super.canUse()
 }
 
 /**

@@ -1,5 +1,6 @@
 package dev.efureev.sproutsquad.client.model
 
+import dev.efureev.sproutsquad.content.plant.CornCannon
 import joshxviii.plantz.pazResource
 import joshxviii.plantz.renderer.entity.plant.PlantRenderState
 import net.minecraft.client.animation.AnimationChannel
@@ -130,7 +131,7 @@ object CornCannonAnimation {
      * A shot: the nose lifts, the cob leaves about 0.5 s in (CornCannon.ACTION_DELAY), the husk kicks back
      * and settles.
      */
-    val action: AnimationDefinition = AnimationDefinition.Builder.withLength(1.1f)
+    val action: AnimationDefinition = AnimationDefinition.Builder.withLength(CornCannon.SHOT_ANIMATION_TICKS / 20f)
         .addAnimation("husk", AnimationChannel(ROTATION,
             rot(0f, 0f, 0f, 0f), rot(0.45f, -18f, 0f, 0f), rot(0.6f, -22f, 0f, 0f), rot(0.8f, -6f, 0f, 0f), rot(1.1f, 0f, 0f, 0f)))
         .addAnimation("husk", AnimationChannel(POSITION,

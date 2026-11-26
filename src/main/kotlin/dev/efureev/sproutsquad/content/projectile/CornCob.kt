@@ -56,6 +56,9 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
 
     override fun getDefaultGravity(): Double = 0.03
 
+    /** A rocket: it keeps its speed in water, so a zombie on the bottom of a lake is reachable (the cannon aims as in air). */
+    override fun ignoreWaterDrag(): Boolean = true
+
     /** The size it got from its cannon: the original's projectiles do not keep it, and the blast grows with it. */
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
@@ -120,15 +123,19 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         val level = level() as? ServerLevel ?: return
         val radius = blastRadius()
         val source = damageSources().source(damageType, this, getOwner())
+        val hurt = mutableSetOf<LivingEntity>()
         level.getEntitiesOfClass(LivingEntity::class.java, AABB(centre, centre).inflate(radius)) { hits(it) && exposed(centre, it) }.forEach { target ->
             val distance = sqrt(target.boundingBox.distanceToSqr(centre))
             val amount = splashDamage(distance, radius)
             if (amount <= 0f) return@forEach
             if (target.hurtServer(level, source, amount)) {
+                hurt += target
                 val direction = calculateHorizontalHurtKnockbackDirection(target, source)
                 target.knockback(this.knockback, -direction.leftDouble(), -direction.rightDouble())
             }
         }
+        // tell the cannon whether its target was hurt: blasts that keep missing make it leave that target alone
+        cannon()?.let { cannon -> cannon.target?.let { target -> if (target in hurt) cannon.blastHit(target) else cannon.blastMissed(target) } }
         level.sendParticles(ParticleTypes.EXPLOSION, centre.x, centre.y, centre.z, 1, 0.0, 0.0, 0.0, 0.0)
         level.sendParticles(SquadParticles.POPCORN.get(), centre.x, centre.y + 0.3, centre.z, POPCORN, 0.6, 0.3, 0.6, 0.12)
         level.playSound(null, centre.x, centre.y, centre.z, PazSounds.MISSILE_EXPLODE.value(), SoundSource.NEUTRAL, 1.0f, 1.0f)
