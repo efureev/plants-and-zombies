@@ -34,6 +34,9 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         /** Cooldown after a shot, while the new cob grows: a shot every COOLDOWN + ACTION_DELAY - 1 = 70 ticks. */
         const val COOLDOWN = 60
 
+        /** How long the eyes squint from the start of a shot: the aim and the launch, until the kick back settles. */
+        const val AIM_MILLIS = 700L
+
         const val ENTITY_LIMIT = 10
         const val EYE_HEIGHT = 0.6f
 
@@ -49,10 +52,10 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
     fun inDeadZone(target: Entity): Boolean = distanceToSqr(target) < MIN_RANGE * MIN_RANGE
 
-    /** `aim` (squinting) while the action runs, plain otherwise and while dying (the renderer adds `sleep` then). */
+    /** `aim` (squinting) for the first [AIM_MILLIS] of a shot, plain otherwise and while dying (the renderer adds `sleep` then). */
     fun faceSuffix(actionMillis: Long?): String = when {
         deathTime > 0 -> ""
-        actionMillis != null -> "aim"
+        actionMillis != null && actionMillis < AIM_MILLIS -> "aim"
         else -> ""
     }
 

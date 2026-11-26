@@ -12,6 +12,7 @@ import dev.efureev.sproutsquad.machines.PlayerMachines
 import dev.efureev.sproutsquad.registry.SquadAttachments
 import dev.efureev.sproutsquad.registry.SquadBlocks
 import dev.efureev.sproutsquad.registry.SquadEntities
+import dev.efureev.sproutsquad.registry.SquadParticles
 import dev.efureev.sproutsquad.structures.StructureSpawns
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.common.NeoForge
@@ -25,6 +26,7 @@ object SproutSquad {
     fun init(modBus: IEventBus) {
         SquadBlocks.register(modBus)
         SquadEntities.register(modBus)
+        SquadParticles.register(modBus)
         SquadAttachments.register(modBus)
         PlayerMachines.register()
         MachineReinforcements.register(modBus)

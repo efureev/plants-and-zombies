@@ -2,6 +2,7 @@ package dev.efureev.sproutsquad.content.projectile
 
 import dev.efureev.sproutsquad.content.plant.CornCannon
 import dev.efureev.sproutsquad.registry.SquadEntities
+import dev.efureev.sproutsquad.registry.SquadParticles
 import joshxviii.plantz.PazDamageTypes
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.entity.projectile.PazProjectile
@@ -38,6 +39,9 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         const val DAMAGE_EDGE = 4f
         const val RADIUS = 2.5
 
+        /** Popcorn puffs scattered by the blast. */
+        private const val POPCORN = 24
+
         /** Splash damage at [distance] blocks from the centre: linear from 8 to 4, nothing past the edge. */
         fun splashDamage(distance: Double): Float =
             if (distance > RADIUS) 0f
@@ -66,7 +70,7 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         discard()
     }
 
-    /** The blast at [centre]: splash damage and a push to every valid target within [RADIUS], a flash and a bang. */
+    /** The blast at [centre]: splash damage and a push to every valid target within [RADIUS], a flash, popcorn and a bang. */
     fun explodeAt(centre: Vec3) {
         val level = level() as? ServerLevel ?: return
         val source = damageSources().source(damageType, this, getOwner())
@@ -80,6 +84,7 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
             }
         }
         level.sendParticles(ParticleTypes.EXPLOSION, centre.x, centre.y, centre.z, 1, 0.0, 0.0, 0.0, 0.0)
+        level.sendParticles(SquadParticles.POPCORN.get(), centre.x, centre.y + 0.3, centre.z, POPCORN, 0.6, 0.3, 0.6, 0.12)
         level.playSound(null, centre.x, centre.y, centre.z, PazSounds.MISSILE_EXPLODE.value(), SoundSource.NEUTRAL, 1.0f, 1.0f)
     }
 }
