@@ -100,3 +100,13 @@ Run the items whose trigger the change touches.
   `hasRoomAt`; test it under a one-block ceiling (`PoppyRattleGameTests.underLowCeiling`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
+- **A projectile that leaves a low plant** (spawn offset forward of the plant's feet): with a full block right in front
+  of the plant, a projectile that starts inside that block is discarded on its first tick, with no hit or blast. Keep the
+  spawn point inside the plant's own block, and test a one-block wall touching the plant (`CornCannonGameTests.wallInFront`).
+- **A low plant that shoots over obstacles** (eyes under 1 block, a high arc): `NearestAttackableTargetGoal` needs line
+  of sight even with `mustSee = false`, so a one-block wall in front hides every target. Call
+  `targetConditions.ignoreLineOfSight()` when the plant is meant to fire blind.
+- **A projectile that picks whom it may hit by its shooter** (`PazProjectile.entityOwner`): that field exists only on the
+  server and only for a projectile made there; on the client and after a save and load it is null. Resolve the shooter
+  from the projectile's synced, saved `owner` reference, do nothing in `onHit*` on the client, and fail safe when the
+  shooter is gone. Test a save-and-load round trip (`CornCannonGameTests.cobAfterReload`).
