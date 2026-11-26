@@ -22,9 +22,12 @@ A long corn husk lying on a rosette of leaves, with an eye on each side, a curly
 
 - Targets zombies of any kind; a tamed Corn Cannon also other monsters, but never creepers.
 - It does not see zombies within 5 blocks: it does not aim at one that close, and lets go of a target that comes within 5 blocks.
-- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it.
+- It does not aim at a zombie under a roof or in a cave: the cob comes down from the sky and would only hit the roof. Leaves do not count as a roof.
+- Hypnotized zombies and a player's machines are allies: it never aims at them, and its cob never hurts them.
+- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close) uses up no cob.
 - The cob flies in a high arc, over walls and fences, and aims ahead of moving targets. It has the same cone at both ends and leaves no flame or smoke.
-- The blast hurts only what the cannon shoots at. Players, pets, villagers and plants are not hurt, and the cob flies through them. It breaks no blocks and sets no fire. Popcorn flies out of the blast.
+- The blast hurts only what the cannon shoots at. Players, pets, villagers and plants are not hurt, and the cob flies through them. A wall between the blast and a zombie shields it. It breaks no blocks and sets no fire, but the block it lands on reacts as to an arrow (a target block gives a signal). Popcorn flies out of the blast.
+- A bigger cannon (the scale attribute) makes a bigger blast.
 
 ## Notes
 
