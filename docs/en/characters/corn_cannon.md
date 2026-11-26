@@ -22,16 +22,16 @@ A long corn husk lying on a rosette of leaves, with an eye on each side, a curly
 
 - Targets zombies of any kind; a tamed Corn Cannon also other monsters, but never creepers.
 - It does not see zombies within 5 blocks: it does not aim at one that close, and lets go of a target that comes within 5 blocks.
-- It does not aim at a zombie under a roof or in a cave: the cob comes down from the sky and would only hit the roof. Leaves do not count as a roof.
+- It does not aim at a zombie under a roof, under a tree or in a cave: the cob comes down from the sky and would only hit the roof. Water is no roof: the cob flies through it, so a zombie at the bottom of a pool is still a target.
 - Hypnotized zombies and a player's machines are allies: it never aims at them, and its cob never hurts them.
-- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close) uses up no cob.
+- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close or went under cover) uses up no cob: the nose just comes down.
 - The cob flies in a high arc, over walls and fences, and aims ahead of moving targets. It has the same cone at both ends and leaves no flame or smoke.
 - The blast hurts only what the cannon shoots at. Players, pets, villagers and plants are not hurt, and the cob flies through them. A wall between the blast and a zombie shields it. It breaks no blocks and sets no fire, but the block it lands on reacts as to an arrow (a target block gives a signal). Popcorn flies out of the blast.
 - A bigger cannon (the scale attribute) makes a bigger blast.
 
 ## Notes
 
-- Under a roof the cob hits the ceiling: the cannon needs open sky above it, like the [Melon Pult](melonpult.md).
+- It needs open sky above it: under a roof or a tree it does not shoot at all, since every cob would hit the ceiling.
 - About twice as strong as the [Melon Pult](melonpult.md), as its author wanted; the price is the Kernel Pult and 8 sun in the recipe, 14 sun to plant and the limit of 10.
 - The [Poppy Rattle](poppy_rattle.md) never hands it out.
 - Uses the original mod's sounds for now: a low shot and the missile's explosion.
