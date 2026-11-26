@@ -165,6 +165,7 @@ object SquadGameTests {
         Test("corn_cannon_overhang_misses", CornCannonGameTests::overhangMisses, structure = id("gametest/lane")),
         Test("corn_cannon_ignored_targets_forgotten", CornCannonGameTests::ignoredTargetsForgotten, maxTicks = 300, structure = id("gametest/lane")),
         Test("corn_cannon_scaffolding_over_cannon", CornCannonGameTests::scaffoldingOverCannon, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_blocked_path_not_fired", CornCannonGameTests::blockedPathNotFired, structure = id("gametest/lane")),
         Test("corn_cannon_recipe", CornCannonGameTests::recipe),
         Test("corn_cannon_not_from_poppy_rattle", CornCannonGameTests::notFromPoppyRattle),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),

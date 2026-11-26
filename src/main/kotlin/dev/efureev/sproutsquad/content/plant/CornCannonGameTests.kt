@@ -450,7 +450,7 @@ object CornCannonGameTests {
 
     /**
      * Blasts that keep missing the target (the cob bursts on an overhang next to it) make the cannon leave that
-     * target alone for a while: three misses in a row; a hit in between starts the count again.
+     * target alone for a while: three misses in a row; a hit or a neutral blast in between starts the count again.
      */
     fun missesDropTarget(helper: GameTestHelper) {
         lateinit var cannon: CornCannon
@@ -464,6 +464,9 @@ object CornCannonGameTests {
                 cannon.target = zombie
                 cannon.blastMissed(zombie)
                 cannon.blastMissed(zombie)
+                cannon.blastNeutral(zombie) // a dodged blast between misses: they are not in a row
+                cannon.blastMissed(zombie)
+                helper.assertTrue(cannon.target === zombie, "dropped the target over misses not in a row")
                 cannon.blastHit(zombie)
                 cannon.blastMissed(zombie)
                 cannon.blastMissed(zombie)
@@ -595,6 +598,41 @@ object CornCannonGameTests {
                 clearMobs(helper)
             }
             .thenSucceed()
+    }
+
+    /**
+     * A cob whose path is blocked right by the cannon (a wall next to it, leaves overhanging its front) is not
+     * fired: it would burst at the cannon, every 3.5 s, forever. The cannon leaves that target alone for a while.
+     * With the path open, the same shot goes.
+     */
+    fun blockedPathNotFired(helper: GameTestHelper) {
+        prepare(helper)
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        cannon.yRot = -90f // facing +x, down the lane
+        cannon.yHeadRot = -90f
+        val goal = CornCannonAttackGoal(cannon)
+        fun shoot(target: LivingEntity): Boolean {
+            cannon.target = target
+            return goal.doAction()
+        }
+        for (y in 0..2) helper.setBlock(BlockPos(2, y, 1), Blocks.STONE) // a wall 3 high right in front
+        val first = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+        helper.assertFalse(shoot(first), "fired into a wall right in front")
+        helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cob was launched into the wall")
+        helper.assertTrue(cannon.target == null, "kept a target it cannot reach")
+        helper.assertValueEqual(cannon.ignoredTargets, 1, "targets left alone")
+        for (y in 0..2) helper.setBlock(BlockPos(2, y, 1), Blocks.AIR)
+        val leaves = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)
+        for (x in 2..4) helper.setBlock(BlockPos(x, 2, 1), leaves) // a canopy over the cannon's front, not over it
+        val second = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(13, 0, 1))
+        helper.assertTrue(cannon.underOpenSky(cannon), "the cannon itself is under the canopy")
+        helper.assertFalse(shoot(second), "fired into the leaves over its front")
+        for (x in 2..4) helper.setBlock(BlockPos(x, 2, 1), Blocks.AIR)
+        val third = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(15, 0, 1))
+        helper.assertTrue(shoot(third), "did not fire along an open path")
+        helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "no cob on an open path")
+        clearMobs(helper)
+        helper.succeed()
     }
 
     /**
