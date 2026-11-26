@@ -25,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import net.minecraft.world.phys.shapes.CollisionContext
 import java.util.UUID
 import kotlin.math.sqrt
 
@@ -107,30 +108,40 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
     }
 
     /**
-     * Whether its flight, as launched, gets near where it is going: the path is followed tick by tick (gravity, no
-     * drag, the cob's own block collision) to where it comes down to the middle of [target]'s height, the aim point
-     * with the lead already in its speed. A block hit farther than the blast radius from that point means the path
-     * is blocked (a wall next to the cannon, leaves over its front).
+     * Whether its flight, as launched, would hurt [target]: the path is followed tick by tick as the real cob moves
+     * (gravity, no drag, a point colliding with blocks as the cob does at that height) to where it would burst, and
+     * the blast there is judged as a real one (within [blastRadius] of the target's box, nothing solid in between).
+     * The target's box moves on by its known speed, the same lead the aim used. A burst far from it means the path
+     * is blocked or out of reach (a wall or leaves by the cannon, a hill or a house in between, a target too high).
      */
     fun pathIsClear(target: LivingEntity): Boolean {
-        val aimY = target.y + target.bbHeight / 2.0
+        val lead = target.knownSpeed
         var pos = position()
         var velocity = deltaMovement
-        var blockedAt: Vec3? = null
-        repeat(MAX_FLIGHT_TICKS) {
+        for (tick in 1..MAX_FLIGHT_TICKS) {
             val next = pos.add(velocity)
-            if (blockedAt == null) {
-                val hit = level().clip(ClipContext(pos, next, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this))
-                if (hit.type != HitResult.Type.MISS) blockedAt = hit.location
-            }
-            if (velocity.y < 0 && next.y <= aimY) {
-                val stop = blockedAt ?: return true
-                return stop.distanceTo(next) <= blastRadius()
-            }
+            val box = target.boundingBox.move(lead.scale(tick.toDouble()))
+            if (box.clip(pos, next).isPresent) return true // straight into the target
+            val hit = level().clip(ClipContext(pos, next, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
+                CollisionContext.positionContext(pos.y)))
+            if (hit.type != HitResult.Type.MISS) return blastReaches(offFace(hit), box)
             pos = next
             velocity = velocity.add(0.0, -gravity, 0.0)
         }
-        return blockedAt == null
+        return false // never came down on anything
+    }
+
+    /** Just off the face of the block it hit, where the blast happens (in the air the cob came through). */
+    private fun offFace(hit: BlockHitResult): Vec3 = hit.location.add(Vec3.atLowerCornerOf(hit.direction.unitVec3i).scale(0.05))
+
+    /** Whether a blast at [centre] reaches a target in [box]: within [blastRadius], and its middle or its top in view. */
+    private fun blastReaches(centre: Vec3, box: AABB): Boolean {
+        val radius = blastRadius()
+        if (box.distanceToSqr(centre) > radius * radius) return false
+        val middle = box.center
+        return listOf(middle, Vec3(middle.x, box.maxY - 0.1, middle.z)).any { point ->
+            level().clip(ClipContext(centre, point, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this)).type == HitResult.Type.MISS
+        }
     }
 
     /** [canHitEntity] for callers outside the class (tests). */
@@ -151,7 +162,7 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         val level = level() as? ServerLevel ?: return
         val state = level.getBlockState(hitResult.blockPos)
         state.onProjectileHit(level, state, hitResult, this)
-        explodeAt(hitResult.location.add(Vec3.atLowerCornerOf(hitResult.direction.unitVec3i).scale(0.05)))
+        explodeAt(offFace(hitResult))
         discard()
     }
 

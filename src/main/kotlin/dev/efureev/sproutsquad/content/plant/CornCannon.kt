@@ -73,6 +73,10 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         const val MISSES_TO_DROP = 3
         const val MISS_IGNORE_TICKS = 100
 
+        /** Shots in a row taken back for a blocked path before the cannon rests for [REST_TICKS] (no empty motions on and on). */
+        const val BLOCKED_TO_REST = 3
+        const val REST_TICKS = 100
+
         const val ENTITY_LIMIT = 10
         const val EYE_HEIGHT = 0.6f
 
@@ -114,9 +118,9 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         return level.clip(up).type == HitResult.Type.MISS
     }
 
-    /** A target worth aiming at, sky over the cannon aside: valid, out of the dead zone, not left alone after misses, under open sky. */
+    /** A target worth aiming at, sky over the cannon aside: not resting, valid, out of the dead zone, not left alone, under open sky. */
     fun canAimAt(target: LivingEntity): Boolean =
-        isValidTarget(target) && !inDeadZone(target) && !ignores(target) && underOpenSky(target)
+        !resting() && isValidTarget(target) && !inDeadZone(target) && !ignores(target) && underOpenSky(target)
 
     /** A target it can shoot at right now: [canAimAt], and open sky over the cannon too. */
     fun canShootAt(target: LivingEntity): Boolean = canAimAt(target) && underOpenSky(this)
@@ -143,6 +147,27 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         misses = 0
         leaveAlone(target)
     }
+
+    private var blockedShots = 0
+    private var restUntil = 0L
+
+    /**
+     * A shot at [target] taken back because its cob could not get there: the cannon leaves it alone, and after
+     * [BLOCKED_TO_REST] such shots in a row (every zombie around is out of reach) it rests a while.
+     */
+    fun shotBlocked(target: LivingEntity) {
+        leaveAlone(target)
+        if (++blockedShots < BLOCKED_TO_REST) return
+        blockedShots = 0
+        restUntil = level().gameTime + REST_TICKS
+    }
+
+    /** A cob really left: the run of blocked shots is over. */
+    fun shotFired() {
+        blockedShots = 0
+    }
+
+    private fun resting(): Boolean = restUntil > level().gameTime
 
     /** Drops [target] and does not aim at it for [MISS_IGNORE_TICKS]: it keeps missing it, or its cob cannot get there. */
     fun leaveAlone(target: LivingEntity) {
@@ -282,9 +307,9 @@ class CornCannonAttackGoal private constructor(
     override fun canDoAction(): Boolean = !dropUnseenTarget() && super.canDoAction()
 
     /**
-     * Launches the cob, then follows its path: one that a block stops short of where it is going (a wall next to the
-     * cannon, leaves over its front) is taken back before it moves, and the cannon leaves that target alone for a
-     * while instead of bursting cobs at its own feet every 3.5 s.
+     * Launches the cob, then follows its path ([CornCob.pathIsClear]): one that would not hurt the target (blocked by
+     * a wall or leaves by the cannon or a hill in between, or falling short of a target out of reach) is taken back
+     * before it moves, and the cannon leaves that target alone for a while instead of wasting a cob every 3.5 s.
      */
     override fun doAction(): Boolean {
         if (dropUnseenTarget()) return false
@@ -294,10 +319,13 @@ class CornCannonAttackGoal private constructor(
         val cob = launched[0]
         if (fired[0] && cob != null && !cob.pathIsClear(target)) {
             cob.discard()
-            cannon.leaveAlone(target)
+            cannon.shotBlocked(target)
             fired[0] = false
         }
-        if (fired[0]) cannon.playSound(PazSounds.PROJECTILE_SHOOT, 1.0f, 0.55f)
+        if (fired[0]) {
+            cannon.shotFired()
+            cannon.playSound(PazSounds.PROJECTILE_SHOOT, 1.0f, 0.55f)
+        }
         return fired[0]
     }
 }
