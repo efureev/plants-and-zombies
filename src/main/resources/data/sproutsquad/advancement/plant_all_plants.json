@@ -449,6 +449,18 @@
           }
         }
       }
+    },
+    "sproutsquad:corn_cannon": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "sproutsquad:corn_cannon"
+          }
+        }
+      }
     }
   },
   "sends_telemetry_event": false

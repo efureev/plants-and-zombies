@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SKS",
+    "SSS"
+  ],
+  "key": {
+    "S": "sproutsquad:sun",
+    "K": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": "sproutsquad:seed_packet",
+      "components": {
+        "minecraft:entity_data": {
+          "id": "sproutsquad:kernelpult"
+        }
+      }
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "sproutsquad:seed_packet",
+    "components": {
+      "minecraft:entity_data": {
+        "id": "sproutsquad:corn_cannon"
+      }
+    }
+  }
+}
