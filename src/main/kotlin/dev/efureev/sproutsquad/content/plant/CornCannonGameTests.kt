@@ -3,12 +3,20 @@ package dev.efureev.sproutsquad.content.plant
 import dev.efureev.sproutsquad.content.projectile.CornCob
 import dev.efureev.sproutsquad.registry.SquadEntities
 import joshxviii.plantz.PazConfig
+import joshxviii.plantz.PazComponents
 import joshxviii.plantz.PazEntities
+import joshxviii.plantz.PazItems
+import joshxviii.plantz.item.SeedPacketItem
+import joshxviii.plantz.item.component.SunCost
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.CraftingInput
+import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.GameType
@@ -157,6 +165,36 @@ object CornCannonGameTests {
                 clearMobs(helper)
             }
             .thenSucceed()
+    }
+
+    /** A Kernel Pult seed packet in the middle of 8 sun makes a Corn Cannon packet; a Peashooter packet does not. */
+    fun recipe(helper: GameTestHelper) {
+        fun craft(packet: EntityType<*>): ItemStack {
+            val sun = { ItemStack(PazItems.SUN) }
+            // a packet from the creative tab or a shovel carries its price as well
+            val seed = SeedPacketItem.stackFor(packet).also { it.set(PazComponents.SUN_COST, SunCost(6)) }
+            val input = CraftingInput.of(3, 3, listOf(
+                sun(), sun(), sun(),
+                sun(), seed, sun(),
+                sun(), sun(), sun(),
+            ))
+            return helper.level.server.recipeManager.getRecipeFor(RecipeType.CRAFTING, input, helper.level)
+                .map { it.value().assemble(input) }.orElse(ItemStack.EMPTY)
+        }
+        val made = craft(PazEntities.KERNEL_PULT)
+        helper.assertTrue(SeedPacketItem.typeFromStack(made) == SquadEntities.CORN_CANNON.get(), "a Kernel Pult packet made $made")
+        helper.assertTrue(craft(PazEntities.PEA_SHOOTER).isEmpty, "a Peashooter packet made ${craft(PazEntities.PEA_SHOOTER)}")
+        helper.succeed()
+    }
+
+    /** The Poppy Rattle never hands out a Corn Cannon: it comes only from the recipe. */
+    fun notFromPoppyRattle(helper: GameTestHelper) {
+        val type = SquadEntities.CORN_CANNON.get()
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(type).`is`(PoppyRattle.EXCLUDED), "not in poppy_rattle_excluded")
+        listOf(false, true).forEach { night ->
+            helper.assertFalse(type in PoppyRattlePool.candidates(helper.level, night), "a candidate (night = $night)")
+        }
+        helper.succeed()
     }
 
     // region lane helpers (as in NeedleSpruceGameTests)
