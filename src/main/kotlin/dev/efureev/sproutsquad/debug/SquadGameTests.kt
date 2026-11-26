@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.content.plant.DoubleSunflowerGameTests
+import dev.efureev.sproutsquad.content.plant.CornCannonGameTests
 import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
 import dev.efureev.sproutsquad.content.plant.PoppyRattleGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
@@ -139,6 +140,11 @@ object SquadGameTests {
         Test("double_sunflower_sun_under_low_ceiling", DoubleSunflowerGameTests::sunUnderLowCeiling),
         Test("double_sunflower_recipe", DoubleSunflowerGameTests::recipe),
         Test("double_sunflower_mutation", DoubleSunflowerGameTests::mutation),
+        Test("corn_cannon_stats", CornCannonGameTests::stats),
+        Test("corn_cannon_face", CornCannonGameTests::face),
+        Test("corn_cannon_fires", CornCannonGameTests::fires, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_dead_zone", CornCannonGameTests::deadZone, maxTicks = 600, structure = id("gametest/lane")),
+        Test("corn_cannon_spares_friends", CornCannonGameTests::sparesFriends, structure = id("gametest/lane")),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),
