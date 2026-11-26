@@ -45,7 +45,7 @@ Sun is the plant currency.
 |  | Raid rewards | Bottles of Sun in many reward tables |
 
 - Sun lies on the ground for about 37 seconds. Within 8 blocks it flies to the nearest player who has room for it, to a damaged plant (healing it) or to a placed Solar Battery.
-- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce, Poppy Rattle, Double Sunflower).
+- Other uses: works like bone meal on crops; burns briefly as furnace fuel; a Farmer (level 1) pays 1 emerald for 32 sun; heals and tames plants; goes into recipes (Plant Pot, Bottle of Sun, Plantz Flag, Potling, Needle Spruce, Poppy Rattle, Double Sunflower, Corn Cannon).
 - **Bottle of Sun**: 8 sun around a glass bottle. It can also be fired from a dispenser.
 - **Solar Battery**: 4 Brainz Alloy, a Reinforced Brainz Alloy block, a Daylight Detector and 2 glass. It stores up to 512 sun. In the inventory, drop sun onto it to charge it, or right-click it with an empty cursor to take out up to a stack. Picked-up sun goes into the battery first, and planting, taming and feeding use its charge. Sneak and right-click to place it on any face of a block: a placed battery pulls in sun within 8 blocks, glows brighter the fuller it is, gives a comparator signal, accepts sun by right-click, feeds an attached dispenser and powers the [Time Machine](#time-machine).
 - The client option "Sun Info HUD" shows your total sun and the cost of the held seed packet.
@@ -69,6 +69,7 @@ Costs are defaults (server option `sunCosts`). Plant names link to their cards.
 | <img src="../images/characters/electric_peashooter.png" alt="" width="112"> | [Electric Peashooter](characters/electric_peashooter.md) | 8 | Electric peas (Electrified) | A Peashooter struck by lightning turns into one; mutation during thunderstorms; late raid rewards |
 | <img src="../images/characters/cactus.png" alt="" width="112"> | [Cactus](characters/cactus.md) | 6 | Shoots needles | Deserts, badlands |
 | <img src="../images/characters/needle_spruce.png" alt="" width="112"> | [Needle Spruce](characters/needle_spruce.md) | 7 | Fires three needles at once; 40 health, 20-block range | Snowy slopes, groves; crafting: spruce sapling, 7 sun |
+| <img src="../images/characters/corn_cannon.png" alt="" width="112"> | [Corn Cannon](characters/corn_cannon.md) | 14 | Launches its cob like a rocket: a blast of 8 damage that spares players, pets and plants; 90 health, 5 to 40 blocks | Crafting: Kernel Pult seed packet, 8 sun |
 | <img src="../images/characters/cabbagepult.png" alt="" width="112"> | [Cabbage-pult](characters/cabbagepult.md) | 5 | Lobs cabbages over obstacles | Plains, forests; village chests |
 | <img src="../images/characters/kernelpult.png" alt="" width="112"> | [Kernel-pult](characters/kernelpult.md) | 6 | Lobs kernels, every fourth shot or so is butter (Buttered) | Plains, savannas; village chests |
 | <img src="../images/characters/melonpult.png" alt="" width="112"> | [Melon-pult](characters/melonpult.md) | 10 | Lobs heavy melons | Jungles |
@@ -576,7 +577,7 @@ The first three can be changed in game with `/pz options`.
 
 ## Characters
 
-Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md), the [Needle Spruce](characters/needle_spruce.md), the [Poppy Rattle](characters/poppy_rattle.md) and the [Double Sunflower](characters/double_sunflower.md).
+Every plant, zombie and machine has its own card with stats, abilities and where to find it: [character index](characters/README.md). For example: [Peashooter](characters/peashooter.md), [Wall-nut](characters/wallnut.md), [Browncoat](characters/browncoat.md), [Zombie Yeti](characters/zombie_yeti.md), [Gargantuar](characters/gargantuar.md), [Lawn Mower](characters/lawn_mower.md). Sprout Squad's own characters start with the mascot [Potling](characters/potling.md), the [Needle Spruce](characters/needle_spruce.md), the [Poppy Rattle](characters/poppy_rattle.md), the [Double Sunflower](characters/double_sunflower.md) and the [Corn Cannon](characters/corn_cannon.md).
 
 ### Secret names
 

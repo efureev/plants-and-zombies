@@ -1,9 +1,11 @@
 package dev.efureev.sproutsquad.registry
 
+import dev.efureev.sproutsquad.content.plant.CornCannon
 import dev.efureev.sproutsquad.content.plant.DoubleSunflower
 import dev.efureev.sproutsquad.content.plant.NeedleSpruce
 import dev.efureev.sproutsquad.content.plant.PoppyRattle
 import dev.efureev.sproutsquad.content.plant.Potling
+import dev.efureev.sproutsquad.content.projectile.CornCob
 import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazMain
 import joshxviii.plantz.PazSpawnPlacements
@@ -79,6 +81,17 @@ object SquadEntities {
     val DOUBLE_SUNFLOWER = plant("double_sunflower", ::DoubleSunflower, width = 0.9f, height = 1.5f,
         sunCost = DoubleSunflower.SUN_COST,
         attributes = Plant.Companion.PlantAttributes(maxHealth = DoubleSunflower.MAX_HEALTH))
+
+    /** Corn Cannon: heavy artillery firing its own corn cob as a rocket. */
+    val CORN_CANNON = plant("corn_cannon", ::CornCannon, width = 1.2f, height = 0.9f, eyeHeight = CornCannon.EYE_HEIGHT,
+        sunCost = CornCannon.SUN_COST,
+        entityLimit = CornCannon.ENTITY_LIMIT,
+        attributes = Plant.Companion.PlantAttributes(maxHealth = CornCannon.MAX_HEALTH, followRange = CornCannon.RANGE))
+    // endregion
+
+    // region Projectiles
+    /** The Corn Cannon's corn cob rocket. */
+    val CORN_COB: DeferredHolder<EntityType<*>, EntityType<CornCob>> = projectile("corn_cob", ::CornCob, 0.5f, 0.5f)
     // endregion
 
     fun register(modBus: IEventBus) {
@@ -113,6 +126,19 @@ object SquadEntities {
     /** Seed packets of our plants, appended to the original plant list in the creative tabs. */
     fun addSeedPackets(output: CreativeModeTab.Output) {
         plantEntries.forEach { output.accept(SeedPacketItem.stackFor(it.type.get())) }
+    }
+
+    /** A projectile, sized like the original's (`PazEntities.registerProjectile`: no eye height). */
+    private fun <T : net.minecraft.world.entity.Entity> projectile(
+        name: String,
+        factory: EntityType.EntityFactory<T>,
+        width: Float,
+        height: Float,
+    ): DeferredHolder<EntityType<*>, EntityType<T>> = ENTITY_TYPES.register(name) { id ->
+        EntityType.Builder.of(factory, MobCategory.MISC)
+            .sized(width, height)
+            .eyeHeight(0f)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, id))
     }
 
     private fun <T : Plant> plant(

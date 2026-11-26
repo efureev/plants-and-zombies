@@ -1,6 +1,7 @@
 package dev.efureev.sproutsquad.debug
 
 import dev.efureev.sproutsquad.content.plant.DoubleSunflowerGameTests
+import dev.efureev.sproutsquad.content.plant.CornCannonGameTests
 import dev.efureev.sproutsquad.content.plant.NeedleSpruceGameTests
 import dev.efureev.sproutsquad.content.plant.PoppyRattleGameTests
 import dev.efureev.sproutsquad.fixes.F2GameTests
@@ -139,6 +140,36 @@ object SquadGameTests {
         Test("double_sunflower_sun_under_low_ceiling", DoubleSunflowerGameTests::sunUnderLowCeiling),
         Test("double_sunflower_recipe", DoubleSunflowerGameTests::recipe),
         Test("double_sunflower_mutation", DoubleSunflowerGameTests::mutation),
+        Test("corn_cannon_stats", CornCannonGameTests::stats),
+        Test("corn_cannon_face", CornCannonGameTests::face),
+        Test("corn_cannon_fires", CornCannonGameTests::fires, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_dead_zone", CornCannonGameTests::deadZone, maxTicks = 600, structure = id("gametest/lane")),
+        Test("corn_cannon_spares_friends", CornCannonGameTests::sparesFriends, structure = id("gametest/lane")),
+        Test("corn_cannon_wall_in_front", CornCannonGameTests::wallInFront, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_cob_after_reload", CornCannonGameTests::cobAfterReload, structure = id("gametest/lane")),
+        Test("corn_cannon_covered_target", CornCannonGameTests::coveredTarget, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_spares_allies", CornCannonGameTests::sparesAllies, structure = id("gametest/lane")),
+        Test("corn_cannon_cancelled_shot", CornCannonGameTests::cancelledShot, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_cob_growth", CornCannonGameTests::cobGrowth),
+        Test("corn_cannon_blast_behind_wall", CornCannonGameTests::blastBehindWall, structure = id("gametest/lane")),
+        Test("corn_cannon_scaled_blast", CornCannonGameTests::scaledBlast),
+        Test("corn_cannon_hits_target_block", CornCannonGameTests::hitsTargetBlock, maxTicks = 100, structure = id("gametest/lane")),
+        Test("corn_cannon_leaf_roof", CornCannonGameTests::leafRoof, maxTicks = 300, structure = id("gametest/lane")),
+        Test("corn_cannon_zombie_in_water", CornCannonGameTests::zombieInWater, maxTicks = 600, structure = id("gametest/lane")),
+        Test("corn_cannon_under_roof", CornCannonGameTests::cannonUnderRoof, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_scale_saved", CornCannonGameTests::scaleSaved),
+        Test("corn_cannon_scaffolding_roof", CornCannonGameTests::scaffoldingRoof, maxTicks = 300, structure = id("gametest/lane")),
+        Test("corn_cannon_misses_drop_target", CornCannonGameTests::missesDropTarget, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_cob_keeps_speed_in_water", CornCannonGameTests::cobKeepsSpeedInWater, structure = id("gametest/lane")),
+        Test("corn_cannon_blocked_blast_is_no_miss", CornCannonGameTests::blockedBlastIsNoMiss, structure = id("gametest/lane")),
+        Test("corn_cannon_overhang_misses", CornCannonGameTests::overhangMisses, structure = id("gametest/lane")),
+        Test("corn_cannon_ignored_targets_forgotten", CornCannonGameTests::ignoredTargetsForgotten, maxTicks = 300, structure = id("gametest/lane")),
+        Test("corn_cannon_scaffolding_over_cannon", CornCannonGameTests::scaffoldingOverCannon, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_blocked_path_not_fired", CornCannonGameTests::blockedPathNotFired, structure = id("gametest/lane")),
+        Test("corn_cannon_canopy_beside_target", CornCannonGameTests::canopyBesideTarget, maxTicks = 400, structure = id("gametest/lane")),
+        Test("corn_cannon_out_of_reach_not_fired", CornCannonGameTests::outOfReachNotFired, structure = id("gametest/lane")),
+        Test("corn_cannon_recipe", CornCannonGameTests::recipe),
+        Test("corn_cannon_not_from_poppy_rattle", CornCannonGameTests::notFromPoppyRattle),
         Test("port_saved_player_loads", PortGameTests::savedPlayerLoads),
         Test("machines_build", MachinesGameTests::build),
         Test("machines_allies", MachinesGameTests::allies, maxTicks = 400),

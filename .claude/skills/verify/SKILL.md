@@ -100,3 +100,29 @@ Run the items whose trigger the change touches.
   `hasRoomAt`; test it under a one-block ceiling (`PoppyRattleGameTests.underLowCeiling`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
+- **A projectile that leaves a low plant** (spawn offset forward of the plant's feet): with a full block right in front
+  of the plant, a projectile that starts inside that block is discarded on its first tick, with no hit or blast. Keep the
+  spawn point inside the plant's own block, and test a one-block wall touching the plant (`CornCannonGameTests.wallInFront`).
+- **A low plant that shoots over obstacles** (eyes under 1 block, a high arc): `NearestAttackableTargetGoal` needs line
+  of sight even with `mustSee = false`, so a one-block wall in front hides every target. Call
+  `targetConditions.ignoreLineOfSight()` when the plant is meant to fire blind.
+- **A projectile that picks whom it may hit by its shooter** (`PazProjectile.entityOwner`): that field exists only on the
+  server and only for a projectile made there; on the client and after a save and load it is null. Resolve the shooter
+  from the projectile's synced, saved `owner` reference, do nothing in `onHit*` on the client, and fail safe when the
+  shooter is gone. Test a save-and-load round trip (`CornCannonGameTests.cobAfterReload`).
+- **A high-arc shooter that targets without line of sight**: a target under a roof or in a cave is reachable only
+  through the roof, and the target goal never lets it go. Pick only targets under open sky by the projectile's own collision
+  rules (a ray straight up with a context coming from above: leaves and scaffolding block, water does not; a heightmap
+  alone gets water and non-solid colliders wrong, and scaffolding is not in `MOTION_BLOCKING`), check the shooter's own
+  sky too, and test a roof, leaves and deep water (`CornCannonGameTests.coveredTarget`, `leafRoof`, `zombieInWater`).
+- **Area damage of our own** (not `level.explode`): check exposure (a ray from the centre to the target) so walls shield,
+  scale the radius with the projectile's scale, and let the hit block react (`state.onProjectileHit`) as `super` would.
+- **Who counts as an ally of the players** in target filters: hypnotized mobs (`isHypnotized`) and a player's machines
+  (`PlayerMachines.isPlayerMachine`) are `Zombie`/`Enemy` subclasses too.
+- **A GameTest that spawns a long-range shooter**: tests run one after another in the same world, and a shooter left
+  alive keeps firing at the next tests' mobs (a Corn Cannon killed the Squash test's zombie). Every such test discards
+  what it spawned at the end, the shooter included.
+- **A shooter that checks its shot before firing** (a simulated path): judge it by the same rule as the real hit, at the
+  real burst point (first block the projectile meets, with its own collision at that height), with the target moved by
+  its lead; a rule of its own refuses shots that would hurt and passes ones that fall short. Test a target out of reach
+  and a canopy by the target (`CornCannonGameTests.outOfReachNotFired`, `canopyBesideTarget`).
