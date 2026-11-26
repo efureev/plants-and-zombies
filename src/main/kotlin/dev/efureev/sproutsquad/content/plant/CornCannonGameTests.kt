@@ -12,6 +12,9 @@ import joshxviii.plantz.item.SeedPacketItem
 import joshxviii.plantz.item.component.SunCost
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.gametest.framework.GameTestInfo
+import net.minecraft.gametest.framework.GameTestListener
+import net.minecraft.gametest.framework.GameTestRunner
 import net.minecraft.util.Mth
 import net.minecraft.util.ProblemReporter
 import net.minecraft.world.effect.MobEffectInstance
@@ -33,6 +36,7 @@ import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.UUID
 
 /**
  * GameTests of the Corn Cannon (docs/en/characters/corn_cannon.md). Registered in SquadGameTests.
@@ -55,7 +59,8 @@ object CornCannonGameTests {
         helper.assertValueEqual(CornCob.splashDamage(1.25), 6f, "damage half way out")
         helper.assertValueEqual(CornCob.splashDamage(2.5), 4f, "damage at the edge")
         helper.assertValueEqual(CornCob.splashDamage(2.6), 0f, "damage past the edge")
-        helper.assertTrue(CornCannon.ACTION_DELAY + CornCannon.SETTLE_TICKS >= CornCannon.SHOT_ANIMATION_TICKS,
+        // the launch is ACTION_DELAY - 1 ticks in (ActionGoal counts down on its first tick)
+        helper.assertTrue(CornCannon.ACTION_DELAY - 1 + CornCannon.SETTLE_TICKS >= CornCannon.SHOT_ANIMATION_TICKS,
             "a called-off shot settles before its animation ends")
         helper.succeed()
     }
@@ -205,6 +210,7 @@ object CornCannonGameTests {
      * villager and the cannon itself. A cob with no cannon at all hits only zombies.
      */
     fun cobAfterReload(helper: GameTestHelper) {
+        onFinish(helper) { clearMobs(helper) }
         val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
         val villager = helper.spawnWithNoFreeWill(EntityTypes.VILLAGER, BlockPos(3, 0, 1))
         val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(5, 0, 1))
@@ -258,6 +264,7 @@ object CornCannonGameTests {
      * was reloaded or has no cannon.
      */
     fun sparesAllies(helper: GameTestHelper) {
+        onFinish(helper) { clearMobs(helper) }
         val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
         val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(5, 0, 1))
         val hypnotized = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(7, 0, 1))
@@ -471,29 +478,135 @@ object CornCannonGameTests {
     }
 
     /**
+     * Blasts right after a hit from another plant still hurt (plant damage bypasses the hurt cooldown), and do not
+     * count as misses: after the frames the zombie is a target as before, not one left alone.
+     */
+    fun blastsInInvulnerabilityAreNoMisses(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        lateinit var zombie: LivingEntity
+        helper.startSequence()
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+                zombie.getAttribute(Attributes.KNOCKBACK_RESISTANCE)!!.baseValue = 1.0 // stays in the open lane
+                cannon.target = zombie
+                zombie.hurtServer(helper.level, helper.level.damageSources().generic(), 4f)
+                repeat(CornCannon.MISSES_TO_DROP) {
+                    val before = zombie.health
+                    val cob = CornCob(helper.level, cannon).also { it.firedAt = zombie.uuid }
+                    cob.explodeAt(helper.absoluteVec(Vec3(14.1, 0.5, 1.5))) // at the blast's edge: about 4 damage
+                    cob.discard()
+                    helper.assertTrue(zombie.health < before, "a blast in the invulnerability frames did not hurt")
+                }
+            }
+            .thenIdle(25)
+            .thenExecute {
+                helper.assertTrue(zombie.isAlive, "the zombie died")
+                // vanilla drops a target while it is invulnerable and the search finds it again; it must not be left alone
+                helper.assertValueEqual(cannon.ignoredTargets, 0, "targets left alone after blasts in the frames")
+                helper.assertTrue(cannon.canShootAt(zombie), "cannot shoot at the zombie after its frames")
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * Only blasts that look like an overhang count as misses: three bursting on a block over the zombie's head
+     * drop it; three on open ground 4 blocks away (a moving target dodged) do not; nor do blasts of a cob fired
+     * at another target.
+     */
+    fun overhangMisses(helper: GameTestHelper) {
+        prepare(helper)
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        val zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+        cannon.target = zombie
+        fun blast(at: Vec3, firedAt: UUID = zombie.uuid) {
+            val cob = CornCob(helper.level, cannon).also { it.firedAt = firedAt }
+            cob.explodeAt(helper.absoluteVec(at))
+            cob.discard()
+        }
+        repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(15.5, 0.1, 1.5)) }
+        helper.assertTrue(cannon.target === zombie, "dropped the target over blasts on open ground away from it")
+        helper.setBlock(BlockPos(11, 2, 1), Blocks.STONE)
+        repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(11.5, 3.05, 1.5), firedAt = UUID.randomUUID()) }
+        helper.assertTrue(cannon.target === zombie, "dropped the target over blasts of cobs fired at something else")
+        repeat(CornCannon.MISSES_TO_DROP) { blast(Vec3(11.5, 3.05, 1.5)) }
+        helper.assertTrue(cannon.target == null, "kept the target over three blasts on the overhang above it")
+        clearMobs(helper)
+        helper.succeed()
+    }
+
+    /** Targets left alone after misses are forgotten once their pause is over, not kept for the cannon's lifetime. */
+    fun ignoredTargetsForgotten(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        helper.startSequence()
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                val first = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+                repeat(CornCannon.MISSES_TO_DROP) { cannon.blastMissed(first) }
+                first.discard()
+                helper.assertValueEqual(cannon.ignoredTargets, 1, "targets left alone")
+            }
+            .thenIdle(CornCannon.MISS_IGNORE_TICKS + 1)
+            .thenExecute {
+                val second = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(13, 0, 1))
+                repeat(CornCannon.MISSES_TO_DROP) { cannon.blastMissed(second) }
+                helper.assertValueEqual(cannon.ignoredTargets, 1, "targets left alone after the first one's pause")
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /** Scaffolding over the cannon is no roof for it: a rising cob passes through scaffolding from below. */
+    fun scaffoldingOverCannon(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                for (y in 0..2) helper.setBlock(BlockPos(2, y, 0), Blocks.SCAFFOLDING)
+                helper.setBlock(BlockPos(2, 2, 1), Blocks.SCAFFOLDING)
+                helper.setBlock(BlockPos(1, 2, 1), Blocks.SCAFFOLDING)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                wall(helper, 12)
+                helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "a cannon under scaffolding did not fire") }
+            .thenExecute {
+                for (y in 0..2) helper.setBlock(BlockPos(2, y, 0), Blocks.AIR)
+                helper.setBlock(BlockPos(2, 2, 1), Blocks.AIR)
+                helper.setBlock(BlockPos(1, 2, 1), Blocks.AIR)
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /**
      * Water is no roof: the cob flies through it without slowing down. A zombie held at the bottom of a pool
      * eight blocks deep is a target, and gets hurt.
      */
     fun zombieInWater(helper: GameTestHelper) {
         lateinit var cannon: CornCannon
         lateinit var zombie: LivingEntity
-        val pool = (-9..-1).flatMap { y -> listOf(BlockPos(10, y, 1), BlockPos(12, y, 1), BlockPos(11, y, 0), BlockPos(11, y, 2), BlockPos(11, y, 1)) }
+        // a pool 7 long (x 6..12) and 8 deep, with stone walls, partly below the structure
+        val pool = (5..13).flatMap { x -> (-9..-1).flatMap { y -> (0..2).map { z -> BlockPos(x, y, z) } } }
         val before = pool.associateWith { helper.getBlockState(it) }
+        onFinish(helper) { before.forEach { (pos, state) -> helper.setBlock(pos, state) } }
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
             .thenExecute {
                 prepare(helper)
                 pool.forEach { helper.setBlock(it, Blocks.STONE) }
-                for (y in -8..-1) helper.setBlock(BlockPos(11, y, 1), Blocks.WATER)
+                for (x in 6..12) for (y in -8..-1) helper.setBlock(BlockPos(x, y, 1), Blocks.WATER)
                 cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
-                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, -8, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(12, -8, 1))
                 zombie.isNoGravity = true
                 helper.assertTrue(cannon.canShootAt(zombie), "a zombie at the bottom of a pool is not a target")
             }
-            .thenWaitUntil { helper.assertTrue(zombie.health < zombie.maxHealth, "the zombie in the water was not hurt") }
-            .thenExecute {
-                clearMobs(helper)
-                before.forEach { (pos, state) -> helper.setBlock(pos, state) } // the pool reaches below the structure
+            .thenWaitUntil {
+                helper.assertTrue(zombie.lastDamageSource?.directEntity is CornCob, "the zombie in the water was not hurt by a cob")
             }
             .thenSucceed()
     }
@@ -505,6 +618,9 @@ object CornCannonGameTests {
     fun cobKeepsSpeedInWater(helper: GameTestHelper) {
         lateinit var cob: CornCob
         lateinit var start: Vec3
+        val trough = (1..15).flatMap { x -> (0..3).flatMap { y -> (0..2).map { z -> BlockPos(x, y, z) } } }
+        val before = trough.associateWith { helper.getBlockState(it) }
+        onFinish(helper) { before.forEach { (pos, state) -> helper.setBlock(pos, state) } }
         helper.startSequence()
             .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
             .thenExecute {
@@ -524,8 +640,6 @@ object CornCannonGameTests {
                 val travelled = cob.x - start.x
                 helper.assertTrue(travelled >= 2.5, "the cob travelled $travelled blocks in 6 ticks of water, expected 3")
                 cob.discard()
-                clearMobs(helper)
-                for (x in 1..15) for (y in 0..3) for (z in 0..2) helper.setBlock(BlockPos(x, y, z), Blocks.AIR)
             }
             .thenSucceed()
     }
@@ -613,11 +727,25 @@ object CornCannonGameTests {
     }
 
     /**
+     * Runs [cleanup] when the test ends, passed or failed: a test that fails half way must not leave a live
+     * cannon (it would shoot at the next tests' zombies) or blocks it changed outside the structure.
+     */
+    private fun onFinish(helper: GameTestHelper, cleanup: () -> Unit) {
+        helper.testInfo.addListener(object : GameTestListener {
+            override fun testStructureLoaded(testInfo: GameTestInfo) {}
+            override fun testPassed(testInfo: GameTestInfo, runner: GameTestRunner) = cleanup()
+            override fun testFailed(testInfo: GameTestInfo, runner: GameTestRunner) = cleanup()
+            override fun testAddedForRerun(original: GameTestInfo, copy: GameTestInfo, runner: GameTestRunner) {}
+        })
+    }
+
+    /**
      * Grass floor and open sky: the cob flies in a high arc, and the test structure is closed on top (a cob
      * hit that ceiling 6 blocks up), so the air goes up to [SKY].
      */
     private fun prepare(helper: GameTestHelper) {
         clearMobs(helper)
+        onFinish(helper) { clearMobs(helper) }
         for (x in 0 until STRIP) {
             helper.setBlock(BlockPos(1 + x, -1, 1), Blocks.GRASS_BLOCK)
             for (y in 0..SKY) helper.setBlock(BlockPos(1 + x, y, 1), Blocks.AIR)
