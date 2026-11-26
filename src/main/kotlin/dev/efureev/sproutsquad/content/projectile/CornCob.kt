@@ -50,6 +50,9 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         /** How far aside from the target, in blocks, a blast above its head still counts as over it (an overhang). */
         private const val OVERHEAD = 1.0
 
+        /** How long [pathIsClear] follows a flight at most: well over the 3 s or so of a 40-block arc. */
+        private const val MAX_FLIGHT_TICKS = 200
+
         /** Popcorn puffs scattered by the blast. */
         private const val POPCORN = 24
 
@@ -101,6 +104,33 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         val cannon = cannon() ?: return CornCannon.isStrayCobTarget(entity)
         if (entityOwner == null && (cannon.hasSameRootOwner(entity) || PlayerMachines.blocksHit(cannon, entity))) return false
         return entity !== cannon && cannon.isValidTarget(entity)
+    }
+
+    /**
+     * Whether its flight, as launched, gets near where it is going: the path is followed tick by tick (gravity, no
+     * drag, the cob's own block collision) to where it comes down to the middle of [target]'s height, the aim point
+     * with the lead already in its speed. A block hit farther than the blast radius from that point means the path
+     * is blocked (a wall next to the cannon, leaves over its front).
+     */
+    fun pathIsClear(target: LivingEntity): Boolean {
+        val aimY = target.y + target.bbHeight / 2.0
+        var pos = position()
+        var velocity = deltaMovement
+        var blockedAt: Vec3? = null
+        repeat(MAX_FLIGHT_TICKS) {
+            val next = pos.add(velocity)
+            if (blockedAt == null) {
+                val hit = level().clip(ClipContext(pos, next, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this))
+                if (hit.type != HitResult.Type.MISS) blockedAt = hit.location
+            }
+            if (velocity.y < 0 && next.y <= aimY) {
+                val stop = blockedAt ?: return true
+                return stop.distanceTo(next) <= blastRadius()
+            }
+            pos = next
+            velocity = velocity.add(0.0, -gravity, 0.0)
+        }
+        return blockedAt == null
     }
 
     /** [canHitEntity] for callers outside the class (tests). */
@@ -160,14 +190,14 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
         val target = cannon?.target ?: return
         if (firedAt == null || firedAt != target.uuid) return
         if (target in reached) return cannon.blastHit(target)
-        if (reached.isNotEmpty()) return
+        if (reached.isNotEmpty()) return cannon.blastNeutral(target)
         val box = target.boundingBox
         val dx = maxOf(box.minX - centre.x, 0.0, centre.x - box.maxX)
         val dz = maxOf(box.minZ - centre.z, 0.0, centre.z - box.maxZ)
         val aside = sqrt(dx * dx + dz * dz)
         val overHead = centre.y > box.maxY && aside <= OVERHEAD
         val behindCover = aside <= radius && !exposed(centre, target)
-        if (overHead || behindCover) cannon.blastMissed(target)
+        if (overHead || behindCover) cannon.blastMissed(target) else cannon.blastNeutral(target)
     }
 
     /** Whether nothing solid stands between the blast and the target's middle or its eyes. */

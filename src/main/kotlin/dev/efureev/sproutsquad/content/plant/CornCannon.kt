@@ -141,10 +141,20 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         }
         if (++misses < MISSES_TO_DROP) return
         misses = 0
+        leaveAlone(target)
+    }
+
+    /** Drops [target] and does not aim at it for [MISS_IGNORE_TICKS]: it keeps missing it, or its cob cannot get there. */
+    fun leaveAlone(target: LivingEntity) {
         val now = level().gameTime
         ignoredUntil.values.removeIf { it <= now } // forget the ones whose pause is over (dead or gone ones too)
         ignoredUntil[target.uuid] = now + MISS_IGNORE_TICKS
         if (this.target === target) this.target = null
+    }
+
+    /** A blast that neither reached [target] nor looked like an overhang (a dodge): the misses are no longer in a row. */
+    fun blastNeutral(target: LivingEntity) {
+        if (missedTarget == target.uuid) misses = 0
     }
 
     /** A blast that hurt [target]: the count of misses starts again. */
@@ -235,10 +245,15 @@ class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTa
 
 /**
  * Launches one [CornCob] in a high arc; drops a target it can no longer shoot at ([CornCannon.canShootAt]).
- * A shot called off during the aim uses up no cob: the reload ActionGoal sets anyway becomes a short settle
- * while the nose comes down, with the cob still full. [fired] is shared with the end-of-action callback.
+ * A shot called off during the aim (or one whose path is blocked) uses up no cob: the reload ActionGoal sets anyway
+ * becomes a short settle while the nose comes down, with the cob still full. [fired] and [launched] are shared with
+ * the callbacks given to the parent.
  */
-class CornCannonAttackGoal private constructor(private val cannon: CornCannon, private val fired: BooleanArray) : ProjectileAttackGoal(
+class CornCannonAttackGoal private constructor(
+    private val cannon: CornCannon,
+    private val fired: BooleanArray,
+    private val launched: Array<CornCob?>,
+) : ProjectileAttackGoal(
     usingEntity = cannon,
     cooldownTime = CornCannon.COOLDOWN,
     actionDelay = CornCannon.ACTION_DELAY,
@@ -250,12 +265,12 @@ class CornCannonAttackGoal private constructor(private val cannon: CornCannon, p
             cannon.cooldown = CornCannon.SETTLE_TICKS
         }
     },
-    projectileFactory = { CornCob(cannon.level(), cannon).also { it.firedAt = cannon.target?.uuid } },
+    projectileFactory = { CornCob(cannon.level(), cannon).also { it.firedAt = cannon.target?.uuid; launched[0] = it } },
     velocity = 1.1,
     useHighArc = true,
     soundEvent = null,
 ) {
-    constructor(cannon: CornCannon) : this(cannon, BooleanArray(1))
+    constructor(cannon: CornCannon) : this(cannon, BooleanArray(1), arrayOfNulls(1))
 
     private fun dropUnseenTarget(): Boolean {
         val target = cannon.target ?: return true
@@ -266,9 +281,22 @@ class CornCannonAttackGoal private constructor(private val cannon: CornCannon, p
 
     override fun canDoAction(): Boolean = !dropUnseenTarget() && super.canDoAction()
 
+    /**
+     * Launches the cob, then follows its path: one that a block stops short of where it is going (a wall next to the
+     * cannon, leaves over its front) is taken back before it moves, and the cannon leaves that target alone for a
+     * while instead of bursting cobs at its own feet every 3.5 s.
+     */
     override fun doAction(): Boolean {
         if (dropUnseenTarget()) return false
+        val target = cannon.target ?: return false
+        launched[0] = null
         fired[0] = super.doAction()
+        val cob = launched[0]
+        if (fired[0] && cob != null && !cob.pathIsClear(target)) {
+            cob.discard()
+            cannon.leaveAlone(target)
+            fired[0] = false
+        }
         if (fired[0]) cannon.playSound(PazSounds.PROJECTILE_SHOOT, 1.0f, 0.55f)
         return fired[0]
     }
