@@ -636,6 +636,68 @@ object CornCannonGameTests {
     }
 
     /**
+     * A tree canopy by the target, judged as the real blast: one in the cob's way down (it would burst on top of the
+     * leaves, which then shield the zombie) is not fired at; one the arc clears does not stop the shot, which hurts.
+     */
+    fun canopyBesideTarget(helper: GameTestHelper) {
+        lateinit var zombie: LivingEntity
+        val leaves = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true)
+        onFinish(helper) { for (x in 6..10) helper.setBlock(BlockPos(x, 3, 1), Blocks.AIR) }
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                cannon.yRot = -90f
+                cannon.yHeadRot = -90f
+                wall(helper, 12)
+                for (x in 8..10) helper.setBlock(BlockPos(x, 3, 1), leaves) // right in the way down
+                val shielded = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+                cannon.target = shielded
+                helper.assertFalse(CornCannonAttackGoal(cannon).doAction(), "fired into the canopy shielding the zombie")
+                shielded.discard()
+                cannon.discard()
+                for (x in 8..10) helper.setBlock(BlockPos(x, 3, 1), Blocks.AIR)
+                for (x in 6..8) helper.setBlock(BlockPos(x, 3, 1), leaves) // farther back: the arc passes over it
+                helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenWaitUntil {
+                helper.assertTrue(zombie.lastDamageSource?.directEntity is CornCob, "the zombie past the canopy was not hurt by a cob")
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * A target out of reach (high on a pillar, the arc falls short and bursts on its side) is not shot at: the cob
+     * would burst far from it every 3.5 s. Three such shots in a row make the cannon rest a while.
+     */
+    fun outOfReachNotFired(helper: GameTestHelper) {
+        prepare(helper)
+        val pillar = (0..5).map { BlockPos(21, it, 1) }
+        pillar.forEach { helper.setBlock(it, Blocks.STONE) }
+        onFinish(helper) { pillar.forEach { helper.setBlock(it, Blocks.AIR) } }
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+        cannon.yRot = -90f
+        cannon.yHeadRot = -90f
+        val goal = CornCannonAttackGoal(cannon)
+        val high = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(21, 6, 1))
+        cannon.target = high
+        helper.assertFalse(goal.doAction(), "fired at a zombie out of reach")
+        helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cob was launched at a zombie out of reach")
+        // two more blocked shots in a row (fresh targets, each left alone in turn): the cannon rests
+        repeat(2) {
+            val other = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(21, 6, 1))
+            cannon.target = other
+            helper.assertFalse(goal.doAction(), "fired at another zombie out of reach")
+        }
+        val easy = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+        helper.assertFalse(cannon.canShootAt(easy), "does not rest after three blocked shots in a row")
+        clearMobs(helper)
+        helper.succeed()
+    }
+
+    /**
      * Water is no roof: the cob flies through it without slowing down. A zombie held at the bottom of a pool
      * eight blocks deep is a target, and gets hurt.
      */
