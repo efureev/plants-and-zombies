@@ -2,7 +2,6 @@ package dev.efureev.sproutsquad.content.plant
 
 import dev.efureev.sproutsquad.content.projectile.CornCob
 import dev.efureev.sproutsquad.machines.PlayerMachines
-import joshxviii.plantz.PazConfig
 import joshxviii.plantz.PazSounds
 import joshxviii.plantz.isHypnotized
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
@@ -14,9 +13,16 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.monster.zombie.Zombie
-import net.minecraft.util.Mth
+import net.minecraft.network.syncher.EntityDataAccessor
+import net.minecraft.network.syncher.EntityDataSerializers
+import net.minecraft.network.syncher.SynchedEntityData
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.Vec2
 import kotlin.math.roundToInt
 
@@ -33,6 +39,8 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         /** What a cob whose cannon is gone may hit: a zombie that is nobody's ally. */
         fun isStrayCobTarget(entity: Entity): Boolean = entity is Zombie && !isAlly(entity)
 
+        private val RELOAD_TOTAL: EntityDataAccessor<Int> = SynchedEntityData.defineId(CornCannon::class.java, EntityDataSerializers.INT)
+
         const val MAX_HEALTH = 90.0
         const val SUN_COST = 14
         const val RANGE = 40.0
@@ -48,6 +56,9 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
         /** How long the eyes squint from the start of a shot: the aim and the launch, until the kick back settles. */
         const val AIM_MILLIS = 700L
+
+        /** A called-off shot: the nose comes down for this long before the cannon may aim again. */
+        const val SETTLE_TICKS = 8
 
         const val ENTITY_LIMIT = 10
         const val EYE_HEIGHT = 0.6f
@@ -72,23 +83,57 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
     fun inDeadZone(target: Entity): Boolean = distanceToSqr(target) < MIN_RANGE * MIN_RANGE
 
     /**
-     * Nothing solid over the target's head (leaves do not count): the cob comes down from the sky, so under a
-     * roof or in a cave it would only hit the roof, and the cannon would fire into it forever.
+     * Nothing the cob would hit over [entity]'s head, by the cob's own rules: blocks with collision count (leaves
+     * too), water does not (the cob flies through it). The cob goes up and comes down from the sky, so a cannon
+     * under a roof or a target in a cave or under a tree would only get the roof hit, forever. A ray straight up
+     * from the eyes to just above the column's top (the heightmap that counts leaves and fluids).
      */
-    fun underOpenSky(target: Entity): Boolean =
-        level().getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, target.blockX, target.blockZ) <= target.blockY + 1
+    fun underOpenSky(entity: Entity): Boolean {
+        val level = level()
+        val from = entity.eyePosition
+        val top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, entity.blockX, entity.blockZ) + 1.0
+        if (from.y >= top) return true
+        val up = ClipContext(from, Vec3(from.x, top, from.z), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, entity)
+        return level.clip(up).type == HitResult.Type.MISS
+    }
 
-    /** A target it can shoot at right now: valid, out of the dead zone and under open sky. */
-    fun canShootAt(target: LivingEntity): Boolean = isValidTarget(target) && !inDeadZone(target) && underOpenSky(target)
+    /** A target it can shoot at right now: valid, out of the dead zone, and open sky over both of them. */
+    fun canShootAt(target: LivingEntity): Boolean =
+        isValidTarget(target) && !inDeadZone(target) && underOpenSky(target) && underOpenSky(this)
+
+    /** The cooldown the last shot set (shorter when powered up), synced for the cob's growth; 0 after a called-off shot. */
+    var reloadTotal: Int
+        get() = entityData.get(RELOAD_TOTAL)
+        private set(value) = entityData.set(RELOAD_TOTAL, value)
+
+    /** Called when a shot's action ends: [total] is the cooldown it set, 0 if no cob left. */
+    fun reloadStarted(total: Int) {
+        reloadTotal = total
+    }
 
     /**
      * How grown the cob is, 0 right after a shot to 1 for a full one: by the cooldown left out of the cooldown
-     * that shot set (shorter when powered up, as ActionGoal sets it). -1 while aiming and 0 when idle: full.
+     * that shot set, whatever a power-up does meanwhile. -1 while aiming, 0 when idle, or a called-off shot: full.
      */
     fun cobGrowth(): Float {
-        if (cooldown <= 0) return 1f
-        val total = if (poweredUp) Mth.floor(COOLDOWN * PazConfig.POWERED_UP_COOLDOWN_REDUCTION).coerceAtLeast(ACTION_DELAY) else COOLDOWN
+        val total = reloadTotal
+        if (cooldown <= 0 || total <= 0) return 1f
         return (1f - cooldown / total.toFloat()).coerceIn(0f, 1f)
+    }
+
+    override fun defineSynchedData(entityData: SynchedEntityData.Builder) {
+        super.defineSynchedData(entityData)
+        entityData.define(RELOAD_TOTAL, COOLDOWN) // a planted cannon starts cooling down: its first cob grows
+    }
+
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putInt("sproutsquad:ReloadTotal", reloadTotal)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        reloadTotal = input.getIntOr("sproutsquad:ReloadTotal", COOLDOWN)
     }
 
     /** The model's pose: the cob's growth in thousandths (CornCannonModel). */
@@ -131,15 +176,21 @@ class CornCannonTargetGoal(cannon: CornCannon) : NearestAttackableTargetGoal<Liv
 
 /**
  * Launches one [CornCob] in a high arc; drops a target it can no longer shoot at ([CornCannon.canShootAt]).
- * A shot called off during the aim uses up no cob: the cooldown ActionGoal sets anyway is taken back
- * (the model shows the cob by the cooldown). [fired] is shared with the end-of-action callback.
+ * A shot called off during the aim uses up no cob: the reload ActionGoal sets anyway becomes a short settle
+ * while the nose comes down, with the cob still full. [fired] is shared with the end-of-action callback.
  */
 class CornCannonAttackGoal private constructor(private val cannon: CornCannon, private val fired: BooleanArray) : ProjectileAttackGoal(
     usingEntity = cannon,
     cooldownTime = CornCannon.COOLDOWN,
     actionDelay = CornCannon.ACTION_DELAY,
     actionStartEffect = { fired[0] = false },
-    actionEndEffect = { if (!fired[0]) cannon.cooldown = 0 },
+    actionEndEffect = {
+        if (fired[0]) cannon.reloadStarted(cannon.cooldown)
+        else {
+            cannon.reloadStarted(0)
+            cannon.cooldown = CornCannon.SETTLE_TICKS
+        }
+    },
     projectileFactory = { CornCob(cannon.level(), cannon) },
     velocity = 1.1,
     useHighArc = true,

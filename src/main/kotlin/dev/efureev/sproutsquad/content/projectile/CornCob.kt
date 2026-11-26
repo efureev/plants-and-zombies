@@ -17,6 +17,8 @@ import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.storage.ValueInput
+import net.minecraft.world.level.storage.ValueOutput
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.EntityHitResult
@@ -53,6 +55,17 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
     }
 
     override fun getDefaultGravity(): Double = 0.03
+
+    /** The size it got from its cannon: the original's projectiles do not keep it, and the blast grows with it. */
+    override fun addAdditionalSaveData(output: ValueOutput) {
+        super.addAdditionalSaveData(output)
+        output.putFloat("sproutsquad:Scale", scale)
+    }
+
+    override fun readAdditionalSaveData(input: ValueInput) {
+        super.readAdditionalSaveData(input)
+        scale = input.getFloatOr("sproutsquad:Scale", 1f)
+    }
 
     /** [RADIUS] grown with the cannon's scale (the cob inherits it), as the original's explosions: by its square root. */
     fun blastRadius(): Double = RADIUS * sqrt(scale.toDouble())
