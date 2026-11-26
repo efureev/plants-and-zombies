@@ -122,3 +122,7 @@ Run the items whose trigger the change touches.
 - **A GameTest that spawns a long-range shooter**: tests run one after another in the same world, and a shooter left
   alive keeps firing at the next tests' mobs (a Corn Cannon killed the Squash test's zombie). Every such test discards
   what it spawned at the end, the shooter included.
+- **A shooter that checks its shot before firing** (a simulated path): judge it by the same rule as the real hit, at the
+  real burst point (first block the projectile meets, with its own collision at that height), with the target moved by
+  its lead; a rule of its own refuses shots that would hurt and passes ones that fall short. Test a target out of reach
+  and a canopy by the target (`CornCannonGameTests.outOfReachNotFired`, `canopyBesideTarget`).
