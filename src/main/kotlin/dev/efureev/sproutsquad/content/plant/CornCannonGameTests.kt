@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.LeavesBlock
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
@@ -280,8 +281,8 @@ object CornCannonGameTests {
     }
 
     /**
-     * A shot called off during the aim (the zombie came within 5 blocks) uses up no cob: no cob leaves and
-     * the cannon does not reload.
+     * A shot called off during the aim (the zombie came within 5 blocks) uses up no cob: no cob leaves, the cob
+     * stays full and the cannon only waits a moment while its nose comes down.
      */
     fun cancelledShot(helper: GameTestHelper) {
         lateinit var cannon: CornCannon
@@ -301,14 +302,18 @@ object CornCannonGameTests {
             }
             .thenWaitUntil { helper.assertTrue(cannon.cooldown != -1, "still aiming") }
             .thenExecute {
-                helper.assertValueEqual(cannon.cooldown, 0, "reload after a called-off shot")
+                helper.assertTrue(cannon.cooldown in 1..CornCannon.SETTLE_TICKS, "a wait of ${cannon.cooldown} ticks after a called-off shot, expected a short settle")
+                helper.assertValueEqual(cannon.cobGrowth(), 1f, "cob after a called-off shot")
                 helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cob left on a called-off shot")
                 clearMobs(helper)
             }
             .thenSucceed()
     }
 
-    /** The cob grows back over the cooldown the shot really started, also a powered-up (shorter) one. */
+    /**
+     * The cob grows back over the reload the shot really started (a powered-up one is shorter), even if the power-up
+     * comes or goes during it; after a called-off shot the cob is full.
+     */
     fun cobGrowth(helper: GameTestHelper) {
         val cannon = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.COMMAND)
             ?: return helper.fail("the Corn Cannon does not spawn")
@@ -316,13 +321,20 @@ object CornCannonGameTests {
         helper.assertValueEqual(cannon.cobGrowth(), 1f, "idle")
         cannon.cooldown = -1
         helper.assertValueEqual(cannon.cobGrowth(), 1f, "aiming")
+        cannon.reloadStarted(CornCannon.COOLDOWN)
         cannon.cooldown = CornCannon.COOLDOWN
         helper.assertValueEqual(cannon.cobGrowth(), 0f, "right after a shot")
         cannon.cooldown = CornCannon.COOLDOWN / 2
         helper.assertValueEqual(cannon.cobGrowth(), 0.5f, "half way")
         cannon.poweredUp = true
-        cannon.cooldown = Mth.floor(CornCannon.COOLDOWN * PazConfig.POWERED_UP_COOLDOWN_REDUCTION)
+        helper.assertValueEqual(cannon.cobGrowth(), 0.5f, "half way, powered up during the reload")
+        val powered = Mth.floor(CornCannon.COOLDOWN * PazConfig.POWERED_UP_COOLDOWN_REDUCTION)
+        cannon.reloadStarted(powered)
+        cannon.cooldown = powered
         helper.assertValueEqual(cannon.cobGrowth(), 0f, "right after a powered-up shot")
+        cannon.cooldown = 8
+        cannon.reloadStarted(0)
+        helper.assertValueEqual(cannon.cobGrowth(), 1f, "settling after a called-off shot")
         helper.succeed()
     }
 
@@ -377,6 +389,96 @@ object CornCannonGameTests {
             }
             .thenExecute { clearMobs(helper) }
             .thenSucceed()
+    }
+
+    /** Leaves over a zombie are a roof too: the cob would burst on the canopy. Not a target. */
+    fun leafRoof(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                helper.setBlock(BlockPos(11, 3, 1), Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true))
+                helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenExecuteFor(100) {
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "fired at a zombie under leaves")
+            }
+            .thenExecute {
+                helper.assertTrue(cannon.target == null, "targets a zombie under leaves")
+                clearMobs(helper)
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * Water is no roof: the cob flies through it. A zombie held at the bottom of a pool three blocks deep is a
+     * target, and gets shot.
+     */
+    fun zombieInWater(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        lateinit var zombie: LivingEntity
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                for (y in -4..-1) {
+                    helper.setBlock(BlockPos(10, y, 1), Blocks.STONE)
+                    helper.setBlock(BlockPos(12, y, 1), Blocks.STONE)
+                    helper.setBlock(BlockPos(11, y, 0), Blocks.STONE)
+                    helper.setBlock(BlockPos(11, y, 2), Blocks.STONE)
+                }
+                helper.setBlock(BlockPos(11, -4, 1), Blocks.STONE)
+                for (y in -3..-1) helper.setBlock(BlockPos(11, y, 1), Blocks.WATER)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                zombie = helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, -3, 1))
+                zombie.isNoGravity = true
+                helper.assertTrue(cannon.canShootAt(zombie), "a zombie at the bottom of a pool is not a target")
+            }
+            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "no shot at a zombie in water") }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
+    }
+
+    /** A cannon under a roof does not shoot (every cob would burst on its own ceiling); without the roof it does. */
+    fun cannonUnderRoof(helper: GameTestHelper) {
+        lateinit var cannon: CornCannon
+        helper.startSequence()
+            .thenWaitUntil { helper.assertTrue(ticking(helper), "strip is not ticking yet") }
+            .thenExecute {
+                prepare(helper)
+                cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(1, 0, 1))
+                helper.setBlock(BlockPos(1, 2, 1), Blocks.STONE)
+                wall(helper, 12)
+                helper.spawnWithNoFreeWill(PazEntities.BROWN_COAT, BlockPos(11, 0, 1))
+            }
+            .thenExecuteFor(100) {
+                helper.assertTrue(cobsOf(helper, cannon).isEmpty(), "a cannon under a roof fired")
+            }
+            .thenExecute {
+                helper.assertTrue(cannon.target == null, "a cannon under a roof has a target")
+                helper.setBlock(BlockPos(1, 2, 1), Blocks.AIR)
+            }
+            .thenWaitUntil { helper.assertTrue(cobsOf(helper, cannon).isNotEmpty(), "no shot once the roof is gone") }
+            .thenExecute { clearMobs(helper) }
+            .thenSucceed()
+    }
+
+    /** A cob keeps its size through a save and load, and with it its blast radius. */
+    fun scaleSaved(helper: GameTestHelper) {
+        val cob = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.COMMAND)
+            ?: return helper.fail("no corn cob")
+        cob.scale = 4f
+        val saved = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.level.registryAccess())
+        cob.saveWithoutId(saved)
+        val loaded = SquadEntities.CORN_COB.get().create(helper.level, EntitySpawnReason.LOAD)
+            ?: return helper.fail("no corn cob")
+        loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.level.registryAccess(), saved.buildResult()))
+        helper.assertValueEqual(loaded.scale, 4f, "scale after a reload")
+        helper.assertValueEqual(loaded.blastRadius(), 2 * CornCob.RADIUS, "radius after a reload")
+        listOf(cob, loaded).forEach { it.discard() }
+        helper.succeed()
     }
 
     /** A Kernel Pult seed packet in the middle of 8 sun makes a Corn Cannon packet; a Peashooter packet does not. */
