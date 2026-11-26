@@ -110,3 +110,10 @@ Run the items whose trigger the change touches.
   server and only for a projectile made there; on the client and after a save and load it is null. Resolve the shooter
   from the projectile's synced, saved `owner` reference, do nothing in `onHit*` on the client, and fail safe when the
   shooter is gone. Test a save-and-load round trip (`CornCannonGameTests.cobAfterReload`).
+- **A high-arc shooter that targets without line of sight**: a target under a roof or in a cave is reachable only
+  through the roof, and the target goal never lets it go. Pick only targets under open sky (a heightmap check) and
+  test one under a roof (`CornCannonGameTests.coveredTarget`).
+- **Area damage of our own** (not `level.explode`): check exposure (a ray from the centre to the target) so walls shield,
+  scale the radius with the projectile's scale, and let the hit block react (`state.onProjectileHit`) as `super` would.
+- **Who counts as an ally of the players** in target filters: hypnotized mobs (`isHypnotized`) and a player's machines
+  (`PlayerMachines.isPlayerMachine`) are `Zombie`/`Enemy` subclasses too.
