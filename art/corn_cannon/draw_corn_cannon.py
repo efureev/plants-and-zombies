@@ -13,7 +13,7 @@ Writes:
     the boxes between the `generated` markers of CornCannonModel.kt and CornCobModel.kt
 
 The design: an ear of corn whose husk has opened at the front into a cannon's mouth, the cob looking out of
-it; an eye bulges on each side over the mouth, corn silk on top, the curly tendril of the original drawing at the back.
+it; an eye bulges on each side of the mouth, corn silk on top, the curly tendril of the original drawing at the back.
 It lies on a hub with six long corn leaves that stays put while the husk turns. Drawn at its real size,
 1 texel = 1/16 block (about 3.6 blocks long).
 
@@ -91,10 +91,10 @@ BOXES = []
 BOXES += octagon("husk", "tail", 0, 5, 12, 12, 3, "husk", seg=0)
 BOXES += octagon("husk", "rear", 5, 14, 16, 16, 3, "husk", seg=1)
 BOXES += octagon("husk", "main", 14, 35, 20, 20, 3, "husk", seg=2, mouth=True)
-# an eye bulging on each side over the mouth, a pixel out from the husk so the side with the eye shows whole
+# an eye bulging on each side of the mouth, a pixel out from the husk so the side with the eye shows whole
 BOXES += [
-    Box("husk", "eye_left", 28, 16, -11, 6, 8, 7, "eye", side=-1),
-    Box("husk", "eye_right", 28, 16, 4, 6, 8, 7, "eye", side=1),
+    Box("husk", "eye_left", 28, 13, -11, 6, 8, 7, "eye", side=-1),
+    Box("husk", "eye_right", 28, 13, 4, 6, 8, 7, "eye", side=1),
 ]
 # the cob, slid into the husk from its back end
 BOXES += round_log("cob", "cob", 29, 52, 12, "cob")
