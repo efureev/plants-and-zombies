@@ -24,11 +24,11 @@ import net.minecraft.util.Mth
 
 /**
  * Corn Cannon: an ear of corn whose husk has opened at the front into a cannon's mouth, the cob looking out of
- * it; an eye bulges on each side of the mouth, corn silk on top, a curly tendril at the back. Drawn at its real size
+ * it; an eye bulges on each side of the mouth, a curly tendril at the back. Drawn at its real size
  * (1 texel = 1/16 block), about 3.6 blocks long.
  *
  * Parts: body (turns with the head, like the Melon Pult) → husk (tilts about its bottom near the tail) →
- * cob, petal_left / petal_right / petal_low (the opened husk leaves), silk, tendril; ground (the hub and its six
+ * cob, petal_left / petal_right / petal_low (the opened husk leaves), tendril; ground (the hub and its six
  * leaves, does not turn). The boxes and the 256×128 texture come from `art/corn_cannon/draw_corn_cannon.py`,
  * which rewrites the generated region below.
  *
@@ -71,7 +71,7 @@ class CornCannonModel(root: ModelPart) : SquadPlantModel(
             val body = mesh.root.addOrReplaceChild("body", CubeListBuilder.create(),
                 PartPose.offset(0f, 24f, 0f))
             val husk = body.addOrReplaceChild("husk", CubeListBuilder.create()
-                .texOffs(154, 97).addBox(-6f, -13f, 10f, 12f, 6f, 3f)  // tail_wide
+                .texOffs(150, 97).addBox(-6f, -13f, 10f, 12f, 6f, 3f)  // tail_wide
                 .texOffs(182, 74).addBox(-3f, -16f, 9f, 6f, 12f, 5f)  // tail_tall
                 .texOffs(136, 74).addBox(-8f, -15f, 1f, 16f, 10f, 7f)  // rear_wide
                 .texOffs(176, 41).addBox(-5f, -18f, 0f, 10f, 16f, 9f)  // rear_tall
@@ -85,9 +85,9 @@ class CornCannonModel(root: ModelPart) : SquadPlantModel(
                 .texOffs(110, 41).addBox(-6f, -3f, -22f, 12f, 6f, 21f)  // cob_wide
                 .texOffs(0, 41).addBox(-3f, -6f, -22f, 6f, 12f, 21f)  // cob_tall
                 .texOffs(118, 97).addBox(-3f, -3f, -26f, 6f, 6f, 4f)  // cob_tip_core
-                .texOffs(0, 110).addBox(-4f, -2f, -25f, 8f, 4f, 2f)  // cob_tip_wide
+                .texOffs(234, 97).addBox(-4f, -2f, -25f, 8f, 4f, 2f)  // cob_tip_wide
                 .texOffs(138, 97).addBox(-2f, -4f, -25f, 4f, 8f, 2f)  // cob_tip_tall
-                .texOffs(20, 110).addBox(-2f, -2f, -28f, 4f, 4f, 2f),  // cob_end
+                .texOffs(0, 110).addBox(-2f, -2f, -28f, 4f, 4f, 2f),  // cob_end
                 PartPose.offset(0f, -10f, -15f))
             val petal_left = husk.addOrReplaceChild("petal_left", CubeListBuilder.create()
                 .texOffs(54, 41).addBox(0f, -8f, -13f, 1f, 16f, 13f),  // petal_left
@@ -98,20 +98,13 @@ class CornCannonModel(root: ModelPart) : SquadPlantModel(
             val petal_low = husk.addOrReplaceChild("petal_low", CubeListBuilder.create()
                 .texOffs(8, 97).addBox(-7f, 0f, -10f, 14f, 1f, 10f),  // petal_low
                 PartPose.offsetAndRotation(0f, -1f, -20f, 0.20944f, 0f, 0f))
-            val silk = husk.addOrReplaceChild("silk", CubeListBuilder.create()
-                .texOffs(224, 97).addBox(-3f, -5f, 1f, 1f, 6f, 1f)  // silk_1
-                .texOffs(150, 97).addBox(-1f, -8f, -1f, 1f, 9f, 1f)  // silk_2
-                .texOffs(206, 97).addBox(0f, -6f, 0f, 1f, 7f, 1f)  // silk_3
-                .texOffs(202, 97).addBox(1f, -7f, -2f, 1f, 8f, 1f)  // silk_4
-                .texOffs(40, 110).addBox(2f, -4f, 1f, 1f, 5f, 1f),  // silk_5
-                PartPose.offsetAndRotation(0f, -20f, -8f, -0.43633f, 0f, 0f))
             val tendril = husk.addOrReplaceChild("tendril", CubeListBuilder.create()
-                .texOffs(210, 97).addBox(-1f, -1f, 0f, 2f, 2f, 5f)  // tendril_1
+                .texOffs(198, 97).addBox(-1f, -1f, 0f, 2f, 2f, 5f)  // tendril_1
                 .texOffs(0, 97).addBox(-1f, -10f, 5f, 2f, 11f, 2f)  // tendril_2
-                .texOffs(184, 97).addBox(-1f, -12f, 0f, 2f, 2f, 7f)  // tendril_3
-                .texOffs(32, 110).addBox(-1f, -10f, 0f, 2f, 4f, 2f)  // tendril_4
-                .texOffs(44, 110).addBox(-1f, -8f, 2f, 2f, 2f, 2f)  // tendril_5
-                .texOffs(228, 97).addBox(-3f, -13f, 6f, 6f, 1f, 5f),  // tendril_leaf
+                .texOffs(180, 97).addBox(-1f, -12f, 0f, 2f, 2f, 7f)  // tendril_3
+                .texOffs(12, 110).addBox(-1f, -10f, 0f, 2f, 4f, 2f)  // tendril_4
+                .texOffs(20, 110).addBox(-1f, -8f, 2f, 2f, 2f, 2f)  // tendril_5
+                .texOffs(212, 97).addBox(-3f, -13f, 6f, 6f, 1f, 5f),  // tendril_leaf
                 PartPose.offset(0f, -10f, 14f))
             val ground = mesh.root.addOrReplaceChild("ground", CubeListBuilder.create()
                 .texOffs(60, 74).addBox(-10f, -2f, -9f, 20f, 2f, 18f)  // hub_wide
@@ -167,7 +160,6 @@ object CornCannonAnimation {
             scale(0f, 1f, 1f, 1f), scale(1.5f, 1.02f, 1.03f, 1f), scale(3f, 1f, 1f, 1f)))
         .addAnimation("petal_left", AnimationChannel(ROTATION, rot(0f, 0f, 0f, 0f), rot(1.5f, 0f, 4f, 0f), rot(3f, 0f, 0f, 0f)))
         .addAnimation("petal_right", AnimationChannel(ROTATION, rot(0f, 0f, 0f, 0f), rot(1.5f, 0f, -4f, 0f), rot(3f, 0f, 0f, 0f)))
-        .addAnimation("silk", AnimationChannel(ROTATION, rot(0f, 0f, 0f, 0f), rot(1.5f, -8f, 0f, 0f), rot(3f, 0f, 0f, 0f)))
         .addAnimation("tendril", AnimationChannel(ROTATION,
             rot(0f, 0f, 0f, 0f), rot(0.75f, 0f, 0f, 12f), rot(1.5f, 0f, 0f, 0f), rot(2.25f, 0f, 0f, -12f), rot(3f, 0f, 0f, 0f)))
         .build()
@@ -187,8 +179,6 @@ object CornCannonAnimation {
             rot(0f, 0f, 0f, 0f), rot(0.45f, 0f, 6f, 0f), rot(0.6f, 0f, -24f, 0f), rot(0.9f, 0f, -6f, 0f), rot(1.1f, 0f, 0f, 0f)))
         .addAnimation("petal_low", AnimationChannel(ROTATION,
             rot(0f, 0f, 0f, 0f), rot(0.45f, -5f, 0f, 0f), rot(0.6f, 20f, 0f, 0f), rot(0.9f, 5f, 0f, 0f), rot(1.1f, 0f, 0f, 0f)))
-        .addAnimation("silk", AnimationChannel(ROTATION,
-            rot(0f, 0f, 0f, 0f), rot(0.55f, 20f, 0f, 0f), rot(0.8f, -15f, 0f, 0f), rot(1.1f, 0f, 0f, 0f)))
         .addAnimation("tendril", AnimationChannel(ROTATION,
             rot(0f, 0f, 0f, 0f), rot(0.55f, 25f, 0f, 0f), rot(0.8f, -10f, 0f, 0f), rot(1.1f, 0f, 0f, 0f)))
         .build()

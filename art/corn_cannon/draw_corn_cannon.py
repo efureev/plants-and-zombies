@@ -13,7 +13,7 @@ Writes:
     the boxes between the `generated` markers of CornCannonModel.kt and CornCobModel.kt
 
 The design: an ear of corn whose husk has opened at the front into a cannon's mouth, the cob looking out of
-it; an eye bulges on each side of the mouth, corn silk on top, the curly tendril of the original drawing at the back.
+it; an eye bulges on each side of the mouth, the curly tendril of the original drawing at the back.
 It lies on a hub with six long corn leaves that stays put while the husk turns. Drawn at its real size,
 1 texel = 1/16 block (about 3.6 blocks long).
 
@@ -41,8 +41,6 @@ G = [c(h) for h in ("2d5213", "3f6d1f", "4a7e26", "5f9a2c", "79b930", "84c738", 
 PALE = [c(h) for h in ("98b84a", "b4d064", "cde483", "e3f2a6")]
 # kernels: highlight, light, base, shadow, seam
 K_HI, K1, K2, K3, KG = c("fff6a8"), c("f7e64d"), c("f6cf37"), c("ecb427"), c("cb8a17")
-# silk
-S1, S2, S3 = c("d96c1c"), c("ecb427"), c("f7e64d")
 EYE, HL = c("111f0a"), c("f2f4ee")
 HOLE, HOLE2 = c("142608"), c("1f3a0d")
 POP1, POP2, POP3 = c("fffbe8"), c("f3e9c4"), c("e0c98a")
@@ -106,14 +104,6 @@ BOXES += [
     Box("petal_right", "petal_right", 34, AXIS_Y - 8, 9, 13, 16, 1, "petal", side=1),
     Box("petal_low", "petal_low", 34, 2, -7, 10, 1, 14, "petal", side=0),
 ]
-# corn silk on top, behind the eyes
-BOXES += [
-    Box("silk", "silk_1", 20, 21, -3, 1, 6, 1, "silk", k=1),
-    Box("silk", "silk_2", 22, 21, -1, 1, 9, 1, "silk", k=0),
-    Box("silk", "silk_3", 21, 21, 0, 1, 7, 1, "silk", k=2),
-    Box("silk", "silk_4", 23, 21, 1, 1, 8, 1, "silk", k=0),
-    Box("silk", "silk_5", 20, 21, 2, 1, 5, 1, "silk", k=1),
-]
 # the curly tendril of the drawing, out of the tail
 BOXES += [
     Box("tendril", "tendril_1", -5, AXIS_Y - 1, -1, 5, 2, 2, "stem"),
@@ -144,13 +134,12 @@ PARTS = {
     "petal_left": ("husk", (34, AXIS_Y, -10), (0, 30, 0)),
     "petal_right": ("husk", (34, AXIS_Y, 10), (0, -30, 0)),
     "petal_low": ("husk", (34, 3, 0), (12, 0, 0)),
-    "silk": ("husk", (22, 22, 0), (-25, 0, 0)),
     "tendril": ("husk", (0, AXIS_Y, 0), (0, 0, 0)),
     "ground": ("root", (29, 0, 0), (0, 0, 0)),
 }
 for k, yaw in enumerate(LEAF_YAWS):
     PARTS[f"leaf_{k}"] = ("ground", (29, 0, 0), (0, yaw, 0))
-PART_ORDER = ["body", "husk", "cob", "petal_left", "petal_right", "petal_low", "silk", "tendril", "ground"] + \
+PART_ORDER = ["body", "husk", "cob", "petal_left", "petal_right", "petal_low", "tendril", "ground"] + \
     [f"leaf_{k}" for k in range(len(LEAF_YAWS))]
 
 # The flying cob: the same cob with the cone at both ends, along x here (CornCobModel builds it along y).
@@ -176,7 +165,7 @@ def pack(boxes, width, height):
     x = y = shelf = 0
     for b in sorted(boxes, key=lambda b: (-uv_size(b)[1], -uv_size(b)[0])):
         key = (b.len, b.h, b.w, b.paint, tuple(sorted((k, v) for k, v in b.ctx.items() if k != "side")))
-        if b.paint in ("eye", "petal", "silk"):
+        if b.paint in ("eye", "petal"):
             key = b.name  # painted per side
         if key in shared:
             out[b.name] = shared[key]
@@ -387,12 +376,6 @@ def petal(img, x0, y0, w, h, face, b, mood):
         fill(img, x0, y0, w, h, edge)
 
 
-def silk(img, x0, y0, w, h, face, b, mood):
-    k = b.ctx["k"]
-    cols = [S3, S2, S2, S1, S1, S1, S1, S1]
-    fill(img, x0, y0, w, h, lambda i, j: cols[min(j + k, 7)] if face not in ("top", "bottom") else S3)
-
-
 def stem(img, x0, y0, w, h, face, b, mood):
     fill(img, x0, y0, w, h, lambda i, j: G[3] if face == "top" else (G[1] if face == "bottom" else (G[2] if j else G[3])))
 
@@ -435,7 +418,7 @@ def ground_leaf(img, x0, y0, w, h, face, b, mood):
 
 
 PAINTERS = {
-    "husk": husk, "eye": eye, "cob": kernels, "petal": petal, "silk": silk, "stem": stem,
+    "husk": husk, "eye": eye, "cob": kernels, "petal": petal, "stem": stem,
     "small_leaf": small_leaf, "hub": hub, "ground_leaf": ground_leaf,
 }
 
@@ -475,8 +458,8 @@ def icon():
         "................",
         "................",
         ".tt.............",
-        "t..t...ss.......",
-        "t.t...sEE.......",
+        "t..t............",
+        "t.t....EE.......",
         "t....hhEEhp.....",
         ".t.hhhhhhhhpkk..",
         "..hhhhhhhhhKkkKk",
@@ -489,7 +472,7 @@ def icon():
         "................",
         "................",
     ]
-    pal = {"t": G[2], "s": S1, "E": EYE, "h": G[6], "H": G[4], "p": PALE[1], "k": K1, "K": K3, "d": G[3], "g": G[2]}
+    pal = {"t": G[2], "E": EYE, "h": G[6], "H": G[4], "p": PALE[1], "k": K1, "K": K3, "d": G[3], "g": G[2]}
     img = Image.new("RGBA", (16, 16), CLEAR)
     for j, row in enumerate(rows):
         for i, ch in enumerate(row):
