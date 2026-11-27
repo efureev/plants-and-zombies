@@ -6,9 +6,11 @@ import joshxviii.plantz.PazSounds
 import joshxviii.plantz.isHypnotized
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.plant.Plant
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
@@ -21,15 +23,18 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.Vec2
 import java.util.UUID
 import kotlin.math.roundToInt
 
 /**
- * Corn Cannon: heavy artillery. A long husk lying on a rosette of leaves fires its corn cob as a rocket
+ * Corn Cannon: heavy artillery, twice the size of its model ([SCALE]). A long husk lying on a rosette of leaves fires its corn cob as a rocket
  * in a high arc; the cob blows up and hurts only what the cannon would shoot at. A new cob grows in 3 s.
  * It does not see zombies within [MIN_RANGE] blocks. Does not sleep. See docs/en/characters/corn_cannon.md.
  */
@@ -78,17 +83,49 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         const val REST_TICKS = 100
 
         const val ENTITY_LIMIT = 10
-        const val EYE_HEIGHT = 0.6f
 
         /**
-         * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes: forward and up, about where
-         * the raised mouth is and still inside the cannon's own block (a cob that starts in a wall right in
+         * Its size (the scale attribute): the model, hitbox, eyes and cob, and so the blast, are this many times what
+         * they are drawn and registered at. The model is about 1.8 blocks long at scale 1.
+         */
+        const val SCALE = 2.0
+
+        /** Eye height at scale 1: 0.9 blocks at [SCALE], under a ceiling one block up (where it may be planted). */
+        const val EYE_HEIGHT = 0.45f
+
+        /** Save key of the size a cannon was saved at: one saved before it grew kept the scale attribute at 1. */
+        private const val SIZE_KEY = "sproutsquad:Size"
+
+        /**
+         * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes (not scaled): forward and up,
+         * in the raised husk and still inside the cannon's own block (a cob that starts in a wall right in
          * front vanishes on its first tick).
          */
         val COB_SPAWN = Vec2(0.3f, 0.15f)
     }
 
+    init {
+        // the box and eyes come from the type at scale 1; the scale attribute starts at [SCALE] without changing,
+        // so nothing else would resize them
+        refreshDimensions()
+    }
+
     override fun sleepsDuringNight(): Boolean = false
+
+    /**
+     * Choking as vanilla judges it, but over the eye area of the cannon at scale 1 (0.96 blocks, inside its own
+     * block): at [SCALE] that area is almost two blocks wide, and any block beside it at eye height would choke it.
+     */
+    override fun isInWall(): Boolean {
+        if (noPhysics) return false
+        val checkWidth = type.dimensions.width() * 0.8
+        val eyeBox = AABB.ofSize(eyePosition, checkWidth, 1.0E-6, checkWidth)
+        return BlockPos.betweenClosedStream(eyeBox).anyMatch { pos ->
+            val state = level().getBlockState(pos)
+            !state.isAir && state.isSuffocating(level(), pos) &&
+                Shapes.joinIsNotEmpty(state.getCollisionShape(level(), pos).move(pos), Shapes.create(eyeBox), BooleanOp.AND)
+        }
+    }
 
     /**
      * What it shoots at, and so what its cob may hurt: zombies; when tamed, other monsters too. Never creepers,
@@ -220,11 +257,15 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
         output.putInt("sproutsquad:ReloadTotal", reloadTotal)
+        output.putDouble(SIZE_KEY, SCALE)
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
         reloadTotal = input.getIntOr("sproutsquad:ReloadTotal", COOLDOWN)
+        // a cannon saved while the plant was half the size (0.2.6) has its scale attribute saved at 1: grow it
+        if (input.getDoubleOr(SIZE_KEY, 1.0) < SCALE) getAttribute(Attributes.SCALE)?.baseValue = SCALE
+        refreshDimensions()
     }
 
     /** The model's pose: the cob's growth in thousandths (CornCannonModel). */
@@ -254,7 +295,7 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
 /**
  * The nearest target it can shoot at ([CornCannon.canShootAt]), seen or not: the cob flies in a high arc, and
- * the eyes sit only 0.6 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
+ * the eyes sit only 0.9 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
  */
 class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTargetGoal<LivingEntity>(
     cannon, LivingEntity::class.java, 5, false, false,

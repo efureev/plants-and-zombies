@@ -86,7 +86,8 @@ object SquadEntities {
     val CORN_CANNON = plant("corn_cannon", ::CornCannon, width = 1.2f, height = 0.9f, eyeHeight = CornCannon.EYE_HEIGHT,
         sunCost = CornCannon.SUN_COST,
         entityLimit = CornCannon.ENTITY_LIMIT,
-        attributes = Plant.Companion.PlantAttributes(maxHealth = CornCannon.MAX_HEALTH, followRange = CornCannon.RANGE))
+        attributes = Plant.Companion.PlantAttributes(maxHealth = CornCannon.MAX_HEALTH, followRange = CornCannon.RANGE,
+            scale = CornCannon.SCALE)) // the size is at scale 1: 2.4 × 1.8 blocks in the world
     // endregion
 
     // region Projectiles
