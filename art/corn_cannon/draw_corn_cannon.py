@@ -74,6 +74,17 @@ def octagon(part, name, x0, x1, w, h, cut, paint, axis_y=AXIS_Y, **ctx):
     ]
 
 
+def round_log(part, name, x0, x1, d, paint, axis_y=AXIS_Y, **ctx):
+    """A round log along x of diameter d (12 or 8): a square a pixel in from the rim the whole length, and a wide
+    and a tall bar a pixel shorter at each end (their end faces fall inside the square, so none share a visible plane)."""
+    sq, bar = d - 2, d // 2
+    return [
+        Box(part, name + "_core", x0, axis_y - sq / 2, -sq / 2, x1 - x0, sq, sq, paint, **ctx),
+        Box(part, name + "_wide", x0 + 1, axis_y - bar / 2, -d / 2, x1 - x0 - 2, bar, d, paint, **ctx),
+        Box(part, name + "_tall", x0 + 1, axis_y - d / 2, -bar / 2, x1 - x0 - 2, d, bar, paint, **ctx),
+    ]
+
+
 # ---------------------------------------------------------------- the cannon
 BOXES = []
 # husk: tail cap, rear, main barrel; the main barrel's front face is the dark mouth
@@ -86,11 +97,9 @@ BOXES += [
     Box("husk", "eye_right", 28, 18, 2, 6, 8, 7, "eye", side=1),
 ]
 # the cob, slid into the husk from its back end
-BOXES += octagon("cob", "cob", 29, 52, 12, 12, 2, "cob")
-BOXES += [
-    Box("cob", "cob_tip", 52, AXIS_Y - 4, -4, 3, 8, 8, "cob"),
-    Box("cob", "cob_end", 55, AXIS_Y - 2, -2, 2, 4, 4, "cob"),
-]
+BOXES += round_log("cob", "cob", 29, 52, 12, "cob")
+BOXES += round_log("cob", "cob_tip", 51, 55, 8, "cob")
+BOXES += [Box("cob", "cob_end", 55, AXIS_Y - 2, -2, 2, 4, 4, "cob")]
 # husk leaves opened round the mouth: left, right and under it (over it the eyes look out)
 BOXES += [
     Box("petal_left", "petal_left", 34, AXIS_Y - 8, -10, 13, 16, 1, "petal", side=-1),
@@ -146,12 +155,14 @@ PART_ORDER = ["body", "husk", "cob", "petal_left", "petal_right", "petal_low", "
 
 # The flying cob: the same cob with the cone at both ends, along x here (CornCobModel builds it along y).
 COB_BOXES = [
-    Box("cob", "end_back", -5, -2, -2, 2, 4, 4, "cob"),
-    Box("cob", "tip_back", -3, -4, -4, 3, 8, 8, "cob"),
-    *octagon("cob", "cob", 0, 23, 12, 12, 2, "cob", axis_y=0),
-    Box("cob", "tip", 23, -4, -4, 3, 8, 8, "cob"),
-    Box("cob", "end", 26, -2, -2, 2, 4, 4, "cob"),
+    Box("cob", "end_back", -6, -2, -2, 2, 4, 4, "cob"),
+    *round_log("cob", "tip_back", -4, 0, 8, "cob", axis_y=0),
+    *round_log("cob", "cob", -1, 24, 12, "cob", axis_y=0),
+    *round_log("cob", "tip", 23, 27, 8, "cob", axis_y=0),
+    Box("cob", "end", 27, -2, -2, 2, 4, 4, "cob"),
 ]
+# CornCobModel builds it along y (x → -y, y → x): the same boxes in model dimensions, for the UV and the paint
+COB_MODEL = [Box(b.part, b.name, b.x, b.y, b.z, b.w, b.len, b.h, b.paint, axis="y") for b in COB_BOXES]
 
 
 # ---------------------------------------------------------------- UV packing
@@ -181,7 +192,7 @@ def pack(boxes, width, height):
 
 
 UV = pack(BOXES, TEX_W, TEX_H)
-COB_UV = pack(COB_BOXES, COB_TEX_W, COB_TEX_H)
+COB_UV = pack(COB_MODEL, COB_TEX_W, COB_TEX_H)
 
 
 # ---------------------------------------------------------------- painters
@@ -299,8 +310,11 @@ def draw_eye(img, x, y, mood, width=3, hl_right=False):
 
 def kernels(img, x0, y0, w, h, face, b, mood):
     """Rows of kernels along the cob: 2 x 2 kernels, a darker seam between rows, staggered along the row."""
-    along_x = face in ("west", "east")      # columns run along the cob
-    along_y = face in ("top", "bottom")     # rows run along the cob
+    if b.ctx.get("axis") == "y":          # the flying cob, built standing: every side runs along it top to bottom
+        along_x, along_y = False, face not in ("top", "bottom")
+    else:
+        along_x = face in ("west", "east")  # columns run along the cob
+        along_y = face in ("top", "bottom") # rows run along the cob
     def k(i, j):
         if along_x:
             row, pos = j, i
@@ -319,7 +333,7 @@ def kernels(img, x0, y0, w, h, face, b, mood):
         kid = (row // 3) * 7 + (pos + stagger) // 3 * 13
         if kid % 11 == 3 and not lit:
             col = K2                                 # a few kernels a shade riper
-        if face in ("west", "east") and j > h * 0.6:
+        if b.ctx.get("axis") != "y" and face in ("west", "east") and j > h * 0.6:
             col = K2 if not lit else K1
         return col
     fill(img, x0, y0, w, h, k)
@@ -453,7 +467,7 @@ def cannon_texture(mood):
 
 def cob_texture():
     img = Image.new("RGBA", (COB_TEX_W, COB_TEX_H), CLEAR)
-    for b in COB_BOXES:
+    for b in COB_MODEL:
         u, v = COB_UV[b.name]
         paint_box(img, u, v, b, "normal")
     return img

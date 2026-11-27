@@ -71,72 +71,75 @@ class CornCannonModel(root: ModelPart) : SquadPlantModel(
             val body = mesh.root.addOrReplaceChild("body", CubeListBuilder.create(),
                 PartPose.offset(0f, 24f, 0f))
             val husk = body.addOrReplaceChild("husk", CubeListBuilder.create()
-                .texOffs(88, 90).addBox(-6f, -13f, 10f, 12f, 6f, 3f)  // tail_wide
-                .texOffs(122, 70).addBox(-3f, -16f, 9f, 6f, 12f, 5f)  // tail_tall
-                .texOffs(76, 70).addBox(-8f, -15f, 1f, 16f, 10f, 7f)  // rear_wide
-                .texOffs(122, 41).addBox(-5f, -18f, 0f, 10f, 16f, 9f)  // rear_tall
-                .texOffs(132, 0).addBox(-10f, -17f, -20f, 20f, 14f, 19f)  // main_wide
+                .texOffs(154, 97).addBox(-6f, -13f, 10f, 12f, 6f, 3f)  // tail_wide
+                .texOffs(182, 74).addBox(-3f, -16f, 9f, 6f, 12f, 5f)  // tail_tall
+                .texOffs(136, 74).addBox(-8f, -15f, 1f, 16f, 10f, 7f)  // rear_wide
+                .texOffs(176, 41).addBox(-5f, -18f, 0f, 10f, 16f, 9f)  // rear_tall
+                .texOffs(70, 0).addBox(-10f, -17f, -20f, 20f, 14f, 19f)  // main_wide
                 .texOffs(0, 0).addBox(-7f, -20f, -21f, 14f, 20f, 21f)  // main_tall
-                .texOffs(144, 70).addBox(-9f, -24f, -20f, 7f, 8f, 6f)  // eye_left
-                .texOffs(170, 70).addBox(2f, -24f, -20f, 7f, 8f, 6f),  // eye_right
+                .texOffs(204, 74).addBox(-9f, -24f, -20f, 7f, 8f, 6f)  // eye_left
+                .texOffs(230, 74).addBox(2f, -24f, -20f, 7f, 8f, 6f),  // eye_right
                 PartPose.offset(0f, -2f, 15f))
             val cob = husk.addOrReplaceChild("cob", CubeListBuilder.create()
-                .texOffs(0, 41).addBox(-6f, -4f, -22f, 12f, 8f, 21f)  // cob_wide
-                .texOffs(70, 0).addBox(-4f, -6f, -23f, 8f, 12f, 23f)  // cob_tall
-                .texOffs(32, 90).addBox(-4f, -4f, -26f, 8f, 8f, 3f)  // cob_tip
-                .texOffs(184, 90).addBox(-2f, -2f, -28f, 4f, 4f, 2f),  // cob_end
+                .texOffs(148, 0).addBox(-5f, -5f, -23f, 10f, 10f, 23f)  // cob_core
+                .texOffs(110, 41).addBox(-6f, -3f, -22f, 12f, 6f, 21f)  // cob_wide
+                .texOffs(0, 41).addBox(-3f, -6f, -22f, 6f, 12f, 21f)  // cob_tall
+                .texOffs(118, 97).addBox(-3f, -3f, -26f, 6f, 6f, 4f)  // cob_tip_core
+                .texOffs(0, 110).addBox(-4f, -2f, -25f, 8f, 4f, 2f)  // cob_tip_wide
+                .texOffs(138, 97).addBox(-2f, -4f, -25f, 4f, 8f, 2f)  // cob_tip_tall
+                .texOffs(20, 110).addBox(-2f, -2f, -28f, 4f, 4f, 2f),  // cob_end
                 PartPose.offset(0f, -10f, -15f))
             val petal_left = husk.addOrReplaceChild("petal_left", CubeListBuilder.create()
-                .texOffs(66, 41).addBox(0f, -8f, -13f, 1f, 16f, 13f),  // petal_left
+                .texOffs(54, 41).addBox(0f, -8f, -13f, 1f, 16f, 13f),  // petal_left
                 PartPose.offsetAndRotation(-10f, -10f, -20f, 0f, 0.5236f, 0f))
             val petal_right = husk.addOrReplaceChild("petal_right", CubeListBuilder.create()
-                .texOffs(94, 41).addBox(-1f, -8f, -13f, 1f, 16f, 13f),  // petal_right
+                .texOffs(82, 41).addBox(-1f, -8f, -13f, 1f, 16f, 13f),  // petal_right
                 PartPose.offsetAndRotation(10f, -10f, -20f, 0f, -0.5236f, 0f))
             val petal_low = husk.addOrReplaceChild("petal_low", CubeListBuilder.create()
-                .texOffs(204, 70).addBox(-7f, 0f, -10f, 14f, 1f, 10f),  // petal_low
+                .texOffs(8, 97).addBox(-7f, 0f, -10f, 14f, 1f, 10f),  // petal_low
                 PartPose.offsetAndRotation(0f, -1f, -20f, 0.20944f, 0f, 0f))
             val silk = husk.addOrReplaceChild("silk", CubeListBuilder.create()
-                .texOffs(158, 90).addBox(-3f, -5f, 1f, 1f, 6f, 1f)  // silk_1
-                .texOffs(84, 90).addBox(-1f, -8f, -1f, 1f, 9f, 1f)  // silk_2
-                .texOffs(140, 90).addBox(0f, -6f, 0f, 1f, 7f, 1f)  // silk_3
-                .texOffs(136, 90).addBox(1f, -7f, -2f, 1f, 8f, 1f)  // silk_4
-                .texOffs(204, 90).addBox(2f, -4f, 1f, 1f, 5f, 1f),  // silk_5
+                .texOffs(224, 97).addBox(-3f, -5f, 1f, 1f, 6f, 1f)  // silk_1
+                .texOffs(150, 97).addBox(-1f, -8f, -1f, 1f, 9f, 1f)  // silk_2
+                .texOffs(206, 97).addBox(0f, -6f, 0f, 1f, 7f, 1f)  // silk_3
+                .texOffs(202, 97).addBox(1f, -7f, -2f, 1f, 8f, 1f)  // silk_4
+                .texOffs(40, 110).addBox(2f, -4f, 1f, 1f, 5f, 1f),  // silk_5
                 PartPose.offsetAndRotation(0f, -20f, -8f, -0.43633f, 0f, 0f))
             val tendril = husk.addOrReplaceChild("tendril", CubeListBuilder.create()
-                .texOffs(144, 90).addBox(-1f, -1f, 0f, 2f, 2f, 5f)  // tendril_1
-                .texOffs(196, 70).addBox(-1f, -10f, 5f, 2f, 11f, 2f)  // tendril_2
-                .texOffs(118, 90).addBox(-1f, -12f, 0f, 2f, 2f, 7f)  // tendril_3
-                .texOffs(196, 90).addBox(-1f, -10f, 0f, 2f, 4f, 2f)  // tendril_4
-                .texOffs(208, 90).addBox(-1f, -8f, 2f, 2f, 2f, 2f)  // tendril_5
-                .texOffs(162, 90).addBox(-3f, -13f, 6f, 6f, 1f, 5f),  // tendril_leaf
+                .texOffs(210, 97).addBox(-1f, -1f, 0f, 2f, 2f, 5f)  // tendril_1
+                .texOffs(0, 97).addBox(-1f, -10f, 5f, 2f, 11f, 2f)  // tendril_2
+                .texOffs(184, 97).addBox(-1f, -12f, 0f, 2f, 2f, 7f)  // tendril_3
+                .texOffs(32, 110).addBox(-1f, -10f, 0f, 2f, 4f, 2f)  // tendril_4
+                .texOffs(44, 110).addBox(-1f, -8f, 2f, 2f, 2f, 2f)  // tendril_5
+                .texOffs(228, 97).addBox(-3f, -13f, 6f, 6f, 1f, 5f),  // tendril_leaf
                 PartPose.offset(0f, -10f, 14f))
             val ground = mesh.root.addOrReplaceChild("ground", CubeListBuilder.create()
-                .texOffs(0, 70).addBox(-10f, -2f, -9f, 20f, 2f, 18f)  // hub_wide
-                .texOffs(160, 41).addBox(-5f, -3f, -10f, 10f, 3f, 20f),  // hub_tall
+                .texOffs(60, 74).addBox(-10f, -2f, -9f, 20f, 2f, 18f)  // hub_wide
+                .texOffs(0, 74).addBox(-5f, -3f, -10f, 10f, 3f, 20f),  // hub_tall
                 PartPose.offset(0f, 24f, 0f))
             val leaf_0 = ground.addOrReplaceChild("leaf_0", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_0_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_0_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_0_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_0_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 0.5236f, 0f))
             val leaf_1 = ground.addOrReplaceChild("leaf_1", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_1_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_1_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_1_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_1_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 1.5708f, 0f))
             val leaf_2 = ground.addOrReplaceChild("leaf_2", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_2_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_2_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_2_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_2_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 2.61799f, 0f))
             val leaf_3 = ground.addOrReplaceChild("leaf_3", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_3_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_3_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_3_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_3_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 3.66519f, 0f))
             val leaf_4 = ground.addOrReplaceChild("leaf_4", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_4_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_4_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_4_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_4_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 4.71239f, 0f))
             val leaf_5 = ground.addOrReplaceChild("leaf_5", CubeListBuilder.create()
-                .texOffs(54, 90).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_5_base
-                .texOffs(0, 90).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_5_tip
+                .texOffs(88, 97).addBox(-3f, -2f, -17f, 6f, 1f, 9f)  // leaf_5_base
+                .texOffs(56, 97).addBox(-3f, -1f, -27f, 6f, 1f, 10f),  // leaf_5_tip
                 PartPose.offsetAndRotation(0f, 0f, 0f, 0f, 5.75959f, 0f))
             // endregion
             return LayerDefinition.create(mesh, 256, 128)
