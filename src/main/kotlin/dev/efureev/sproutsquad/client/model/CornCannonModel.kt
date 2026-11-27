@@ -24,7 +24,7 @@ import net.minecraft.util.Mth
 
 /**
  * Corn Cannon: an ear of corn whose husk has opened at the front into a cannon's mouth, the cob looking out of
- * it; two eyes bulge over the mouth, corn silk on top, a curly tendril at the back. Drawn at its real size
+ * it; an eye bulges on each side over the mouth, corn silk on top, a curly tendril at the back. Drawn at its real size
  * (1 texel = 1/16 block), about 3.6 blocks long.
  *
  * Parts: body (turns with the head, like the Melon Pult) → husk (tilts about its bottom near the tail) →
@@ -77,8 +77,8 @@ class CornCannonModel(root: ModelPart) : SquadPlantModel(
                 .texOffs(176, 41).addBox(-5f, -18f, 0f, 10f, 16f, 9f)  // rear_tall
                 .texOffs(70, 0).addBox(-10f, -17f, -20f, 20f, 14f, 19f)  // main_wide
                 .texOffs(0, 0).addBox(-7f, -20f, -21f, 14f, 20f, 21f)  // main_tall
-                .texOffs(204, 74).addBox(-9f, -24f, -20f, 7f, 8f, 6f)  // eye_left
-                .texOffs(230, 74).addBox(2f, -24f, -20f, 7f, 8f, 6f),  // eye_right
+                .texOffs(204, 74).addBox(-11f, -22f, -20f, 7f, 8f, 6f)  // eye_left
+                .texOffs(230, 74).addBox(4f, -22f, -20f, 7f, 8f, 6f),  // eye_right
                 PartPose.offset(0f, -2f, 15f))
             val cob = husk.addOrReplaceChild("cob", CubeListBuilder.create()
                 .texOffs(148, 0).addBox(-5f, -5f, -23f, 10f, 10f, 23f)  // cob_core

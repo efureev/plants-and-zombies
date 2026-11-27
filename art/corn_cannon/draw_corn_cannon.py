@@ -13,7 +13,7 @@ Writes:
     the boxes between the `generated` markers of CornCannonModel.kt and CornCobModel.kt
 
 The design: an ear of corn whose husk has opened at the front into a cannon's mouth, the cob looking out of
-it; two eyes bulge over the mouth, corn silk on top, the curly tendril of the original drawing at the back.
+it; an eye bulges on each side over the mouth, corn silk on top, the curly tendril of the original drawing at the back.
 It lies on a hub with six long corn leaves that stays put while the husk turns. Drawn at its real size,
 1 texel = 1/16 block (about 3.6 blocks long).
 
@@ -91,10 +91,10 @@ BOXES = []
 BOXES += octagon("husk", "tail", 0, 5, 12, 12, 3, "husk", seg=0)
 BOXES += octagon("husk", "rear", 5, 14, 16, 16, 3, "husk", seg=1)
 BOXES += octagon("husk", "main", 14, 35, 20, 20, 3, "husk", seg=2, mouth=True)
-# eyes bulging over the mouth
+# an eye bulging on each side over the mouth, a pixel out from the husk so the side with the eye shows whole
 BOXES += [
-    Box("husk", "eye_left", 28, 18, -9, 6, 8, 7, "eye", side=-1),
-    Box("husk", "eye_right", 28, 18, 2, 6, 8, 7, "eye", side=1),
+    Box("husk", "eye_left", 28, 16, -11, 6, 8, 7, "eye", side=-1),
+    Box("husk", "eye_right", 28, 16, 4, 6, 8, 7, "eye", side=1),
 ]
 # the cob, slid into the husk from its back end
 BOXES += round_log("cob", "cob", 29, 52, 12, "cob")
@@ -266,7 +266,7 @@ def husk(img, x0, y0, w, h, face, b, mood):
 
 
 def eye(img, x0, y0, w, h, face, b, mood):
-    """A green bulb with a dark eye on its front and on its outer side (style guide: dark eye, 1 px highlight)."""
+    """A green bulb with a dark eye on its outer side only (style guide: dark eye, 1 px highlight)."""
     side = b.ctx["side"]
     base = lambda i, j: G[7] if j < 2 else (G[6] if j < h - 2 else G[5])
     if face == "top":
@@ -277,11 +277,7 @@ def eye(img, x0, y0, w, h, face, b, mood):
         return
     fill(img, x0, y0, w, h, base)
     outer = (face == "west" and side < 0) or (face == "east" and side > 0)
-    if face == "north":
-        # pupil 3 x 4, a little toward the middle of the face (the eyes look ahead, slightly cross-eyed)
-        px = 2 if side < 0 else w - 5
-        draw_eye(img, x0 + px, y0 + 2, mood, hl_right=side < 0)
-    elif outer:
+    if outer:
         # on the outer side, near the front: west columns run tail→nose, east nose→tail
         px = w - 4 if face == "west" else 1
         draw_eye(img, x0 + px, y0 + 2, mood, width=3, hl_right=face == "east")
