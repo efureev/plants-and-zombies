@@ -68,6 +68,71 @@ object CornCannonGameTests {
         helper.succeed()
     }
 
+    /**
+     * Twice the size of its model: scale 2, a 2.4 × 1.8 block box, the eyes under a ceiling one block up, and
+     * a cob as big as its cannon (so a blast of radius 2.5 × √2).
+     */
+    fun size(helper: GameTestHelper) {
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(2, 1, 2))
+        helper.assertValueEqual(cannon.scale, 2f, "scale")
+        helper.assertTrue(Mth.equal(cannon.bbWidth, 2.4f) && Mth.equal(cannon.bbHeight, 1.8f),
+            "box ${cannon.bbWidth} × ${cannon.bbHeight}, expected 2.4 × 1.8")
+        helper.assertTrue(cannon.eyeHeight < 1f, "eyes ${cannon.eyeHeight} blocks up")
+        val cob = CornCob(helper.level, cannon)
+        helper.assertValueEqual(cob.scale, 2f, "cob scale")
+        helper.assertTrue(Mth.equal(cob.blastRadius(), CornCob.RADIUS * Mth.SQRT_OF_TWO), "blast radius ${cob.blastRadius()}")
+        listOf(cob, cannon).forEach { it.discard() }
+        helper.succeed()
+    }
+
+    /**
+     * Planted under a ceiling one block up and between two walls (its 1.8 × 2.4 box reaches into all three), it
+     * does not choke: the eyes stay below the ceiling, and blocks beside it do not count.
+     */
+    fun underLowCeiling(helper: GameTestHelper) {
+        val spot = BlockPos(2, 1, 2)
+        helper.setBlock(spot.below(), Blocks.GRASS_BLOCK)
+        helper.setBlock(spot.above(), Blocks.STONE)
+        helper.setBlock(spot.east(), Blocks.STONE)
+        helper.setBlock(spot.west(), Blocks.STONE)
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), spot)
+        helper.assertFalse(cannon.isInWall, "eyes inside the ceiling at ${cannon.eyeY}")
+        helper.startSequence()
+            .thenIdle(40)
+            .thenExecute {
+                helper.assertTrue(cannon.isAlive, "choked under the ceiling")
+                helper.assertValueEqual(cannon.health, cannon.maxHealth, "health under the ceiling")
+                cannon.discard()
+            }
+            .thenSucceed()
+    }
+
+    /**
+     * A cannon saved while the plant was half the size (scale attribute 1, no size key) grows to scale 2 when
+     * loaded; one saved now keeps whatever scale it was given (a command).
+     */
+    fun grownAfterLoad(helper: GameTestHelper) {
+        fun reload(cannon: CornCannon, old: Boolean): CornCannon? {
+            val saved = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.level.registryAccess())
+            cannon.saveWithoutId(saved)
+            val tag = saved.buildResult()
+            if (old) tag.remove("sproutsquad:Size")
+            val loaded = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.LOAD) ?: return null
+            loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.level.registryAccess(), tag))
+            return loaded
+        }
+        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(2, 1, 2))
+        cannon.getAttribute(Attributes.SCALE)!!.baseValue = 1.0
+        val old = reload(cannon, old = true) ?: return helper.fail("no Corn Cannon")
+        helper.assertValueEqual(old.scale, 2f, "scale of a cannon saved at the old size")
+        helper.assertTrue(Mth.equal(old.bbWidth, 2.4f), "box of a cannon saved at the old size: ${old.bbWidth}")
+        cannon.getAttribute(Attributes.SCALE)!!.baseValue = 3.0
+        val current = reload(cannon, old = false) ?: return helper.fail("no Corn Cannon")
+        helper.assertValueEqual(current.scale, 3f, "scale given by a command")
+        listOf(cannon, old, current).forEach { it.discard() }
+        helper.succeed()
+    }
+
     /** The face squints while aiming and firing (the first 700 ms), and is plain again after it and while dying (the renderer adds `sleep`). */
     fun face(helper: GameTestHelper) {
         val cannon = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.COMMAND)
