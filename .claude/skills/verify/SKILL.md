@@ -98,6 +98,12 @@ Run the items whose trigger the change touches.
 - **A taller hitbox** (`height` in `SquadEntities`): the eye defaults to 0.85 of it, and above 1 block it ends up inside
   a ceiling one block up, where plants may be planted: the plant chokes (`in_wall`). Pin `eyeHeight` below 1 or add
   `hasRoomAt`; test it under a one-block ceiling (`PoppyRattleGameTests.underLowCeiling`).
+- **A plant made bigger by the scale attribute** (`PlantAttributes(scale = …)`): the box and eyes come from the type at
+  scale 1 and are resized only when the attribute *changes*, so a fresh plant keeps the small box: call
+  `refreshDimensions()` in `init`. Vanilla's choke check (`isInWall`) spans 0.8 of the scaled width at eye height, so a
+  plant wider than about 1.2 blocks chokes on any block beside it: narrow the check, and test walls beside it and a
+  one-block ceiling (`CornCannonGameTests.underLowCeiling`). Plants already saved keep their old base scale: migrate them
+  on load (`CornCannonGameTests.grownAfterLoad`).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
 - **A projectile that leaves a low plant** (spawn offset forward of the plant's feet): with a full block right in front
