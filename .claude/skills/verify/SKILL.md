@@ -23,7 +23,10 @@ still lacks (textures, icon, names, recipe, advancement).
 
 `./gradlew runServer` must reach `Done (…)! For help` with no `ERROR`/`Exception` (common code must not touch
 client classes). Gradle does not pass stdin, so `stop` cannot be typed: once `Done` is in the log, kill the
-server process (only the one with `--nogui`, never a process under `.claude/worktrees`).
+server process. Its command line does not show `--nogui` (Gradle passes the arguments in a file), so a pattern on it
+finds nothing and the server stays up holding `run/world/session.lock` (the next GameTest or server run then fails
+with `already locked`). With no client running, `pgrep -f devlaunch.Main` lists it; kill that PID (never a process
+under `.claude/worktrees`) and check that `pgrep` finds nothing afterwards.
 
 ## 3. The client, driven by a script (autopilot)
 
@@ -98,12 +101,13 @@ Run the items whose trigger the change touches.
 - **A taller hitbox** (`height` in `SquadEntities`): the eye defaults to 0.85 of it, and above 1 block it ends up inside
   a ceiling one block up, where plants may be planted: the plant chokes (`in_wall`). Pin `eyeHeight` below 1 or add
   `hasRoomAt`; test it under a one-block ceiling (`PoppyRattleGameTests.underLowCeiling`).
-- **A plant made bigger by the scale attribute** (`PlantAttributes(scale = …)`): the box and eyes come from the type at
-  scale 1 and are resized only when the attribute *changes*, so a fresh plant keeps the small box: call
-  `refreshDimensions()` in `init`. Vanilla's choke check (`isInWall`) spans 0.8 of the scaled width at eye height, so a
-  plant wider than about 1.2 blocks chokes on any block beside it: narrow the check, and test walls beside it and a
-  one-block ceiling (`CornCannonGameTests.underLowCeiling`). Plants already saved keep their old base scale: migrate them
-  on load (`CornCannonGameTests.grownAfterLoad`).
+- **A wide plant** (box wider than about 1.2 blocks, like the Corn Cannon's 2.4): vanilla's choke check (`isInWall`)
+  spans 0.8 of the box width at eye height, so the plant chokes on any block beside it. Narrow the check
+  (`CornCannon.isInWall`) and test walls beside it and a one-block ceiling (`CornCannonGameTests.underLowCeiling`).
+- **A plant made bigger by the scale attribute** (`PlantAttributes(scale = …)`): the texels grow with it, coarser than
+  every other plant's; draw a big plant at its real size instead. If the attribute is used anyway, the box and eyes are
+  resized only when it *changes* (call `refreshDimensions()` in `init`), and plants already saved keep their old base
+  scale (migrate them on load).
 - **Who hands out a new plant**: the Poppy Rattle gives every `#sproutsquad:plant` not in
   `poppy_rattle_excluded.json`. Either exclude the plant or list the Poppy Rattle where the docs say how to get it.
 - **A projectile that leaves a low plant** (spawn offset forward of the plant's feet): with a full block right in front
