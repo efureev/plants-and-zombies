@@ -38,8 +38,8 @@ MODEL_LAYER = {
 # Textures that do not follow textures/entity/<kind>/<id>/<id>.png
 TEXTURE = {"gnome": "gnome/red.png"}
 # Characters whose shape reads better from another side than the default 3/4 from the front-right (yaw 30):
-# the long, low Corn Cannon is drawn more from the side, so its cob, eye and tendril all show.
-VIEW_YAW = {"corn_cannon": -55.0}
+# the long Corn Cannon is drawn from the front-left, so both eyes, the cob, the opened husk and the tendril show.
+VIEW_YAW = {"corn_cannon": -35.0}
 NUM = r"-?\d+(?:\.\d+)?(?:[eE]-?\d+)?[fFdD]?"
 
 
