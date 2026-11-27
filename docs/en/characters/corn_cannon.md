@@ -4,7 +4,7 @@
 
 **Plant · artillery** · Sprout Squad
 
-An ear of corn whose husk has opened at the front into a cannon's mouth, with a big corn cob looking out of it. Two eyes bulge over the mouth, corn silk sticks up behind them and a curly tendril grows at the back; the husk lies on a round hub with six long corn leaves, and turns on it. It lifts its nose and launches the cob like a rocket in a high arc; the cob blows up where it lands and the cannon grows a new one in 3 seconds.
+An ear of corn whose husk has opened at the front into a cannon's mouth, with a big corn cob looking out of it. An eye bulges on each side over the mouth, corn silk sticks up between them and a curly tendril grows at the back; the husk lies on a round hub with six long corn leaves, and turns on it. It lifts its nose and launches the cob like a rocket in a high arc; the cob blows up where it lands and the cannon grows a new one in 3 seconds.
 
 | | |
 |---|---|
