@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
-import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.monster.Creeper
 import net.minecraft.world.entity.monster.Enemy
@@ -34,7 +33,7 @@ import java.util.UUID
 import kotlin.math.roundToInt
 
 /**
- * Corn Cannon: heavy artillery, twice the size of its model ([SCALE]). A long husk lying on a rosette of leaves fires its corn cob as a rocket
+ * Corn Cannon: heavy artillery, about 3.6 blocks long. A corn husk opened at the front, lying on a rosette of leaves, fires its corn cob as a rocket
  * in a high arc; the cob blows up and hurts only what the cannon would shoot at. A new cob grows in 3 s.
  * It does not see zombies within [MIN_RANGE] blocks. Does not sleep. See docs/en/characters/corn_cannon.md.
  */
@@ -84,17 +83,15 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
         const val ENTITY_LIMIT = 10
 
-        /**
-         * Its size (the scale attribute): the model, hitbox, eyes and cob, and so the blast, are this many times what
-         * they are drawn and registered at. The model is about 1.8 blocks long at scale 1.
-         */
-        const val SCALE = 2.0
+        /** Its box, 2.4 × 1.8 blocks: the model is about 3.6 blocks long and 1.4 high. */
+        const val WIDTH = 2.4f
+        const val HEIGHT = 1.8f
 
-        /** Eye height at scale 1: 0.9 blocks at [SCALE], under a ceiling one block up (where it may be planted). */
-        const val EYE_HEIGHT = 0.45f
+        /** Eye height: below a ceiling one block up, where it may be planted. */
+        const val EYE_HEIGHT = 0.9f
 
-        /** Save key of the size a cannon was saved at: one saved before it grew kept the scale attribute at 1. */
-        private const val SIZE_KEY = "sproutsquad:Size"
+        /** Width of the eye area that may choke it ([isInWall]): inside its own block. */
+        private const val CHOKE_WIDTH = 0.96
 
         /**
          * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes (not scaled): forward and up,
@@ -104,22 +101,15 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         val COB_SPAWN = Vec2(0.3f, 0.15f)
     }
 
-    init {
-        // the box and eyes come from the type at scale 1; the scale attribute starts at [SCALE] without changing,
-        // so nothing else would resize them
-        refreshDimensions()
-    }
-
     override fun sleepsDuringNight(): Boolean = false
 
     /**
-     * Choking as vanilla judges it, but over the eye area of the cannon at scale 1 (0.96 blocks, inside its own
-     * block): at [SCALE] that area is almost two blocks wide, and any block beside it at eye height would choke it.
+     * Choking as vanilla judges it, but over an eye area of [CHOKE_WIDTH] (inside its own block): vanilla takes 0.8 of
+     * the box width, almost two blocks here, and any block beside it at eye height would choke it.
      */
     override fun isInWall(): Boolean {
         if (noPhysics) return false
-        val checkWidth = type.dimensions.width() * 0.8
-        val eyeBox = AABB.ofSize(eyePosition, checkWidth, 1.0E-6, checkWidth)
+        val eyeBox = AABB.ofSize(eyePosition, CHOKE_WIDTH, 1.0E-6, CHOKE_WIDTH)
         return BlockPos.betweenClosedStream(eyeBox).anyMatch { pos ->
             val state = level().getBlockState(pos)
             !state.isAir && state.isSuffocating(level(), pos) &&
@@ -257,15 +247,11 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
     override fun addAdditionalSaveData(output: ValueOutput) {
         super.addAdditionalSaveData(output)
         output.putInt("sproutsquad:ReloadTotal", reloadTotal)
-        output.putDouble(SIZE_KEY, SCALE)
     }
 
     override fun readAdditionalSaveData(input: ValueInput) {
         super.readAdditionalSaveData(input)
         reloadTotal = input.getIntOr("sproutsquad:ReloadTotal", COOLDOWN)
-        // a cannon saved while the plant was half the size (0.2.6) has its scale attribute saved at 1: grow it
-        if (input.getDoubleOr(SIZE_KEY, 1.0) < SCALE) getAttribute(Attributes.SCALE)?.baseValue = SCALE
-        refreshDimensions()
     }
 
     /** The model's pose: the cob's growth in thousandths (CornCannonModel). */
