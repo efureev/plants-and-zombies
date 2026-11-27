@@ -11,8 +11,8 @@ A long corn husk lying on a rosette of leaves, with an eye on each side, a curly
 | Id | `sproutsquad:corn_cannon` |
 | Health | 90 |
 | Sun cost | 14 |
-| Size | 1.2 × 0.9 blocks (the model is about 1.8 blocks long) |
-| Attack | a corn cob every 3.5 s; it explodes on impact: 8 damage at the centre, down to 4 at the edge, radius 2.5 blocks |
+| Size | 2.4 × 1.8 blocks (the model is about 3.6 blocks long and 1.3 blocks high) |
+| Attack | a corn cob every 3.5 s; it explodes on impact: 8 damage at the centre, down to 4 at the edge, radius about 3.5 blocks |
 | Range | 5 to 40 blocks, no line of sight needed |
 | At night | does not sleep |
 | Limit | 10 within 32 blocks |
@@ -29,10 +29,11 @@ A long corn husk lying on a rosette of leaves, with an eye on each side, a curly
 - A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close or went under cover) uses up no cob: the cannon goes through the motion without firing.
 - The cob flies in a high arc, over walls and fences, and aims ahead of moving targets. It has the same cone at both ends and leaves no flame or smoke.
 - The blast hurts only what the cannon shoots at. Players, pets, villagers and plants are not hurt, and the cob flies through them. A wall between the blast and a zombie shields it. It breaks no blocks and sets no fire, but the block it lands on reacts as to an arrow (a target block gives a signal). Popcorn flies out of the blast.
-- A bigger cannon (the scale attribute) makes a bigger blast.
+- A bigger cannon (the scale attribute) makes a bigger blast: the blast radius grows with the square root of the cannon's scale. A planted cannon is at scale 2 already: its cob is as big as it is.
 
 ## Notes
 
+- It is big, but it may be planted under a ceiling one block up or right against walls: blocks beside it and above its body do not choke it.
 - It needs open sky above it: under a roof or a tree it does not shoot at all, since every cob would hit the ceiling. Scaffolding above it counts as a roof too: a rising cob would get stuck in it.
 - About twice as strong as the [Melon Pult](melonpult.md), as its author wanted; the price is the Kernel Pult and 8 sun in the recipe, 14 sun to plant and the limit of 10.
 - The [Poppy Rattle](poppy_rattle.md) never hands it out.

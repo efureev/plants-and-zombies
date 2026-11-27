@@ -1,3 +1,9 @@
+# Sprout Squad 0.2.7
+Changes since Sprout Squad 0.2.6.
+
+### Changes
+- Corn Cannon is twice as big: about 3.6 blocks long and 1.3 blocks high, a hitbox of 2.4 × 1.8 blocks. Its cob is twice as big too, and the blast radius grows from 2.5 to about 3.5 blocks. Cannons already planted grow when the world loads. It still fits under a ceiling one block up and against walls without choking.
+
 # Sprout Squad 0.2.6
 Changes since Sprout Squad 0.2.5.
 
