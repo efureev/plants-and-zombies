@@ -2,7 +2,7 @@
 Changes since Sprout Squad 0.2.6.
 
 ### Changes
-- Corn Cannon is twice as big and redrawn: an ear of corn whose husk opens at the front into a cannon's mouth, an eye bulging on each side of it, corn silk on top, lying on a hub with six long corn leaves. About 3.6 blocks long and 1.6 blocks high, a hitbox of 2.4 × 1.8 blocks, drawn at the same pixel size as other plants. Its cob is twice as big too, the husk leaves fling open as it fires, and the blast radius grows from 2.5 to 3.5 blocks. It still fits under a ceiling one block up and against walls without choking.
+- Corn Cannon is twice as big and redrawn: an ear of corn whose husk opens at the front into a cannon's mouth, an eye bulging on each side of it, lying on a hub with six long corn leaves. About 3.6 blocks long and 1.6 blocks high, a hitbox of 2.4 × 1.8 blocks, drawn at the same pixel size as other plants. Its cob is twice as big too, the husk leaves fling open as it fires, and the blast radius grows from 2.5 to 3.5 blocks. It still fits under a ceiling one block up and against walls without choking.
 
 # Sprout Squad 0.2.6
 Changes since Sprout Squad 0.2.5.
