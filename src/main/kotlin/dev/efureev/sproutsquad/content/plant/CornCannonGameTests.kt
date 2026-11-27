@@ -59,9 +59,9 @@ object CornCannonGameTests {
         helper.assertValueEqual(PazConfig.getSunCost(type), 14, "sun cost")
         helper.assertValueEqual(PazConfig.getEntityLimit(type), 10, "entity limit")
         helper.assertValueEqual(CornCob.splashDamage(0.0), 8f, "damage at the centre")
-        helper.assertValueEqual(CornCob.splashDamage(1.25), 6f, "damage half way out")
-        helper.assertValueEqual(CornCob.splashDamage(2.5), 4f, "damage at the edge")
-        helper.assertValueEqual(CornCob.splashDamage(2.6), 0f, "damage past the edge")
+        helper.assertValueEqual(CornCob.splashDamage(1.75), 6f, "damage half way out")
+        helper.assertValueEqual(CornCob.splashDamage(3.5), 4f, "damage at the edge")
+        helper.assertValueEqual(CornCob.splashDamage(3.6), 0f, "damage past the edge")
         // the launch is ACTION_DELAY - 1 ticks in (ActionGoal counts down on its first tick)
         helper.assertTrue(CornCannon.ACTION_DELAY - 1 + CornCannon.SETTLE_TICKS >= CornCannon.SHOT_ANIMATION_TICKS,
             "a called-off shot settles before its animation ends")
@@ -69,18 +69,18 @@ object CornCannonGameTests {
     }
 
     /**
-     * Twice the size of its model: scale 2, a 2.4 × 1.8 block box, the eyes under a ceiling one block up, and
-     * a cob as big as its cannon (so a blast of radius 2.5 × √2).
+     * A big plant drawn at its real size: scale 1, a 2.4 × 1.8 block box, the eyes under a ceiling one block up,
+     * and a blast of radius 3.5.
      */
     fun size(helper: GameTestHelper) {
         val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(2, 1, 2))
-        helper.assertValueEqual(cannon.scale, 2f, "scale")
+        helper.assertValueEqual(cannon.scale, 1f, "scale")
         helper.assertTrue(Mth.equal(cannon.bbWidth, 2.4f) && Mth.equal(cannon.bbHeight, 1.8f),
             "box ${cannon.bbWidth} × ${cannon.bbHeight}, expected 2.4 × 1.8")
         helper.assertTrue(cannon.eyeHeight < 1f, "eyes ${cannon.eyeHeight} blocks up")
         val cob = CornCob(helper.level, cannon)
-        helper.assertValueEqual(cob.scale, 2f, "cob scale")
-        helper.assertTrue(Mth.equal(cob.blastRadius(), CornCob.RADIUS * Mth.SQRT_OF_TWO), "blast radius ${cob.blastRadius()}")
+        helper.assertValueEqual(cob.scale, 1f, "cob scale")
+        helper.assertValueEqual(cob.blastRadius(), 3.5, "blast radius")
         listOf(cob, cannon).forEach { it.discard() }
         helper.succeed()
     }
@@ -105,32 +105,6 @@ object CornCannonGameTests {
                 cannon.discard()
             }
             .thenSucceed()
-    }
-
-    /**
-     * A cannon saved while the plant was half the size (scale attribute 1, no size key) grows to scale 2 when
-     * loaded; one saved now keeps whatever scale it was given (a command).
-     */
-    fun grownAfterLoad(helper: GameTestHelper) {
-        fun reload(cannon: CornCannon, old: Boolean): CornCannon? {
-            val saved = TagValueOutput.createWithContext(ProblemReporter.DISCARDING, helper.level.registryAccess())
-            cannon.saveWithoutId(saved)
-            val tag = saved.buildResult()
-            if (old) tag.remove("sproutsquad:Size")
-            val loaded = SquadEntities.CORN_CANNON.get().create(helper.level, EntitySpawnReason.LOAD) ?: return null
-            loaded.load(TagValueInput.create(ProblemReporter.DISCARDING, helper.level.registryAccess(), tag))
-            return loaded
-        }
-        val cannon = helper.spawn(SquadEntities.CORN_CANNON.get(), BlockPos(2, 1, 2))
-        cannon.getAttribute(Attributes.SCALE)!!.baseValue = 1.0
-        val old = reload(cannon, old = true) ?: return helper.fail("no Corn Cannon")
-        helper.assertValueEqual(old.scale, 2f, "scale of a cannon saved at the old size")
-        helper.assertTrue(Mth.equal(old.bbWidth, 2.4f), "box of a cannon saved at the old size: ${old.bbWidth}")
-        cannon.getAttribute(Attributes.SCALE)!!.baseValue = 3.0
-        val current = reload(cannon, old = false) ?: return helper.fail("no Corn Cannon")
-        helper.assertValueEqual(current.scale, 3f, "scale given by a command")
-        listOf(cannon, old, current).forEach { it.discard() }
-        helper.succeed()
     }
 
     /** The face squints while aiming and firing (the first 700 ms), and is plain again after it and while dying (the renderer adds `sleep`). */
