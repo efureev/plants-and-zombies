@@ -46,7 +46,7 @@ class CornCob(type: EntityType<out CornCob>, level: Level, owner: CornCannon? = 
     companion object {
         const val DAMAGE_CENTER = 8f
         const val DAMAGE_EDGE = 4f
-        const val RADIUS = 2.5
+        const val RADIUS = 3.5
 
         /** How far aside from the target, in blocks, a blast above its head still counts as over it (an overhang). */
         private const val OVERHEAD = 1.0

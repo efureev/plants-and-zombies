@@ -142,6 +142,8 @@ object SquadGameTests {
         Test("double_sunflower_mutation", DoubleSunflowerGameTests::mutation),
         Test("corn_cannon_stats", CornCannonGameTests::stats),
         Test("corn_cannon_face", CornCannonGameTests::face),
+        Test("corn_cannon_size", CornCannonGameTests::size),
+        Test("corn_cannon_under_low_ceiling", CornCannonGameTests::underLowCeiling),
         Test("corn_cannon_fires", CornCannonGameTests::fires, maxTicks = 400, structure = id("gametest/lane")),
         Test("corn_cannon_dead_zone", CornCannonGameTests::deadZone, maxTicks = 600, structure = id("gametest/lane")),
         Test("corn_cannon_spares_friends", CornCannonGameTests::sparesFriends, structure = id("gametest/lane")),

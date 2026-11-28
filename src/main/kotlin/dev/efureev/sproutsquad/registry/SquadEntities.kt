@@ -83,7 +83,7 @@ object SquadEntities {
         attributes = Plant.Companion.PlantAttributes(maxHealth = DoubleSunflower.MAX_HEALTH))
 
     /** Corn Cannon: heavy artillery firing its own corn cob as a rocket. */
-    val CORN_CANNON = plant("corn_cannon", ::CornCannon, width = 1.2f, height = 0.9f, eyeHeight = CornCannon.EYE_HEIGHT,
+    val CORN_CANNON = plant("corn_cannon", ::CornCannon, width = CornCannon.WIDTH, height = CornCannon.HEIGHT, eyeHeight = CornCannon.EYE_HEIGHT,
         sunCost = CornCannon.SUN_COST,
         entityLimit = CornCannon.ENTITY_LIMIT,
         attributes = Plant.Companion.PlantAttributes(maxHealth = CornCannon.MAX_HEALTH, followRange = CornCannon.RANGE))

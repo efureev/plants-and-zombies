@@ -6,6 +6,7 @@ import joshxviii.plantz.PazSounds
 import joshxviii.plantz.isHypnotized
 import joshxviii.plantz.ai.goal.ProjectileAttackGoal
 import joshxviii.plantz.entity.plant.Plant
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LivingEntity
@@ -21,15 +22,18 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
 import net.minecraft.world.level.storage.ValueInput
 import net.minecraft.world.level.storage.ValueOutput
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.HitResult
+import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
+import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.Vec2
 import java.util.UUID
 import kotlin.math.roundToInt
 
 /**
- * Corn Cannon: heavy artillery. A long husk lying on a rosette of leaves fires its corn cob as a rocket
+ * Corn Cannon: heavy artillery, about 3.6 blocks long. A corn husk opened at the front, lying on a rosette of leaves, fires its corn cob as a rocket
  * in a high arc; the cob blows up and hurts only what the cannon would shoot at. A new cob grows in 3 s.
  * It does not see zombies within [MIN_RANGE] blocks. Does not sleep. See docs/en/characters/corn_cannon.md.
  */
@@ -78,17 +82,40 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
         const val REST_TICKS = 100
 
         const val ENTITY_LIMIT = 10
-        const val EYE_HEIGHT = 0.6f
+
+        /** Its box, 2.4 × 1.8 blocks: the model is about 3.6 blocks long and 1.4 high. */
+        const val WIDTH = 2.4f
+        const val HEIGHT = 1.8f
+
+        /** Eye height: below a ceiling one block up, where it may be planted. */
+        const val EYE_HEIGHT = 0.9f
+
+        /** Width of the eye area that may choke it ([isInWall]): inside its own block. */
+        private const val CHOKE_WIDTH = 0.96
 
         /**
-         * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes: forward and up, about where
-         * the raised mouth is and still inside the cannon's own block (a cob that starts in a wall right in
+         * Where the cob leaves the husk, as a [CornCob] spawn offset from the eyes (not scaled): forward and up,
+         * in the raised husk and still inside the cannon's own block (a cob that starts in a wall right in
          * front vanishes on its first tick).
          */
         val COB_SPAWN = Vec2(0.3f, 0.15f)
     }
 
     override fun sleepsDuringNight(): Boolean = false
+
+    /**
+     * Choking as vanilla judges it, but over an eye area of [CHOKE_WIDTH] (inside its own block): vanilla takes 0.8 of
+     * the box width, almost two blocks here, and any block beside it at eye height would choke it.
+     */
+    override fun isInWall(): Boolean {
+        if (noPhysics) return false
+        val eyeBox = AABB.ofSize(eyePosition, CHOKE_WIDTH, 1.0E-6, CHOKE_WIDTH)
+        return BlockPos.betweenClosedStream(eyeBox).anyMatch { pos ->
+            val state = level().getBlockState(pos)
+            !state.isAir && state.isSuffocating(level(), pos) &&
+                Shapes.joinIsNotEmpty(state.getCollisionShape(level(), pos).move(pos), Shapes.create(eyeBox), BooleanOp.AND)
+        }
+    }
 
     /**
      * What it shoots at, and so what its cob may hurt: zombies; when tamed, other monsters too. Never creepers,
@@ -254,7 +281,7 @@ class CornCannon(type: EntityType<out Plant>, level: Level) : Plant(type, level)
 
 /**
  * The nearest target it can shoot at ([CornCannon.canShootAt]), seen or not: the cob flies in a high arc, and
- * the eyes sit only 0.6 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
+ * the eyes sit only 0.9 blocks up, so a one-block wall in front would otherwise hide every zombie behind it.
  */
 class CornCannonTargetGoal(private val cannon: CornCannon) : NearestAttackableTargetGoal<LivingEntity>(
     cannon, LivingEntity::class.java, 5, false, false,

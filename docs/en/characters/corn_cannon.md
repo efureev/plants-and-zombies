@@ -4,15 +4,15 @@
 
 **Plant · artillery** · Sprout Squad
 
-A long corn husk lying on a rosette of leaves, with an eye on each side, a curly tendril at the back and a big corn cob sticking out of the front. It lifts its nose and launches the cob like a rocket in a high arc; the cob blows up where it lands and the cannon grows a new one in 3 seconds.
+An ear of corn whose husk has opened at the front into a cannon's mouth, with a big corn cob looking out of it. An eye bulges on each side of the mouth and a curly tendril grows at the back; the husk lies on a round hub with six long corn leaves, and turns on it. It lifts its nose and launches the cob like a rocket in a high arc; the cob blows up where it lands and the cannon grows a new one in 3 seconds.
 
 | | |
 |---|---|
 | Id | `sproutsquad:corn_cannon` |
 | Health | 90 |
 | Sun cost | 14 |
-| Size | 1.2 × 0.9 blocks (the model is about 1.8 blocks long) |
-| Attack | a corn cob every 3.5 s; it explodes on impact: 8 damage at the centre, down to 4 at the edge, radius 2.5 blocks |
+| Size | 2.4 × 1.8 blocks (the model is about 3.6 blocks long and 1.6 blocks high) |
+| Attack | a corn cob every 3.5 s; it explodes on impact: 8 damage at the centre, down to 4 at the edge, radius about 3.5 blocks |
 | Range | 5 to 40 blocks, no line of sight needed |
 | At night | does not sleep |
 | Limit | 10 within 32 blocks |
@@ -26,13 +26,14 @@ A long corn husk lying on a rosette of leaves, with an eye on each side, a curly
 - When three of its blasts in a row burst right over its target or next to it behind cover (an overhang, a wall) without reaching anyone, it leaves that zombie alone for 5 seconds and picks another. A blast in plain view that a walking zombie simply dodged does not count, nor does one that reached another enemy; either also breaks the run.
 - Before a shot it follows the cob's path to where it would burst: if that blast would not reach the zombie (a wall or leaves by the cannon, a hill, a house or a tree canopy in the way, a zombie too high to reach), it does not fire and leaves that zombie alone for 5 seconds. After three such shots in a row it rests for 5 seconds.
 - Hypnotized zombies and a player's machines are allies: it never aims at them, and its cob never hurts them.
-- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close or went under cover) uses up no cob: the cannon goes through the motion without firing.
+- A shot: the nose lifts and the eyes squint, the cob leaves about half a second later as the husk leaves fling open, and the husk kicks back. The empty husk is dark inside until the new cob has grown back out of it. A shot called off during the aim (the zombie came too close or went under cover) uses up no cob: the cannon goes through the motion without firing.
 - The cob flies in a high arc, over walls and fences, and aims ahead of moving targets. It has the same cone at both ends and leaves no flame or smoke.
 - The blast hurts only what the cannon shoots at. Players, pets, villagers and plants are not hurt, and the cob flies through them. A wall between the blast and a zombie shields it. It breaks no blocks and sets no fire, but the block it lands on reacts as to an arrow (a target block gives a signal). Popcorn flies out of the blast.
-- A bigger cannon (the scale attribute) makes a bigger blast.
+- A bigger cannon (the scale attribute) makes a bigger blast: the blast radius grows with the square root of the cannon's scale. A planted cannon is at scale 2 already: its cob is as big as it is.
 
 ## Notes
 
+- It is big, but it may be planted under a ceiling one block up or right against walls: blocks beside it and above its body do not choke it.
 - It needs open sky above it: under a roof or a tree it does not shoot at all, since every cob would hit the ceiling. Scaffolding above it counts as a roof too: a rising cob would get stuck in it.
 - About twice as strong as the [Melon Pult](melonpult.md), as its author wanted; the price is the Kernel Pult and 8 sun in the recipe, 14 sun to plant and the limit of 10.
 - The [Poppy Rattle](poppy_rattle.md) never hands it out.
